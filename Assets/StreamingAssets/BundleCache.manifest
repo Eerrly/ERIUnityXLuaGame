@@ -1,0 +1,13 @@
+ManifestFileVersion: 0
+CRC: 3203173501
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: prefabcanvas
+      Dependencies: {}
+    Info_1:
+      Name: game
+      Dependencies: {}
+    Info_2:
+      Name: team
+      Dependencies: {}

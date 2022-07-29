@@ -7,18 +7,14 @@ using UnityEditor.U2D;
 using UnityEngine;
 using System.Collections.Generic;
 
-public class OdinAtlasEditor : OdinEditorWindow
+public class AtlasSettings
 {
-    private bool isInit = false;
-
-    [MenuItem("SampleTools/Atlas Tools")]
-    public static void ShowAtlasWin()
+    public AtlasSettings(int schemeIndex)
     {
-        var window = GetWindow<OdinAtlasEditor>();
-        window.Show();
+        this.schemeIndex = schemeIndex;
     }
 
-    public string[] spritePaths;
+    public int schemeIndex;
 
     [InfoBox("Sprite Atlas Packing Settings", InfoMessageType.None)]
     public int blockOffset = 1;
@@ -38,6 +34,43 @@ public class OdinAtlasEditor : OdinEditorWindow
     public bool crunchedCompression = true;
     public TextureImporterCompression textureCompression = TextureImporterCompression.Compressed;
     public int compressionQuality = 50;
+}
+
+public class InputData
+{
+    public InputData(string spriteFolderParent = null)
+    {
+        this.spriteFolderParent = spriteFolderParent;
+        if(!string.IsNullOrEmpty(spriteFolderParent) && Directory.Exists(spriteFolderParent))
+        {
+            spriteFolders = Directory.GetDirectories(spriteFolderParent);
+        }
+    }
+
+    public int schemeIndex = 0;
+
+    [FolderPath(ParentFolder = "Assets")]
+    [OnValueChanged("OnSpriteFolderParentChanged")]
+    public string spriteFolderParent;
+
+    [FolderPath(ParentFolder = "Assets")]
+    public string[] spriteFolders;
+}
+
+public class OdinAtlasEditor : OdinEditorWindow
+{
+    private bool isInit = false;
+
+    [MenuItem("SampleTools/Atlas Tools")]
+    public static void ShowAtlasWin()
+    {
+        var window = GetWindow<OdinAtlasEditor>();
+        window.Show();
+    }
+
+    public List<InputData> InputDatas;
+
+    public List<AtlasSettings> settings;
 
     [PropertySpace(20)]
     public string outputPath = "Assets/Resources/Atlas";
@@ -51,57 +84,72 @@ public class OdinAtlasEditor : OdinEditorWindow
     protected override void OnEnable()
     {
         atlaes = new List<SpriteAtlas>();
-        spritePaths = Directory.GetDirectories("Assets/Resources/Sprites");
+        InputDatas = new List<InputData>();
+        settings = new List<AtlasSettings>();
+        OnInitialize();
+    }
+
+    public void OnInitialize()
+    {
+        settings.Add(new AtlasSettings(0));
     }
 
     [Button("Generate Atlas", ButtonSizes.Large, ButtonStyle.Box)]
     public void GenerateAtlas()
     {
         atlaes.Clear();
-        for (int i = 0; i < spritePaths.Length; i++)
+        for (int i = 0; i < InputDatas.Count; i++)
         {
-            DirectoryInfo directoryInfo = new DirectoryInfo(spritePaths[i]);
-            string atlasPath = Path.Combine(outputPath, directoryInfo.Name + ".spriteatlas");
-            if (File.Exists(atlasPath)) File.Delete(atlasPath);
+            for (int j = 0; j < InputDatas[i].spriteFolders.Length; j++)
+            {
 
-            SpriteAtlas atlas = new SpriteAtlas();
-            SpriteAtlasPackingSettings spriteAtlasPackingSettings = new SpriteAtlasPackingSettings()
-            {
-                blockOffset = blockOffset,
-                enableRotation = enableRotation,
-                enableTightPacking = enableTightPacking,
-                padding = padding,
-            };
-            atlas.SetPackingSettings(spriteAtlasPackingSettings);
-            SpriteAtlasTextureSettings spriteAtlasTextureSettings = new SpriteAtlasTextureSettings()
-            {
-                readable = readable,
-                generateMipMaps = generateMipMaps,
-                sRGB = sRGB,
-                filterMode = filterMode,
-            };
-            atlas.SetTextureSettings(spriteAtlasTextureSettings);
-            TextureImporterPlatformSettings textureImporterPlatformSettings = new TextureImporterPlatformSettings()
-            {
-                maxTextureSize = maxTextureSize,
-                format = format,
-                crunchedCompression = crunchedCompression,
-                textureCompression = textureCompression,
-                compressionQuality = compressionQuality,
-            };
-            atlas.SetPlatformSettings(textureImporterPlatformSettings);
-            AssetDatabase.CreateAsset(atlas, atlasPath);
-
-            FileInfo[] files = directoryInfo.GetFiles("*.png");
-            foreach (FileInfo file in files)
-            {
-                atlas.Add(new[] { AssetDatabase.LoadAssetAtPath<Sprite>(spritePaths[i] + "/" + file.Name) });
             }
-            AssetDatabase.SaveAssets();
-
-            atlaes.Add(AssetDatabase.LoadAssetAtPath<SpriteAtlas>(atlasPath));
         }
         isInit = true;
+    }
+
+    public void Generate(string directoryPath, int index)
+    {
+        DirectoryInfo directoryInfo = new DirectoryInfo(directoryPath);
+        string atlasPath = Path.Combine(outputPath, directoryInfo.Name + ".spriteatlas");
+        if (File.Exists(atlasPath)) File.Delete(atlasPath);
+
+        SpriteAtlas atlas = new SpriteAtlas();
+        SpriteAtlasPackingSettings spriteAtlasPackingSettings = new SpriteAtlasPackingSettings()
+        {
+            blockOffset = settings[InputDatas[index].schemeIndex].blockOffset,
+            enableRotation = settings[InputDatas[index].schemeIndex].enableRotation,
+            enableTightPacking = settings[InputDatas[index].schemeIndex].enableTightPacking,
+            padding = settings[InputDatas[index].schemeIndex].padding,
+        };
+        atlas.SetPackingSettings(spriteAtlasPackingSettings);
+        SpriteAtlasTextureSettings spriteAtlasTextureSettings = new SpriteAtlasTextureSettings()
+        {
+            readable = settings[InputDatas[index].schemeIndex].readable,
+            generateMipMaps = settings[InputDatas[index].schemeIndex].generateMipMaps,
+            sRGB = settings[InputDatas[index].schemeIndex].sRGB,
+            filterMode = settings[InputDatas[index].schemeIndex].filterMode,
+        };
+        atlas.SetTextureSettings(spriteAtlasTextureSettings);
+        TextureImporterPlatformSettings textureImporterPlatformSettings = new TextureImporterPlatformSettings()
+        {
+            maxTextureSize = settings[InputDatas[index].schemeIndex].maxTextureSize,
+            format = settings[InputDatas[index].schemeIndex].format,
+            crunchedCompression = settings[InputDatas[index].schemeIndex].crunchedCompression,
+            textureCompression = settings[InputDatas[index].schemeIndex].textureCompression,
+            compressionQuality = settings[InputDatas[index].schemeIndex].compressionQuality,
+        };
+        atlas.SetPlatformSettings(textureImporterPlatformSettings);
+        AssetDatabase.CreateAsset(atlas, atlasPath);
+
+        FileInfo[] files = directoryInfo.GetFiles("*.png");
+        foreach (FileInfo file in files)
+        {
+            atlas.Add(new[] { AssetDatabase.LoadAssetAtPath<Sprite>(directoryPath + "/" + file.Name) });
+        }
+        AssetDatabase.SaveAssets();
+
+        atlaes.Add(AssetDatabase.LoadAssetAtPath<SpriteAtlas>(atlasPath));
     }
 
     protected override void OnDestroy()

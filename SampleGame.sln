@@ -11,8 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sirenix.OdinValidator", "Si
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.AssetBundleBrowser.Editor", "Unity.AssetBundleBrowser.Editor.csproj", "{56DD730E-A146-C092-2501-82EB5C46582E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sirenix.OdinInspector.Modules.UnityMathematics", "Sirenix.OdinInspector.Modules.UnityMathematics.csproj", "{04091610-4754-8A98-62E5-1BE8D9D76E84}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,10 +37,6 @@ Global
 		{56DD730E-A146-C092-2501-82EB5C46582E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{56DD730E-A146-C092-2501-82EB5C46582E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{56DD730E-A146-C092-2501-82EB5C46582E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{04091610-4754-8A98-62E5-1BE8D9D76E84}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{04091610-4754-8A98-62E5-1BE8D9D76E84}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{04091610-4754-8A98-62E5-1BE8D9D76E84}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{04091610-4754-8A98-62E5-1BE8D9D76E84}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

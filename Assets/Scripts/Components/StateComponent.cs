@@ -4,8 +4,8 @@
 /// </summary>
 public class StateComponent : BaseComponent
 {
-    
-    internal class Common
+    [System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Auto, Pack = 4)]
+    internal struct Common
     {
         public int curStateId;
         public int nextStateId;
@@ -13,7 +13,7 @@ public class StateComponent : BaseComponent
         public float enterTime;
         public float exitTime;
 
-        public Common()
+        public Common(int no)
         {
             curStateId = default(int);
             nextStateId = default(int);
@@ -23,31 +23,51 @@ public class StateComponent : BaseComponent
         }
     }
 
-    private Common common = new Common();
+    private Common common = new Common(0);
 
     /// <summary>
     /// 当前状态Id
     /// </summary>
-    public int curStateId => common.curStateId;
+    public int curStateId
+    {
+        get { return common.curStateId; }
+        set { common.curStateId = value; }
+    }
 
     /// <summary>
     /// 下一个状态Id
     /// </summary>
-    public int nextStateId => common.nextStateId;
+    public int nextStateId
+    {
+        get { return common.nextStateId; }
+        set { common.nextStateId = value; }
+    }
 
     /// <summary>
     /// 上一个状态Id
     /// </summary>
-    public int preStateId => common.prevStateId;
+    public int preStateId
+    {
+        get { return common.prevStateId; }
+        set { common.prevStateId = value; }
+    }
 
     /// <summary>
     /// 进入状态的时间
     /// </summary>
-    public float enterTime => common.enterTime;
+    public float enterTime
+    {
+        get { return common.enterTime; }
+        set { common.enterTime = value; }
+    }
 
     /// <summary>
     /// 退出状态的时间
     /// </summary>
-    public float exitTime => common.exitTime;
+    public float exitTime
+    {
+        get { return common.exitTime; }
+        set { common.exitTime = value; }
+    }
 
 }

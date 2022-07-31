@@ -15,10 +15,9 @@ public class BattleView : MonoBehaviour
     {
         for (int i = 0; i < data.players.Length; i++)
         {
-            var player = new GameObject("player");
+            var player = new GameObject(BattleConstant.normalPlayerName);
             PlayerView playerView = player.AddComponent<PlayerView>();
-            playerView.playerId = i;
-            playerView.Init();
+            playerView.Init(i);
             _playerViews.Add(playerView);
         }
     }

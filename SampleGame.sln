@@ -1,15 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sirenix.OdinInspector.CompatibilityLayer", "Sirenix.OdinInspector.CompatibilityLayer.csproj", "{10740865-04F4-01FD-98A4-B98AC913F77E}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "Assembly-CSharp.csproj", "{5DC72454-1083-E016-5554-28AD8CE67F8F}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sirenix.OdinInspector.CompatibilityLayer.Editor", "Sirenix.OdinInspector.CompatibilityLayer.Editor.csproj", "{7A212202-C4D9-B125-26C8-5F2552C3939C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sirenix.OdinValidator", "Sirenix.OdinValidator.csproj", "{C2F2A419-FACA-2AD3-1879-FB3D2B018E7E}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.AssetBundleBrowser.Editor", "Unity.AssetBundleBrowser.Editor.csproj", "{56DD730E-A146-C092-2501-82EB5C46582E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,26 +9,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{10740865-04F4-01FD-98A4-B98AC913F77E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{10740865-04F4-01FD-98A4-B98AC913F77E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{10740865-04F4-01FD-98A4-B98AC913F77E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{10740865-04F4-01FD-98A4-B98AC913F77E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5DC72454-1083-E016-5554-28AD8CE67F8F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5DC72454-1083-E016-5554-28AD8CE67F8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5DC72454-1083-E016-5554-28AD8CE67F8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5DC72454-1083-E016-5554-28AD8CE67F8F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7A212202-C4D9-B125-26C8-5F2552C3939C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7A212202-C4D9-B125-26C8-5F2552C3939C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7A212202-C4D9-B125-26C8-5F2552C3939C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7A212202-C4D9-B125-26C8-5F2552C3939C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C2F2A419-FACA-2AD3-1879-FB3D2B018E7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C2F2A419-FACA-2AD3-1879-FB3D2B018E7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C2F2A419-FACA-2AD3-1879-FB3D2B018E7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C2F2A419-FACA-2AD3-1879-FB3D2B018E7E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{56DD730E-A146-C092-2501-82EB5C46582E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{56DD730E-A146-C092-2501-82EB5C46582E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{56DD730E-A146-C092-2501-82EB5C46582E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{56DD730E-A146-C092-2501-82EB5C46582E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

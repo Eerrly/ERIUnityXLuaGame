@@ -13,7 +13,7 @@ public class BaseStateMachine<T> where T: BaseEntity
         return _stateDic[stateId];
     }
 
-    public virtual void Update(T entity)
+    public virtual void Update(T entity, BattleEntity battleEntity)
     {
 
     }

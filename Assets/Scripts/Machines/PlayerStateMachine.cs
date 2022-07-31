@@ -64,17 +64,51 @@ public class PlayerStateMachine : BaseStateMachine<PlayerEntity>
         }
     }
 
-    public override void Update(PlayerEntity playerEntity)
+    public override void Update(PlayerEntity playerEntity, BattleEntity battleEntity)
     {
-        base.Update(playerEntity);
+        base.Update(playerEntity, battleEntity);
         var curState = _stateDic[(int)playerEntity.curStateId];
-        curState.OnUpdate(playerEntity);
+        curState.OnUpdate(playerEntity, battleEntity);
     }
 
-    public void LateUpdate(PlayerEntity playerEntity)
+    public void LateUpdate(PlayerEntity playerEntity, BattleEntity battleEntity)
     {
         var curState = _stateDic[(int)playerEntity.curStateId];
-        curState.OnLateUpdate(playerEntity);
+        curState.OnLateUpdate(playerEntity, battleEntity);
+    }
+
+    /// <summary>
+    /// 改变玩家状态
+    /// </summary>
+    /// <param name="playerEntity">玩家实体</param>
+    /// <param name="battleEntity">战斗实体</param>
+    /// <returns>是否有改变</returns>
+    public bool DoChangeState(PlayerEntity playerEntity, BattleEntity battleEntity)
+    {
+        var nextId = playerEntity.state.nextStateId;
+        var nextState = _stateDic[nextId] as PlayerBaseState;
+        if(nextId != 0 && nextState != null && nextState.TryEnter(playerEntity, battleEntity))
+        {
+            var currId = playerEntity.state.curStateId;
+            var currState = _stateDic[currId] as PlayerBaseState;
+            if(currId != 0 && currState != null && currState.TryExit(playerEntity, battleEntity))
+            {
+                currState.OnExit(playerEntity, battleEntity);
+            }
+            playerEntity.state.nextStateId = (int)EPlayerState.None;
+            nextState.Reset(playerEntity, battleEntity);
+            nextState.OnEnter(playerEntity, battleEntity);
+            if(playerEntity.state.nextStateId != (int)EPlayerState.None)
+            {
+                return DoChangeState(playerEntity, battleEntity);
+            }
+            return true;
+        }
+        else
+        {
+            playerEntity.state.nextStateId = (int)EPlayerState.None;
+        }
+        return false;
     }
 
 }

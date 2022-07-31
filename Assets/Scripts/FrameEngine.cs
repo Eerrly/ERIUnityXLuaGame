@@ -31,6 +31,9 @@ public class FrameEngine
     private bool _threadStop = false;
     private Thread _logicThread;
 
+    /// <summary>
+    /// 开启逻辑线程
+    /// </summary>
     public void StartEngine()
     {
         BattleManager.mainThreadId = Thread.CurrentThread.ManagedThreadId;
@@ -39,6 +42,9 @@ public class FrameEngine
         _logicThread.Start();
     }
 
+    /// <summary>
+    /// 逻辑线程轮询
+    /// </summary>
     private void LogicThreadUpdate()
     {
         while (!_threadStop)
@@ -51,14 +57,35 @@ public class FrameEngine
         }
     }
 
+    /// <summary>
+    /// 注册轮询方法
+    /// </summary>
+    /// <param name="listener">轮询方法</param>
     public void RegisterFrameUpdateListener(Action listener)
     {
         _frameUpdateListeners = listener;
     }
 
+    /// <summary>
+    /// 取消注册轮询方法
+    /// </summary>
     public void UnRegisterFrameUpdateListener()
     {
         _frameUpdateListeners = null;
+    }
+
+    /// <summary>
+    /// 停止战斗线程
+    /// </summary>
+    public void StopEngine()
+    {
+        _threadStop = true;
+        if(_logicThread != null)
+        {
+            _logicThread.Join();
+            _logicThread = null;
+        }
+        _threadStop = false;
     }
 
 }

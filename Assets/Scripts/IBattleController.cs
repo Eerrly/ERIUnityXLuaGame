@@ -13,4 +13,6 @@
 
     public void SwitchProceedingStatus(bool pause) { Paused = pause; }
 
+    public abstract void GameOver();
+
 }

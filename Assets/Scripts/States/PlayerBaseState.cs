@@ -11,12 +11,20 @@ public class PlayerBaseState : BaseState<PlayerEntity>
         set { _stateId = (int)value; }
     }
 
-    public override void Enter(PlayerEntity entity) {  }
+    public override void Reset(PlayerEntity entity, BattleEntity battleEntity)
+    {
+        entity.state.preStateId = entity.state.curStateId;
+        entity.state.curStateId = _stateId;
+        entity.state.nextStateId = 0;
+        entity.state.enterTime = battleEntity.time;
+    }
 
-    public override void OnUpdate(PlayerEntity entity) { }
+    public override void OnEnter(PlayerEntity entity, BattleEntity battleEntity) {  }
 
-    public override void OnLateUpdate(PlayerEntity entity) { }
+    public override void OnUpdate(PlayerEntity entity, BattleEntity battleEntity) { }
 
-    public override void Exit(PlayerEntity entity) { }
+    public override void OnLateUpdate(PlayerEntity entity, BattleEntity battleEntity) { }
+
+    public override void OnExit(PlayerEntity entity, BattleEntity battleEntity) { }
 
 }

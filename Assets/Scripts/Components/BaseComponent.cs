@@ -9,17 +9,16 @@ using System.Reflection;
 public class BaseComponent
 {
     public override string ToString() {
-
-        var fileds = GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+        PropertyInfo[] props = GetType().GetProperties();
         StringBuilder sb = new StringBuilder();
-        foreach (var filed in fileds)
+        foreach (PropertyInfo info in props)
         {
-            object value = filed.GetValue(this);
+            object value = info.GetValue(this);
             if (value != null)
             {
-                if (value.GetType().IsGenericType)
+                if (value.GetType().IsArray)
                 {
-                    sb.AppendFormat("\t\t{0}:\n", filed.Name);
+                    sb.AppendFormat("\t\t{0}:\n", info.Name);
                     foreach (var a in (IEnumerable)value)
                     {
                         sb.AppendFormat("\t\t\t{0}\n", a);
@@ -27,7 +26,7 @@ public class BaseComponent
                 }
                 else
                 {
-                    sb.AppendFormat("\t\t{0}:{1}\n", filed.Name, value.ToString());
+                    sb.AppendFormat("\t\t{0}:{1}\n", info.Name, value.ToString());
                 }
             }
         }

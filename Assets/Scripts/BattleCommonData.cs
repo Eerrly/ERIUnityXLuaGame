@@ -5,6 +5,7 @@ public class BattlePlayerCommonData
 {
     public string name;
     public int level;
+    public int pos;
 }
 
 [Serializable]

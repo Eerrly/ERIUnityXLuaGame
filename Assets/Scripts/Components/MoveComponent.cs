@@ -6,7 +6,6 @@ public class MoveComponent : BaseComponent
     {
         public float[] position;
         public float[] rotation;
-        public float[] moveDirection;
         public float moveSpeed;
         public float turnSpeed;
 
@@ -14,7 +13,6 @@ public class MoveComponent : BaseComponent
         {
             position = new float[3] { 0, 0, 0 };
             rotation = new float[4] { 0, 0, 0, 1 };
-            moveDirection = new float[3] { 0, 0, 0 };
             moveSpeed = default(float);
             turnSpeed = default(float);
         }
@@ -32,12 +30,6 @@ public class MoveComponent : BaseComponent
     {
         get { return common.rotation; }
         set { common.rotation = value; }
-    }
-
-    public float[] moveDirection
-    {
-        get { return common.moveDirection; }
-        set { common.moveDirection = value; }
     }
 
     public float moveSpeed

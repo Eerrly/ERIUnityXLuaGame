@@ -42,7 +42,7 @@ public class PlayerView : MonoBehaviour
         
         _startPosition = transform.position;
         _position = MathManager.ToVector3(playerEntity.transform.pos);
-        if(Vector3.zero == _position)
+        if(Vector3.zero == _position || _position == transform.position)
         {
             _position = MathManager.ToVector3(playerEntity.movement.position);
         }
@@ -51,12 +51,15 @@ public class PlayerView : MonoBehaviour
 
         _startRotation = transform.rotation;
         _rotation = MathManager.ToQuaternion(playerEntity.transform.rot);
-        if (Quaternion.identity == _rotation)
+        if (Quaternion.identity == _rotation || _rotation == transform.rotation)
         {
             _rotation = MathManager.ToQuaternion(playerEntity.movement.rotation);
         }
         _qua = Quaternion.Lerp(_startRotation, _rotation, playerEntity.movement.turnSpeed * deltaTime);
         transform.rotation = _qua;
+
+        playerEntity.transform.pos = MathManager.ToFloat3(transform.position);
+        playerEntity.transform.rot = MathManager.ToFloat4(transform.rotation);
     }
 
     private int animId;
@@ -66,7 +69,7 @@ public class PlayerView : MonoBehaviour
         if (!gameObject.activeSelf)
             return;
         animId = playerEntity.animation.animId;
-        if(animator != null && _lastAnimationId != animId)
+        if(animator != null && animId != 0 && _lastAnimationId != animId)
         {
             playerEntity.animation.normalizedTime = 0.0f;
             _lastAnimationId = animId;

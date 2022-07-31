@@ -15,8 +15,12 @@ public class PlayerStateSystem
 
     public static void ChangePlayerState(PlayerEntity playerEntity, EPlayerState state)
     {
-        int stateId = (int)state;
-        if(stateId > minStateId && stateId < maxStateId)
+        ChangePlayerState(playerEntity, (int)state);
+    }
+
+    public static void ChangePlayerState(PlayerEntity playerEntity, int stateId)
+    {
+        if (stateId > minStateId && stateId < maxStateId)
         {
             playerEntity.state.nextStateId = stateId;
         }

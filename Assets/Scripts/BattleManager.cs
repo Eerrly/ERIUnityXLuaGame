@@ -70,7 +70,7 @@ public class BattleManager : MonoBehaviour
         _battleView.InitView(_battleClientData);
         Util.InvokeAttributeCall(this, typeof(EntitySystem), false, typeof(EntitySystem.Initialize), false);
         _frameEngine.RegisterFrameUpdateListener(EngineUpdate);
-        _frameEngine.StartEngine(BattleConstant.FrameInterval * 0.001f);
+        _frameEngine.StartEngine(1 / BattleConstant.FrameInterval);
         _battle.Initialize();
     }
 

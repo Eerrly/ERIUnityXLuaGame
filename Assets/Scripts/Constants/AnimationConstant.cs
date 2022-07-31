@@ -2,6 +2,7 @@ public class AnimationConstant
 {
     public static readonly string[] aniamtionNames = new string[]
     {
+        "None",
         "Idle",
         "Run",
         "Attack",
@@ -10,8 +11,9 @@ public class AnimationConstant
 
 public enum EAnimationID
 {
-    None = -1,
-    Idle = 0,
-    Move = 1,
-    Attack = 2,
+    None = 0,
+    Idle = 1,
+    Move = 2,
+    Attack = 3,
+    Count,
 }

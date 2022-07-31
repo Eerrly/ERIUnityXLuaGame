@@ -3,12 +3,12 @@ public class PlayerAttackState : PlayerBaseState
 {
     public override void OnEnter(PlayerEntity playerEntity, BattleEntity battleEntity)
     {
-        playerEntity.animation.animId = (int)EAnimationID.Attack;
+        AnimationSystem.ChangePlayerAnimation(playerEntity, EAnimationID.Attack);
     }
 
     public override void OnLateUpdate(PlayerEntity playerEntity, BattleEntity battleEntity)
     {
-        if(playerEntity.animation.normalizedTime >= 0.95f)
+        if(AnimationSystem.CheckAnimationNormalizedTimeDone(playerEntity))
         {
             if (KeySystem.IsYawTypeStop(playerEntity.input.yaw))
             {

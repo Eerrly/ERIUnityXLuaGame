@@ -1,7 +1,7 @@
 public class BattleConstant
 {
 
-    public static readonly float FrameInterval = 33;
+    public static readonly float FrameInterval = 30;
 
     public static readonly string normalPlayerName = "player";
 
@@ -15,6 +15,6 @@ public class BattleConstant
 
     public static readonly float attackDistance = 1;
 
-    public static readonly float attackCdTime = 2;
+    public static readonly float attackCdTime = 1;
 
 }

@@ -1,8 +1,4 @@
-﻿
-/// <summary>
-/// 状态组件
-/// </summary>
-public class StateComponent : BaseComponent
+﻿public class StateComponent : BaseComponent
 {
     [System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Auto, Pack = 4)]
     internal struct Common
@@ -25,45 +21,30 @@ public class StateComponent : BaseComponent
 
     private Common common = new Common(0);
 
-    /// <summary>
-    /// 当前状态Id
-    /// </summary>
     public int curStateId
     {
         get { return common.curStateId; }
         set { common.curStateId = value; }
     }
 
-    /// <summary>
-    /// 下一个状态Id
-    /// </summary>
     public int nextStateId
     {
         get { return common.nextStateId; }
         set { common.nextStateId = value; }
     }
 
-    /// <summary>
-    /// 上一个状态Id
-    /// </summary>
     public int preStateId
     {
         get { return common.prevStateId; }
         set { common.prevStateId = value; }
     }
 
-    /// <summary>
-    /// 进入状态的时间
-    /// </summary>
     public float enterTime
     {
         get { return common.enterTime; }
         set { common.enterTime = value; }
     }
 
-    /// <summary>
-    /// 退出状态的时间
-    /// </summary>
     public float exitTime
     {
         get { return common.exitTime; }

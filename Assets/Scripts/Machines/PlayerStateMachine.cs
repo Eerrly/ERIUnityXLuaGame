@@ -66,7 +66,6 @@ public class PlayerStateMachine : BaseStateMachine<PlayerEntity>
 
     public override void Update(PlayerEntity playerEntity, BattleEntity battleEntity)
     {
-        base.Update(playerEntity, battleEntity);
         var curState = _stateDic[(int)playerEntity.curStateId];
         curState.OnUpdate(playerEntity, battleEntity);
     }
@@ -77,12 +76,6 @@ public class PlayerStateMachine : BaseStateMachine<PlayerEntity>
         curState.OnLateUpdate(playerEntity, battleEntity);
     }
 
-    /// <summary>
-    /// 改变玩家状态
-    /// </summary>
-    /// <param name="playerEntity">玩家实体</param>
-    /// <param name="battleEntity">战斗实体</param>
-    /// <returns>是否有改变</returns>
     public bool DoChangeState(PlayerEntity playerEntity, BattleEntity battleEntity)
     {
         var nextId = playerEntity.state.nextStateId;

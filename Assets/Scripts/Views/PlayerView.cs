@@ -2,30 +2,18 @@
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-/// <summary>
-/// 玩家渲染类
-/// </summary>
 public class PlayerView : MonoBehaviour
 {
     private Animator animator;
 
-    /// <summary>
-    /// 玩家Id
-    /// </summary>
     public int playerId { get; set; }
 
-    /// <summary>
-    /// 初始化
-    /// </summary>
     public async void Init(int id)
     {
         playerId = id;
         await CoLoadCharacter();
     }
 
-    /// <summary>
-    /// 异步加载
-    /// </summary>
     public async UniTask<GameObject> CoLoadCharacter()
     {
         GameObject character = await Resources.LoadAsync<GameObject>(BattleConstant.playerCharacterPath) as GameObject;
@@ -34,9 +22,6 @@ public class PlayerView : MonoBehaviour
         return go;
     }
 
-    /// <summary>
-    /// 渲染轮询
-    /// </summary>
     public void RenderUpdate(BattleEntity battleEntity, int playerId, float deltaTime)
     {
         PlayerEntity playerEntity = battleEntity.FindPlayer(playerId);
@@ -44,13 +29,9 @@ public class PlayerView : MonoBehaviour
         AnimationUpdate(playerEntity);
     }
 
-    private int _yaw;
     private Vector3 _startPosition;
     private Vector3 _position;
-    private Vector3 _statePosition;
-    private Vector3 _moveDirection;
-    private Vector3 _move;
-    private Vector3 _delta;
+    private Vector3 _pos;
     private Quaternion _startRotation;
     private Quaternion _rotation;
     private Quaternion _qua;
@@ -59,54 +40,48 @@ public class PlayerView : MonoBehaviour
         if (!gameObject.activeSelf)
             return;
         
-        _yaw = playerEntity.input.yaw;
-
         _startPosition = transform.position;
         _position = MathManager.ToVector3(playerEntity.transform.pos);
-        _statePosition = _position;
-
-        _moveDirection = MathManager.ToVector3(playerEntity.movement.moveDirection).normalized;
-        if (_moveDirection == Vector3.zero)
+        if(Vector3.zero == _position)
         {
-            _moveDirection = MathManager.FromYawToVector3(_yaw).normalized;
+            _position = MathManager.ToVector3(playerEntity.movement.position);
         }
-        _move = _moveDirection * playerEntity.movement.moveSpeed;
-
-        _position += _move * deltaTime;
-        _delta = Vector3.Lerp(_startPosition - _statePosition, Vector3.zero, 0.0f);
-        transform.position = _position + _delta;
+        _pos = Vector3.Lerp(_startPosition + _position * deltaTime, Vector3.zero, 0.0f);
+        transform.position = _pos;
 
         _startRotation = transform.rotation;
         _rotation = MathManager.ToQuaternion(playerEntity.transform.rot);
-        if (_rotation == Quaternion.identity)
+        if (Quaternion.identity == _rotation)
         {
-            if (_yaw == -1)
-                _rotation = _startRotation;
-            else
-                _rotation = MathManager.FromYaw(_yaw);
+            _rotation = MathManager.ToQuaternion(playerEntity.movement.rotation);
         }
         _qua = Quaternion.Lerp(_startRotation, _rotation, playerEntity.movement.turnSpeed * deltaTime);
         transform.rotation = _qua;
     }
 
-    private EAnimationID animId;
-    private EAnimationID _lastAnimationId = EAnimationID.None;
+    private int animId;
+    private int _lastAnimationId = -1;
     private void AnimationUpdate(PlayerEntity playerEntity)
     {
         if (!gameObject.activeSelf)
             return;
         animId = playerEntity.animation.animId;
-        if(animator && _lastAnimationId != animId)
+        if(animator != null && _lastAnimationId != animId)
         {
+            playerEntity.animation.normalizedTime = 0.0f;
             _lastAnimationId = animId;
             AnimationManager.CrossFadeInFixedTime(
                 animator,
-                AnimtionConstant.aniamtionNames[(int)animId],
+                AnimationConstant.aniamtionNames[animId],
                 playerEntity.animation.fixedTransitionDuration,
                 playerEntity.animation.layer,
                 playerEntity.animation.fixedTimeOffset,
                 playerEntity.animation.normalizedTransitionTime
                 );
+        }
+        if(animator != null)
+        {
+            playerEntity.animation.normalizedTime = animator.GetCurrentAnimatorStateInfo(0).normalizedTime;
         }
     }
 

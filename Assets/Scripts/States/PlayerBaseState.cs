@@ -1,8 +1,4 @@
-﻿
-/// <summary>
-/// 玩家状态
-/// </summary>
-[PlayerState(EPlayerState.None)]
+﻿[PlayerState(EPlayerState.None)]
 public class PlayerBaseState : BaseState<PlayerEntity>
 {
     public EPlayerState StateId
@@ -11,20 +7,21 @@ public class PlayerBaseState : BaseState<PlayerEntity>
         set { _stateId = (int)value; }
     }
 
-    public override void Reset(PlayerEntity entity, BattleEntity battleEntity)
+    public override void Reset(PlayerEntity playerEntity, BattleEntity battleEntity)
     {
-        entity.state.preStateId = entity.state.curStateId;
-        entity.state.curStateId = _stateId;
-        entity.state.nextStateId = 0;
-        entity.state.enterTime = battleEntity.time;
+        playerEntity.state.preStateId = playerEntity.state.curStateId;
+        playerEntity.state.curStateId = _stateId;
+        playerEntity.state.nextStateId = 0;
+        playerEntity.state.enterTime = battleEntity.time;
+        playerEntity.state.exitTime = playerEntity.state.enterTime;
     }
 
-    public override void OnEnter(PlayerEntity entity, BattleEntity battleEntity) {  }
+    public override void OnEnter(PlayerEntity playerEntity, BattleEntity battleEntity) {  }
 
-    public override void OnUpdate(PlayerEntity entity, BattleEntity battleEntity) { }
+    public override void OnUpdate(PlayerEntity playerEntity, BattleEntity battleEntity) { }
 
-    public override void OnLateUpdate(PlayerEntity entity, BattleEntity battleEntity) { }
+    public override void OnLateUpdate(PlayerEntity playerEntity, BattleEntity battleEntity) { }
 
-    public override void OnExit(PlayerEntity entity, BattleEntity battleEntity) { }
+    public override void OnExit(PlayerEntity playerEntity, BattleEntity battleEntity) { }
 
 }

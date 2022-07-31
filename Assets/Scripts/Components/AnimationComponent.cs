@@ -1,31 +1,30 @@
-/// <summary>
-/// ¶¯»­×é¼þ
-/// </summary>
 public class AnimationComponent : BaseComponent
 {
 
     [System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Auto, Pack = 4)]
     internal struct Common
     {
-        public EAnimationID animId;
+        public int animId;
         public float fixedTransitionDuration;
         public int layer;
         public float fixedTimeOffset;
         public float normalizedTransitionTime;
+        public float normalizedTime;
 
         public Common(int no)
         {
-            animId = default(EAnimationID);
+            animId = default(int);
             fixedTransitionDuration = default(float);
             layer = default(int);
             fixedTimeOffset = default(float);
             normalizedTransitionTime = default(float);
+            normalizedTime = default(float);
         }
     }
 
     private Common common = new Common(0);
 
-    public EAnimationID animId
+    public int animId
     {
         get { return common.animId; }
         set { common.animId = value; }
@@ -55,5 +54,10 @@ public class AnimationComponent : BaseComponent
         set { common.normalizedTransitionTime = value; }
     }
 
+    public float normalizedTime
+    {
+        get { return common.normalizedTime; }
+        set { common.normalizedTime = value; }
+    }
 
 }

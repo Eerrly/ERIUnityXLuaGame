@@ -1,21 +1,9 @@
-﻿/// <summary>
-/// 战斗控制器
-/// </summary>
-public class BattleController : IBattleController
+﻿public class BattleController : IBattleController
 {
     public int nextFrame;
 
-    /// <summary>
-    /// 是否游戏结束
-    /// </summary>
-    private bool _gameOver = false;
-
     public BattleEntity battleEntity { get; set; }
 
-    /// <summary>
-    /// 构造函数
-    /// </summary>
-    /// <param name="data">战斗数据</param>
     public BattleController(BattleCommonData data)
     {
         battleEntity = new BattleEntity();
@@ -27,23 +15,19 @@ public class BattleController : IBattleController
         }
     }
 
-    /// <summary>
-    /// 初始化
-    /// </summary>
     public override void Initialize()
     {
-        _gameOver = false;
     }
 
-    /// <summary>
-    /// 逻辑轮询
-    /// </summary>
     public override void LogicUpdate()
     {
         try
         {
             if (!Paused)
             {
+                battleEntity.deltaTime = FrameEngine.frameInterval * battleEntity.timeScale;
+                battleEntity.time += battleEntity.deltaTime;
+
                 UpdateInput();
 
                 var playerList = battleEntity.playerList;
@@ -81,9 +65,6 @@ public class BattleController : IBattleController
         }
     }
 
-    /// <summary>
-    /// 渲染轮询
-    /// </summary>
     public override void RenderUpdate()
     {
         try
@@ -98,12 +79,6 @@ public class BattleController : IBattleController
 
     public override void Release() { }
 
-    /// <summary>
-    /// 游戏结束
-    /// </summary>
-    public override void GameOver()
-    {
-        _gameOver = true;
-    }
+    public override void GameOver() { }
 
 }

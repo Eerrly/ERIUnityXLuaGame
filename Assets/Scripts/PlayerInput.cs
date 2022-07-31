@@ -1,9 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// 输入键位
-/// </summary>
 public class KeyCode
 {
     public string _name;
@@ -29,9 +26,6 @@ public class KeyCode
 
 }
 
-/// <summary>
-/// 玩家输入
-/// </summary>
 public class PlayerInput : MonoBehaviour
 {
     private FrameBuffer.Input _input;
@@ -46,10 +40,6 @@ public class PlayerInput : MonoBehaviour
         keys.Add(key);
     }
 
-    /// <summary>
-    /// 获取玩家的输入操作
-    /// </summary>
-    /// <returns></returns>
     public FrameBuffer.Input GetPlayerInput()
     {
         _input = new FrameBuffer.Input();
@@ -58,9 +48,6 @@ public class PlayerInput : MonoBehaviour
         return _input;
     }
 
-    /// <summary>
-    /// 轮询
-    /// </summary>
     void Update()
     {
         byte _tmpKeyState = 0;
@@ -74,7 +61,7 @@ public class PlayerInput : MonoBehaviour
         }
         _keyState = _tmpKeyState;
 
-        Vector3 moveInput = ((InputManager.Vertical * Vector3.forward) + (InputManager.Horizontal * Vector3.right));
+        Vector3 moveInput = (InputManager.Vertical * Vector3.forward) + (InputManager.Horizontal * Vector3.right);
         if(_lastMoveInput != Vector3.zero && moveInput != Vector3.zero)
         {
             _moveInput = _lastMoveInput;

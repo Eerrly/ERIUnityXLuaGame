@@ -12,7 +12,11 @@ public class FrameBuffer
         private byte raw;
 
         /// <summary>
-        /// 玩家的移动数据,值区间为[0, 8]
+        /// 8  1  2
+        ///  \ | /
+        /// 7——0——3
+        ///  / | \
+        /// 6  5  4
         /// </summary>
         public byte yaw
         {
@@ -21,7 +25,7 @@ public class FrameBuffer
         }
 
         /// <summary>
-        /// 玩家的所有按键输入,但是实际用不到8个键位
+        /// [space] [j] [k] [l]
         /// </summary>
         public byte key
         {

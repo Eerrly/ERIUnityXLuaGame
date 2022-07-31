@@ -1,9 +1,6 @@
-/// <summary>
-/// 输入组件
-/// </summary>
 public class InputComponent : BaseComponent
 {
-
+    [System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Auto, Pack = 4)]
     internal struct Common
     {
         public int yaw;
@@ -18,18 +15,12 @@ public class InputComponent : BaseComponent
 
     private Common common = new Common(0);
 
-    /// <summary>
-    /// 输入的方向
-    /// </summary>
     public int yaw
     {
         get { return common.yaw; }
         set { common.yaw = value; }
     }
 
-    /// <summary>
-    /// 按下的按钮
-    /// </summary>
     public int key
     {
         get { return common.key; }

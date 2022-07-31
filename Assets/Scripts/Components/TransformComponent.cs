@@ -1,7 +1,4 @@
-﻿/// <summary>
-/// 位置组件
-/// </summary>
-public class TransformComponent : BaseComponent
+﻿public class TransformComponent : BaseComponent
 {
     [System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Auto, Pack = 4)]
     internal struct Common
@@ -18,18 +15,12 @@ public class TransformComponent : BaseComponent
 
     private Common common = new Common(0);
 
-    /// <summary>
-    /// 坐标
-    /// </summary>
     public float[] pos
     {
         get { return common.pos; }
         set { common.pos = value; }
     }
 
-    /// <summary>
-    /// 旋转
-    /// </summary>
     public float[] rot
     {
         get { return common.rot; }

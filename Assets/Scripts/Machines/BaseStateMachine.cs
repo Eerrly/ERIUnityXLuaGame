@@ -1,7 +1,4 @@
-﻿/// <summary>
-/// 状态机器
-/// </summary>
-public class BaseStateMachine<T> where T: BaseEntity
+﻿public class BaseStateMachine<T> where T: BaseEntity
 {
 
     protected BaseState<T>[] _stateDic;

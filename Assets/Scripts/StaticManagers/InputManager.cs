@@ -1,23 +1,12 @@
 using UnityEngine;
 
-/// <summary>
-/// 输入管理器
-/// </summary>
 public static class InputManager
 {
-    /// <summary>
-    /// 开关
-    /// </summary>
+
     public static bool enabled = true;
 
-    /// <summary>
-    /// 默认的按键状态 （J、K、L）
-    /// </summary>
     public static bool[] defaultKeies = new bool[] { false, false, false, false };
 
-    /// <summary>
-    /// 纵向
-    /// </summary>
     public static float Vertical
     {
         get
@@ -28,9 +17,6 @@ public static class InputManager
         }
     }
 
-    /// <summary>
-    /// 横向
-    /// </summary>
     public static float Horizontal
     {
         get
@@ -41,11 +27,6 @@ public static class InputManager
         }
     }
 
-    /// <summary>
-    /// 是否按键
-    /// </summary>
-    /// <param name="name">键名</param>
-    /// <returns>是否按键</returns>
     public static bool GetKey(string name)
     {
         if (!enabled)

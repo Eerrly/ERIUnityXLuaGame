@@ -1,14 +1,9 @@
 ﻿using System;
 using System.Threading;
 
-/// <summary>
-/// 管理EngineUpdate
-/// </summary>
 public class FrameEngine
 {
-    /// <summary>
-    /// 暂停
-    /// </summary>
+
     private bool _pause = false;
     public bool Pause
     {
@@ -16,9 +11,6 @@ public class FrameEngine
         set { _pause = value; }
     }
 
-    /// <summary>
-    /// 时间缩放
-    /// </summary>
     private float _timeScale = 0.0f;
     public float TimeScale
     {
@@ -26,25 +18,32 @@ public class FrameEngine
         set { _timeScale = value; }
     }
 
+    private static float _frameInterval;
+    public static float frameInterval
+    {
+        get { return _frameInterval; }
+        private set { _frameInterval = value; }
+    }
+
     private Action _frameUpdateListeners = null;
 
     private bool _threadStop = false;
     private Thread _logicThread;
 
-    /// <summary>
-    /// 开启逻辑线程
-    /// </summary>
-    public void StartEngine()
+    public static void SetFrameInterval(float frameInterval)
     {
+        _frameInterval = frameInterval;
+    }
+
+    public void StartEngine(float frameInterval)
+    {
+        SetFrameInterval(frameInterval);
         BattleManager.mainThreadId = Thread.CurrentThread.ManagedThreadId;
         _logicThread = new Thread(new ThreadStart(LogicThreadUpdate));
         _logicThread.IsBackground = true;
         _logicThread.Start();
     }
 
-    /// <summary>
-    /// 逻辑线程轮询
-    /// </summary>
     private void LogicThreadUpdate()
     {
         while (!_threadStop)
@@ -55,28 +54,19 @@ public class FrameEngine
             }
             Thread.Sleep(1);
         }
+        Util.InvokeAttributeCall(this, typeof(EntitySystem), false, typeof(EntitySystem.Release), false);
     }
 
-    /// <summary>
-    /// 注册轮询方法
-    /// </summary>
-    /// <param name="listener">轮询方法</param>
     public void RegisterFrameUpdateListener(Action listener)
     {
         _frameUpdateListeners = listener;
     }
 
-    /// <summary>
-    /// 取消注册轮询方法
-    /// </summary>
     public void UnRegisterFrameUpdateListener()
     {
         _frameUpdateListeners = null;
     }
 
-    /// <summary>
-    /// 停止战斗线程
-    /// </summary>
     public void StopEngine()
     {
         _threadStop = true;

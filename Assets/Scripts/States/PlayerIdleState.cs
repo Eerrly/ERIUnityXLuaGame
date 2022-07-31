@@ -1,22 +1,22 @@
 ﻿[PlayerState(EPlayerState.Idle)]
 public class PlayerIdleState : PlayerBaseState
 {
-    public override void OnEnter(PlayerEntity entity, BattleEntity battleEntity)
+    public override void OnEnter(PlayerEntity playerEntity, BattleEntity battleEntity)
     {
-        entity.animation.animId = 0;
-        entity.animation.fixedTransitionDuration = 0.0f;
+        playerEntity.animation.animId = 0;
+        playerEntity.animation.fixedTransitionDuration = 0.1f;
     }
 
-    public override void OnUpdate(PlayerEntity entity, BattleEntity battleEntity)
+    public override void OnLateUpdate(PlayerEntity playerEntity, BattleEntity battleEntity)
     {
-    }
-
-    public override void OnLateUpdate(PlayerEntity entity, BattleEntity battleEntity)
-    {
-    }
-
-    public override void OnExit(PlayerEntity entity, BattleEntity battleEntity)
-    {
+        if(!KeySystem.IsYawTypeStop(playerEntity.input.yaw))
+        {
+            PlayerStateSystem.ChangePlayerState(playerEntity, EPlayerState.Move);
+        }
+        if (KeySystem.CheckAttackKeyDown(playerEntity))
+        {
+            PlayerStateSystem.ChangePlayerState(playerEntity, EPlayerState.AttackReady);
+        }
     }
 
 }

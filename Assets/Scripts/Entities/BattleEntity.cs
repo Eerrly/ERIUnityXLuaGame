@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 
-/// <summary>
-/// 战斗实体
-/// </summary>
 public class BattleEntity : BaseEntity
 {
 
-    public float deltaTime;
+    public float deltaTime = 0.0f;
 
-    public float time;
+    public float time = 0.0f;
 
-    public float timeScale;
+    public float timeScale = 1.0f;
 
     public List<PlayerEntity> playerList = new List<PlayerEntity>();
 

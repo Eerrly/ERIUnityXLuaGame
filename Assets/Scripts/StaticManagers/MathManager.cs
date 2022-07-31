@@ -3,10 +3,15 @@ using UnityEngine;
 public static class MathManager
 {
     public static readonly float AngleMax = 360.0f;
+    public static readonly float HalfAngleMax = 180.0f;
     public const int YawOffset = 1;
     public const int YawStop = -YawOffset;
     public static readonly float DivAngle = 45.0f;
     public static readonly float HalfDivAngle = 22.5f;
+
+    public static float[] Vector3Zero => new float[] { 0.0f, 0.0f, 0.0f };
+
+    public static float[] QuaternionIdentity => new float[] { 0.0f, 0.0f, 0.0f, 1.0f };
 
     public static int Format8DirInput(Vector3 input)
     {
@@ -65,6 +70,11 @@ public static class MathManager
             _cacheYawToVector3[yaw] = _FromYawToVector3(yaw);
         }
         return _cacheYawToVector3[yaw];
+    }
+
+    public static float GetYawAngle(int yaw)
+    {
+        return yaw * DivAngle;
     }
 
     public static Vector3 ToVector3(float[] pos)

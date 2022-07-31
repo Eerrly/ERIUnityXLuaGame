@@ -3,9 +3,6 @@ using System.Text;
 using System.Collections;
 using System.Reflection;
 
-/// <summary>
-/// 组件基类
-/// </summary>
 public class BaseComponent
 {
     public override string ToString() {

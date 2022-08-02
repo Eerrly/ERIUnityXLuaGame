@@ -13,6 +13,10 @@ public class PlayerIdleState : PlayerBaseState
         {
             PlayerStateSystem.ChangePlayerState(playerEntity, EPlayerState.Move);
         }
+        if (KeySystem.CheckWarRoarKeyDown(playerEntity))
+        {
+            PlayerStateSystem.ChangePlayerState(playerEntity, EPlayerState.WarRoar);
+        }
         if (KeySystem.CheckAttackKeyDown(playerEntity))
         {
             PlayerStateSystem.ChangePlayerState(playerEntity, EPlayerState.AttackReady);

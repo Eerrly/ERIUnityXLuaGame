@@ -10,9 +10,6 @@
         return _stateDic[stateId];
     }
 
-    public virtual void Update(T entity, BattleEntity battleEntity)
-    {
-
-    }
+    public virtual void Update(T entity, BattleEntity battleEntity) { }
 
 }

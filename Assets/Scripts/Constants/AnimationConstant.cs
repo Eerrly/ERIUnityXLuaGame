@@ -6,6 +6,7 @@ public class AnimationConstant
         "Idle",
         "Run",
         "Attack",
+        "Skill",
     };
 }
 
@@ -15,5 +16,6 @@ public enum EAnimationID
     Idle = 1,
     Move = 2,
     Attack = 3,
+    Skill = 4,
     Count,
 }

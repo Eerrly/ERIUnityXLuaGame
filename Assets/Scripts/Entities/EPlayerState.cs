@@ -7,9 +7,11 @@
 
     Move = 2,
 
-    AttackReady = 3,
+    WarRoar = 3,
 
-    Attack = 4,
+    AttackReady = 4,
+
+    Attack = 5,
 
     Count,
 }

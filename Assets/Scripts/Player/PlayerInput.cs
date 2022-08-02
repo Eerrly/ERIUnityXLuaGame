@@ -55,7 +55,7 @@ public class PlayerInput : MonoBehaviour
         {
             if (keys[i].State)
             {
-                _tmpKeyState |= (byte)(1 + i);
+                _tmpKeyState |= (byte)(1 << i);
                 break;
             }
         }

@@ -7,6 +7,7 @@
     public BattleController(BattleCommonData data)
     {
         battleEntity = new BattleEntity();
+        battleEntity.Init();
         for (int i = 0; i < data.players.Length; i++)
         {
             PlayerEntity playerEntity = new PlayerEntity();
@@ -32,14 +33,19 @@
 
                 var playerList = battleEntity.playerList;
 
+                BattleStateMachine.Instance.Update(battleEntity, null);
                 for (int i = 0; i < playerList.Count; i++)
                 {
                     PlayerStateMachine.Instance.Update(playerList[i], battleEntity);
                 }
+
+                BattleStateMachine.Instance.LateUpdate(battleEntity, null);
                 for (int i = 0; i < playerList.Count; i++)
                 {
                     PlayerStateMachine.Instance.LateUpdate(playerList[i], battleEntity);
                 }
+
+                BattleStateMachine.Instance.DoChangeState(battleEntity, null);
                 for (int i = 0; i < playerList.Count; i++)
                 {
                     PlayerStateMachine.Instance.DoChangeState(playerList[i], battleEntity);

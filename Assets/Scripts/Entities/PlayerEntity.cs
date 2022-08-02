@@ -9,6 +9,7 @@
     public InputComponent input = new InputComponent();
     public AnimationComponent animation = new AnimationComponent();
     public AttackComponent attack = new AttackComponent();
+    public RuntimePropertyComponent runtimeProperty = new RuntimePropertyComponent();
     #endregion
 
     public EPlayerState curStateId
@@ -40,6 +41,12 @@
         animation.fixedTimeOffset = 0.0f;
         animation.normalizedTransitionTime = 0.0f;
         attack.lastAttackTime = -1;
+        InitBuffs();
+    }
+
+    void InitBuffs()
+    {
+        runtimeProperty.activeBuffs.Add(new PlayerBuff(1));
     }
 
 }

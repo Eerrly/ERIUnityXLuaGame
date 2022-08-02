@@ -4,13 +4,41 @@ using System.Collections.Generic;
 public class BattleEntity : BaseEntity
 {
 
-    public float deltaTime = 0.0f;
+    public float deltaTime;
 
-    public float time = 0.0f;
+    public float time;
 
-    public float timeScale = 1.0f;
+    public float timeScale;
 
     public List<PlayerEntity> playerList = new List<PlayerEntity>();
+
+    #region Components
+    public StateComponent state = new StateComponent();
+    #endregion
+
+    public EBattleState curStateId
+    {
+        get { return (EBattleState)state.curStateId; }
+    }
+
+    public EBattleState nextStateId
+    {
+        get { return (EBattleState)state.nextStateId; }
+    }
+
+    public EBattleState preStateId
+    {
+        get { return (EBattleState)state.preStateId; }
+    }
+
+    internal void Init()
+    {
+        deltaTime = 0.0f;
+        time = 0.0f;
+        timeScale = 1.0f;
+        state.curStateId = (int)EBattleState.None;
+        state.nextStateId = (int)EBattleState.RoundPlaying;
+    }
 
     public PlayerEntity FindPlayer(int playerId)
     {

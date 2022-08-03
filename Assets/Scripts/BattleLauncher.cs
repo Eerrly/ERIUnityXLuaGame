@@ -13,15 +13,16 @@ public class BattleLauncher : MonoBehaviour
     {
         battleCommonData = new BattleCommonData();
         battleCommonData.mode = 1;
-        var battlePlayerCommonData = new BattlePlayerCommonData() { level = 1, name = "sb" };
-        battleCommonData.players = new BattlePlayerCommonData[] { battlePlayerCommonData };
+        var battlePlayerCommonDataA = new BattlePlayerCommonData() { pos = 0, level = 1, name = "A" };
+        var battlePlayerCommonDataB = new BattlePlayerCommonData() { pos = 1, level = 1, name = "B" };
+        battleCommonData.players = new BattlePlayerCommonData[] { battlePlayerCommonDataA, battlePlayerCommonDataB };
     }
 
     void Start()
     {
         BattleManager.Instance.Initialize();
         BattleManager.Instance.SetBattleData(battleCommonData);
-        BattleManager.Instance.StartBattle();
+        BattleManager.Instance.StartBattle(0);
     }
 
 }

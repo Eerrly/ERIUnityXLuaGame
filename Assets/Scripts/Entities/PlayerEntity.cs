@@ -10,7 +10,15 @@
     public AnimationComponent animation = new AnimationComponent();
     public AttackComponent attack = new AttackComponent();
     public RuntimePropertyComponent runtimeProperty = new RuntimePropertyComponent();
+    public PropertyComponent property = new PropertyComponent();
     #endregion
+
+    private bool _isAi = false;
+    public bool isAi
+    {
+        get { return _isAi; }
+        set { _isAi = value; }
+    }
 
     public EPlayerState curStateId
     {
@@ -30,6 +38,7 @@
     internal void Init(BattlePlayerCommonData data)
     {
         ID = data.pos;
+        isAi = data.isAi;
         state.curStateId = (int)EPlayerState.None;
         state.nextStateId = (int)EPlayerState.Idle;
         input.yaw = MathManager.YawStop;
@@ -41,12 +50,18 @@
         animation.fixedTimeOffset = 0.0f;
         animation.normalizedTransitionTime = 0.0f;
         attack.lastAttackTime = -1;
+        property.collsionSize = BattleConstant.collisionRadius;
         InitBuffs();
     }
 
     void InitBuffs()
     {
         runtimeProperty.activeBuffs.Add(new PlayerBuff(1));
+    }
+
+    public float GetCollisionRadius(BattleEntity battleEntity)
+    {
+        return property.collsionSize;
     }
 
 }

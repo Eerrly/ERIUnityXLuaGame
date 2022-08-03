@@ -45,6 +45,8 @@
                     PlayerStateMachine.Instance.LateUpdate(playerList[i], battleEntity);
                 }
 
+                PhysicsSystem.Update(battleEntity);
+
                 BattleStateMachine.Instance.DoChangeState(battleEntity, null);
                 for (int i = 0; i < playerList.Count; i++)
                 {
@@ -60,15 +62,11 @@
 
     public void UpdateInput() {
         var input = BattleManager.Instance.GetInput();
-        var playerList = battleEntity.playerList;
-        for (int i = 0; i < playerList.Count; i++)
-        {
 #if UNITY_EDITOR && UNITY_DEBUG
-            UnityEngine.Debug.Log(string.Format("Player Input ：{0}", input.ToString()));
+        UnityEngine.Debug.Log(string.Format("UpdateInput Input ：{0}", input.ToString()));
 #endif
-            playerList[i].input.yaw = input.yaw - MathManager.YawOffset;
-            playerList[i].input.key = input.key;
-        }
+        battleEntity.selfPlayerEntity.input.yaw = input.yaw - MathManager.YawOffset;
+        battleEntity.selfPlayerEntity.input.key = input.key;
     }
 
     public override void RenderUpdate()

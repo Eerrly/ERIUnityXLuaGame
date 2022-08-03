@@ -22,4 +22,6 @@ public class PlayerBaseState : BaseState<PlayerEntity>
 
     public override void OnExit(PlayerEntity playerEntity, BattleEntity battleEntity) { }
 
+    public virtual void OnCollision(PlayerEntity source, PlayerEntity target, BattleEntity battleEntity) { }
+
 }

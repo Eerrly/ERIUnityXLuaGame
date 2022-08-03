@@ -31,6 +31,11 @@ public class BattleEntity : BaseEntity
         get { return (EBattleState)state.preStateId; }
     }
 
+    public PlayerEntity selfPlayerEntity
+    {
+        get { return playerList[BattleManager.Instance.selfPlayerId]; }
+    }
+
     internal void Init()
     {
         deltaTime = 0.0f;

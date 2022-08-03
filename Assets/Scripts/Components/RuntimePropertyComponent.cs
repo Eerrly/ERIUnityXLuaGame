@@ -42,4 +42,11 @@ public class RuntimePropertyComponent : BaseComponent
         set { _buffExtra = value; }
     }
 
+    private List<PhysisPlayer> _closedPlayers = new List<PhysisPlayer>();
+    public List<PhysisPlayer> closedPlayers
+    {
+        get { return _closedPlayers; }
+        set { _closedPlayers = value; }
+    }
+
 }

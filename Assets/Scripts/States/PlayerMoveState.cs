@@ -34,4 +34,8 @@ public class PlayerMoveState : PlayerBaseState
         playerEntity.movement.moveSpeed = 0.0f;
         playerEntity.movement.turnSpeed = 0.0f;
     }
+
+    public override void OnCollision(PlayerEntity source, PlayerEntity target, BattleEntity battleEntity)
+    {
+    }
 }

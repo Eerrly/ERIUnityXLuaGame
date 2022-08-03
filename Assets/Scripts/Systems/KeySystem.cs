@@ -35,14 +35,12 @@ public class KeySystem
     public static bool CheckAttackKeyDown(PlayerEntity playerEntity)
     {
         var result = (playerEntity.input.key & 0x2) > 0;
-        UnityEngine.Debug.Log("CheckAttackKeyDown : " + result);
         return result;
     }
 
     public static bool CheckWarRoarKeyDown(PlayerEntity playerEntity)
     {
         var result = (playerEntity.input.key & 0x4) > 0;
-        UnityEngine.Debug.Log("CheckWarRoarKeyDown : " + result);
         return result;
     }
 

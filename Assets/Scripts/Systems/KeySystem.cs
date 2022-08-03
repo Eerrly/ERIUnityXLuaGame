@@ -1,7 +1,6 @@
 [EntitySystem]
 public class KeySystem
 {
-    
     public static void Clear(BattleEntity battleEntity)
     {
         var players = battleEntity.playerList;
@@ -20,7 +19,7 @@ public class KeySystem
     public static int GetLogicKeyDown(PlayerEntity playerEntity)
     {
         var input = playerEntity.input;
-        int key = (int)ELogicInputKey.Space;
+        int key = (int)ELogicInputKey.None;
         while (key < (int)ELogicInputKey.KeyCount)
         {
             if((input.key & key) > 0)
@@ -44,9 +43,9 @@ public class KeySystem
         return result;
     }
 
-    public static bool CheckSpaceKeyDown(PlayerEntity playerEntity)
+    public static bool CheckTabKeyDown(PlayerEntity playerEntity)
     {
-        return (playerEntity.input.key & 0x2) > 0;
+        return (playerEntity.input.key & 0x1) > 0;
     }
 
 }

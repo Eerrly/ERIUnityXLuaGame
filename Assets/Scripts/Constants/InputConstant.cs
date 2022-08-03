@@ -4,7 +4,7 @@ public class InputConstant
 
     public static readonly string Horizontal = "Horizontal";
 
-    public static readonly string KeyCodeSpace = "space";
+    public static readonly string KeyCodeSpace = "tab";
 
     public static readonly string KeyCodeJ = "j";
 
@@ -15,7 +15,8 @@ public class InputConstant
 
 public enum ELogicInputKey
 {
-    Space = 1 << 0,
+    None = -1,
+    Tab = 1 << 0,
     J = 1 << 1,
     K = 1 << 2,
     L = 1 << 3,

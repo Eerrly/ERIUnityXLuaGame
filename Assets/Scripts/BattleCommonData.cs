@@ -3,7 +3,7 @@
 [Serializable]
 public class BattlePlayerCommonData
 {
-    public bool isAi;
+    public int camp;
     public string name;
     public int level;
     public int pos;

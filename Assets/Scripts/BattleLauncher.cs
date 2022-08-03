@@ -13,9 +13,10 @@ public class BattleLauncher : MonoBehaviour
     {
         battleCommonData = new BattleCommonData();
         battleCommonData.mode = 1;
-        var battlePlayerCommonDataA = new BattlePlayerCommonData() { pos = 0, level = 1, name = "A" };
-        var battlePlayerCommonDataB = new BattlePlayerCommonData() { pos = 1, level = 1, name = "B" };
-        battleCommonData.players = new BattlePlayerCommonData[] { battlePlayerCommonDataA, battlePlayerCommonDataB };
+        battleCommonData.players = new BattlePlayerCommonData[] {
+            new BattlePlayerCommonData() { camp = 1, pos = 0, level = 1, name = "A" },
+            new BattlePlayerCommonData() { camp = 2, pos = 1, level = 1, name = "B" },
+        };
     }
 
     void Start()

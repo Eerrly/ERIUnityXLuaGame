@@ -5,15 +5,17 @@ public class BattleConstant
 
     public static readonly string normalPlayerName = "player";
 
+    public static readonly float normalPlayerPositionOffset = -0.15f;
+
     public static readonly string playerCharacterPath = "Prefabs/Character";
 
-    public static readonly string[] buttonNames = new string[] { "space", "j", "k", "l" };
+    public static readonly string[] buttonNames = new string[] { "tab", "j", "k", "l" };
 
     public static readonly float moveSpeed = 0.5f;
 
     public static readonly float turnSpeed = 15f;
 
-    public static readonly float attackDistance = 1f;
+    public static readonly float attackDistance = 0.125f;
 
     public static readonly float attackCdTime = 1f;
 

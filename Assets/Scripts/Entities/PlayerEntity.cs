@@ -13,13 +13,6 @@
     public PropertyComponent property = new PropertyComponent();
     #endregion
 
-    private bool _isAi = false;
-    public bool isAi
-    {
-        get { return _isAi; }
-        set { _isAi = value; }
-    }
-
     public EPlayerState curStateId
     {
         get { return (EPlayerState)state.curStateId; }
@@ -38,7 +31,6 @@
     internal void Init(BattlePlayerCommonData data)
     {
         ID = data.pos;
-        isAi = data.isAi;
         state.curStateId = (int)EPlayerState.None;
         state.nextStateId = (int)EPlayerState.Idle;
         input.yaw = MathManager.YawStop;
@@ -49,7 +41,9 @@
         animation.layer = -1;
         animation.fixedTimeOffset = 0.0f;
         animation.normalizedTransitionTime = 0.0f;
+        attack.targetId = -1;
         attack.lastAttackTime = -1;
+        property.camp = (ECamp)data.camp;
         property.collsionSize = BattleConstant.collisionRadius;
         InitBuffs();
     }

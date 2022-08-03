@@ -13,6 +13,11 @@ public class PlayerStateSystem
         maxStateId = (int)EPlayerState.Count;
     }
 
+    public static bool HasAttackTarget(PlayerEntity playerEntity)
+    {
+        return playerEntity.attack.targetId != -1;
+    }
+
     public static void ChangePlayerState(PlayerEntity playerEntity, EPlayerState state)
     {
         ChangePlayerState(playerEntity, (int)state);

@@ -4,6 +4,7 @@ public class AttackComponent : BaseComponent
     internal struct Common
     {
         public float cd;
+        public int targetId;
         public float lastAttackTime;
         public float attackDistance;
         public float displacementCompensation;
@@ -11,6 +12,7 @@ public class AttackComponent : BaseComponent
         public Common(int no)
         {
             cd = default(float);
+            targetId = default(int);
             lastAttackTime = default(float);
             attackDistance = default(float);
             displacementCompensation = default(float);
@@ -23,6 +25,12 @@ public class AttackComponent : BaseComponent
     {
         get { return common.cd; }
         set { common.cd = value; }
+    }
+
+    public int targetId
+    {
+        get { return common.targetId; }
+        set { common.targetId = value; }
     }
 
     public float lastAttackTime

@@ -3,6 +3,9 @@ public class PlayerAttackState : PlayerBaseState
 {
     public override void OnEnter(PlayerEntity playerEntity, BattleEntity battleEntity)
     {
+#if UNITY_DEBUG
+        UnityEngine.Debug.Log("Attack TargetId:" + playerEntity.attack.targetId);
+#endif
         AnimationSystem.ChangePlayerAnimation(playerEntity, EAnimationID.Attack);
     }
 

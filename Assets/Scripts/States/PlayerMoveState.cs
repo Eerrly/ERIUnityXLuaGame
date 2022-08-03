@@ -13,6 +13,11 @@ public class PlayerMoveState : PlayerBaseState
     {
         MoveSystem.UpdatePosition(playerEntity);
         MoveSystem.UpdateRotaion(playerEntity);
+
+        if (KeySystem.CheckTabKeyDown(playerEntity))
+        {
+            AttackSystem.SelectAttackTarget(playerEntity, battleEntity);
+        }
     }
 
     public override void OnLateUpdate(PlayerEntity playerEntity, BattleEntity battleEntity)
@@ -21,7 +26,7 @@ public class PlayerMoveState : PlayerBaseState
         {
             PlayerStateSystem.ChangePlayerState(playerEntity, EPlayerState.Idle);
         }
-        if (KeySystem.CheckAttackKeyDown(playerEntity))
+        if (AttackSystem.HasAttackTarget(playerEntity) && KeySystem.CheckAttackKeyDown(playerEntity))
         {
             PlayerStateSystem.ChangePlayerState(playerEntity, EPlayerState.AttackReady);
         }

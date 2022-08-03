@@ -31,11 +31,6 @@ public struct PhysisPlayer
 public class PhysicsSystem
 {
 
-    public static bool IsCanAttack(PlayerEntity playerEntity)
-    {
-        return true;
-    }
-
     public static void Update(BattleEntity battleEntity)
     {
         var playerList = battleEntity.playerList;

@@ -31,19 +31,25 @@ public class KeySystem
         return 0;
     }
 
-    public static bool CheckAttackKeyDown(PlayerEntity playerEntity)
+    public static bool CheckKeyCodeJDown(PlayerEntity playerEntity)
     {
         var result = (playerEntity.input.key & 0x2) > 0;
         return result;
     }
 
-    public static bool CheckWarRoarKeyDown(PlayerEntity playerEntity)
+    public static bool CheckKeyCodeKDown(PlayerEntity playerEntity)
     {
         var result = (playerEntity.input.key & 0x4) > 0;
         return result;
     }
 
-    public static bool CheckTabKeyDown(PlayerEntity playerEntity)
+    public static bool CheckKeyCodeLDown(PlayerEntity playerEntity)
+    {
+        var result = (playerEntity.input.key & 0x8) > 0;
+        return result;
+    }
+
+    public static bool CheckKeyCodeSpaceDown(PlayerEntity playerEntity)
     {
         return (playerEntity.input.key & 0x1) > 0;
     }

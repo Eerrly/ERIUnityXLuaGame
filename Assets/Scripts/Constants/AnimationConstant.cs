@@ -4,9 +4,9 @@ public class AnimationConstant
     {
         "None",
         "Idle",
+        "Walk",
         "Run",
         "Attack",
-        "Skill",
     };
 }
 
@@ -14,8 +14,8 @@ public enum EAnimationID
 {
     None = 0,
     Idle = 1,
-    Move = 2,
-    Attack = 3,
-    Skill = 4,
+    Walk = 2,
+    Run = 3,
+    Attack = 4,
     Count,
 }

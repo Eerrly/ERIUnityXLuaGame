@@ -7,7 +7,7 @@
 
     Move = 2,
 
-    WarRoar = 3,
+    Patrol = 3,
 
     AttackReady = 4,
 

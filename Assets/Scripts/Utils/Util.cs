@@ -38,30 +38,4 @@ public class Util
         }
     }
 
-    public static int Random(ref uint seed)
-    {
-        unsafe
-        {
-            uint next = seed;
-            uint result;
-
-            next *= 1103515245;
-            next += 12345;
-            result = (uint)(next / 65536) % 2048;
-
-            next *= 1103515245;
-            next += 12345;
-            result <<= 10;
-            result ^= (uint)(next / 65536) % 1024;
-
-            next *= 1103515245;
-            next += 12345;
-            result <<= 10;
-            result ^= (uint)(next / 65536) % 1024;
-
-            seed = next;
-            return (int)result;
-        }
-    }
-
 }

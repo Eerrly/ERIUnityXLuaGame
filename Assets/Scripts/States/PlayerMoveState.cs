@@ -3,7 +3,7 @@ public class PlayerMoveState : PlayerBaseState
 {
     public override void OnEnter(PlayerEntity playerEntity, BattleEntity battleEntity)
     {
-        AnimationSystem.ChangePlayerAnimation(playerEntity, EAnimationID.Move);
+        AnimationSystem.ChangePlayerAnimation(playerEntity, EAnimationID.Run);
         playerEntity.animation.fixedTransitionDuration = 0.1f;
         playerEntity.movement.moveSpeed = PlayerPropertyConstant.MoveSpeed;
         playerEntity.movement.turnSpeed = PlayerPropertyConstant.TurnSpeed;
@@ -21,7 +21,7 @@ public class PlayerMoveState : PlayerBaseState
         {
             PlayerStateSystem.ChangePlayerState(playerEntity, EPlayerState.Idle);
         }
-        if (KeySystem.CheckAttackKeyDown(playerEntity))
+        if (KeySystem.CheckKeyCodeJDown(playerEntity))
         {
             PlayerStateSystem.ChangePlayerState(playerEntity, EPlayerState.AttackReady);
         }
@@ -37,5 +37,8 @@ public class PlayerMoveState : PlayerBaseState
 
     public override void OnCollision(PlayerEntity source, PlayerEntity target, BattleEntity battleEntity)
     {
+#if UNITY_DEBUG
+        UnityEngine.Debug.Log("[PlayerMoveState OnCollision] source:" + source.ID + ", target:" + target.ID);
+#endif
     }
 }

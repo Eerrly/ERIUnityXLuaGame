@@ -14,8 +14,8 @@ public class BattleLauncher : MonoBehaviour
         battleCommonData = new BattleCommonData();
         battleCommonData.mode = 1;
         battleCommonData.players = new BattlePlayerCommonData[] {
-            new BattlePlayerCommonData() { camp = 1, pos = 0, level = 1, name = "A" },
-            new BattlePlayerCommonData() { isAi = true, camp = 2, pos = 1, level = 1, name = "B" },
+            new BattlePlayerCommonData() { camp = 1, pos = 0, level = 1, name = "Player" },
+            new BattlePlayerCommonData() { camp = 2, pos = 1, level = 1, name = "Enemy" },
         };
     }
 

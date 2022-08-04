@@ -9,15 +9,11 @@ public class PlayerIdleState : PlayerBaseState
 
     public override void OnLateUpdate(PlayerEntity playerEntity, BattleEntity battleEntity)
     {
-        if(!KeySystem.IsYawTypeStop(playerEntity.input.yaw))
+        if (!KeySystem.IsYawTypeStop(playerEntity.input.yaw))
         {
             PlayerStateSystem.ChangePlayerState(playerEntity, EPlayerState.Move);
         }
-        if (KeySystem.CheckWarRoarKeyDown(playerEntity))
-        {
-            PlayerStateSystem.ChangePlayerState(playerEntity, EPlayerState.WarRoar);
-        }
-        if (KeySystem.CheckAttackKeyDown(playerEntity))
+        if (KeySystem.CheckKeyCodeJDown(playerEntity))
         {
             PlayerStateSystem.ChangePlayerState(playerEntity, EPlayerState.AttackReady);
         }

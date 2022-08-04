@@ -87,6 +87,11 @@ public static class MathManager
         return new Quaternion(rot[0], rot[1], rot[2], rot[3]);
     }
 
+    public static float[] ToFloat2(Vector2 vector)
+    {
+        return new float[2] { vector.x, vector.y };
+    }
+
     public static float[] ToFloat3(Vector3 vector)
     {
         return new float[3] { vector.x, vector.y, vector.z };

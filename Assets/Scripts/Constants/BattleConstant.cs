@@ -4,10 +4,14 @@ public class BattleConstant
 
     public static readonly float FrameInterval = 30.0f;
 
-    public static readonly float normalPlayerPositionOffset = -0.15f;
+    public static readonly float normalPlayerPositionOffset = -2f;
 
-    public static readonly string playerCharacterPath = "Prefabs/Character";
+    public static readonly string playerCharacterPath = "Prefabs/Player";
+
+    public static readonly string enemyCharacterPath = "Prefabs/Enemy";
 
     public static readonly string[] buttonNames = new string[] { "tab", "j", "k", "l" };
+
+    public static readonly int randomSeed = 114514;
 
 }

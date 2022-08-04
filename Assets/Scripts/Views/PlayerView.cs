@@ -16,7 +16,8 @@ public class PlayerView : MonoBehaviour
 
     public async UniTask<GameObject> CoLoadCharacter()
     {
-        GameObject character = await Resources.LoadAsync<GameObject>(BattleConstant.playerCharacterPath) as GameObject;
+        var resourcePrefabPath = playerId == 0 ? BattleConstant.playerCharacterPath : BattleConstant.enemyCharacterPath;
+        GameObject character = await Resources.LoadAsync<GameObject>(resourcePrefabPath) as GameObject;
         GameObject go = Instantiate(character, transform, false);
         animator = go.GetComponentInChildren<Animator>();
         return go;

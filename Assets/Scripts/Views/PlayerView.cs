@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerView : MonoBehaviour
 {
     private Animator animator;
-    private GameObject quan;
+    private GameObject feetCircleObj;
 
     public int playerId { get; set; }
 
@@ -19,7 +19,7 @@ public class PlayerView : MonoBehaviour
     {
         GameObject character = await Resources.LoadAsync<GameObject>(BattleConstant.playerCharacterPath) as GameObject;
         GameObject go = Instantiate(character, transform, false);
-        quan = go.transform.Find("Quan").gameObject;
+        feetCircleObj = go.transform.Find(BattleConstant.feetCircleName).gameObject;
         animator = go.GetComponentInChildren<Animator>();
         return go;
     }
@@ -42,7 +42,7 @@ public class PlayerView : MonoBehaviour
     {
         if (!gameObject.activeSelf)
             return;
-        
+
         _startPosition = transform.position;
         _position = MathManager.ToVector3(playerEntity.transform.pos);
         if(Vector3.zero == _position || _position == transform.position)
@@ -93,7 +93,7 @@ public class PlayerView : MonoBehaviour
 
     private void AttackUpdate(PlayerEntity playerEntity, BattleEntity battleEntity)
     {
-        quan?.SetActive(playerEntity.ID == battleEntity.selfPlayerEntity.attack.targetId);
+        feetCircleObj?.SetActive(playerEntity.ID == battleEntity.selfPlayerEntity.attack.targetId);
     }
 
 }

@@ -9,6 +9,8 @@ public class BattleConstant
 
     public static readonly string playerCharacterPath = "Prefabs/Character";
 
+    public static readonly string feetCircleName = "Quan";
+
     public static readonly string[] buttonNames = new string[] { "tab", "j", "k", "l" };
 
     public static readonly float moveSpeed = 0.5f;

@@ -20,7 +20,7 @@ public class AttackSystem
         var source = MathManager.ToVector3(playerEntity.transform.pos);
         var distance = (target - source).magnitude;
 #if UNITY_DEBUG
-        UnityEngine.Debug.Log("CheckAttackDistance distance:" + distance + ", result:" + (distance <= BattleConstant.attackDistance));
+        UnityEngine.Debug.Log("[AttackSystem CheckAttackDistance] distance:" + distance + ", result:" + (distance <= BattleConstant.attackDistance));
 #endif
         return distance <= BattleConstant.attackDistance;
     }
@@ -34,15 +34,27 @@ public class AttackSystem
     
     public static void SelectAttackTarget(PlayerEntity playerEntity, BattleEntity battleEntity)
     {
+        var foundIndex = -1;
         var playerList = battleEntity.playerList;
         for (int i = 0; i < playerList.Count; i++)
         {
             if(playerList[i].property.camp != playerEntity.property.camp && playerEntity.attack.targetId != playerList[i].ID)
             {
-                playerEntity.attack.targetId = playerList[i].ID;
+                foundIndex = i;
                 break;
             }
         }
+        if(foundIndex != -1)
+        {
+            playerEntity.attack.targetId = playerList[foundIndex].ID;
+        }
+        else
+        {
+            playerEntity.attack.targetId = -1;
+        }
+#if UNITY_DEBUG
+        UnityEngine.Debug.Log("[AttackSystem SelectAttackTarget] targetId:" + playerEntity.attack.targetId);
+#endif
     }
 
 }

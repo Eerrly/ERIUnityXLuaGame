@@ -4,13 +4,13 @@ public class InputConstant
 
     public static readonly string Horizontal = "Horizontal";
 
-    public static readonly string KeyCodeSpace = "tab";
+    public const string KeyCodeSpace = "tab";
 
-    public static readonly string KeyCodeJ = "j";
+    public const string KeyCodeJ = "j";
 
-    public static readonly string KeyCodeK = "k";
+    public const string KeyCodeK = "k";
 
-    public static readonly string KeyCodeL = "l";
+    public const string KeyCodeL = "l";
 }
 
 public enum ELogicInputKey

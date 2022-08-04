@@ -34,21 +34,20 @@ public static class InputManager
         var state = Input.GetKey(name);
         if (!state)
         {
-            if (InputConstant.KeyCodeSpace.Equals(name))
+            switch (name)
             {
-                state = defaultKeies[0];
-            }
-            else if (InputConstant.KeyCodeJ.Equals(name))
-            {
-                state = defaultKeies[1];
-            }
-            else if (InputConstant.KeyCodeK.Equals(name))
-            {
-                state = defaultKeies[2];
-            }
-            else if (InputConstant.KeyCodeL.Equals(name))
-            {
-                state = defaultKeies[3];
+                case InputConstant.KeyCodeSpace:
+                    state = defaultKeies[0];
+                    break;
+                case InputConstant.KeyCodeJ:
+                    state = defaultKeies[1];
+                    break;
+                case InputConstant.KeyCodeK:
+                    state = defaultKeies[2];
+                    break;
+                case InputConstant.KeyCodeL:
+                    state = defaultKeies[3];
+                    break;
             }
         }
         return state;

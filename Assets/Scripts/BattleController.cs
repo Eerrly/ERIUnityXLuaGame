@@ -62,9 +62,6 @@
 
     public void UpdateInput() {
         var input = BattleManager.Instance.GetInput();
-#if UNITY_EDITOR && UNITY_DEBUG
-        UnityEngine.Debug.Log(string.Format("UpdateInput Input ：{0}", input.ToString()));
-#endif
         battleEntity.selfPlayerEntity.input.yaw = input.yaw - MathManager.YawOffset;
         battleEntity.selfPlayerEntity.input.key = input.key;
     }

@@ -38,7 +38,6 @@ public class BattleManager : MonoBehaviour
     private BattleCommonData _battleClientData;
 
     public int selfPlayerId { get; set; }
-    public int nextSelfPlayerId { get; set; }
 
     private void Awake()
     {
@@ -70,7 +69,6 @@ public class BattleManager : MonoBehaviour
     public void StartBattle(int selfPlayerId)
     {
         this.selfPlayerId = selfPlayerId;
-        this.nextSelfPlayerId = selfPlayerId;
         _battle = new BattleController(_battleClientData);
         _battleView.InitView(_battleClientData);
         Util.InvokeAttributeCall(this, typeof(EntitySystem), false, typeof(EntitySystem.Initialize), false);

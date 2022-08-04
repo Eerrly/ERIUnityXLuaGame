@@ -25,7 +25,7 @@ public class FrameBuffer
         }
 
         /// <summary>
-        /// [space] [j] [k] [l]
+        /// [tab] [j] [k] [l]
         /// </summary>
         public byte key
         {

@@ -5,19 +5,14 @@ public class PlayerMoveState : PlayerBaseState
     {
         AnimationSystem.ChangePlayerAnimation(playerEntity, EAnimationID.Move);
         playerEntity.animation.fixedTransitionDuration = 0.1f;
-        playerEntity.movement.moveSpeed = BattleConstant.moveSpeed;
-        playerEntity.movement.turnSpeed = BattleConstant.turnSpeed;
+        playerEntity.movement.moveSpeed = PlayerPropertyConstant.MoveSpeed;
+        playerEntity.movement.turnSpeed = PlayerPropertyConstant.TurnSpeed;
     }
 
     public override void OnUpdate(PlayerEntity playerEntity, BattleEntity battleEntity)
     {
         MoveSystem.UpdatePosition(playerEntity);
         MoveSystem.UpdateRotaion(playerEntity);
-
-        if (KeySystem.CheckTabKeyDown(playerEntity))
-        {
-            AttackSystem.SelectAttackTarget(playerEntity, battleEntity);
-        }
     }
 
     public override void OnLateUpdate(PlayerEntity playerEntity, BattleEntity battleEntity)
@@ -26,7 +21,7 @@ public class PlayerMoveState : PlayerBaseState
         {
             PlayerStateSystem.ChangePlayerState(playerEntity, EPlayerState.Idle);
         }
-        if (AttackSystem.HasAttackTarget(playerEntity) && KeySystem.CheckAttackKeyDown(playerEntity))
+        if (KeySystem.CheckAttackKeyDown(playerEntity))
         {
             PlayerStateSystem.ChangePlayerState(playerEntity, EPlayerState.AttackReady);
         }

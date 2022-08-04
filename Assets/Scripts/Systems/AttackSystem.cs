@@ -6,23 +6,18 @@ public class AttackSystem
     [EntitySystem.Initialize]
     public static void Initialize()
     {
-        attackCdTimeFrame = BattleConstant.attackCdTime * BattleConstant.FrameInterval;
+        attackCdTimeFrame = PlayerPropertyConstant.AttackCdTime * BattleConstant.FrameInterval;
     }
 
-    public static bool HasAttackTarget(PlayerEntity playerEntity)
+    public static bool CheckAttackDistance(PlayerEntity playerEntity, PlayerEntity otherEntity, BattleEntity battleEntity)
     {
-        return playerEntity.attack.targetId != -1;
-    }
-
-    public static bool CheckAttackDistance(PlayerEntity playerEntity, BattleEntity battleEntity)
-    {
-        var target = MathManager.ToVector3(battleEntity.FindPlayer(playerEntity.attack.targetId).transform.pos);
+        var target = MathManager.ToVector3(otherEntity.transform.pos);
         var source = MathManager.ToVector3(playerEntity.transform.pos);
         var distance = (target - source).magnitude;
 #if UNITY_DEBUG
-        UnityEngine.Debug.Log("[AttackSystem CheckAttackDistance] distance:" + distance + ", result:" + (distance <= BattleConstant.attackDistance));
+        UnityEngine.Debug.Log("[AttackSystem CheckAttackDistance] distance:" + distance + ", result:" + (distance <= PlayerPropertyConstant.AttackDistance));
 #endif
-        return distance <= BattleConstant.attackDistance;
+        return distance <= PlayerPropertyConstant.AttackDistance;
     }
 
     public static bool CheckAttackCdTime(PlayerEntity playerEntity, BattleEntity battleEntity)
@@ -30,31 +25,6 @@ public class AttackSystem
         if (playerEntity.attack.lastAttackTime < 0)
             return true;
         return battleEntity.time - playerEntity.attack.lastAttackTime >= attackCdTimeFrame;
-    }
-    
-    public static void SelectAttackTarget(PlayerEntity playerEntity, BattleEntity battleEntity)
-    {
-        var foundIndex = -1;
-        var playerList = battleEntity.playerList;
-        for (int i = 0; i < playerList.Count; i++)
-        {
-            if(playerList[i].property.camp != playerEntity.property.camp && playerEntity.attack.targetId != playerList[i].ID)
-            {
-                foundIndex = i;
-                break;
-            }
-        }
-        if(foundIndex != -1)
-        {
-            playerEntity.attack.targetId = playerList[foundIndex].ID;
-        }
-        else
-        {
-            playerEntity.attack.targetId = -1;
-        }
-#if UNITY_DEBUG
-        UnityEngine.Debug.Log("[AttackSystem SelectAttackTarget] targetId:" + playerEntity.attack.targetId);
-#endif
     }
 
 }

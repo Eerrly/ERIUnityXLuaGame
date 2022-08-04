@@ -35,16 +35,15 @@
         state.nextStateId = (int)EPlayerState.Idle;
         input.yaw = MathManager.YawStop;
         input.key = 0;
-        movement.moveSpeed = BattleConstant.moveSpeed;
-        movement.turnSpeed = BattleConstant.turnSpeed;
+        movement.moveSpeed = PlayerPropertyConstant.MoveSpeed;
+        movement.turnSpeed = PlayerPropertyConstant.TurnSpeed;
         animation.fixedTransitionDuration = 0.0f;
         animation.layer = -1;
         animation.fixedTimeOffset = 0.0f;
         animation.normalizedTransitionTime = 0.0f;
-        attack.targetId = -1;
         attack.lastAttackTime = -1;
         property.camp = (ECamp)data.camp;
-        property.collsionSize = BattleConstant.collisionRadius;
+        property.collsionSize = PlayerPropertyConstant.CollisionRadius;
         InitBuffs();
     }
 

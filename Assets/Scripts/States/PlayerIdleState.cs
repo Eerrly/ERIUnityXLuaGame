@@ -7,14 +7,6 @@ public class PlayerIdleState : PlayerBaseState
         playerEntity.animation.fixedTransitionDuration = 0.1f;
     }
 
-    public override void OnUpdate(PlayerEntity playerEntity, BattleEntity battleEntity)
-    {
-        if (KeySystem.CheckTabKeyDown(playerEntity))
-        {
-            AttackSystem.SelectAttackTarget(playerEntity, battleEntity);
-        }
-    }
-
     public override void OnLateUpdate(PlayerEntity playerEntity, BattleEntity battleEntity)
     {
         if(!KeySystem.IsYawTypeStop(playerEntity.input.yaw))
@@ -25,7 +17,7 @@ public class PlayerIdleState : PlayerBaseState
         {
             PlayerStateSystem.ChangePlayerState(playerEntity, EPlayerState.WarRoar);
         }
-        if (AttackSystem.HasAttackTarget(playerEntity) && KeySystem.CheckAttackKeyDown(playerEntity))
+        if (KeySystem.CheckAttackKeyDown(playerEntity))
         {
             PlayerStateSystem.ChangePlayerState(playerEntity, EPlayerState.AttackReady);
         }

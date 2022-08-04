@@ -31,19 +31,32 @@
     internal void Init(BattlePlayerCommonData data)
     {
         ID = data.pos;
-        state.curStateId = (int)EPlayerState.None;
-        state.nextStateId = (int)EPlayerState.Idle;
         input.yaw = MathManager.YawStop;
         input.key = 0;
-        movement.moveSpeed = PlayerPropertyConstant.MoveSpeed;
-        movement.turnSpeed = PlayerPropertyConstant.TurnSpeed;
         animation.fixedTransitionDuration = 0.0f;
         animation.layer = -1;
         animation.fixedTimeOffset = 0.0f;
         animation.normalizedTransitionTime = 0.0f;
         attack.lastAttackTime = -1;
         property.camp = (ECamp)data.camp;
-        property.collsionSize = PlayerPropertyConstant.CollisionRadius;
+        
+        if (data.camp == BattleConstant.MyCamp)
+        {
+            state.curStateId = (int)EPlayerState.None;
+            state.nextStateId = (int)EPlayerState.Idle;
+            movement.moveSpeed = PlayerPropertyConstant.MoveSpeed;
+            movement.turnSpeed = PlayerPropertyConstant.TurnSpeed;
+            property.collsionSize = PlayerPropertyConstant.CollisionRadius;
+        }
+        else
+        {
+            state.curStateId = (int)EEnemyState.None;
+            state.nextStateId = (int)EEnemyState.Idle;
+            movement.moveSpeed = EnemyPropertyConstant.MoveSpeed;
+            movement.turnSpeed = EnemyPropertyConstant.TurnSpeed;
+            property.collsionSize = EnemyPropertyConstant.CollisionRadius;
+        }
+
         InitBuffs();
     }
 

@@ -15,7 +15,7 @@ public class BattleView : MonoBehaviour
     {
         for (int i = 0; i < data.players.Length; i++)
         {
-            var player = new GameObject(BattleConstant.normalPlayerName);
+            var player = new GameObject(data.players[i].name);
             player.transform.position = new Vector3(i * BattleConstant.normalPlayerPositionOffset, 0, 0);
             PlayerView playerView = player.AddComponent<PlayerView>();
             playerView.Init(i);

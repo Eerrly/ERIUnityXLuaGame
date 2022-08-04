@@ -1,5 +1,7 @@
 ﻿public class PlayerPropertyConstant
 {
+    public const string Name = "Player";
+
     public const float HP = 100.0f;
 
     public const float MoveSpeed = 0.5f;
@@ -21,6 +23,8 @@
 
 public class EnemyPropertyConstant
 {
+    public const string Name = "Enemy";
+
     public const float HP = 100.0f;
 
     public const float MoveSpeed = 0.5f;

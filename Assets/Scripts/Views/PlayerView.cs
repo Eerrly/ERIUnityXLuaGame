@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerView : MonoBehaviour
 {
-    private Animator animator;
+    private AnimatedMeshAnimator animator;
 
     public int playerId { get; set; }
 
@@ -19,7 +19,7 @@ public class PlayerView : MonoBehaviour
         var resourcePrefabPath = playerId == 0 ? BattleConstant.playerCharacterPath : BattleConstant.enemyCharacterPath;
         GameObject character = await Resources.LoadAsync<GameObject>(resourcePrefabPath) as GameObject;
         GameObject go = Instantiate(character, transform, false);
-        animator = go.GetComponentInChildren<Animator>();
+        animator = go.GetComponentInChildren<AnimatedMeshAnimator>();
         return go;
     }
 
@@ -72,20 +72,9 @@ public class PlayerView : MonoBehaviour
         animId = playerEntity.animation.animId;
         if(animator != null && animId != 0 && _lastAnimationId != animId)
         {
-            playerEntity.animation.normalizedTime = 0.0f;
+            var animations = playerEntity.ID == 0 ? AnimationConstant.PlayerAnimationNames : AnimationConstant.EnemyAniamtionNames;
+            animator.Play(animations[animId], 0f);
             _lastAnimationId = animId;
-            AnimationManager.CrossFadeInFixedTime(
-                animator,
-                AnimationConstant.aniamtionNames[animId],
-                playerEntity.animation.fixedTransitionDuration,
-                playerEntity.animation.layer,
-                playerEntity.animation.fixedTimeOffset,
-                playerEntity.animation.normalizedTransitionTime
-                );
-        }
-        if(animator != null)
-        {
-            playerEntity.animation.normalizedTime = animator.GetCurrentAnimatorStateInfo(0).normalizedTime;
         }
     }
 

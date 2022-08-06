@@ -1,12 +1,21 @@
 public class AnimationConstant
 {
-    public static readonly string[] aniamtionNames = new string[]
+    public static readonly string[] EnemyAniamtionNames = new string[]
     {
         "None",
-        "Idle",
-        "Walk",
-        "Run",
-        "Attack",
+        "Orc_wolfrider_05_combat_idle",
+        "Orc_wolfrider_06_combat_walk",
+        "Orc_wolfrider_03_run",
+        "Orc_wolfrider_08_attack_B",
+    };
+
+    public static readonly string[] PlayerAnimationNames = new string[]
+    {
+        "None",
+        "WK_heavy_infantry_05_combat_idle",
+        "WK_heavy_infantry_06_combat_walk",
+        "WK_heavy_infantry_04_charge",
+        "WK_heavy_infantry_08_attack_B",
     };
 }
 

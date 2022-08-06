@@ -2,12 +2,14 @@ using UnityEngine;
 
 public class Test : MonoBehaviour
 {
+    private AnimatedMeshAnimator[] enemyAnimator;
 
-    private Animator anim;
-
-    public void xxxxx()
+    private void Start()
     {
-        anim.CrossFade("", 0.1f, 0);
+        enemyAnimator = FindObjectsOfType<AnimatedMeshAnimator>();
+        for (int i = 0; i < enemyAnimator.Length; i++)
+        {
+            enemyAnimator[i].Play("Orc_wolfrider_03_run", 0f);
+        }
     }
-
 }

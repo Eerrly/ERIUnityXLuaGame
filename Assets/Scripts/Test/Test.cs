@@ -2,14 +2,17 @@ using UnityEngine;
 
 public class Test : MonoBehaviour
 {
-    private AnimatedMeshAnimator[] enemyAnimator;
+    public GameObject go;
 
     private void Start()
     {
-        enemyAnimator = FindObjectsOfType<AnimatedMeshAnimator>();
-        for (int i = 0; i < enemyAnimator.Length; i++)
+        for (int i = 0; i < 1000; i++)
         {
-            enemyAnimator[i].Play("Orc_wolfrider_03_run", 0f);
+            var resourcePrefabPath = BattleConstant.playerCharacterPath;
+            GameObject character = Resources.Load<GameObject>(resourcePrefabPath) as GameObject;
+            GameObject go = Instantiate(character, new Vector3(Random.insideUnitCircle.x * 10, 0, Random.insideUnitCircle.y * 10), Quaternion.identity);
+            AnimatedMeshAnimator animator = go.GetComponentInChildren<AnimatedMeshAnimator>();
+            animator.Play("WK_heavy_infantry_08_attack_B", 0f);
         }
     }
 }

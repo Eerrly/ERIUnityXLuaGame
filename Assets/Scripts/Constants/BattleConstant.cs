@@ -2,7 +2,7 @@ public class BattleConstant
 {
     public static readonly int MyCamp = 1;
 
-    public static readonly float FrameInterval = 30.0f;
+    public static readonly int FrameInterval = 30;
 
     public static readonly float normalPlayerPositionOffset = -2f;
 

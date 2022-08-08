@@ -22,7 +22,7 @@ public class AttackSystem
 
     public static bool CheckAttackCdTime(PlayerEntity playerEntity, BattleEntity battleEntity)
     {
-        if (playerEntity.attack.lastAttackTime < 0)
+        if (playerEntity.attack.lastAttackTime <= 0)
             return true;
         return battleEntity.time - playerEntity.attack.lastAttackTime >= attackCdTimeFrame;
     }

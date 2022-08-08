@@ -76,6 +76,10 @@ public class PlayerView : MonoBehaviour
             animator.Play(animations[animId], 0f);
             _lastAnimationId = animId;
         }
+        if(animator != null)
+        {
+            playerEntity.animation.normalizedTime = animator.NormalizedTime;
+        }
     }
 
 }

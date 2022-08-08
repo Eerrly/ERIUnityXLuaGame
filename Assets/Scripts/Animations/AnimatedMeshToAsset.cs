@@ -9,7 +9,7 @@ using UnityEngine.Rendering;
 public class AnimatedMeshToAsset
 {
     private const int BoneMatrixRowCount = 3;
-    private const int TargetFrameRate = 60;
+    private static int TargetFrameRate => BattleConstant.FrameInterval;
 
     [MenuItem("AnimatedMeshRendererGenerator/MeshToAsset")]
     private static void Generate()
@@ -169,8 +169,8 @@ public class AnimatedMeshToAsset
         var animtedMeshRenderer = go.AddComponent<AnimatedMeshAnimator>();
         var properyBlockController = go.AddComponent<MaterialPropertyBlockController>();
         var frameInformations = new List<AnimationFrameInfo>();
-        var currentClipFrames = 0;
 
+        var currentClipFrames = 0;
         foreach (var clip in clips)
         {
             var frameCount = (int)(clip.length * TargetFrameRate);
@@ -178,7 +178,6 @@ public class AnimatedMeshToAsset
             var endFrame = startFrame + frameCount - 1;
 
             frameInformations.Add(new AnimationFrameInfo(clip.name, startFrame, endFrame, frameCount));
-
             currentClipFrames = endFrame;
         }
 

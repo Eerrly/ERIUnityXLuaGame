@@ -8,8 +8,17 @@ public class AnimatedMeshAnimator : MonoBehaviour
     List<AnimationFrameInfo> FrameInformations;
     [SerializeField]
     MaterialPropertyBlockController PropertyBlockController;
-
+    
+    public float NormalizedTime { get; private set; }
     public bool IsPlaying { get; private set; }
+
+    private void Awake()
+    {
+        _timer = 0;
+        _frameCount = 1;
+        NormalizedTime = 0;
+        IsPlaying = false;
+    }
 
     public void Setup(List<AnimationFrameInfo> frameInformations, MaterialPropertyBlockController propertyBlockController)
     {
@@ -19,6 +28,8 @@ public class AnimatedMeshAnimator : MonoBehaviour
 
     public void Play(string animationName, float offsetSeconds)
     {
+        if (IsPlaying) Stop();
+
         var frameInformation = FrameInformations.First(x => x.Name == animationName);
 
         PropertyBlockController.SetFloat("_OffsetSeconds", offsetSeconds);
@@ -28,6 +39,8 @@ public class AnimatedMeshAnimator : MonoBehaviour
         PropertyBlockController.Apply();
 
         IsPlaying = true;
+
+        _frameCount = frameInformation.FrameCount;
     }
 
     public void Stop()
@@ -38,6 +51,15 @@ public class AnimatedMeshAnimator : MonoBehaviour
         PropertyBlockController.Apply();
 
         IsPlaying = false;
+
+        _timer = 0;
+    }
+
+    private float _timer;
+    private int _frameCount;
+    private void Update()
+    {
+        if (IsPlaying && NormalizedTime < 1) NormalizedTime = Mathf.Min(1.0f, (_timer += Time.deltaTime) * BattleConstant.FrameInterval / _frameCount);
     }
 
 }

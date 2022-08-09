@@ -35,7 +35,7 @@ public class AnimatedMeshToAsset
             return;
         }
 
-        var selectionPath = "Assets/Resources/GPU";
+        var selectionPath = "Assets/Resources";
         var skinnedMeshRenderer = skinnedMeshRenderers.First();
         var clips = animator.runtimeAnimatorController.animationClips;
 

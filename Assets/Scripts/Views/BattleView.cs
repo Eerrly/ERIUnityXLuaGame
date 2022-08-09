@@ -9,6 +9,9 @@ public class BattleView : MonoBehaviour
     public void InitView(BattleCommonData data)
     {
         InitPlayerView(data);
+        var spaceX = transform.localScale.x * BattleConstant.spaceX;
+        var spaceZ = transform.localScale.z * BattleConstant.spaceZ;
+        SpacePartition.Init(spaceX, spaceZ, BattleConstant.cellSize);
     }
 
     private void InitPlayerView(BattleCommonData data)
@@ -45,8 +48,36 @@ public class BattleView : MonoBehaviour
     {
         foreach (var item in _playerViews)
         {
-            if (item) Destroy(item.gameObject);
+            if (item)
+            {
+                Destroy(item.gameObject);
+            }
         }
     }
+
+#if UNITY_DEBUG
+    void OnDrawGizmos()
+    {
+        List<Cell> cellList = SpacePartition.GetCellList();
+        if(cellList == null)
+        {
+            return;
+        }
+        for (int i = 0; i < cellList.Count; i++)
+        {
+            Cell cell = cellList[i];
+            if(cell.entities.Count > 0)
+            {
+                Gizmos.color = new Color(0, 1f, 0, 0.2f);
+                Gizmos.DrawCube(cell.bounds.center, cell.bounds.size);
+            }
+            else
+            {
+                Gizmos.color = Color.white;
+                Gizmos.DrawWireCube(cell.bounds.center, cell.bounds.size);
+            }
+        }
+    }
+#endif
 
 }

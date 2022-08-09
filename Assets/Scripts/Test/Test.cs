@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class Test : MonoBehaviour
 {
@@ -15,4 +16,6 @@ public class Test : MonoBehaviour
             animator.Play("WK_heavy_infantry_08_attack_B", 0f);
         }
     }
+
+
 }

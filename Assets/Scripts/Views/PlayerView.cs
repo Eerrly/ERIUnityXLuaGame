@@ -28,6 +28,7 @@ public class PlayerView : MonoBehaviour
         PlayerEntity playerEntity = battleEntity.FindPlayer(playerId);
         TransformUpdate(playerEntity, deltaTime);
         AnimationUpdate(playerEntity);
+        SpacePartition.UpdateEntityCell(playerEntity);
     }
 
     private Vector3 _startPosition;

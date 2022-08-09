@@ -2,6 +2,8 @@
 {
     public int ID;
 
+    public Cell cell;
+
     #region Components
     public TransformComponent transform = new TransformComponent();
     public MoveComponent movement = new MoveComponent();

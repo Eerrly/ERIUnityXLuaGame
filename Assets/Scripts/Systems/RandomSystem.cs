@@ -5,6 +5,7 @@ public class RandomSystem
 {
     private static void Initialize()
     {
+        Random.InitState(BattleConstant.randomSeed);
     }
 
     public static float RandomRange(float min, float max)

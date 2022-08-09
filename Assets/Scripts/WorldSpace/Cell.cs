@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 
 public class Cell
@@ -29,6 +30,18 @@ public class Cell
         {
             entities.Add(entity);
         }
+    }
+
+    public override string ToString()
+    {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.Append(string.Format("id:{0} entities:[", id));
+        for (int i = 0; i < entities.Count; i++)
+        {
+            stringBuilder.Append(string.Format("{0},", entities[i].ID));
+        }
+        stringBuilder.Append("]");
+        return stringBuilder.ToString();
     }
 
 }

@@ -19,7 +19,7 @@ public class BattleView : MonoBehaviour
         for (int i = 0; i < data.players.Length; i++)
         {
             var player = new GameObject(data.players[i].name);
-            player.transform.position = new Vector3(i * BattleConstant.normalPlayerPositionOffset, 0, 0);
+            player.transform.position = new Vector3(Random.insideUnitCircle.x * BattleConstant.normalPlayerPositionOffset, 0, Random.insideUnitCircle.y * BattleConstant.normalPlayerPositionOffset);
             PlayerView playerView = player.AddComponent<PlayerView>();
             playerView.Init(i);
             _playerViews.Add(playerView);
@@ -56,7 +56,7 @@ public class BattleView : MonoBehaviour
     }
 
 #if UNITY_DEBUG
-    void OnDrawGizmos()
+    private void OnDrawGizmos()
     {
         List<Cell> cellList = SpacePartition.GetCellList();
         if(cellList == null)

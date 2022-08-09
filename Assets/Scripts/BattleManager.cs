@@ -113,4 +113,11 @@ public class BattleManager : MonoBehaviour
         _frameEngine.StopEngine();
     }
 
+#if UNITY_DEBUG
+    private void OnGUI()
+    {
+        GUI.Label(new Rect(20, 40, 300, 20), (_battle as BattleController).battleEntity.selfPlayerEntity.cell.ToString());
+    }
+#endif
+
 }

@@ -3,9 +3,9 @@
 [EntitySystem]
 public class RandomSystem
 {
-    private static void Initialize()
+    private static void InitState(PlayerEntity entity)
     {
-        Random.InitState(BattleConstant.randomSeed);
+        Random.InitState(entity.runtimeProperty.seed);
     }
 
     public static float RandomRange(float min, float max)

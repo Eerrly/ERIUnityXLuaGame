@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using System.Collections.Generic;
 
 public class BattleManager : MonoBehaviour
 {
@@ -114,9 +115,53 @@ public class BattleManager : MonoBehaviour
     }
 
 #if UNITY_DEBUG
+    private int height = 20;
     private void OnGUI()
     {
-        GUI.Label(new Rect(20, 40, 300, 20), (_battle as BattleController).battleEntity.selfPlayerEntity.cell.ToString());
+        int index = 1;
+        PlayerEntity playerEntity = (_battle as BattleController).battleEntity.selfPlayerEntity;
+        GUI.Label(new Rect(20, index++ * height, 800, height),
+            string.Format("[player]\tid:{0}", playerEntity.ID));
+        GUI.Label(new Rect(20, index++ * height, 800, height), 
+            string.Format("[input]\tyaw:{0}, key:{1}", playerEntity.input.yaw, playerEntity.input.key));
+        GUI.Label(new Rect(20, index++ * height, 800, height), 
+            string.Format("[cell]\t{0}", playerEntity.cell.ToString()));
+        GUI.Label(new Rect(20, index++ * height, 800, height), 
+            string.Format("[state]\t{0}", Enum.GetName(typeof(EPlayerState), playerEntity.curStateId)));
+        GUI.Label(new Rect(20, index++ * height, 800, height),
+            string.Format("[move]\tposition:{0}, rotation:{1}", MathManager.ToVector3(playerEntity.movement.position).ToString(), MathManager.ToQuaternion(playerEntity.movement.rotation).ToString()));
+    }
+
+    private void OnDrawGizmos()
+    {
+        List<Cell> cellList = SpacePartition.GetCellList();
+        if (cellList == null)
+        {
+            return;
+        }
+        for (int i = 0; i < cellList.Count; i++)
+        {
+            Cell cell = cellList[i];
+            if (cell.entities.Count > 0)
+            {
+                Gizmos.color = new Color(0, 1f, 0, 0.2f);
+                Gizmos.DrawCube(cell.bounds.center, cell.bounds.size);
+                for (int j = 0; j < cell.entities.Count; j++)
+                {
+                    if(cell.entities[j].ID == selfPlayerId)
+                    {
+                        Gizmos.color = new Color(1, 0, 0, 0.2f);
+                        Gizmos.DrawCube(cell.bounds.center, cell.bounds.size * 3);
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                Gizmos.color = Color.white;
+                Gizmos.DrawWireCube(cell.bounds.center, cell.bounds.size);
+            }
+        }
     }
 #endif
 

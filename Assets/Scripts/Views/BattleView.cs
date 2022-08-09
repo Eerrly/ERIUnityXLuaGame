@@ -55,29 +55,4 @@ public class BattleView : MonoBehaviour
         }
     }
 
-#if UNITY_DEBUG
-    private void OnDrawGizmos()
-    {
-        List<Cell> cellList = SpacePartition.GetCellList();
-        if(cellList == null)
-        {
-            return;
-        }
-        for (int i = 0; i < cellList.Count; i++)
-        {
-            Cell cell = cellList[i];
-            if(cell.entities.Count > 0)
-            {
-                Gizmos.color = new Color(0, 1f, 0, 0.2f);
-                Gizmos.DrawCube(cell.bounds.center, cell.bounds.size);
-            }
-            else
-            {
-                Gizmos.color = Color.white;
-                Gizmos.DrawWireCube(cell.bounds.center, cell.bounds.size);
-            }
-        }
-    }
-#endif
-
 }

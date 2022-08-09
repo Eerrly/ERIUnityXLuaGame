@@ -40,6 +40,7 @@
         animation.fixedTimeOffset = 0.0f;
         animation.normalizedTransitionTime = 0.0f;
         attack.lastAttackTime = -1;
+        runtimeProperty.seed = BattleConstant.randomSeed;
         property.camp = (ECamp)data.camp;
 
         state.curStateId = (int)EPlayerState.None;

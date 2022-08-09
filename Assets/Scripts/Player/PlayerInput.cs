@@ -73,11 +73,4 @@ public class PlayerInput : MonoBehaviour
         _lastMoveInput = moveInput.normalized;
     }
 
-#if UNITY_DEBUG
-    private void OnGUI()
-    {
-        GUI.Label(new Rect(20, 20, 300, 20), string.Format("input : {0}", _input.ToString()));
-    }
-#endif
-
 }

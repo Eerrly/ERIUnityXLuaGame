@@ -1,6 +1,9 @@
 ﻿using System;
 using UnityEngine;
+
+#if UNITY_DEBUG
 using System.Collections.Generic;
+#endif
 
 public class BattleManager : MonoBehaviour
 {
@@ -120,20 +123,44 @@ public class BattleManager : MonoBehaviour
     {
         int index = 1;
         PlayerEntity playerEntity = (_battle as BattleController).battleEntity.selfPlayerEntity;
-        GUI.Label(new Rect(20, index++ * height, 800, height),
+        GUI.Label(new Rect(20, index++ * height, 1024, height),
             string.Format("[player]\tid:{0}", playerEntity.ID));
-        GUI.Label(new Rect(20, index++ * height, 800, height), 
+        GUI.Label(new Rect(20, index++ * height, 1024, height), 
             string.Format("[input]\tyaw:{0}, key:{1}", playerEntity.input.yaw, playerEntity.input.key));
-        GUI.Label(new Rect(20, index++ * height, 800, height), 
-            string.Format("[cell]\t{0}", playerEntity.cell.ToString()));
-        GUI.Label(new Rect(20, index++ * height, 800, height), 
+        GUI.Label(new Rect(20, index++ * height, 1024, height), 
             string.Format("[state]\t{0}", Enum.GetName(typeof(EPlayerState), playerEntity.curStateId)));
-        GUI.Label(new Rect(20, index++ * height, 800, height),
+        GUI.Label(new Rect(20, index++ * height, 1024, height),
+            string.Format("[anim]\tanimId:{0}, normalizedTime:{1}", Enum.GetName(typeof(EAnimationID), playerEntity.animation.animId), playerEntity.animation.normalizedTime));
+        GUI.Label(new Rect(20, index++ * height, 1024, height),
             string.Format("[move]\tposition:{0}, rotation:{1}", MathManager.ToVector3(playerEntity.movement.position).ToString(), MathManager.ToQuaternion(playerEntity.movement.rotation).ToString()));
+        
+        List<Cell> aroundCellList = SpacePartition.GetAroundCellList(playerEntity);
+        string strCellInfo = "[cell]\t";
+        for (int i = 0; i < aroundCellList.Count; i++)
+        {
+            if (aroundCellList[i].entities.Count == 1 && aroundCellList[i].entities[0].ID == selfPlayerId)
+                continue;
+            if (aroundCellList[i].entities.Count > 0)
+            {
+                strCellInfo += (aroundCellList[i].ToString() + " ");
+            }
+        }
+        GUI.Label(new Rect(20, index++ * height, 1024, height), strCellInfo);
     }
 
     private void OnDrawGizmos()
     {
+        if (_battle != null)
+        {
+            PlayerEntity playerEntity = (_battle as BattleController).battleEntity.selfPlayerEntity;
+            List<Cell> aroundCellList = SpacePartition.GetAroundCellList(playerEntity);
+            for (int i = 0; i < aroundCellList.Count; i++)
+            {
+                Gizmos.color = new Color(1, 0, 0, 0.2f);
+                Gizmos.DrawCube(aroundCellList[i].bounds.center, aroundCellList[i].bounds.size);
+            }
+        }
+
         List<Cell> cellList = SpacePartition.GetCellList();
         if (cellList == null)
         {
@@ -146,15 +173,6 @@ public class BattleManager : MonoBehaviour
             {
                 Gizmos.color = new Color(0, 1f, 0, 0.2f);
                 Gizmos.DrawCube(cell.bounds.center, cell.bounds.size);
-                for (int j = 0; j < cell.entities.Count; j++)
-                {
-                    if(cell.entities[j].ID == selfPlayerId)
-                    {
-                        Gizmos.color = new Color(1, 0, 0, 0.2f);
-                        Gizmos.DrawCube(cell.bounds.center, cell.bounds.size * 3);
-                        break;
-                    }
-                }
             }
             else
             {

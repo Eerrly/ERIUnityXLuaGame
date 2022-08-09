@@ -6,7 +6,7 @@ public class BattleConstant
 
     public static readonly int FrameInterval = 30;
 
-    public static readonly float normalPlayerPositionOffset = 10f;
+    public static readonly float normalPlayerPositionOffset = 40f;
 
     public static readonly string playerCharacterPath = "Prefabs/Player";
 

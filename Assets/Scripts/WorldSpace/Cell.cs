@@ -38,7 +38,7 @@ public class Cell
         stringBuilder.Append(string.Format("id:{0} entities:[", id));
         for (int i = 0; i < entities.Count; i++)
         {
-            stringBuilder.Append(string.Format("{0},", entities[i].ID));
+            stringBuilder.Append(string.Format(i == (entities.Count - 1) ? "{0}" : "{0},", entities[i].ID));
         }
         stringBuilder.Append("]");
         return stringBuilder.ToString();

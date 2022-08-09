@@ -64,6 +64,31 @@ public static class SpacePartition
         }
     }
 
+    public static List<Cell> GetAroundCellList(PlayerEntity entity)
+    {
+        List<Cell> aroundCellList = new List<Cell>();
+        int index = PositionIntoIndex(MathManager.ToVector3(entity.transform.pos));
+        if (index >= cellList.Count)
+        {
+            return aroundCellList;
+        }
+        for (int i = -1; i < 2; i++)
+        {
+            int x = i + (int)(index / cellSize.x);
+            if (x < 0 || x > cellList.Count)
+                continue;
+            for (int j = -1; j < 2; j++)
+            {
+                int z = j + (int)(index % cellSize.z);
+                if (z >= 0 && z <= cellList.Count)
+                {
+                    aroundCellList.Add(cellList[x * cellCountX + z]);
+                }
+            }
+        }
+        return aroundCellList;
+    }
+
     public static List<Cell> GetCellList()
     {
         return cellList;

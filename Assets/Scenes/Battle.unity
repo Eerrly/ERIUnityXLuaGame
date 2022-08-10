@@ -314,9 +314,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66bbb6ab5de15cc46a26499ccc782940, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sectorCheckAngle: 45
-  sectorCheckTheta: 1
-  nGuiLabelHeight: 20
 --- !u!1001 &5201128084065450306
 PrefabInstance:
   m_ObjectHideFlags: 0

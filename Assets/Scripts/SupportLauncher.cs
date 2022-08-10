@@ -1,10 +1,10 @@
-﻿#if UNITY_DEBUG
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class SupportLauncher : MonoBehaviour
 {
+#if UNITY_DEBUG
     [Header("扇形范围检测")]
     [SerializeField] float sectorCheckAngle;
     [SerializeField] float sectorCheckTheta;
@@ -117,6 +117,5 @@ public class SupportLauncher : MonoBehaviour
         DrawSelfEntity();
         DrawCellList();
     }
-
-}
 #endif
+}

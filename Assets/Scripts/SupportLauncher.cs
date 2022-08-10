@@ -45,17 +45,7 @@ public class SupportLauncher : MonoBehaviour
         if (BattleManager.Instance == null || BattleManager.Instance.battle == null)
             return;
         PlayerEntity playerEntity = (BattleManager.Instance.battle as BattleController).battleEntity.selfPlayerEntity;
-        List<Cell> aroundCellList = SpacePartition.GetAroundCellList(playerEntity);
-        for (int i = 0; i < aroundCellList.Count; i++)
-        {
-            Gizmos.color = new Color(1, 0, 0, 0.2f);
-            Gizmos.DrawCube(aroundCellList[i].bounds.center, aroundCellList[i].bounds.size);
-            Gizmos.color = new Color(1, 0, 0);
-            for (int j = 0; j < aroundCellList[i].entities.Count; j++)
-            {
-                Gizmos.DrawLine(MathManager.ToVector3(playerEntity.transform.pos), MathManager.ToVector3(aroundCellList[i].entities[j].transform.pos));
-            }
-        }
+        DrawAroundCellList(playerEntity);
 
         Gizmos.color = Color.green;
         Vector3 position = MathManager.ToVector3(playerEntity.transform.pos);
@@ -110,6 +100,21 @@ public class SupportLauncher : MonoBehaviour
         if (angle != 360)
         {
             Gizmos.DrawLine(currentP, origin);
+        }
+    }
+
+    private void DrawAroundCellList(PlayerEntity playerEntity)
+    {
+        List<Cell> aroundCellList = SpacePartition.GetAroundCellList(playerEntity);
+        for (int i = 0; i < aroundCellList.Count; i++)
+        {
+            Gizmos.color = new Color(1, 0, 0, 0.2f);
+            Gizmos.DrawCube(aroundCellList[i].bounds.center, aroundCellList[i].bounds.size);
+            Gizmos.color = new Color(1, 0, 0);
+            for (int j = 0; j < aroundCellList[i].entities.Count; j++)
+            {
+                Gizmos.DrawLine(MathManager.ToVector3(playerEntity.transform.pos), MathManager.ToVector3(aroundCellList[i].entities[j].transform.pos));
+            }
         }
     }
 

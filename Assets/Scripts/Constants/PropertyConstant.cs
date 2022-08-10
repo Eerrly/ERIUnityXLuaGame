@@ -12,7 +12,7 @@
 
     public const float Attack = 10.0f;
 
-    public const float AttackDistance = 0.125f;
+    public const float AttackDistance = 2.0f;
 
     public const float AttackCdTime = 1.0f;
 
@@ -35,7 +35,7 @@ public class EnemyPropertyConstant
 
     public const float Attack = 10.0f;
 
-    public const float AttackDistance = 0.125f;
+    public const float AttackDistance = 2.0f;
 
     public const float AttackCdTime = 1.0f;
 

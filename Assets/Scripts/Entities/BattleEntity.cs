@@ -16,6 +16,7 @@ public class BattleEntity : BaseEntity
     public StateComponent state = new StateComponent();
     #endregion
 
+    #region Attributes
     public EBattleState curStateId
     {
         get { return (EBattleState)state.curStateId; }
@@ -35,6 +36,7 @@ public class BattleEntity : BaseEntity
     {
         get { return playerList[BattleManager.Instance.selfPlayerId]; }
     }
+    #endregion
 
     internal void Init()
     {

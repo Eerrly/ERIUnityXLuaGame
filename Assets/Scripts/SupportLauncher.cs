@@ -8,21 +8,22 @@ public class SupportLauncher : MonoBehaviour
     [Header("扇形范围检测")]
     [SerializeField] float sectorCheckAngle;
     [SerializeField] float sectorCheckTheta;
-    [Header("ONGUI文本高度")]
+    [Header("文本绘制")]
     [SerializeField] int nGuiLabelHeight = 20;
+    [SerializeField] int nGuiLabelWidth = 1024;
     private void OnGUI()
     {
         int index = 1;
         PlayerEntity playerEntity = (BattleManager.Instance.battle as BattleController).battleEntity.selfPlayerEntity;
-        GUI.Label(new Rect(20, index++ * nGuiLabelHeight, 1024, nGuiLabelHeight),
+        GUI.Label(new Rect(20, index++ * nGuiLabelHeight, nGuiLabelWidth, nGuiLabelHeight),
             string.Format("[player]\tid:{0}", playerEntity.ID));
-        GUI.Label(new Rect(20, index++ * nGuiLabelHeight, 1024, nGuiLabelHeight),
+        GUI.Label(new Rect(20, index++ * nGuiLabelHeight, nGuiLabelWidth, nGuiLabelHeight),
             string.Format("[input]\tyaw:{0}, key:{1}", playerEntity.input.yaw, playerEntity.input.key));
-        GUI.Label(new Rect(20, index++ * nGuiLabelHeight, 1024, nGuiLabelHeight),
+        GUI.Label(new Rect(20, index++ * nGuiLabelHeight, nGuiLabelWidth, nGuiLabelHeight),
             string.Format("[state]\t{0}", Enum.GetName(typeof(EPlayerState), playerEntity.curStateId)));
-        GUI.Label(new Rect(20, index++ * nGuiLabelHeight, 1024, nGuiLabelHeight),
+        GUI.Label(new Rect(20, index++ * nGuiLabelHeight, nGuiLabelWidth, nGuiLabelHeight),
             string.Format("[anim]\tanimId:{0}, normalizedTime:{1}", Enum.GetName(typeof(EAnimationID), playerEntity.animation.animId), playerEntity.animation.normalizedTime));
-        GUI.Label(new Rect(20, index++ * nGuiLabelHeight, 1024, nGuiLabelHeight),
+        GUI.Label(new Rect(20, index++ * nGuiLabelHeight, nGuiLabelWidth, nGuiLabelHeight),
             string.Format("[move]\tposition:{0}, rotation:{1}", MathManager.ToVector3(playerEntity.movement.position).ToString(), MathManager.ToQuaternion(playerEntity.movement.rotation).ToString()));
 
         List<Cell> aroundCellList = SpacePartition.GetAroundCellList(playerEntity);
@@ -36,7 +37,7 @@ public class SupportLauncher : MonoBehaviour
                 strCellInfo += (aroundCellList[i].ToString() + " ");
             }
         }
-        GUI.Label(new Rect(20, index++ * nGuiLabelHeight, 1024, nGuiLabelHeight), strCellInfo);
+        GUI.Label(new Rect(20, index++ * nGuiLabelHeight, nGuiLabelWidth, nGuiLabelHeight), strCellInfo);
     }
 
     private void DrawSelfEntity()

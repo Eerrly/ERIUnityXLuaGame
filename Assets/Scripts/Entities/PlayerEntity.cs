@@ -15,6 +15,7 @@
     public PropertyComponent property = new PropertyComponent();
     #endregion
 
+    #region Attributes
     public EPlayerState curStateId
     {
         get { return (EPlayerState)state.curStateId; }
@@ -29,6 +30,7 @@
     {
         get { return (EPlayerState)state.preStateId; }
     }
+    #endregion
 
     internal void Init(BattlePlayerCommonData data)
     {

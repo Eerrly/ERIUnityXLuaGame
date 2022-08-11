@@ -10,6 +10,7 @@ public class AnimationComponent : BaseComponent
         public float fixedTimeOffset;
         public float normalizedTransitionTime;
         public float normalizedTime;
+        public bool loop;
 
         public Common(int no)
         {
@@ -19,6 +20,7 @@ public class AnimationComponent : BaseComponent
             fixedTimeOffset = default(float);
             normalizedTransitionTime = default(float);
             normalizedTime = default(float);
+            loop = default(bool);
         }
     }
 
@@ -58,6 +60,12 @@ public class AnimationComponent : BaseComponent
     {
         get { return common.normalizedTime; }
         set { common.normalizedTime = value; }
+    }
+
+    public bool loop
+    {
+        get { return common.loop; }
+        set { common.loop = value; }
     }
 
 }

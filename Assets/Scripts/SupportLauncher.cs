@@ -5,7 +5,7 @@ using UnityEngine;
 public class SupportLauncher : MonoBehaviour
 {
 #if UNITY_DEBUG
-    [Header("扇形范围检测")]
+    [Header("扇形范围绘制")]
     [SerializeField] float sectorCheckAngle;
     [SerializeField] float sectorCheckTheta;
     [Header("文本绘制")]
@@ -16,7 +16,7 @@ public class SupportLauncher : MonoBehaviour
         int index = 1;
         PlayerEntity playerEntity = (BattleManager.Instance.battle as BattleController).battleEntity.selfPlayerEntity;
         GUI.Label(new Rect(20, index++ * nGuiLabelHeight, nGuiLabelWidth, nGuiLabelHeight),
-            string.Format("[player]\tid:{0}", playerEntity.ID));
+            string.Format("[player]\tid:{0}, hp:{1}", playerEntity.ID, playerEntity.property.hp));
         GUI.Label(new Rect(20, index++ * nGuiLabelHeight, nGuiLabelWidth, nGuiLabelHeight),
             string.Format("[input]\tyaw:{0}, key:{1}", playerEntity.input.yaw, playerEntity.input.key));
         GUI.Label(new Rect(20, index++ * nGuiLabelHeight, nGuiLabelWidth, nGuiLabelHeight),
@@ -50,7 +50,7 @@ public class SupportLauncher : MonoBehaviour
         Gizmos.color = Color.green;
         Vector3 position = MathManager.ToVector3(playerEntity.transform.pos);
         Vector3 forward = MathManager.ToQuaternion(playerEntity.transform.rot) * Vector3.forward;
-        DrawWireSemicircle(position, forward, PlayerPropertyConstant.AttackDistance, 45, Vector3.up);
+        DrawWireSemicircle(position, forward, PlayerPropertyConstant.AttackDistance, BattleConstant.angle, Vector3.up);
     }
 
     private void DrawCellList()

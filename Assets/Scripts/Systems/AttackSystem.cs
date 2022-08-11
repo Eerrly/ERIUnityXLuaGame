@@ -27,4 +27,16 @@ public class AttackSystem
         return battleEntity.time - playerEntity.attack.lastAttackTime >= attackCdTimeFrame;
     }
 
+    public static bool Attack(PlayerEntity sourceEntity, PlayerEntity targetEntity)
+    {
+        var result = true;
+        var residualHp = targetEntity.property.hp - sourceEntity.attack.atk;
+        if(residualHp < 0)
+        {
+            residualHp = 0;
+        }
+        targetEntity.property.hp = residualHp;
+        return result;
+    }
+
 }

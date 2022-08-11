@@ -25,7 +25,7 @@ public class AnimationSystem
         }
     }
 
-    public static bool CheckAnimationNormalizedTimeDone(PlayerEntity playerEntity, float normalizedTime = 0.95f)
+    public static bool CheckAnimationNormalizedTime(PlayerEntity playerEntity, float normalizedTime = 0.95f)
     {
         return playerEntity.animation.normalizedTime >= normalizedTime;
     }

@@ -3,8 +3,9 @@ public class PlayerIdleState : PlayerBaseState
 {
     public override void OnEnter(PlayerEntity playerEntity, BattleEntity battleEntity)
     {
-        AnimationSystem.ChangePlayerAnimation(playerEntity, EAnimationID.Idle);
+        playerEntity.animation.loop = true;
         playerEntity.animation.fixedTransitionDuration = 0.1f;
+        AnimationSystem.ChangePlayerAnimation(playerEntity, EAnimationID.Idle);
     }
 
     public override void OnLateUpdate(PlayerEntity playerEntity, BattleEntity battleEntity)

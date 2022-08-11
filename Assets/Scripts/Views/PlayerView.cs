@@ -74,7 +74,7 @@ public class PlayerView : MonoBehaviour
         if(animator != null && animId != 0 && _lastAnimationId != animId)
         {
             var animations = playerEntity.ID == 0 ? AnimationConstant.PlayerAnimationNames : AnimationConstant.EnemyAniamtionNames;
-            animator.Play(animations[animId], 0f);
+            animator.Play(animations[animId], 0f, playerEntity.animation.loop);
             _lastAnimationId = animId;
         }
         if(animator != null)

@@ -3,19 +3,27 @@
     [System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Auto, Pack = 4)]
     internal struct Common
     {
+        public float hp;
         public int camp;
         public int teamLevel;
         public float collsionSize;
 
         public Common(int no)
         {
+            hp = default(float);
             camp = default(int);
             teamLevel = default(int);
             collsionSize = default(float);
         }
     }
 
-    private Common common = new Common();
+    private Common common = new Common(0);
+
+    public float hp
+    {
+        get { return common.hp; }
+        set { common.hp = value; }
+    }
 
     public ECamp camp
     {

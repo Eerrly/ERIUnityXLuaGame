@@ -7,11 +7,11 @@
 
     Move = 2,
 
-    Patrol = 3,
+    AttackReady = 3,
 
-    AttackReady = 4,
+    Attack = 4,
 
-    Attack = 5,
+    Dead = 5,
 
     Count,
 }

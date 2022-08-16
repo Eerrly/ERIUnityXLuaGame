@@ -21,14 +21,14 @@ public class FirstAgent : behaviac.Agent
 	public void OnMethod()
 	{
 ///<<< BEGIN WRITING YOUR CODE OnMethod
-		UnityEngine.Debug.Log("OnMethod intValue:" + intValue);
+		UnityEngine.Debug.Log("[FirstAgent OnMethod] intValue:" + intValue);
 ///<<< END WRITING YOUR CODE
 	}
 
 	public void OnOver()
 	{
 		///<<< BEGIN WRITING YOUR CODE OnOver
-		UnityEngine.Debug.Log("OnOver intValue:" + intValue);
+		UnityEngine.Debug.Log("[FirstAgent OnOver] intValue:" + intValue);
 ///<<< END WRITING YOUR CODE
 	}
 

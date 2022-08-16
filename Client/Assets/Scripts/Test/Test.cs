@@ -2,24 +2,22 @@ using UnityEngine;
 
 public class Test : MonoBehaviour
 {
-    FirstAgent fa;
-
-    private void Awake()
-    {
-        fa = new FirstAgent();
-    }
+    private behaviac.Agent agent;
 
     private void Start()
     {
-        behaviac.Workspace.Instance.FilePath = Application.dataPath + @"\Scripts\AI\exported";
-        behaviac.Workspace.Instance.FileFormat = behaviac.Workspace.EFileFormat.EFF_xml;
-        fa.btload("FirstTree");
-        fa.btsetcurrent("FirstTree");
+        agent = AIManager.Instance.SetTree<FirstAgent>("FirstTree");
     }
 
     private void Update()
     {
-        fa.btexec();
+        AIManager.Instance.Exec<FirstAgent>(agent);
+        Debug.Log("[Test Update] count:" + AIManager.Instance.LoadedAgentQueueDicCount);
+    }
+
+    private void OnDestroy()
+    {
+        AIManager.Instance.Release();
     }
 
 }

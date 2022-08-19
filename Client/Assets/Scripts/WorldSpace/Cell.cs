@@ -7,16 +7,16 @@ public class Cell
 
     public int id;
     public Bounds bounds;
-    public List<PlayerEntity> entities;
+    public List<BaseEntity> entities;
 
     public Cell(int id, Vector3 center, Vector3 size)
     {
         this.id = id;
-        this.entities = new List<PlayerEntity>();
+        this.entities = new List<BaseEntity>();
         this.bounds = new Bounds(center, size);
     }
 
-    public void RemoveEnity(PlayerEntity entity)
+    public void RemoveEnity(BaseEntity entity)
     {
         if (entities.Contains(entity))
         {
@@ -24,7 +24,7 @@ public class Cell
         }
     }
 
-    public void AddEntity(PlayerEntity entity)
+    public void AddEntity(BaseEntity entity)
     {
         if (!entities.Contains(entity))
         {

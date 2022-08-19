@@ -8,6 +8,16 @@
     }
 }
 
+public class EnemyStateAttribute : System.Attribute
+{
+    public EEnemyState _state;
+
+    public EnemyStateAttribute(EEnemyState state)
+    {
+        _state = state;
+    }
+}
+
 public class BattleStateAttribute : System.Attribute
 {
     public EBattleState _state;

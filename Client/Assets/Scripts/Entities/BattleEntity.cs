@@ -10,33 +10,12 @@ public class BattleEntity : BaseEntity
 
     public float timeScale;
 
-    public List<PlayerEntity> playerList = new List<PlayerEntity>();
-
-    #region Components
-    public StateComponent state = new StateComponent();
-    #endregion
-
-    #region Attributes
-    public EBattleState curStateId
-    {
-        get { return (EBattleState)state.curStateId; }
-    }
-
-    public EBattleState nextStateId
-    {
-        get { return (EBattleState)state.nextStateId; }
-    }
-
-    public EBattleState preStateId
-    {
-        get { return (EBattleState)state.preStateId; }
-    }
+    public List<BaseEntity> entities = new List<BaseEntity>();
 
     public PlayerEntity selfPlayerEntity
     {
-        get { return playerList[BattleManager.Instance.selfPlayerId]; }
+        get { return (PlayerEntity)entities[BattleManager.Instance.selfPlayerId]; }
     }
-    #endregion
 
     internal void Init()
     {
@@ -47,13 +26,14 @@ public class BattleEntity : BaseEntity
         state.nextStateId = (int)EBattleState.RoundPlaying;
     }
 
-    public PlayerEntity FindPlayer(int playerId)
+    public BaseEntity FindEntity(int entityId)
     {
-        for (int i = 0; i < playerList.Count; i++)
+        for (int i = 0; i < entities.Count; i++)
         {
-            if (playerList[i].ID == playerId)
-                return playerList[i];
+            if (entities[i].ID == entityId)
+                return entities[i];
         }
         return null;
     }
+
 }

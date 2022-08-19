@@ -21,7 +21,7 @@ public class BattleView : MonoBehaviour
             var player = new GameObject(data.players[i].name);
             player.transform.position = new Vector3(Random.insideUnitCircle.x * BattleConstant.normalPlayerPositionOffset, 0, Random.insideUnitCircle.y * BattleConstant.normalPlayerPositionOffset);
             PlayerView playerView = player.AddComponent<PlayerView>();
-            playerView.Init(i);
+            playerView.Init(data.players[i]);
             _playerViews.Add(playerView);
         }
     }
@@ -30,7 +30,7 @@ public class BattleView : MonoBehaviour
     {
         for (int i = 0; i < _playerViews.Count; ++i)
         {
-            if (_playerViews[i].playerId == playerId)
+            if (_playerViews[i].entityId == playerId)
                 return _playerViews[i];
         }
         return null;
@@ -40,7 +40,7 @@ public class BattleView : MonoBehaviour
     {
         for (int i = 0; i < _playerViews.Count; i++)
         {
-            _playerViews[i].RenderUpdate(battleEntity, i, Time.deltaTime);
+            _playerViews[i].RenderUpdate(battleEntity, Time.deltaTime);
         }
     }
 

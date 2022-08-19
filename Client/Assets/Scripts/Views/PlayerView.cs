@@ -6,80 +6,82 @@ public class PlayerView : MonoBehaviour
 {
     private AnimatedMeshAnimator animator;
 
-    public int playerId { get; set; }
+    public int entityId { get; set; }
+    public int camp { get; set; }
 
-    public async void Init(int id)
+    public async void Init(BattlePlayerCommonData data)
     {
-        playerId = id;
+        entityId = data.pos;
+        camp = data.camp;
         await CoLoadCharacter();
     }
 
     public async UniTask<GameObject> CoLoadCharacter()
     {
-        var resourcePrefabPath = playerId == 0 ? BattleConstant.playerCharacterPath : BattleConstant.enemyCharacterPath;
+        var resourcePrefabPath = entityId == 0 ? BattleConstant.playerCharacterPath : BattleConstant.enemyCharacterPath;
         GameObject character = await Resources.LoadAsync<GameObject>(resourcePrefabPath) as GameObject;
         GameObject go = Instantiate(character, transform, false);
         animator = go.GetComponentInChildren<AnimatedMeshAnimator>();
         return go;
     }
 
-    public void RenderUpdate(BattleEntity battleEntity, int playerId, float deltaTime)
+    public void RenderUpdate(BattleEntity battleEntity, float deltaTime)
     {
-        PlayerEntity playerEntity = battleEntity.FindPlayer(playerId);
-        TransformUpdate(playerEntity, deltaTime);
-        AnimationUpdate(playerEntity);
-        SpacePartition.UpdateEntityCell(playerEntity);
+        BaseEntity entity = battleEntity.FindEntity(entityId);
+        TransformUpdate(entity, deltaTime);
+        AnimationUpdate(entity);
+        SpacePartition.UpdateEntityCell(entity);
     }
 
-    private Vector3 _startPosition;
-    private Vector3 _position;
-    private Vector3 _pos;
-    private Quaternion _startRotation;
-    private Quaternion _rotation;
-    private Quaternion _qua;
-    private void TransformUpdate(PlayerEntity playerEntity, float deltaTime)
+    private Vector3 p_startPosition;
+    private Vector3 p_position;
+    private Vector3 p_pos;
+    private Quaternion p_startRotation;
+    private Quaternion p_rotation;
+    private Quaternion p_qua;
+    private void TransformUpdate(BaseEntity entity, float deltaTime)
     {
         if (!gameObject.activeSelf)
             return;
 
-        _startPosition = transform.position;
-        _position = MathManager.ToVector3(playerEntity.transform.pos);
-        if(Vector3.zero == _position || _position == transform.position)
+        p_startPosition = transform.position;
+        p_position = MathManager.ToVector3(entity.transform.pos);
+        if(Vector3.zero == p_position || p_position == transform.position)
         {
-            _position = MathManager.ToVector3(playerEntity.movement.position);
+            p_position = MathManager.ToVector3(entity.movement.position);
         }
-        _pos = Vector3.Lerp(_startPosition + _position * deltaTime, Vector3.zero, 0.0f);
-        transform.position = _pos;
+        p_pos = Vector3.Lerp(p_startPosition + p_position * deltaTime, Vector3.zero, 0.0f);
+        transform.position = p_pos;
 
-        _startRotation = transform.rotation;
-        _rotation = MathManager.ToQuaternion(playerEntity.transform.rot);
-        if (Quaternion.identity == _rotation || _rotation == transform.rotation)
+        p_startRotation = transform.rotation;
+        p_rotation = MathManager.ToQuaternion(entity.transform.rot);
+        if (Quaternion.identity == p_rotation || p_rotation == transform.rotation)
         {
-            _rotation = MathManager.ToQuaternion(playerEntity.movement.rotation);
+            p_rotation = MathManager.ToQuaternion(entity.movement.rotation);
         }
-        _qua = Quaternion.Lerp(_startRotation, _rotation, playerEntity.movement.turnSpeed * deltaTime);
-        transform.rotation = _qua;
+        p_qua = Quaternion.Lerp(p_startRotation, p_rotation, entity.movement.turnSpeed * deltaTime);
+        transform.rotation = p_qua;
 
-        playerEntity.transform.pos = MathManager.ToFloat3(transform.position);
-        playerEntity.transform.rot = MathManager.ToFloat4(transform.rotation);
+        entity.transform.pos = MathManager.ToFloat3(transform.position);
+        entity.transform.rot = MathManager.ToFloat4(transform.rotation);
     }
 
-    private int animId;
-    private int _lastAnimationId = -1;
-    private void AnimationUpdate(PlayerEntity playerEntity)
+    private int p_animId;
+    private int p_lastAnimationId = -1;
+    private void AnimationUpdate(BaseEntity entity)
     {
         if (!gameObject.activeSelf)
             return;
-        animId = playerEntity.animation.animId;
-        if(animator != null && animId != 0 && _lastAnimationId != animId)
+        p_animId = entity.animation.animId;
+        if(animator != null && p_animId != 0 && p_lastAnimationId != p_animId)
         {
-            var animations = playerEntity.ID == 0 ? AnimationConstant.PlayerAnimationNames : AnimationConstant.EnemyAniamtionNames;
-            animator.Play(animations[animId], 0f, playerEntity.animation.loop);
-            _lastAnimationId = animId;
+            var animations = entity.property.camp == ECamp.Alliance ? AnimationConstant.PlayerAnimationNames : AnimationConstant.EnemyAniamtionNames;
+            animator.Play(animations[p_animId], 0f, entity.animation.loop);
+            p_lastAnimationId = p_animId;
         }
         if(animator != null)
         {
-            playerEntity.animation.normalizedTime = animator.NormalizedTime;
+            entity.animation.normalizedTime = animator.NormalizedTime;
         }
     }
 

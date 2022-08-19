@@ -16,7 +16,7 @@ public class PlayerAttackState : PlayerBaseState
             var entities = SectorSystem.GetWithinRangeOfTheAttack(playerEntity);
             for (int i = 0; i < entities.Count; i++)
             {
-                AttackSystem.Attack(playerEntity, entities[i]);
+                AttackSystem.Attack(playerEntity, (EnemyEntity)entities[i]);
             }
         }
         if(AnimationSystem.CheckAnimationNormalizedTime(playerEntity))

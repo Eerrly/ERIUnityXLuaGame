@@ -48,7 +48,7 @@ public static class SpacePartition
         return x * cellCountX + z;
     }
 
-    public static void UpdateEntityCell(PlayerEntity entity)
+    public static void UpdateEntityCell(BaseEntity entity)
     {
         int index = PositionIntoIndex(MathManager.ToVector3(entity.transform.pos));
         if(index >= cellList.Count)
@@ -64,7 +64,7 @@ public static class SpacePartition
         }
     }
 
-    public static List<Cell> GetAroundCellList(PlayerEntity entity)
+    public static List<Cell> GetAroundCellList(BaseEntity entity)
     {
         List<Cell> aroundCellList = new List<Cell>();
         int index = PositionIntoIndex(MathManager.ToVector3(entity.transform.pos));

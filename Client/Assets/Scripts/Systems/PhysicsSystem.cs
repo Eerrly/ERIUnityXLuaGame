@@ -32,19 +32,19 @@ public class PhysicsSystem
 
     public static void Update(BattleEntity battleEntity)
     {
-        var playerList = battleEntity.playerList;
-        for (int i = 0; i < playerList.Count; i++)
+        var entities = battleEntity.entities;
+        for (int i = 0; i < entities.Count; i++)
         {
-            var source = playerList[i];
-            if(source.state.curStateId != (int)EPlayerState.Move)
+            var source = entities[i];
+            if(source.state.curStateId != (int)EPlayerState.Move && source.state.curStateId != (int)EEnemyState.Move)
             {
                 continue;
             }
             source.runtimeProperty.closedPlayers.Clear();
-            for (int j = 0; j < playerList.Count; j++)
+            for (int j = 0; j < entities.Count; j++)
             {
-                var target = playerList[j];
-                if(source.ID == target.ID || target.state.curStateId == (int)EPlayerState.None)
+                var target = entities[j];
+                if(source.ID == target.ID || target.state.curStateId == (int)EEnemyState.None || source.state.curStateId == (int)EPlayerState.None)
                 {
                     continue;
                 }
@@ -57,19 +57,19 @@ public class PhysicsSystem
             }
         }
 
-        for (int i = 0; i < playerList.Count; i++)
+        for (int i = 0; i < entities.Count; i++)
         {
-            var source = playerList[i];
+            var source = entities[i];
             var closedPlayers = source.runtimeProperty.closedPlayers;
             for (int j = 0; j < closedPlayers.Count; j++)
             {
-                var target = battleEntity.FindPlayer(closedPlayers[j].id);
+                var target = battleEntity.FindEntity(closedPlayers[j].id);
                 UpdateCollision(source, target, battleEntity);
             }
         }
     }
 
-    private static void UpdateCollision(PlayerEntity source, PlayerEntity target, BattleEntity battleEntity)
+    private static void UpdateCollision(BaseEntity source, BaseEntity target, BattleEntity battleEntity)
     {
         var sMove = MathManager.ToVector3(source.movement.position);
         var tMove = MathManager.ToVector3(target.movement.position);
@@ -93,8 +93,8 @@ public class PhysicsSystem
 
         if (Vector3.Dot(vecT2S, sMove) > 0.0f)
         {
-            (PlayerStateMachine.Instance.GetState((int)source.curStateId) as PlayerBaseState).OnCollision(source, target, battleEntity);
-            (PlayerStateMachine.Instance.GetState((int)target.curStateId) as PlayerBaseState).OnCollision(target, source, battleEntity);
+            (PlayerStateMachine.Instance.GetState((int)source.state.curStateId) as PlayerBaseState).OnCollision(source, target, battleEntity);
+            (EnemyStateMachine.Instance.GetState((int)target.state.curStateId) as EnemyBaseState).OnCollision(target, source, battleEntity);
         }
     }
 

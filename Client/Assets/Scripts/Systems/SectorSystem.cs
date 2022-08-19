@@ -4,10 +4,10 @@ using System.Collections.Generic;
 public class SectorSystem
 {
 
-    public static List<PlayerEntity> GetWithinRangeOfTheAttack(PlayerEntity playerEntity)
+    public static List<BaseEntity> GetWithinRangeOfTheAttack(BaseEntity playerEntity)
     {
         List<Cell> aroundCellList = SpacePartition.GetAroundCellList(playerEntity);
-        List<PlayerEntity> entities = new List<PlayerEntity>();
+        List<BaseEntity> entities = new List<BaseEntity>();
 
         for (int i = 0; i < aroundCellList.Count; i++)
         {

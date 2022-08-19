@@ -1,8 +1,8 @@
-﻿public class PlayerEntity : BaseEntity
+﻿
+public class EnemyEntity : BaseEntity
 {
 
     #region Components
-    public InputComponent input = new InputComponent();
     public AttackComponent attack = new AttackComponent();
     #endregion
 
@@ -10,29 +10,26 @@
     {
         ID = data.pos;
 
-        input.yaw = MathManager.YawStop;
-        input.key = 0;
-
         animation.fixedTransitionDuration = 0.0f;
         animation.layer = -1;
         animation.fixedTimeOffset = 0.0f;
         animation.normalizedTransitionTime = 0.0f;
 
-        attack.atk = PlayerPropertyConstant.Attack;
-        attack.attackDistance = PlayerPropertyConstant.AttackDistance;
+        attack.atk = EnemyPropertyConstant.Attack;
+        attack.attackDistance = EnemyPropertyConstant.AttackDistance;
         attack.lastAttackTime = -1;
 
         runtimeProperty.seed = BattleConstant.randomSeed;
 
-        property.hp = PlayerPropertyConstant.HP;
+        property.hp = EnemyPropertyConstant.HP;
         property.camp = (ECamp)data.camp;
-        property.collsionSize = PlayerPropertyConstant.CollisionRadius;
+        property.collsionSize = EnemyPropertyConstant.CollisionRadius;
 
-        state.curStateId = (int)EPlayerState.None;
-        state.nextStateId = (int)EPlayerState.Idle;
+        state.curStateId = (int)EEnemyState.None;
+        state.nextStateId = (int)EEnemyState.Idle;
 
-        movement.moveSpeed = PlayerPropertyConstant.MoveSpeed;
-        movement.turnSpeed = PlayerPropertyConstant.TurnSpeed;
+        movement.moveSpeed = EnemyPropertyConstant.MoveSpeed;
+        movement.turnSpeed = EnemyPropertyConstant.TurnSpeed;
 
         InitBuffs();
     }

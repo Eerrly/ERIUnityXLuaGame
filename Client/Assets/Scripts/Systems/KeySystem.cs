@@ -3,11 +3,12 @@ public class KeySystem
 {
     public static void Clear(BattleEntity battleEntity)
     {
-        var players = battleEntity.playerList;
+        var players = battleEntity.entities;
         for (int i = 0; i < players.Count; i++)
         {
-            players[i].input.yaw = MathManager.YawStop;
-            players[i].input.key = 0;
+            var player = (PlayerEntity)players[i];
+            player.input.yaw = MathManager.YawStop;
+            player.input.key = 0;
         }
     }
 

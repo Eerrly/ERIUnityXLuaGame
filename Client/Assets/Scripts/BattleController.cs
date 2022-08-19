@@ -10,14 +10,20 @@
         battleEntity.Init();
         for (int i = 0; i < data.players.Length; i++)
         {
-            PlayerEntity playerEntity = new PlayerEntity();
-            playerEntity.Init(data.players[i]);
-            battleEntity.playerList.Add(playerEntity);
+            BaseEntity entity;
+            if (data.players[i].camp == 1)
+                entity = new PlayerEntity();
+            else
+                entity = new EnemyEntity();
+
+            entity.Init(data.players[i]);
+            battleEntity.entities.Add(entity);
         }
     }
 
     public override void Initialize()
     {
+        battleEntity.deltaTime = FrameEngine.frameInterval * battleEntity.timeScale;
     }
 
     public override void LogicUpdate()
@@ -31,26 +37,53 @@
 
                 UpdateInput();
 
-                var playerList = battleEntity.playerList;
+                var entities = battleEntity.entities;
 
                 BattleStateMachine.Instance.Update(battleEntity, null);
-                for (int i = 0; i < playerList.Count; i++)
+                for (int i = 0; i < entities.Count; i++)
                 {
-                    PlayerStateMachine.Instance.Update(playerList[i], battleEntity);
+                    if(entities[i].property.camp == ECamp.Alliance)
+                    {
+                        var playerEntity = (PlayerEntity)entities[i];
+                        PlayerStateMachine.Instance.Update(playerEntity, battleEntity);
+                    }
+                    else
+                    {
+                        var enemyEntity = (EnemyEntity)entities[i];
+                        EnemyStateMachine.Instance.Update(enemyEntity, battleEntity);
+                    }
                 }
 
                 BattleStateMachine.Instance.LateUpdate(battleEntity, null);
-                for (int i = 0; i < playerList.Count; i++)
+                for (int i = 0; i < entities.Count; i++)
                 {
-                    PlayerStateMachine.Instance.LateUpdate(playerList[i], battleEntity);
+                    if (entities[i].property.camp == ECamp.Alliance)
+                    {
+                        var playerEntity = (PlayerEntity)entities[i];
+                        PlayerStateMachine.Instance.LateUpdate(playerEntity, battleEntity);
+                    }
+                    else
+                    {
+                        var enemyEntity = (EnemyEntity)entities[i];
+                        EnemyStateMachine.Instance.LateUpdate(enemyEntity, battleEntity);
+                    }
                 }
 
                 PhysicsSystem.Update(battleEntity);
 
                 BattleStateMachine.Instance.DoChangeState(battleEntity, null);
-                for (int i = 0; i < playerList.Count; i++)
+                for (int i = 0; i < entities.Count; i++)
                 {
-                    PlayerStateMachine.Instance.DoChangeState(playerList[i], battleEntity);
+                    if (entities[i].property.camp == ECamp.Alliance)
+                    {
+                        var playerEntity = (PlayerEntity)entities[i];
+                        PlayerStateMachine.Instance.DoChangeState(playerEntity, battleEntity);
+                    }
+                    else
+                    {
+                        var enemyEntity = (EnemyEntity)entities[i];
+                        EnemyStateMachine.Instance.DoChangeState(enemyEntity, battleEntity);
+                    }
                 }
             }
         }

@@ -8,7 +8,7 @@ public class PlayerAttackReadyState : PlayerBaseState
 
     public override void OnLateUpdate(PlayerEntity playerEntity, BattleEntity battleEntity)
     {
-        PlayerStateSystem.ChangePlayerState(playerEntity, EPlayerState.Attack);
+        EntityStateSystem.ChangeEntityState(playerEntity, EPlayerState.Attack);
     }
 
 }

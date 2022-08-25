@@ -20,11 +20,11 @@ public class PlayerMoveState : PlayerBaseState
     {
         if (KeySystem.IsYawTypeStop(playerEntity.input.yaw))
         {
-            PlayerStateSystem.ChangePlayerState(playerEntity, EPlayerState.Idle);
+            EntityStateSystem.ChangeEntityState(playerEntity, EPlayerState.Idle);
         }
         if (KeySystem.CheckKeyCodeJDown(playerEntity))
         {
-            PlayerStateSystem.ChangePlayerState(playerEntity, EPlayerState.AttackReady);
+            EntityStateSystem.ChangeEntityState(playerEntity, EPlayerState.AttackReady);
         }
     }
 

@@ -7,11 +7,13 @@ public enum EEnemyState
 
     Move = 2,
 
-    AttackReady = 3,
+    Patrol = 3,
 
-    Attack = 4,
+    AttackReady = 4,
 
-    Dead = 5,
+    Attack = 5,
+
+    Dead = 6,
 
     Count,
 }

@@ -6,13 +6,16 @@ public class PlayerView : MonoBehaviour
 {
     private AnimatedMeshAnimator animator;
 
-    public int entityId { get; set; }
-    public int camp { get; set; }
+    private int _entityId;
+    public int entityId => _entityId;
+
+    private int _camp;
+    public int camp => _camp;
 
     public async void Init(BattlePlayerCommonData data)
     {
-        entityId = data.pos;
-        camp = data.camp;
+        _entityId = data.pos;
+        _camp = data.camp;
         await CoLoadCharacter();
     }
 

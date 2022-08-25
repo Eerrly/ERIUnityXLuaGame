@@ -23,11 +23,11 @@ public class PlayerAttackState : PlayerBaseState
         {
             if (KeySystem.IsYawTypeStop(playerEntity.input.yaw))
             {
-                PlayerStateSystem.ChangePlayerState(playerEntity, EPlayerState.Idle);
+                EntityStateSystem.ChangeEntityState(playerEntity, EPlayerState.Idle);
             }
             else
             {
-                PlayerStateSystem.ChangePlayerState(playerEntity, EPlayerState.Move);
+                EntityStateSystem.ChangeEntityState(playerEntity, EPlayerState.Move);
             }
         }
     }

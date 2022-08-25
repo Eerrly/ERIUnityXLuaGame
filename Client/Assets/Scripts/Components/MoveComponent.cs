@@ -4,6 +4,7 @@ public class MoveComponent : BaseComponent
     [System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Auto, Pack = 4)]
     internal struct Common
     {
+        public float[] target;
         public float[] position;
         public float[] rotation;
         public float moveSpeed;
@@ -11,6 +12,7 @@ public class MoveComponent : BaseComponent
 
         public Common(int no)
         {
+            target = default(float[]);
             position = new float[3] { 0, 0, 0 };
             rotation = new float[4] { 0, 0, 0, 1 };
             moveSpeed = default(float);
@@ -19,6 +21,12 @@ public class MoveComponent : BaseComponent
     }
 
     private Common common = new Common(0);
+
+    public float[] target
+    {
+        get { return common.target; }
+        set { common.target = value; }
+    }
 
     public float[] position
     {

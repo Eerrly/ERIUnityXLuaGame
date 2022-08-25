@@ -48,6 +48,15 @@ public static class SpacePartition
         return x * cellCountX + z;
     }
 
+    public static int PositionIntoIndex(float[] pos)
+    {
+        float dx = pos[0] - (spaceX * -1 * 0.5f);
+        float dz = pos[2] - (spaceZ * -1 * 0.5f);
+        int x = (int)(dx / cellSize.x);
+        int z = (int)(dz / cellSize.z);
+        return x * cellCountX + z;
+    }
+
     public static void UpdateEntityCell(BaseEntity entity)
     {
         int index = PositionIntoIndex(MathManager.ToVector3(entity.transform.pos));

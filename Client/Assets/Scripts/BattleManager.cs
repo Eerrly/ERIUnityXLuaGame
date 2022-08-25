@@ -33,11 +33,17 @@ public class BattleManager : MonoBehaviour
         private set { _playerInput = value; }
     }
 
+    private long _time;
+    public long Time => _time;
+
     private FrameEngine _frameEngine = new FrameEngine();
 
     private BattleCommonData _battleClientData;
 
+    private bool _battleStarted = false;
+
     public int selfPlayerId { get; set; }
+
 
     private void Awake()
     {
@@ -68,6 +74,7 @@ public class BattleManager : MonoBehaviour
 
     public void StartBattle(int selfPlayerId)
     {
+        this._battleStarted = true;
         this.selfPlayerId = selfPlayerId;
         _battle = new BattleController(_battleClientData);
         _battleView.InitView(_battleClientData);
@@ -92,7 +99,11 @@ public class BattleManager : MonoBehaviour
 
     private void Update()
     {
-        RenderUpdate();
+        if (_battleStarted)
+        {
+            _time = (int)(UnityEngine.Time.time * 1000);
+            RenderUpdate();
+        }
     }
 
     private void RenderUpdate()

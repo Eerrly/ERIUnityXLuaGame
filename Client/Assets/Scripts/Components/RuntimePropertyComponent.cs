@@ -5,17 +5,17 @@ public class RuntimePropertyComponent : BaseComponent
     [System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Auto, Pack = 4)]
     internal struct Common
     {
-        public int seed;
+        public uint seed;
 
         public Common(int no)
         {
-            seed = default(int);
+            seed = default(uint);
         }
     }
 
     private Common common = new Common(0);
 
-    public int seed
+    public uint seed
     {
         get { return common.seed; }
         set { common.seed = value; }

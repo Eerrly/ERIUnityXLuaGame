@@ -8,9 +8,11 @@ public class AttackComponent : BaseComponent
         public float lastAttackTime;
         public float attackDistance;
         public float displacementCompensation;
+        public int[] targets;
 
         public Common(int no)
         {
+            targets = default(int[]);
             cd = default(float);
             atk = default(float);
             lastAttackTime = default(float);
@@ -20,6 +22,12 @@ public class AttackComponent : BaseComponent
     }
 
     private Common common = new Common(0);
+
+    public int[] targets
+    {
+        get { return common.targets; }
+        set { common.targets = value; }
+    }
 
     public float cd
     {

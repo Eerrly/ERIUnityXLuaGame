@@ -12,22 +12,22 @@ public class AnimationSystem
         maxAnimId = (int)EAnimationID.Count;
     }
 
-    public static void ChangePlayerAnimation(PlayerEntity playerEntity, EAnimationID animId)
+    public static void ChangePlayerAnimation(BaseEntity entity, EAnimationID animId)
     {
-        ChangePlayerAnimation(playerEntity, (int)animId);
+        ChangePlayerAnimation(entity, (int)animId);
     }
 
-    public static void ChangePlayerAnimation(PlayerEntity playerEntity, int nAnimId)
+    public static void ChangePlayerAnimation(BaseEntity entity, int nAnimId)
     {
         if (nAnimId > minAnimId && nAnimId < maxAnimId)
         {
-            playerEntity.animation.animId = nAnimId;
+            entity.animation.animId = nAnimId;
         }
     }
 
-    public static bool CheckAnimationNormalizedTime(PlayerEntity playerEntity, float normalizedTime = 0.95f)
+    public static bool CheckAnimationNormalizedTime(BaseEntity entity, float normalizedTime = 0.95f)
     {
-        return playerEntity.animation.normalizedTime >= normalizedTime;
+        return entity.animation.normalizedTime >= normalizedTime;
     }
 
 }

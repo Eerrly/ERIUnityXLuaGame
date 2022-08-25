@@ -19,6 +19,8 @@
     public const float KnockbackCumulativeValue = 30.0f;
 
     public const float CollisionRadius = 0.5f;
+
+    public const int atkMaxCount = 3;
 }
 
 public class EnemyPropertyConstant
@@ -27,7 +29,7 @@ public class EnemyPropertyConstant
 
     public const float HP = 100.0f;
 
-    public const float MoveSpeed = 2.5f;
+    public const float MoveSpeed = 6f;
 
     public const float TurnSpeed = 15.0f;
 
@@ -42,4 +44,8 @@ public class EnemyPropertyConstant
     public const float KnockbackCumulativeValue = 30.0f;
 
     public const float CollisionRadius = 0.5f;
+
+    public const int atkMaxCount = 1;
+
+    public const int patrolMaxDistance = 30;
 }

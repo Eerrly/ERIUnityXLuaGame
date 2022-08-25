@@ -2,10 +2,6 @@
 public class EnemyEntity : BaseEntity
 {
 
-    #region Components
-    public AttackComponent attack = new AttackComponent();
-    #endregion
-
     internal override void Init(BattlePlayerCommonData data)
     {
         ID = data.pos;
@@ -15,11 +11,12 @@ public class EnemyEntity : BaseEntity
         animation.fixedTimeOffset = 0.0f;
         animation.normalizedTransitionTime = 0.0f;
 
+        attack.targets = new int[EnemyPropertyConstant.atkMaxCount];
         attack.atk = EnemyPropertyConstant.Attack;
         attack.attackDistance = EnemyPropertyConstant.AttackDistance;
         attack.lastAttackTime = -1;
 
-        runtimeProperty.seed = BattleConstant.randomSeed;
+        runtimeProperty.seed = (uint)UnityEngine.Random.Range(1, BattleConstant.randomSeed);
 
         property.hp = EnemyPropertyConstant.HP;
         property.camp = (ECamp)data.camp;

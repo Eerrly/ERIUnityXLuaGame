@@ -1,4 +1,6 @@
-﻿[EnemyState(EEnemyState.Idle)]
+﻿using System;
+
+[EnemyState(EEnemyState.Idle)]
 public class EnemyIdleState : EnemyBaseState
 {
     public override void OnEnter(EnemyEntity enemyEntity, BattleEntity battleEntity)
@@ -10,14 +12,25 @@ public class EnemyIdleState : EnemyBaseState
 
     public override void OnUpdate(EnemyEntity enemyEntity, BattleEntity battleEntity)
     {
-        enemyEntity.attack.targets = SectorSystem.GetAroundEntities(enemyEntity, EnemyPropertyConstant.atkMaxCount);
+        enemyEntity.attack.targets = SectorSystem.GetAroundEntities(enemyEntity, EnemyPropertyConstant.atkMaxCount, true);
     }
 
     public override void OnLateUpdate(EnemyEntity enemyEntity, BattleEntity battleEntity)
     {
         if(enemyEntity.attack.targets.Length > 0)
         {
-            //EntityStateSystem.ChangeEntityState(enemyEntity, EEnemyState.Move);
+            var entity = battleEntity.FindEntity(enemyEntity.attack.targets[0]);
+            var target = MathManager.ToVector3(entity.transform.pos);
+            var pos = MathManager.ToVector3(enemyEntity.transform.pos);
+            var direction = target - pos;
+            if (direction.sqrMagnitude > Math.Pow(EnemyPropertyConstant.CollisionRadius + PlayerPropertyConstant.CollisionRadius, 2))
+            {
+                EntityStateSystem.ChangeEntityState(enemyEntity, EEnemyState.Move);
+            }
+            else
+            {
+                EntityStateSystem.ChangeEntityState(enemyEntity, EEnemyState.AttackReady);
+            }
         }
         else
         {

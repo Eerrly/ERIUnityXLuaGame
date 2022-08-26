@@ -2,9 +2,9 @@
 {
     public const string Name = "Player";
 
-    public const float HP = 100.0f;
+    public const float HP = 200.0f;
 
-    public const float MoveSpeed = 2.5f;
+    public const float MoveSpeed = 5f;
 
     public const float TurnSpeed = 15.0f;
 
@@ -29,7 +29,7 @@ public class EnemyPropertyConstant
 
     public const float HP = 100.0f;
 
-    public const float MoveSpeed = 6f;
+    public const float MoveSpeed = 5f;
 
     public const float TurnSpeed = 15.0f;
 

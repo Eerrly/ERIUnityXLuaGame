@@ -18,7 +18,7 @@
         attack.attackDistance = PlayerPropertyConstant.AttackDistance;
         attack.lastAttackTime = -1;
 
-        runtimeProperty.seed = (uint)UnityEngine.Random.Range(1, BattleConstant.randomSeed);
+        runtimeProperty.seed = BattleConstant.randomSeed;
 
         property.hp = PlayerPropertyConstant.HP;
         property.camp = (ECamp)data.camp;

@@ -37,7 +37,7 @@ public class SectorSystem
         return entities;
     }
 
-    public static int[] GetAroundEntities(BaseEntity entity, int maxCount)
+    public static int[] GetAroundEntities(BaseEntity entity, int maxCount, bool isActive = false)
     {
         List<Cell> aroundCellList = SpacePartition.GetAroundCellList(entity);
         List<BaseEntity> entities = new List<BaseEntity>();
@@ -50,7 +50,17 @@ public class SectorSystem
                 var other = cellEntities[j];
                 if (other.property.camp == entity.property.camp)
                     continue;
-                entities.Add(other);
+                if (isActive)
+                {
+                    if(other.property.hp > 0)
+                    {
+                        entities.Add(other);
+                    }
+                }
+                else
+                {
+                    entities.Add(other);
+                }
             }
         }
 

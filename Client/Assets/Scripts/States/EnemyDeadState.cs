@@ -10,7 +10,7 @@ public class EnemyDeadState : EnemyBaseState
     public override void OnEnter(EnemyEntity enemyEntity, BattleEntity battleEntity)
     {
         enemyEntity.animation.loop = false;
-        AnimationSystem.ChangePlayerAnimation(enemyEntity, EAnimationID.None);
+        AnimationSystem.EnableAnimator(enemyEntity, false);
     }
 
 }

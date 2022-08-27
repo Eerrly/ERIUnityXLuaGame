@@ -11,6 +11,7 @@ public class AnimationComponent : BaseComponent
         public float normalizedTransitionTime;
         public float normalizedTime;
         public bool loop;
+        public bool enable;
 
         public Common(int no)
         {
@@ -21,6 +22,7 @@ public class AnimationComponent : BaseComponent
             normalizedTransitionTime = default(float);
             normalizedTime = default(float);
             loop = default(bool);
+            enable = default(bool);
         }
     }
 
@@ -66,6 +68,12 @@ public class AnimationComponent : BaseComponent
     {
         get { return common.loop; }
         set { common.loop = value; }
+    }
+
+    public bool enable
+    {
+        get { return common.enable; }
+        set { common.enable = value; }
     }
 
 }

@@ -10,6 +10,7 @@ public class EnemyEntity : BaseEntity
         animation.layer = -1;
         animation.fixedTimeOffset = 0.0f;
         animation.normalizedTransitionTime = 0.0f;
+        animation.enable = true;
 
         attack.targets = new int[EnemyPropertyConstant.atkMaxCount];
         attack.atk = EnemyPropertyConstant.Attack;

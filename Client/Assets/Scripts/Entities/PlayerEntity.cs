@@ -12,6 +12,7 @@
         animation.layer = -1;
         animation.fixedTimeOffset = 0.0f;
         animation.normalizedTransitionTime = 0.0f;
+        animation.enable = true;
 
         attack.targets = new int[PlayerPropertyConstant.atkMaxCount];
         attack.atk = PlayerPropertyConstant.Attack;

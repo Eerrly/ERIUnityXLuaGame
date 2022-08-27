@@ -9,9 +9,9 @@ public class PropertySystem
         hpState = BattleConstant.hpStates.Length - 1;
     }
 
-    public static int CheckEntityHPState(PlayerEntity playerEntity)
+    public static int CheckEntityHPState(BaseEntity entity)
     {
-        var progress = playerEntity.property.hp / PlayerPropertyConstant.HP;
+        var progress = entity.property.hp / (entity.property.camp == 0 ? PlayerPropertyConstant.HP : EnemyPropertyConstant.HP);
         for (int i = 0; i < BattleConstant.hpStates.Length; i++)
         {
             if(progress >= BattleConstant.hpStates[i])

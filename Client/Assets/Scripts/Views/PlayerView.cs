@@ -77,14 +77,18 @@ public class PlayerView : MonoBehaviour
         if (!gameObject.activeSelf)
             return;
         p_animId = entity.animation.animId;
-        if(animator != null && p_animId != 0 && p_lastAnimationId != p_animId)
-        {
-            var animations = entity.property.camp == ECamp.Alliance ? AnimationConstant.PlayerAnimationNames : AnimationConstant.EnemyAniamtionNames;
-            animator.Play(animations[p_animId], 0f, entity.animation.loop);
-            p_lastAnimationId = p_animId;
-        }
         if(animator != null)
         {
+            if(p_animId != 0 && p_lastAnimationId != p_animId)
+            {
+                var animations = entity.property.camp == ECamp.Alliance ? AnimationConstant.PlayerAnimationNames : AnimationConstant.EnemyAniamtionNames;
+                animator.Play(animations[p_animId], 0f, entity.animation.loop);
+                p_lastAnimationId = p_animId;
+            }
+            else if(p_animId == 0)
+            {
+                animator.Stop();
+            }
             entity.animation.normalizedTime = animator.NormalizedTime;
         }
     }

@@ -20,4 +20,19 @@ public class PlayerIdleState : PlayerBaseState
         }
     }
 
+    public override void OnCollision(BaseEntity source, BaseEntity target, BattleEntity battleEntity)
+    {
+#if UNITY_DEBUG
+        UnityEngine.Debug.Log("[PlayerIdleState OnCollision] source:" + source.ID + ", target:" + target.ID);
+#endif
+    }
+
+    public override void OnPostCollision(BaseEntity source, BaseEntity target, BattleEntity battleEntity)
+    {
+        PhysicsSystem.CheckCollisionDir(source, target);
+#if UNITY_DEBUG
+        UnityEngine.Debug.Log("[PlayerIdleState OnPostCollision] source:" + source.ID + ", target:" + target.ID + ", collisionDir:" + System.Enum.GetName(typeof(ECollisionDir), source.collision.collisionDir));
+#endif
+    }
+
 }

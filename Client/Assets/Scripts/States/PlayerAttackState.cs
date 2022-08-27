@@ -11,16 +11,14 @@ public class PlayerAttackState : PlayerBaseState
 
     public override void OnLateUpdate(PlayerEntity playerEntity, BattleEntity battleEntity)
     {
-        if(AnimationSystem.CheckAnimationNormalizedTime(playerEntity, 0.65f))
+        if(AnimationSystem.CheckAnimationNormalizedTime(playerEntity))
         {
             var entities = SectorSystem.GetWithinRangeOfTheAttack(playerEntity);
             for (int i = 0; i < entities.Count; i++)
             {
-                AttackSystem.Attack(playerEntity, (EnemyEntity)entities[i]);
+                AttackSystem.Attack(playerEntity, entities[i]);
             }
-        }
-        if(AnimationSystem.CheckAnimationNormalizedTime(playerEntity))
-        {
+
             if (KeySystem.IsYawTypeStop(playerEntity.input.yaw))
             {
                 EntityStateSystem.ChangeEntityState(playerEntity, EPlayerState.Idle);

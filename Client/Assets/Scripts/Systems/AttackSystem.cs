@@ -32,6 +32,9 @@ public class AttackSystem
 
     public static bool Attack(BaseEntity sourceEntity, BaseEntity targetEntity)
     {
+#if UNITY_DEBUG
+        UnityEngine.Debug.Log("[AttackSystem Attack] source.ID:" + sourceEntity.ID + ", target.ID:" + targetEntity.ID);
+#endif
         var result = true;
         var residualHp = targetEntity.property.hp - sourceEntity.attack.atk;
         if(residualHp < 0)
@@ -39,6 +42,7 @@ public class AttackSystem
             residualHp = 0;
         }
         targetEntity.property.hp = residualHp;
+        EntityStateSystem.ChangeEntityState(targetEntity, targetEntity.state.count - 1);
         return result;
     }
 

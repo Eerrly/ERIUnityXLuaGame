@@ -35,11 +35,4 @@ public class PlayerMoveState : PlayerBaseState
         playerEntity.movement.moveSpeed = 0.0f;
         playerEntity.movement.turnSpeed = 0.0f;
     }
-
-    public override void OnCollision(BaseEntity source, BaseEntity target, BattleEntity battleEntity)
-    {
-#if UNITY_DEBUG
-        UnityEngine.Debug.Log("[PlayerMoveState OnCollision] source:" + source.ID + ", target:" + target.ID);
-#endif
-    }
 }

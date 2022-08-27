@@ -10,7 +10,7 @@
 
     public const float Defensiveness = 5.0f;
 
-    public const float Attack = 10.0f;
+    public const float Attack = 50.0f;
 
     public const float AttackDistance = 2.0f;
 

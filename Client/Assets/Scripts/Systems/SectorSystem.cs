@@ -20,8 +20,8 @@ public class SectorSystem
                     continue;
                 var playerPos = MathManager.ToVector3(entity.transform.pos);
                 var otherPos = MathManager.ToVector3(other.transform.pos);
-                var distance = (otherPos - playerPos).sqrMagnitude;
-                if (distance <= PlayerPropertyConstant.AttackDistance + EnemyPropertyConstant.CollisionRadius)
+                var distance = (otherPos - playerPos).magnitude;
+                if (distance <= Mathf.Pow(PlayerPropertyConstant.AttackDistance + EnemyPropertyConstant.CollisionRadius, 2))
                 {
                     var forward = MathManager.ToVector3(entity.transform.fwd);
                     var angle = Vector3.Angle(forward, otherPos - playerPos);

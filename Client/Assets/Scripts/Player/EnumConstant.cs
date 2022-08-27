@@ -19,3 +19,11 @@ public enum EBuffExitType
     None = 0,
     Time = 1,
 }
+
+public enum ECollisionDir
+{
+    Forward = 1,
+    Left,
+    Right,
+    Back
+}

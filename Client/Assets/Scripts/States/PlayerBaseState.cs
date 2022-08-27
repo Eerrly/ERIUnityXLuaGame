@@ -24,4 +24,6 @@ public class PlayerBaseState : BaseState<PlayerEntity>
 
     public virtual void OnCollision(BaseEntity source, BaseEntity target, BattleEntity battleEntity) { }
 
+    public virtual void OnPostCollision(BaseEntity source, BaseEntity target, BattleEntity battleEntity) { }
+
 }

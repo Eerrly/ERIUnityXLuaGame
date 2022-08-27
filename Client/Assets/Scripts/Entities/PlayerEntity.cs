@@ -22,10 +22,12 @@
 
         property.hp = PlayerPropertyConstant.HP;
         property.camp = (ECamp)data.camp;
-        property.collsionSize = PlayerPropertyConstant.CollisionRadius;
+
+        collision.collsionSize = PlayerPropertyConstant.CollisionRadius;
 
         state.curStateId = (int)EPlayerState.None;
         state.nextStateId = (int)EPlayerState.Idle;
+        state.count = (int)EPlayerState.Count;
 
         movement.moveSpeed = PlayerPropertyConstant.MoveSpeed;
         movement.turnSpeed = PlayerPropertyConstant.TurnSpeed;
@@ -40,7 +42,7 @@
 
     public override float GetCollisionRadius(BattleEntity battleEntity)
     {
-        return property.collsionSize;
+        return collision.collsionSize;
     }
 
 }

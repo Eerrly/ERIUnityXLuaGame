@@ -8,6 +8,7 @@
         public int prevStateId;
         public float enterTime;
         public float exitTime;
+        public int count;
 
         public Common(int no)
         {
@@ -16,6 +17,7 @@
             prevStateId = default(int);
             enterTime = default(float);
             exitTime = default(float);
+            count = default(int);
         }
     }
 
@@ -49,6 +51,12 @@
     {
         get { return common.exitTime; }
         set { common.exitTime = value; }
+    }
+
+    public int count
+    {
+        get { return common.count; }
+        set { common.count = value; }
     }
 
 }

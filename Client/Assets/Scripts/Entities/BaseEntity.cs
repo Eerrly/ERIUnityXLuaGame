@@ -13,6 +13,7 @@
     public AnimationComponent animation = new AnimationComponent();
     public RuntimePropertyComponent runtimeProperty = new RuntimePropertyComponent();
     public PropertyComponent property = new PropertyComponent();
+    public CollisionComponent collision = new CollisionComponent();
     #endregion
 
     #region Attributes

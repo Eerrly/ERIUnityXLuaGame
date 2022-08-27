@@ -37,20 +37,20 @@ public class PhysicsSystem
         {
             var source = entities[i];
             source.runtimeProperty.closedPlayers.Clear();
-            if (source.state.curStateId != (int)EPlayerState.Move && source.state.curStateId != (int)EEnemyState.Move)
+            if (source.state.curStateId == (int)EPlayerState.Dead || source.state.curStateId == (int)EEnemyState.Dead)
             {
                 continue;
             }
             for (int j = 0; j < entities.Count; j++)
             {
                 var target = entities[j];
-                if(source.ID == target.ID || target.state.curStateId == (int)EEnemyState.None || source.state.curStateId == (int)EPlayerState.None)
+                if(source.ID == target.ID || target.state.curStateId == (int)EEnemyState.Dead || source.state.curStateId == (int)EPlayerState.Dead)
                 {
                     continue;
                 }
                 var radius = source.GetCollisionRadius(battleEntity) + target.GetCollisionRadius(battleEntity);
                 var sqrMagnitude = (MathManager.ToVector3(target.transform.pos) - MathManager.ToVector3(source.transform.pos)).sqrMagnitude;
-                if (sqrMagnitude < radius * radius)
+                if (sqrMagnitude <= radius * radius)
                 {
                     source.runtimeProperty.closedPlayers.Add(new PhysisPlayer() { id = target.ID });
                 }
@@ -96,6 +96,8 @@ public class PhysicsSystem
             (PlayerStateMachine.Instance.GetState(source.state.curStateId) as PlayerBaseState)?.OnCollision(source, target, battleEntity);
             (EnemyStateMachine.Instance.GetState(target.state.curStateId) as EnemyBaseState)?.OnCollision(target, source, battleEntity);
         }
+
+        (PlayerStateMachine.Instance.GetState(source.state.curStateId) as PlayerBaseState)?.OnPostCollision(source, target, battleEntity);
     }
 
     private static Vector3 CombineForce(Vector3 aDeltaMove, Vector3 bDeltaMove)
@@ -112,6 +114,35 @@ public class PhysicsSystem
 
         lenC = Mathf.Max(lenB, lenC);
         return normalB * lenC + (bDeltaMove - cDeltaMove);
+    }
+
+    /// <summary>
+    /// -45  45
+    ///    \/
+    ///    /\
+    /// -135 135
+    /// </summary>
+    public static void CheckCollisionDir(BaseEntity source, BaseEntity target)
+    {
+        source.collision.collisionDir = 0;
+        var direction = MathManager.ToVector3(target.transform.pos) - MathManager.ToVector3(source.transform.pos);
+        var angle = Vector3.SignedAngle(MathManager.ToVector3(source.transform.fwd), direction.normalized, Vector3.up);
+        if(-45 < angle && angle < 45)
+        {
+            source.collision.collisionDir = (int)ECollisionDir.Forward;
+        }
+        else if(-135 < angle && angle < -45)
+        {
+            source.collision.collisionDir = (int)ECollisionDir.Left;
+        }
+        else if(135 > angle && angle > 45)
+        {
+            source.collision.collisionDir = (int)ECollisionDir.Right;
+        }
+        else if(135 < angle || angle < -135)
+        {
+            source.collision.collisionDir = (int)ECollisionDir.Back;
+        }
     }
 
 }

@@ -6,14 +6,12 @@
         public float hp;
         public int camp;
         public int teamLevel;
-        public float collsionSize;
 
         public Common(int no)
         {
             hp = default(float);
             camp = default(int);
             teamLevel = default(int);
-            collsionSize = default(float);
         }
     }
 
@@ -35,12 +33,6 @@
     {
         get { return common.teamLevel; }
         set { common.teamLevel = value; }
-    }
-
-    public float collsionSize
-    {
-        get { return common.collsionSize; }
-        set { common.collsionSize = value; }
     }
 
 }

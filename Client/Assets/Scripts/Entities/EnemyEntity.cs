@@ -20,10 +20,12 @@ public class EnemyEntity : BaseEntity
 
         property.hp = EnemyPropertyConstant.HP;
         property.camp = (ECamp)data.camp;
-        property.collsionSize = EnemyPropertyConstant.CollisionRadius;
+
+        collision.collsionSize = EnemyPropertyConstant.CollisionRadius;
 
         state.curStateId = (int)EEnemyState.None;
         state.nextStateId = (int)EEnemyState.Idle;
+        state.count = (int)EEnemyState.Count;
 
         movement.moveSpeed = EnemyPropertyConstant.MoveSpeed;
         movement.turnSpeed = EnemyPropertyConstant.TurnSpeed;
@@ -38,7 +40,7 @@ public class EnemyEntity : BaseEntity
 
     public override float GetCollisionRadius(BattleEntity battleEntity)
     {
-        return property.collsionSize;
+        return collision.collsionSize;
     }
 
 }

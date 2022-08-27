@@ -11,32 +11,22 @@ public class EnemyAttackState : EnemyBaseState
     public override void OnLateUpdate(EnemyEntity enemyEntity, BattleEntity battleEntity)
     {
         var entities = SectorSystem.GetWithinRangeOfTheAttack(enemyEntity);
-        if (AnimationSystem.CheckAnimationNormalizedTime(enemyEntity, 0.65f))
-        {
-            for (int i = 0; i < entities.Count; i++)
-            {
-                if(entities[i].property.hp > 0)
-                {
-                    AttackSystem.Attack(enemyEntity, entities[i]);
-                }
-            }
-            EntityStateSystem.ChangeEntityState(enemyEntity, EPlayerState.Idle);
-        }
         if (AnimationSystem.CheckAnimationNormalizedTime(enemyEntity))
         {
-            var hasTarget = false;
+            BaseEntity targetEntity = null;
             for (int i = 0; i < entities.Count; i++)
             {
                 if(entities[i].property.hp > 0)
                 {
-                    hasTarget = true;
+                    targetEntity = entities[i];
                     break;
                 }
             }
-            if (!hasTarget)
+            if(targetEntity != null)
             {
-                EntityStateSystem.ChangeEntityState(enemyEntity, EPlayerState.Idle);
+                AttackSystem.Attack(enemyEntity, targetEntity);
             }
+            EntityStateSystem.ChangeEntityState(enemyEntity, EPlayerState.Idle);
         }
     }
 

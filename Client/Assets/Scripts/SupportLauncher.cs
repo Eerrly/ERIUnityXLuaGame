@@ -113,7 +113,11 @@ public class SupportLauncher : MonoBehaviour
             Gizmos.color = new Color(1, 0, 0);
             for (int j = 0; j < aroundCellList[i].entities.Count; j++)
             {
-                Gizmos.DrawLine(MathManager.ToVector3(playerEntity.transform.pos), MathManager.ToVector3(aroundCellList[i].entities[j].transform.pos));
+                var entity = aroundCellList[i].entities[j];
+                if ((int)entity.curStateId != entity.state.count - 1)
+                {
+                    Gizmos.DrawLine(MathManager.ToVector3(playerEntity.transform.pos), MathManager.ToVector3(entity.transform.pos));
+                }
             }
         }
     }

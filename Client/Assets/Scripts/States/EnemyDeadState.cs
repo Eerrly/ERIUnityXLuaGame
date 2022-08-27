@@ -9,6 +9,10 @@ public class EnemyDeadState : EnemyBaseState
 
     public override void OnEnter(EnemyEntity enemyEntity, BattleEntity battleEntity)
     {
+        enemyEntity.movement.position = MathManager.Vector3Zero;
+        enemyEntity.movement.rotation = MathManager.QuaternionIdentity;
+        enemyEntity.input.yaw = MathManager.YawStop;
+
         enemyEntity.animation.loop = false;
         AnimationSystem.EnableAnimator(enemyEntity, false);
     }

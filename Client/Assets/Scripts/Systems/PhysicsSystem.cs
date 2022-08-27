@@ -36,11 +36,11 @@ public class PhysicsSystem
         for (int i = 0; i < entities.Count; i++)
         {
             var source = entities[i];
-            if(source.state.curStateId != (int)EPlayerState.Move && source.state.curStateId != (int)EEnemyState.Move)
+            source.runtimeProperty.closedPlayers.Clear();
+            if (source.state.curStateId != (int)EPlayerState.Move && source.state.curStateId != (int)EEnemyState.Move)
             {
                 continue;
             }
-            source.runtimeProperty.closedPlayers.Clear();
             for (int j = 0; j < entities.Count; j++)
             {
                 var target = entities[j];

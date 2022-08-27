@@ -33,13 +33,6 @@ public class EnemyPatrolState : EnemyBaseState
         {
             EntityStateSystem.ChangeEntityState(enemyEntity, EEnemyState.Idle);
         }
-
-        if(enemyEntity.attack.targets.Length > 0)
-        {
-            enemyEntity.input.yaw = MathManager.YawStop;
-            enemyEntity.movement.position = MathManager.Vector3Zero;
-            enemyEntity.movement.rotation = MathManager.QuaternionIdentity;
-        }
     }
 
     public override void OnLateUpdate(EnemyEntity enemyEntity, BattleEntity battleEntity)

@@ -23,8 +23,7 @@ public class SectorSystem
                 var distance = (otherPos - playerPos).sqrMagnitude;
                 if (distance <= PlayerPropertyConstant.AttackDistance + EnemyPropertyConstant.CollisionRadius)
                 {
-                    var playerRot = MathManager.ToQuaternion(entity.transform.rot);
-                    var forward = playerRot * Vector3.forward;
+                    var forward = MathManager.ToVector3(entity.transform.fwd);
                     var angle = Vector3.Angle(forward, otherPos - playerPos);
                     if(angle <= BattleConstant.angle * 0.5)
                     {

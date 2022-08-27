@@ -5,11 +5,13 @@
     {
         public float[] pos;
         public float[] rot;
+        public float[] fwd;
 
         public Common(int no)
         {
             pos = new float[3] { 0, 0, 0 };
             rot = new float[4] { 0, 0, 0, 1 };
+            fwd = default(float[]);
         }
     }
 
@@ -25,6 +27,12 @@
     {
         get { return common.rot; }
         set { common.rot = value; }
+    }
+
+    public float[] fwd
+    {
+        get { return common.fwd; }
+        set { common.fwd = value; }
     }
 
 }

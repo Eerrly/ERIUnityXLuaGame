@@ -67,6 +67,7 @@ public class PlayerView : MonoBehaviour
 
         entity.transform.pos = MathManager.ToFloat3(transform.position);
         entity.transform.rot = MathManager.ToFloat4(transform.rotation);
+        entity.transform.fwd = MathManager.ToFloat3(transform.rotation * Vector3.forward);
     }
 
     private int p_animId;

@@ -77,7 +77,7 @@ public class PhysicsSystem
         var vecS2T = MathManager.ToVector3(source.transform.pos) - MathManager.ToVector3(target.transform.pos);
         var vecT2S = MathManager.ToVector3(target.transform.pos) - MathManager.ToVector3(source.transform.pos);
 
-        if(Vector3.Dot(vecT2S, tMove) > 0.0f)
+        if (Vector3.Dot(vecT2S, tMove) > 0.0f)
         {
             sMove = CombineForce(tMove, sMove);
         }
@@ -89,7 +89,7 @@ public class PhysicsSystem
                 sMove -= Vector3.Project(sMove, vecS2T);
             }
         }
-        source.movement.position = MathManager.ToFloat3(sMove.normalized);
+        source.movement.position = MathManager.ToFloat3(sMove);
 
         if (Vector3.Dot(vecT2S, sMove) > 0.0f)
         {
@@ -111,7 +111,7 @@ public class PhysicsSystem
         var cDeltaMove = normalA * lenC;
 
         lenC = Mathf.Max(lenB, lenC);
-        return normalB * lenC + (cDeltaMove - aDeltaMove);
+        return normalB * lenC + (bDeltaMove - cDeltaMove);
     }
 
 }

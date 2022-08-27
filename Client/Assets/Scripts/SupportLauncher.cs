@@ -49,7 +49,7 @@ public class SupportLauncher : MonoBehaviour
 
         Gizmos.color = Color.green;
         Vector3 position = MathManager.ToVector3(playerEntity.transform.pos);
-        Vector3 forward = MathManager.ToQuaternion(playerEntity.transform.rot) * Vector3.forward;
+        Vector3 forward = MathManager.ToVector3(playerEntity.transform.fwd);
         DrawWireSemicircle(position, forward, PlayerPropertyConstant.AttackDistance, BattleConstant.angle, Vector3.up);
     }
 

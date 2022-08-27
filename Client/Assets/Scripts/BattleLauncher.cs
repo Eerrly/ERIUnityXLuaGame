@@ -13,7 +13,7 @@ public class BattleLauncher : MonoBehaviour
     {
         battleCommonData = new BattleCommonData();
         battleCommonData.mode = 1;
-        battleCommonData.players = new BattlePlayerCommonData[10];
+        battleCommonData.players = new BattlePlayerCommonData[2];
         for (int i = 0; i < battleCommonData.players.Length; i++)
         {
             BattlePlayerCommonData data = new BattlePlayerCommonData();

@@ -1667,6 +1667,7 @@ namespace CSObjectWrapEditor
             GenEnumWraps();
             GenCodeForClass();
             GenLuaRegister();
+            CS2LuaCommentGen.Generate(LuaCallCSharp.ToArray(), "../Lua/Core/Auto/CSComment.lua");
             callCustomGen();
             Debug.Log("finished! use " + (DateTime.Now - start).TotalMilliseconds + " ms");
             AssetDatabase.Refresh();

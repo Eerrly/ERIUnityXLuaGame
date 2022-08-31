@@ -38,4 +38,38 @@ public class Util
         }
     }
 
+    public static string MD5(string str)
+    {
+        if (string.IsNullOrEmpty(str))
+        {
+            return null;
+        }
+        var bytes = System.Text.Encoding.UTF8.GetBytes(str);
+        using (var md5 = new System.Security.Cryptography.MD5CryptoServiceProvider())
+        {
+            var result = md5.ComputeHash(bytes);
+            var builder = new System.Text.StringBuilder();
+            for (int i = 0; i < result.Length; i++)
+            {
+                builder.Append(result[i].ToString("x2"));
+            }
+            var value = builder.ToString();
+            return value;
+        }
+    }
+
+    unsafe public static uint HashPath(string input)
+    {
+        uint h = 2166136261;
+        fixed (char* key = input)
+        {
+            int lenght = input.Length;
+            for (var i = 0; i < lenght; ++i)
+            {
+                h = (h * 16777619) ^ (byte)key[i];
+            }
+        }
+        return h;
+    }
+
 }

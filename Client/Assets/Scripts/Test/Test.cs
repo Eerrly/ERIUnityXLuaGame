@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Test : MonoBehaviour
@@ -7,7 +6,19 @@ public class Test : MonoBehaviour
 
     void Start()
     {
-        //LuaManager.Instance.DoFile("require('main/main')");
+        //StartCoroutine(nameof(CoLoadStart));
+        LuaStart();
     }
 
+    IEnumerator CoLoadStart()
+    {
+        var loader = new ResLoader("UI/A.prefab", null, false);
+        yield return loader;
+        loader.Res.GetGameObjectInstance();
+    }
+
+    void LuaStart()
+    {
+        LuaManager.Instance.luaEnv.DoString("require 'main/main'");
+    }
 }

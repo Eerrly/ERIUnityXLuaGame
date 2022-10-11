@@ -1,5 +1,11 @@
 ﻿using System;
+using System.IO;
+using System.Text;
+using System.Text.RegularExpressions;
 using UnityEngine;
+using LitJson;
+using UnityEditor;
+
 public class Util
 {
     public static T GetOrAddComponent<T>(GameObject go) where T : Component
@@ -58,6 +64,49 @@ public class Util
         }
     }
 
+    public static void SaveConfig(object data, string fileName)
+    {
+        string json = Regex.Unescape(JsonMapper.ToPrettyJson(data));
+        File.WriteAllText(FileUtil.CombinePaths(Setting.EditorConfigPath, fileName), json, Encoding.UTF8);
+    }
+
+    public static T LoadConfig<T>(string fileName)
+    {
+        string path = FileUtil.CombinePaths(Setting.EditorConfigPath, fileName);
+        if (File.Exists(path))
+        {
+            string json = File.ReadAllText(path, Encoding.UTF8);
+            return JsonMapper.ToObject<T>(json);
+        }
+        var obj = default(T);
+        if(null == obj)
+        {
+            obj = System.Activator.CreateInstance<T>();
+        }
+        return obj;
+    }
+
+    public static string GetAssetAbsolutePath(string assetPath)
+    {
+        string path = Application.dataPath;
+        path = path.Substring(0, path.Length - 6);
+        path += assetPath;
+        return path;
+    }
+
+    public static bool SetPathToSelection(string path)
+    {
+#if UNITY_EDITOR
+        var obj = AssetDatabase.LoadAssetAtPath<UnityEngine.Object>(path);
+        if (obj != null)
+        {
+            Selection.objects = new UnityEngine.Object[] { obj };
+            return true;
+        }
+#endif
+        return false;
+    }
+
     unsafe public static uint HashPath(string input)
     {
         uint h = 2166136261;
@@ -70,6 +119,16 @@ public class Util
             }
         }
         return h;
+    }
+
+    public static bool CheckAndLogError(object o, string error)
+    {
+        if (o == null || (o is bool && !(bool)o))
+        {
+            Debug.LogError(error);
+            return false;
+        }
+        return true;
     }
 
 }

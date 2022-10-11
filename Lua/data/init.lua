@@ -1,5 +1,0 @@
-require("xlua/util")
-require("xlua/lib")
-require("xlua/core/lang")
-require("xlua/unity/action")
-require("xlua/unity/behaviour")

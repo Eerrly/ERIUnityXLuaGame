@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
@@ -6,7 +7,7 @@ using XLua;
 using System;
 
 [LuaCallCSharp, GenComment]
-public class LuaBehaviour : MonoBehaviour
+public partial class LuaBehaviour : MonoBehaviour
 {
     internal struct Event
     {
@@ -21,11 +22,37 @@ public class LuaBehaviour : MonoBehaviour
 
     private UIBehaviour[] id2ui;
     private Dictionary<string, int> name2id;
+    private Dictionary<int, Coroutine> _cacheCoroutines = null;
+    private List<Resource> _loadedCache = null;
     private object instance;
     private LuaBehaviour root;
     private List<LuaBehaviour> children;
     private List<Event> events;
     private int index;
+
+    public Dictionary<int, Coroutine> CacheCoroutines
+    {
+        get
+        {
+            if (_cacheCoroutines == null)
+            {
+                _cacheCoroutines = new Dictionary<int, Coroutine>();
+            }
+            return _cacheCoroutines;
+        }
+    }
+
+    public List<Resource> LoadedCache
+    {
+        get
+        {
+            if (_loadedCache == null)
+            {
+                _loadedCache = new List<Resource>();
+            }
+            return _loadedCache;
+        }
+    }
 
     private void Awake()
     {
@@ -76,7 +103,7 @@ public class LuaBehaviour : MonoBehaviour
     public void BindInstance(object instance)
     {
         this.instance = instance;
-        LuaManager.Instance.BindInstance(this, name2id, instance);
+        LuaManager.Instance.BindInstance(this, name2id, this.instance);
     }
 
     [NoComment]
@@ -189,6 +216,271 @@ public class LuaBehaviour : MonoBehaviour
                     });
                 }
                 break;
+        }
+    }
+
+    [NoComment]
+    public void Release()
+    {
+        for (int i = 0; i < LoadedCache.Count; i++)
+        {
+            LoadedCache[i].Release();
+        }
+        LoadedCache.Clear();
+        if (id2ui != null)
+        {
+            for (int i = 0; i < id2ui.Length; i++)
+            {
+                if(id2ui[i] != null)
+                {
+                    var monos = id2ui[i].GetComponents<MonoBehaviour>();
+                    for (int j = 0; j < monos.Length; j++)
+                    {
+                        monos[j].StopAllCoroutines();
+                    }
+                }
+            }
+        }
+        CacheCoroutines.Clear();
+        LuaTable table = (LuaTable)instance;
+        if(LuaManager.Instance != null && LuaManager.Instance.luaEnv != null && table != null)
+        {
+            table.Dispose();
+        }
+        instance = null;
+        if (this)
+        {
+            StopAllCoroutines();
+        }
+    }
+
+}
+
+public partial class LuaBehaviour : MonoBehaviour
+{
+
+    public bool IsActive(int id)
+    {
+        UIBehaviour c = null;
+        if (TryGetControl(id, out c))
+        {
+            return c.gameObject.activeSelf;
+        }
+        return false;
+    }
+
+    public void SetCanvasGroupAlpha(int id, float alpha)
+    {
+        MonoBehaviour c = null;
+        if (TryGetControl(id, out c))
+        {
+            CanvasGroup group = c.GetComponent<CanvasGroup>();
+            if (group)
+            {
+                group.alpha = alpha;
+                group.blocksRaycasts = alpha > 0;
+            }
+        }
+    }
+
+    public void SetActive(int id, bool active)
+    {
+        UIBehaviour c = null;
+        if (TryGetControl(id, out c))
+        {
+            if (c.gameObject.activeSelf != active)
+            {
+                c.gameObject.SetActive(active);
+            }
+        }
+    }
+
+    public void SetParent(int id1, int id2, bool worldPositionStays)
+    {
+        UIBehaviour c1 = null;
+        UIBehaviour c2 = null;
+        if (TryGetControl(id1, out c1) && TryGetControl(id2, out c2))
+        {
+            c1.transform.SetParent(c2.transform, worldPositionStays);
+        }
+    }
+
+    public bool IsEnable(int id)
+    {
+        UIBehaviour c = null;
+        if (TryGetControl(id, out c))
+        {
+            return c.enabled;
+        }
+        return false;
+    }
+
+    public void SetEnable(int id, bool enabled)
+    {
+        UIBehaviour c = null;
+        if (TryGetControl(id, out c))
+        {
+            c.enabled = enabled;
+        }
+    }
+
+    public void SetPosition(int id, float x, float y, float z)
+    {
+        MonoBehaviour c = null;
+        if (TryGetControl(id, out c))
+        {
+            c.transform.localPosition = new Vector3(x, y, z);
+        }
+    }
+
+    public void SetRotation(int id, float x, float y, float z)
+    {
+        MonoBehaviour c = null;
+        if (TryGetControl(id, out c))
+        {
+            c.transform.localRotation = Quaternion.Euler(new Vector3(x, y, z));
+        }
+    }
+
+    public void SetScale(int id, float x, float y, float z)
+    {
+        MonoBehaviour c = null;
+        if (TryGetControl(id, out c))
+        {
+            c.transform.localScale = new Vector3(x, y, z);
+        }
+    }
+
+    public void SetAnchoredPosition(int id, float x, float y, float z)
+    {
+        MonoBehaviour c = null;
+        if (TryGetControl(id, out c))
+        {
+            RectTransform rectTransform = c.gameObject.GetComponent<RectTransform>();
+            if (rectTransform != null)
+            {
+                rectTransform.anchoredPosition = new Vector3(x, y, z);
+            }
+        }
+    }
+
+    public void SetInteractable(int id, bool interactable)
+    {
+        Selectable s = null;
+        if (TryGetControl(id, out s))
+        {
+            s.interactable = interactable;
+        }
+    }
+
+    public bool IsInteractable(int id, bool interactable)
+    {
+        Selectable s = null;
+        if (TryGetControl(id, out s))
+        {
+            return s.interactable;
+        }
+        return false;
+    }
+
+    public void SetButtonEnable(int id, bool enabled)
+    {
+        Button c = null;
+        if (TryGetControl(id, out c))
+        {
+            c.interactable = enabled;
+        }
+    }
+
+    public string GetText(int id)
+    {
+        Text c = null;
+        if (TryGetControl(id, out c))
+        {
+            return c.text;
+        }
+        return "";
+    }
+
+    public void SetText(int id, string text)
+    {
+        Text c = null;
+        if (TryGetControl(id, out c))
+        {
+            Coroutine co = null;
+            if (CacheCoroutines.TryGetValue(id, out co))
+            {
+                if (co != null)
+                {
+                    c.StopCoroutine(co);
+                }
+                CacheCoroutines.Remove(id);
+            }
+
+            c.text = text;
+        }
+    }
+
+    public void SetFontSize(int id, int size)
+    {
+        Text c = null;
+        if (TryGetControl(id, out c))
+        {
+            c.fontSize = size;
+        }
+    }
+
+    public void SetImage(int id, string spritePath, bool resetSize = false, float sizeRatio = 1)
+    {
+        Image c = null;
+        if (TryGetControl(id, out c))
+        {
+            Coroutine co = null;
+            if (CacheCoroutines.TryGetValue(id, out co))
+            {
+                if (co != null)
+                {
+                    StopCoroutine(co);
+                }
+                CacheCoroutines.Remove(id);
+            }
+
+            co = StartCoroutine(CoSetImage(id, c, spritePath, resetSize, sizeRatio));
+            CacheCoroutines.Add(id, co);
+        }
+    }
+
+    private void SetImage(Image c, Sprite sprite, Resource cache, bool resetSize, float sizeRatio)
+    {
+        LoadedCache.Add(cache);
+        c.sprite = sprite;
+        if (resetSize)
+        {
+            c.SetNativeSize();
+        }
+        if (sizeRatio != 1)
+        {
+            Vector2 size = c.rectTransform.sizeDelta;
+            c.rectTransform.sizeDelta = size * sizeRatio;
+        }
+    }
+
+    private IEnumerator CoSetImage(int id, Image c, string spritePath, bool resetSize, float sizeRatio)
+    {
+        var atlasPath = ResUtil.GetAtlasPathBySpritePath(spritePath);
+        var loader = new ResLoader(atlasPath, null, false);
+        yield return loader;
+        var resource = (Resource)loader.Current;
+        var spriteName = ResUtil.GetFileNameWithoutExtension(spritePath);
+        var sprite = resource.GetSprite(spriteName);
+        if (sprite != null)
+        {
+            resource.Retain();
+            loader.Dispose();
+            loader = null;
+            CacheCoroutines.Remove(id);
+            SetImage(c, sprite, resource, resetSize, sizeRatio);
+            yield break;
         }
     }
 

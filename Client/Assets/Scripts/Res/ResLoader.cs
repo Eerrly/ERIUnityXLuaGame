@@ -53,6 +53,8 @@ public partial class ResLoader : IEnumerator, System.IDisposable
 
     public object Current => _resource;
 
+    public Resource Res => _resource;
+
     public bool MoveNext()
     {
         return _resource == null;
@@ -74,9 +76,14 @@ public partial class ResLoader
 {
     public static List<AssetBundleCreateRequest> requestList = new List<AssetBundleCreateRequest>();
 
+#if UNITY_EDITOR
     public static IEnumerator CoEditorLoadTask(LoadingTask task)
     {
-        var path = System.IO.Path.Combine(Constant.EditorBundlePath, task.path);
+        var path = task.path;
+        if (!task.path.Contains(Setting.EditorBundlePath))
+        {
+            path = System.IO.Path.Combine(Setting.EditorBundlePath, task.path);
+        }
         if (System.IO.Directory.Exists(path) && task.namesDict != null && task.namesDict.Count > 0)
         {
             var loadedFiles = new List<Object>();
@@ -144,7 +151,9 @@ public partial class ResLoader
         yield return null;
     }
 
-    private IEnumerator CoLoadTask(LoadingTask task)
+#endif
+
+    public static IEnumerator CoLoadTask(LoadingTask task)
     {
         var loadingBundles = ResManager.Instance.loadingBundles;
         var loadedBundles = ResManager.Instance.loadedBundles;
@@ -196,7 +205,7 @@ public partial class ResLoader
                     AssetBundleCreateRequest packageAssetBundleRequest = null;
                     try
                     {
-                        assetBundleRequest = AssetBundle.LoadFromFileAsync(location.path, task.crc, task.offset);
+                        assetBundleRequest = AssetBundle.LoadFromFileAsync(location.path, 0, task.offset);
                         requestList.Add(assetBundleRequest);
                         var item = manifest.GetItem(task.hash);
                         if(item != null && item.packageItem != null)
@@ -204,7 +213,7 @@ public partial class ResLoader
                             var packageLocation = ResManager.Instance.ToLocation(item.packageItem);
                             try
                             {
-                                packageAssetBundleRequest = AssetBundle.LoadFromFileAsync(packageLocation.path, item.packageItem.crc, item.packageItem.offset);
+                                packageAssetBundleRequest = AssetBundle.LoadFromFileAsync(packageLocation.path, 0, item.packageItem.offset);
                                 requestList.Add(packageAssetBundleRequest);
                             }
                             catch
@@ -241,14 +250,14 @@ public partial class ResLoader
                 {
                     try
                     {
-                        bundleGroup.rawBundle = AssetBundle.LoadFromFile(location.path, task.crc, task.offset);
+                        bundleGroup.rawBundle = AssetBundle.LoadFromFile(location.path, 0, task.offset);
                         var item = manifest.GetItem(task.hash);
                         if(item != null && item.packageItem != null)
                         {
                             var packageLocation = ResManager.Instance.ToLocation(item.packageItem);
                             try
                             {
-                                bundleGroup.packageBundle = AssetBundle.LoadFromFile(packageLocation.path, item.packageItem.crc, item.packageItem.offset);
+                                bundleGroup.packageBundle = AssetBundle.LoadFromFile(packageLocation.path, 0, item.packageItem.offset);
                             }
                             catch
                             {
@@ -304,7 +313,7 @@ public partial class ResLoader
             else
             {
                 var item = manifest.GetItem(task.hash);
-                if(bundle.isSingleObject && item != null && !item.group)
+                if(bundle.isSingleObject && item != null && !item.directories)
                 {
                     name = "_";
                 }

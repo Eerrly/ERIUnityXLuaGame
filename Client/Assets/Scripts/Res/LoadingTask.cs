@@ -9,7 +9,6 @@ public class LoadingTask
     public uint hash;
     public Resource file;
     public string error;
-    public uint crc;
     public uint offset;
     public bool async;
     public bool isDependency;
@@ -26,12 +25,11 @@ public class LoadingTask
         hash = default(uint);
         file = null;
         error = default(string);
-        crc = default(uint);
         offset = default(uint);
         async = default(bool);
         isDependency = default(bool);
         dependencyRefCount = default(int);
-        namesDict.Clear();
-        onLoadedCallbacks.Clear();
+        namesDict?.Clear();
+        onLoadedCallbacks?.Clear();
     }
 }

@@ -43,7 +43,7 @@ public class LuaManager : Singleton<LuaManager> {
         {
             while (e.MoveNext())
             {
-                self.Set<string, int>(e.Current.Key, e.Current.Value);
+                id.Set<string, int>(e.Current.Key, e.Current.Value);
             }
         }
         self.Set<string, LuaTable>("ID", id);

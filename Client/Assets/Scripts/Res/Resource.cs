@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.U2D;
 
 public class Resource : ReferenceCountBase
 {
@@ -100,6 +101,30 @@ public class Resource : ReferenceCountBase
             }
         }
         return null;
+    }
+
+    public Sprite GetSprite(string name)
+    {
+        Sprite sprite = null;
+        if(Assets != null)
+        {
+            for (int i = 0; i < Assets.Length; i++)
+            {
+                if(Assets[i].name == name)
+                {
+                    sprite = (Assets[i] as SpriteAtlas).GetSprite(name);
+                    if (sprite != null)
+                    {
+                        break;
+                    }
+                }
+            }
+        }
+        if (sprite == null && Asset != null)
+        {
+            sprite = (Asset as SpriteAtlas).GetSprite(name);
+        }
+        return sprite;
     }
 
 }

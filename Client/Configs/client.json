@@ -1,0 +1,28 @@
+﻿
+{
+    "enablePatching" : false,
+    "useAssetBundle" : true,
+    "itemList"       : [
+        {
+            "root" : "SpriteAtlas",
+            "directories" : false,
+            "searchoption" : 1,
+            "extension"    : "",
+            "filter"       : "*.*"
+        },
+        {
+            "root" : "Textures",
+            "directories" : true,
+            "searchoption" : 0,
+            "extension"    : "",
+            "filter"       : "*.*"
+        },
+        {
+            "root" : "UI",
+            "directories" : false,
+            "searchoption" : 1,
+            "extension"    : "",
+            "filter"       : "*.*"
+        }
+    ]
+}

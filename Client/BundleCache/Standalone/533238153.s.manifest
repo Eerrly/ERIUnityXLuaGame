@@ -1,0 +1,42 @@
+ManifestFileVersion: 0
+CRC: 2262587721
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 5f4a4a04ee785080ed2ae15fcd6c056e
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: a354baa3bcdaca8cba5e1ac053aaeade
+HashAppended: 0
+ClassTypes:
+- Class: 213
+  Script: {instanceID: 0}
+- Class: 687078895
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/Sources/Textures/A/banyungong.png
+- Assets/Sources/Textures/A/Pic/04_pic_lt.png
+- Assets/Sources/Textures/A/golden_finger.png
+- Assets/Sources/Textures/A/Pic/04_pic_dtts.png
+- Assets/Sources/Textures/A/Pic/04_pic_drts.png
+- Assets/Sources/Textures/A/activity_red_ore.png
+- Assets/Sources/Textures/A/activity_yellow_ore_01.png
+- Assets/Sources/Textures/A/activity_yellow_ore.png
+- Assets/Sources/Textures/A/Gift/gift_diamond.png
+- Assets/Sources/Textures/A/Pic/04_pic_fwlc.png
+- Assets/Sources/Textures/A/activity_licence.png
+- Assets/Sources/Textures/A/Pic/04_pic_zhuangbeiqianghua.png
+- Assets/Sources/Textures/A/Pic/04_pic_yinxiongzhaomu.png
+- Assets/Sources/Textures/A/Gift/gift_candy.png
+- Assets/Sources/Textures/A/Gift/gift_sundae.png
+- Assets/Sources/Textures/A/Pic/04_pic_tongyong.png
+- Assets/Sources/Textures/A/activity_blue_ore.png
+- Assets/Sources/Textures/A/Pic/04_pic_fwsd.png
+- Assets/Sources/Textures/A/Pic/04_pic_zd.png
+- Assets/Sources/Textures/A/Gift/gift_pudding.png
+- Assets/Sources/Textures/A/Gift/gift_castle.png
+- Assets/Sources/Textures/A/gongchengshi.png
+- Assets/Sources/Textures/A/Pic/04_pic_juesetisheng.png
+- Assets/Sources/Textures/A/anypiece.png
+Dependencies: []

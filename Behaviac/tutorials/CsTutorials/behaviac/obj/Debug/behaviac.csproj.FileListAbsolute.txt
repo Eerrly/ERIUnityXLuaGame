@@ -1,5 +1,0 @@
-D:\behaviac_ext\tutorials\CsTutorials\behaviac\bin\Debug\behaviac.dll
-D:\behaviac_ext\tutorials\CsTutorials\behaviac\bin\Debug\behaviac.pdb
-D:\behaviac_ext\tutorials\CsTutorials\behaviac\obj\Debug\behaviac.dll
-D:\behaviac_ext\tutorials\CsTutorials\behaviac\obj\Debug\behaviac.pdb
-D:\behaviac_ext\tutorials\CsTutorials\behaviac\obj\Debug\behaviac.csprojResolveAssemblyReference.cache

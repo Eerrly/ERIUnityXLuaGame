@@ -1,0 +1,100 @@
+﻿
+{
+    "items" : [
+        {
+            "hash" : 2100422461,
+            "dependencies" : [
+            ],
+            "offset"       : 4,
+            "size"         : 5244,
+            "directories"  : false,
+            "extension"    : "",
+            "packageResourcePath" : "ui/a.prefab",
+            "packageResource"     : false,
+            "isPatching"          : false,
+            "packageItem"         : null
+        },
+        {
+            "hash" : 2119712533,
+            "dependencies" : [
+                533238153
+            ],
+            "offset"       : 5248,
+            "size"         : 35374,
+            "directories"  : false,
+            "extension"    : "",
+            "packageResourcePath" : "spriteatlas/sources_textures_a.spriteatlas",
+            "packageResource"     : false,
+            "isPatching"          : false,
+            "packageItem"         : null
+        },
+        {
+            "hash" : 3579854856,
+            "dependencies" : [
+                533238153
+            ],
+            "offset"       : 40622,
+            "size"         : 35209,
+            "directories"  : false,
+            "extension"    : "",
+            "packageResourcePath" : "spriteatlas/sources_textures_a_pic.spriteatlas",
+            "packageResource"     : false,
+            "isPatching"          : false,
+            "packageItem"         : null
+        },
+        {
+            "hash" : 3582187666,
+            "dependencies" : [
+                533238154
+            ],
+            "offset"       : 75831,
+            "size"         : 27588,
+            "directories"  : false,
+            "extension"    : "",
+            "packageResourcePath" : "spriteatlas/sources_textures_b.spriteatlas",
+            "packageResource"     : false,
+            "isPatching"          : false,
+            "packageItem"         : null
+        },
+        {
+            "hash" : 3668139938,
+            "dependencies" : [
+                533238153
+            ],
+            "offset"       : 103419,
+            "size"         : 37109,
+            "directories"  : false,
+            "extension"    : "",
+            "packageResourcePath" : "spriteatlas/sources_textures_a_gift.spriteatlas",
+            "packageResource"     : false,
+            "isPatching"          : false,
+            "packageItem"         : null
+        },
+        {
+            "hash" : 533238153,
+            "dependencies" : [
+            ],
+            "offset"       : 140528,
+            "size"         : 10480,
+            "directories"  : true,
+            "extension"    : "",
+            "packageResourcePath" : "textures/a",
+            "packageResource"     : false,
+            "isPatching"          : false,
+            "packageItem"         : null
+        },
+        {
+            "hash" : 533238154,
+            "dependencies" : [
+            ],
+            "offset"       : 151008,
+            "size"         : 4881,
+            "directories"  : true,
+            "extension"    : "",
+            "packageResourcePath" : "textures/b",
+            "packageResource"     : false,
+            "isPatching"          : false,
+            "packageItem"         : null
+        }
+    ]
+}

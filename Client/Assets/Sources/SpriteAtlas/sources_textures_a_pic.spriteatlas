@@ -1,0 +1,68 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: sources_textures_a_pic
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings: []
+    packingSettings:
+      serializedVersion: 2
+      padding: 2
+      blockOffset: 0
+      allowAlphaSplitting: 0
+      enableRotation: 0
+      enableTightPacking: 0
+    variantMultiplier: 1
+    packables:
+    - {fileID: 21300000, guid: 2722a053257cf9348a158ed772995321, type: 3}
+    - {fileID: 21300000, guid: 0a42e4c2c076b7947b9aeff06e8c5690, type: 3}
+    - {fileID: 21300000, guid: 48f628864b1b4db44935e8b5061ce9ea, type: 3}
+    - {fileID: 21300000, guid: dd1ced49a5703ff4abc8f892cb9d889d, type: 3}
+    - {fileID: 21300000, guid: 7076510d4d293bc44bbc8b0eeb4efb41, type: 3}
+    - {fileID: 21300000, guid: 15285f10f39d21f448b890e26af5ea50, type: 3}
+    - {fileID: 21300000, guid: d532e98811fb6dd4a9775e70ddf90300, type: 3}
+    - {fileID: 21300000, guid: d93c1a38ed1bcb745a5b3945612ec47a, type: 3}
+    - {fileID: 21300000, guid: 3d0c885af4457d44a9b22ffd3ba97d16, type: 3}
+    - {fileID: 21300000, guid: 29bfc9e753c75ee4090278d2c85b05e4, type: 3}
+    bindAsDefault: 1
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: 15285f10f39d21f448b890e26af5ea50, type: 3}
+  - {fileID: 21300000, guid: 0a42e4c2c076b7947b9aeff06e8c5690, type: 3}
+  - {fileID: 21300000, guid: 2722a053257cf9348a158ed772995321, type: 3}
+  - {fileID: 21300000, guid: 48f628864b1b4db44935e8b5061ce9ea, type: 3}
+  - {fileID: 21300000, guid: 29bfc9e753c75ee4090278d2c85b05e4, type: 3}
+  - {fileID: 21300000, guid: d93c1a38ed1bcb745a5b3945612ec47a, type: 3}
+  - {fileID: 21300000, guid: d532e98811fb6dd4a9775e70ddf90300, type: 3}
+  - {fileID: 21300000, guid: dd1ced49a5703ff4abc8f892cb9d889d, type: 3}
+  - {fileID: 21300000, guid: 3d0c885af4457d44a9b22ffd3ba97d16, type: 3}
+  - {fileID: 21300000, guid: 7076510d4d293bc44bbc8b0eeb4efb41, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - 04_pic_lt
+  - 04_pic_dtts
+  - 04_pic_drts
+  - 04_pic_fwlc
+  - 04_pic_zhuangbeiqianghua
+  - 04_pic_yinxiongzhaomu
+  - 04_pic_tongyong
+  - 04_pic_fwsd
+  - 04_pic_zd
+  - 04_pic_juesetisheng
+  m_Tag: sources_textures_a_pic
+  m_IsVariant: 0

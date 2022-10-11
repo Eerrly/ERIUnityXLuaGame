@@ -103,16 +103,16 @@ public class Resource : ReferenceCountBase
         return null;
     }
 
-    public Sprite GetSprite(string name)
+    public Sprite GetSprite(string name = null)
     {
         Sprite sprite = null;
-        if(Assets != null)
+        if (name != null && Assets != null)
         {
             for (int i = 0; i < Assets.Length; i++)
             {
-                if(Assets[i].name == name)
+                if (Assets[i].name == name)
                 {
-                    sprite = (Assets[i] as SpriteAtlas).GetSprite(name);
+                    sprite = Assets[i] as Sprite;
                     if (sprite != null)
                     {
                         break;
@@ -122,7 +122,7 @@ public class Resource : ReferenceCountBase
         }
         if (sprite == null && Asset != null)
         {
-            sprite = (Asset as SpriteAtlas).GetSprite(name);
+            sprite = Asset as Sprite;
         }
         return sprite;
     }

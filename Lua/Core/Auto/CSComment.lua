@@ -13,7 +13,7 @@
 ---@field SetCanvasGroupAlpha fun(self:CS.LuaBehaviour,id:int32, alpha:single)
 ---@field SetEnable fun(self:CS.LuaBehaviour,id:int32, enabled:boolean)
 ---@field SetFontSize fun(self:CS.LuaBehaviour,id:int32, size:int32)
----@field SetImage fun(self:CS.LuaBehaviour,id:int32, spritePath:string, resetSize:boolean, sizeRatio:single)
+---@field SetImage fun(self:CS.LuaBehaviour,id:int32, dir:string, spriteName:string, resetSize:boolean, sizeRatio:single)
 ---@field SetInteractable fun(self:CS.LuaBehaviour,id:int32, interactable:boolean)
 ---@field SetParent fun(self:CS.LuaBehaviour,id1:int32, id2:int32, worldPositionStays:boolean)
 ---@field SetPosition fun(self:CS.LuaBehaviour,id:int32, x:single, y:single, z:single)

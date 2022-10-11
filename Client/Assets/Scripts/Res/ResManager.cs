@@ -23,7 +23,7 @@ public class ResManager : Singleton<ResManager>
         uint result = 0;
         if (!string.IsNullOrEmpty(path))
         {
-            path = FileUtil.Normalized(path).ToLower().Replace("assets/sources/", "");
+            path = path.ToLower().Replace("assets/sources/", "");
             if(!cacheFileMap.TryGetValue(path, out result))
             {
                 result = Util.HashPath(path);

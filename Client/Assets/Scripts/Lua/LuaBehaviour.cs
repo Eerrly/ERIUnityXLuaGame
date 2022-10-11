@@ -430,7 +430,7 @@ public partial class LuaBehaviour : MonoBehaviour
         }
     }
 
-    public void SetImage(int id, string spritePath, bool resetSize = false, float sizeRatio = 1)
+    public void SetImage(int id, string dir, string spriteName, bool resetSize = false, float sizeRatio = 1)
     {
         Image c = null;
         if (TryGetControl(id, out c))
@@ -445,7 +445,7 @@ public partial class LuaBehaviour : MonoBehaviour
                 CacheCoroutines.Remove(id);
             }
 
-            co = StartCoroutine(CoSetImage(id, c, spritePath, resetSize, sizeRatio));
+            co = StartCoroutine(CoSetImage(id, c, dir, spriteName, resetSize, sizeRatio));
             CacheCoroutines.Add(id, co);
         }
     }
@@ -465,23 +465,18 @@ public partial class LuaBehaviour : MonoBehaviour
         }
     }
 
-    private IEnumerator CoSetImage(int id, Image c, string spritePath, bool resetSize, float sizeRatio)
+    private IEnumerator CoSetImage(int id, Image c, string dir, string spriteName, bool resetSize, float sizeRatio)
     {
-        var atlasPath = ResUtil.GetAtlasPathBySpritePath(spritePath);
-        var loader = new ResLoader(atlasPath, null, false);
+        var loader = new ResLoader(dir, spriteName, false);
         yield return loader;
         var resource = (Resource)loader.Current;
-        var spriteName = ResUtil.GetFileNameWithoutExtension(spritePath);
-        var sprite = resource.GetSprite(spriteName);
-        if (sprite != null)
-        {
-            resource.Retain();
-            loader.Dispose();
-            loader = null;
-            CacheCoroutines.Remove(id);
-            SetImage(c, sprite, resource, resetSize, sizeRatio);
-            yield break;
-        }
+        var sprite = resource.GetSprite();
+        resource.Retain();
+        loader.Dispose();
+        loader = null;
+        CacheCoroutines.Remove(id);
+        SetImage(c, sprite, resource, resetSize, sizeRatio);
+        yield break;
     }
 
 }

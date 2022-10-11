@@ -859,37 +859,40 @@ namespace XLua.CSObjectWrap
             
 			    int gen_param_count = LuaAPI.lua_gettop(L);
             
-                if(gen_param_count == 5&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 2)&& (LuaAPI.lua_isnil(L, 3) || LuaAPI.lua_type(L, 3) == LuaTypes.LUA_TSTRING)&& LuaTypes.LUA_TBOOLEAN == LuaAPI.lua_type(L, 4)&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 5)) 
+                if(gen_param_count == 6&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 2)&& (LuaAPI.lua_isnil(L, 3) || LuaAPI.lua_type(L, 3) == LuaTypes.LUA_TSTRING)&& (LuaAPI.lua_isnil(L, 4) || LuaAPI.lua_type(L, 4) == LuaTypes.LUA_TSTRING)&& LuaTypes.LUA_TBOOLEAN == LuaAPI.lua_type(L, 5)&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 6)) 
                 {
                     int _id = LuaAPI.xlua_tointeger(L, 2);
-                    string _spritePath = LuaAPI.lua_tostring(L, 3);
-                    bool _resetSize = LuaAPI.lua_toboolean(L, 4);
-                    float _sizeRatio = (float)LuaAPI.lua_tonumber(L, 5);
+                    string _dir = LuaAPI.lua_tostring(L, 3);
+                    string _spriteName = LuaAPI.lua_tostring(L, 4);
+                    bool _resetSize = LuaAPI.lua_toboolean(L, 5);
+                    float _sizeRatio = (float)LuaAPI.lua_tonumber(L, 6);
                     
-                    gen_to_be_invoked.SetImage( _id, _spritePath, _resetSize, _sizeRatio );
+                    gen_to_be_invoked.SetImage( _id, _dir, _spriteName, _resetSize, _sizeRatio );
                     
                     
                     
                     return 0;
                 }
-                if(gen_param_count == 4&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 2)&& (LuaAPI.lua_isnil(L, 3) || LuaAPI.lua_type(L, 3) == LuaTypes.LUA_TSTRING)&& LuaTypes.LUA_TBOOLEAN == LuaAPI.lua_type(L, 4)) 
+                if(gen_param_count == 5&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 2)&& (LuaAPI.lua_isnil(L, 3) || LuaAPI.lua_type(L, 3) == LuaTypes.LUA_TSTRING)&& (LuaAPI.lua_isnil(L, 4) || LuaAPI.lua_type(L, 4) == LuaTypes.LUA_TSTRING)&& LuaTypes.LUA_TBOOLEAN == LuaAPI.lua_type(L, 5)) 
                 {
                     int _id = LuaAPI.xlua_tointeger(L, 2);
-                    string _spritePath = LuaAPI.lua_tostring(L, 3);
-                    bool _resetSize = LuaAPI.lua_toboolean(L, 4);
+                    string _dir = LuaAPI.lua_tostring(L, 3);
+                    string _spriteName = LuaAPI.lua_tostring(L, 4);
+                    bool _resetSize = LuaAPI.lua_toboolean(L, 5);
                     
-                    gen_to_be_invoked.SetImage( _id, _spritePath, _resetSize );
+                    gen_to_be_invoked.SetImage( _id, _dir, _spriteName, _resetSize );
                     
                     
                     
                     return 0;
                 }
-                if(gen_param_count == 3&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 2)&& (LuaAPI.lua_isnil(L, 3) || LuaAPI.lua_type(L, 3) == LuaTypes.LUA_TSTRING)) 
+                if(gen_param_count == 4&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 2)&& (LuaAPI.lua_isnil(L, 3) || LuaAPI.lua_type(L, 3) == LuaTypes.LUA_TSTRING)&& (LuaAPI.lua_isnil(L, 4) || LuaAPI.lua_type(L, 4) == LuaTypes.LUA_TSTRING)) 
                 {
                     int _id = LuaAPI.xlua_tointeger(L, 2);
-                    string _spritePath = LuaAPI.lua_tostring(L, 3);
+                    string _dir = LuaAPI.lua_tostring(L, 3);
+                    string _spriteName = LuaAPI.lua_tostring(L, 4);
                     
-                    gen_to_be_invoked.SetImage( _id, _spritePath );
+                    gen_to_be_invoked.SetImage( _id, _dir, _spriteName );
                     
                     
                     

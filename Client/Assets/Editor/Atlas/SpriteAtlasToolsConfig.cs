@@ -11,6 +11,7 @@ public class SpriteAtlasToolsConfig
 
     public List<SpriteAtlasToolsConfigItem> itemList = new List<SpriteAtlasToolsConfigItem>();
 
+    [System.Serializable]
     public class SpriteAtlasToolsConfigItem
     {
         public string textureDirPath;

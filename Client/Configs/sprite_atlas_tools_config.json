@@ -1,16 +1,1 @@
-﻿
-{
-    "spriteAtlasSaveDirPath" : "Assets/Sources/SpriteAtlas",
-    "packingTextureWidthLimit" : 1024,
-    "packingTextureHeightLimit" : 1024,
-    "itemList"                  : [
-        {
-            "textureDirPath" : "Assets/Sources/Textures/A",
-            "isSubDirSplit"  : false
-        },
-        {
-            "textureDirPath" : "Assets/Sources/Textures/B",
-            "isSubDirSplit"  : false
-        }
-    ]
-}
+﻿{"spriteAtlasSaveDirPath":"Assets/Examples/SpriteAtlas","packingTextureWidthLimit":1024,"packingTextureHeightLimit":1024,"itemList":[{"textureDirPath":"Assets/Sources/Textures/A","isSubDirSplit":true},{"textureDirPath":"Assets/Sources/Textures/B","isSubDirSplit":false}]}

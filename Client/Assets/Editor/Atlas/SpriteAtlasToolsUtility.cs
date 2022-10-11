@@ -4,8 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using Jing;
-using LitJson;
 using UnityEditor;
 using UnityEditor.U2D;
 using UnityEngine.U2D;
@@ -45,7 +43,6 @@ public class SpriteAtlasToolsUtility
         item.textureDirPath = textureDirPath;
         cfg.itemList.Add(item);
         Util.SaveConfig(cfg, Constant.ATLAS_CONFIG_NAME);
-        Debug.Log("AddSpriteAtlas Success!");
         onAddSpriteAtlas?.Invoke();
     }
 

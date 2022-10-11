@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using Jing;
 
 public partial class Constant
 {

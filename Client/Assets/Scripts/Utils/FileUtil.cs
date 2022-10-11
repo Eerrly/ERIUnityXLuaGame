@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 public class FileUtil
 {
@@ -89,6 +90,28 @@ public class FileUtil
             }
         }
         return false;
+    }
+
+    /// <summary>
+    /// 拷贝文件
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="target"></param>
+    /// <param name="overwrite"></param>
+    public static void CopyFile(string source, string target, bool overwrite = true)
+    {
+        if (false == File.Exists(source))
+        {
+            throw new Exception(string.Format("文件不存在:[{0}]", source));
+        }
+
+        var targetDir = Directory.GetParent(target);
+        if (false == targetDir.Exists)
+        {
+            targetDir.Create();
+        }
+
+        File.Copy(source, target, overwrite);
     }
 
 }

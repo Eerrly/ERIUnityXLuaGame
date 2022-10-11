@@ -9,6 +9,7 @@ public class BuildToolsConfig
 
     public List<BuildToolsConfigItem> itemList = new List<BuildToolsConfigItem>();
 
+    [System.Serializable]
     public class BuildToolsConfigItem
     {
         public string root;

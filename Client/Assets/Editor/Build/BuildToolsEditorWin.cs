@@ -46,11 +46,9 @@ public class BuildToolsEditorWin : OdinEditorWindow
     [InfoBox("AssetBundle资源包配置 (Assets/Sources/)")]
     [HideLabel]
     [LabelText("资源数据")]
-    [PropertySpace(20)]
     public List<BuildToolsItemEidtor> itemList = new List<BuildToolsItemEidtor>();
 
-    [Button("保存配置", ButtonSizes.Large)]
-    [ButtonGroup("BuildToolsButton")]
+    [Button("保存当前配置", ButtonSizes.Large)]
     public void SaveConfigFile()
     {
         cfg.enablePatching = this.enablePatching;
@@ -77,8 +75,6 @@ public class BuildToolsEditorWin : OdinEditorWindow
     }
 
     [Button("开始构建", ButtonSizes.Large)]
-    [PropertySpace(10)]
-    [ButtonGroup("BuildToolsButton")]
     public void Build()
     {
         EditorUtility.DisplayProgressBar("Progress", "assetbundle building ...", 0);

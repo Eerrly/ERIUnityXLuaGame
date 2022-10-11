@@ -5,7 +5,6 @@ using Sirenix.OdinInspector.Editor;
 using Sirenix.Utilities.Editor;
 using Sirenix.Utilities;
 using Sirenix.OdinInspector;
-using Jing;
 
 public static class EditorWindowExtensions
 {
@@ -133,6 +132,25 @@ public class SpriteAtlasToolsEditorWin : OdinEditorWindow
     void PackPreviewAll()
     {
         SpriteAtlasToolsUtility.PackPreview(spriteAtlasSaveDirPath);
+    }
+
+    [Button("保存当前配置", ButtonSizes.Large)]
+    [PropertyOrder(32)]
+    void SaveConfig()
+    {
+        var conf = new SpriteAtlasToolsConfig();
+        conf.spriteAtlasSaveDirPath = spriteAtlasSaveDirPath;
+        conf.packingTextureWidthLimit = packingTextureWidthLimit;
+        conf.packingTextureHeightLimit = packingTextureHeightLimit;
+        conf.itemList = new List<SpriteAtlasToolsConfig.SpriteAtlasToolsConfigItem>();
+        foreach (var v in itemList)
+        {
+            var item = new SpriteAtlasToolsConfig.SpriteAtlasToolsConfigItem();
+            item.isSubDirSplit = v.isSubDirSplit;
+            item.textureDirPath = v.texturesDirPath;
+            conf.itemList.Add(item);
+        }
+        Util.SaveConfig(conf, Constant.ATLAS_CONFIG_NAME);
     }
 
 }

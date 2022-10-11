@@ -33,7 +33,7 @@ SpriteAtlas:
     - {fileID: 21300000, guid: 16e9ece006d785f4bb1d98d924cb113d, type: 3}
     - {fileID: 21300000, guid: 97e936c943eea6945881d5f8dd723b5e, type: 3}
     - {fileID: 21300000, guid: 2c8f9d15a8bbad64fbd0111c78e8d7a3, type: 3}
-    - {fileID: 2800000, guid: 18d5fd0c0bc95b24387cdd8857f4a108, type: 3}
+    - {fileID: 21300000, guid: b36c6729d1d7dad4ea80cc0a934ea293, type: 3}
     - {fileID: 21300000, guid: 731f8cb735d372d45b2d43f683bb8101, type: 3}
     bindAsDefault: 1
   m_MasterAtlas: {fileID: 0}
@@ -41,13 +41,13 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 16e9ece006d785f4bb1d98d924cb113d, type: 3}
   - {fileID: 21300000, guid: 2c8f9d15a8bbad64fbd0111c78e8d7a3, type: 3}
   - {fileID: 21300000, guid: 731f8cb735d372d45b2d43f683bb8101, type: 3}
+  - {fileID: 21300000, guid: b36c6729d1d7dad4ea80cc0a934ea293, type: 3}
   - {fileID: 21300000, guid: 97e936c943eea6945881d5f8dd723b5e, type: 3}
-  - {fileID: 21300000, guid: 18d5fd0c0bc95b24387cdd8857f4a108, type: 3}
   m_PackedSpriteNamesToIndex:
   - item_01
   - item_03
   - item_06
+  - item_05
   - item_02
-  - gongchengshi
   m_Tag: sources_textures_b
   m_IsVariant: 0

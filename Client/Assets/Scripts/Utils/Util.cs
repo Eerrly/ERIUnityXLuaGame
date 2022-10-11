@@ -3,7 +3,6 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using UnityEngine;
-using LitJson;
 using UnityEditor;
 
 public class Util
@@ -66,7 +65,7 @@ public class Util
 
     public static void SaveConfig(object data, string fileName)
     {
-        string json = Regex.Unescape(JsonMapper.ToPrettyJson(data));
+        string json = Regex.Unescape(JsonUtility.ToJson(data));
         File.WriteAllText(FileUtil.CombinePaths(Setting.EditorConfigPath, fileName), json, Encoding.UTF8);
     }
 
@@ -76,7 +75,8 @@ public class Util
         if (File.Exists(path))
         {
             string json = File.ReadAllText(path, Encoding.UTF8);
-            return JsonMapper.ToObject<T>(json);
+            T t = JsonUtility.FromJson<T>(json);
+            return t;
         }
         var obj = default(T);
         if(null == obj)

@@ -57,6 +57,8 @@ public partial class LuaBehaviour : MonoBehaviour
     private void Awake()
     {
         name2id = new Dictionary<string, int>();
+        children = new List<LuaBehaviour>();
+        events = new List<Event>();
 
         var uis = new List<Transform>();
         transform.GetComponentsInChildren<Transform>(true, uis);

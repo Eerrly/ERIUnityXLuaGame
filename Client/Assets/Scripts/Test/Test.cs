@@ -19,6 +19,8 @@ public class Test : MonoBehaviour
 
     void LuaStart()
     {
-        LuaManager.Instance.luaEnv.DoString("require 'main/main'");
+        LuaManager.Instance.luaEnv.DoString(@"
+require 'main/main'
+");
     }
 }

@@ -1,2 +1,2 @@
-local Test = require("ui/Test")
+local Test = require("ui.Test")
 Test:start()

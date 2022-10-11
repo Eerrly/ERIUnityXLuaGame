@@ -20,7 +20,7 @@ public class LuaManager : Singleton<LuaManager> {
     private Dictionary<string, object[]> _luaDic = new Dictionary<string, object[]>();
 
     byte[] MyLuaCustomLoader(ref string fileName) {
-        string filePath = Path.Combine(Application.dataPath.Replace("/Assets", ""), Setting.EditorScriptRoot) + "/" + fileName + ".lua";
+        string filePath = Path.Combine(Application.dataPath.Replace("/Assets", ""), Setting.EditorScriptRoot) + "/" + fileName.Replace(".", "/") + ".lua";
         if (File.Exists(filePath))
         {
             return File.ReadAllBytes(filePath);

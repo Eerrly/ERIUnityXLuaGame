@@ -6,8 +6,9 @@ public class Test : MonoBehaviour
 
     void Start()
     {
+        Global.Instance.OnGameStart.AddListener(LuaStart);
+        Global.Instance.Run();
         //StartCoroutine(nameof(CoLoadStart));
-        LuaStart();
     }
 
     IEnumerator CoLoadStart()
@@ -19,7 +20,7 @@ public class Test : MonoBehaviour
 
     void LuaStart()
     {
-        LuaManager.Instance.luaEnv.DoString(@"
+        Global.Instance.LuaManager.luaEnv.DoString(@"
 require 'main/main'
 ");
     }

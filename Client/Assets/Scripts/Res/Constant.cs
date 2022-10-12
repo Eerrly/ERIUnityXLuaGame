@@ -8,7 +8,7 @@ public partial class Constant
 
     public static string CLIENT_CONFIG_NAME => "client.json";
 
-    public static string ASSETBUNDLES_CONFIG_NAME => "asset_bundles.txt";
+    public static string ASSETBUNDLES_CONFIG_NAME => "asset_bundles.json";
 
     public static string ATLASSPRITE_EXTENSION => ".spriteatlas";
 

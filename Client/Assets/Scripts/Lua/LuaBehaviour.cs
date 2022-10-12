@@ -105,7 +105,7 @@ public partial class LuaBehaviour : MonoBehaviour
     public void BindInstance(object instance)
     {
         this.instance = instance;
-        LuaManager.Instance.BindInstance(this, name2id, this.instance);
+        Global.Instance.LuaManager.BindInstance(this, name2id, this.instance);
     }
 
     [NoComment]
@@ -185,7 +185,7 @@ public partial class LuaBehaviour : MonoBehaviour
         if(TryGetControl(id, out child))
         {
             if(child.instance == null) {
-                child.Initialize(LuaManager.Instance.luaEnv.NewTable(), root);
+                child.Initialize(Global.Instance.LuaManager.luaEnv.NewTable(), root);
             }
             return child.instance;
         }
@@ -245,7 +245,7 @@ public partial class LuaBehaviour : MonoBehaviour
         }
         CacheCoroutines.Clear();
         LuaTable table = (LuaTable)instance;
-        if(LuaManager.Instance != null && LuaManager.Instance.luaEnv != null && table != null)
+        if(Global.Instance != null && Global.Instance.LuaManager.luaEnv != null && table != null)
         {
             table.Dispose();
         }

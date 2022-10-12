@@ -2,8 +2,10 @@
 using System.Collections;
 using UnityEngine;
 
-public class ResManager : Singleton<ResManager>
+public class ResManager : MonoBehaviour, IManager
 {
+    public bool IsInitialized { get; set; }
+
     internal Dictionary<string, uint> cacheFileMap = new Dictionary<string, uint>();
     internal Resource errorResource = new Resource(null, null, null, "not exist");
     internal bool preInitialized = false;
@@ -41,7 +43,7 @@ public class ResManager : Singleton<ResManager>
         }
     }
 
-    public override void OnInitialize()
+    public void OnInitialize()
     {
         preInitialized = true;
         loadingTasks.Clear();
@@ -57,9 +59,8 @@ public class ResManager : Singleton<ResManager>
 
     public IEnumerator CoWaitInitialize()
     {
-        client = Util.LoadConfig<BuildToolsConfig>(Constant.CLIENT_CONFIG_NAME);
 #if UNITY_EDITOR
-        if (client.useAssetBundle)
+        if (Setting.Config.useAssetBundle)
         {
             InitializeClientConfig();
         }
@@ -67,6 +68,7 @@ public class ResManager : Singleton<ResManager>
         InitializeClientConfig();
 #endif
         yield return null;
+        IsInitialized = true;
     }
 
     private void InitializeClientConfig()
@@ -133,7 +135,7 @@ public class ResManager : Singleton<ResManager>
     {
         if (preInitialized)
         {
-            if(client.useAssetBundle && (manifest == null || !manifest.Exist(hash)))
+            if(Setting.Config.useAssetBundle && (manifest == null || !manifest.Exist(hash)))
             {
                 if(onLoaded != null) onLoaded(errorResource);
             }
@@ -265,7 +267,7 @@ public class ResManager : Singleton<ResManager>
                 {
                     task.state = ELoadingState.Loading;
 #if UNITY_EDITOR
-                    if (client.useAssetBundle)
+                    if (Setting.Config.useAssetBundle)
                     {
                         StartCoroutine(ResLoader.CoLoadTask(task));
                     }
@@ -300,7 +302,7 @@ public class ResManager : Singleton<ResManager>
         }
     }
 
-    public override void OnRelease()
+    public void OnRelease()
     {
         preInitialized = false;
         manifest = null;
@@ -329,6 +331,7 @@ public class ResManager : Singleton<ResManager>
                 }
             }
         }
+        IsInitialized = false;
     }
 
     private void OnDestroy()

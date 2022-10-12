@@ -59,6 +59,20 @@ public class ResUtil
     }
 
 #if UNITY_EDITOR
+    private static void BuildLuaScripts()
+    {
+        var luaDirectory = Path.Combine(Application.dataPath.Replace("/Assets", ""), Setting.EditorScriptRoot);
+        var luaTargetDirectory = Path.Combine(Application.dataPath.Replace("Assets", ""), Setting.RuntimeScriptBundleName);
+        Directory.Delete(luaTargetDirectory, true);
+        var files = Directory.GetFiles(luaDirectory, "*.lua", SearchOption.AllDirectories);
+        for (int i = 0; i < files.Length; i++)
+        {
+            var localFilePath = files[i].Replace(luaDirectory, "").Replace(".lua", ".bytes");
+            FileUtil.CopyFile(files[i], luaTargetDirectory + "/" + localFilePath);
+        }
+        AssetDatabase.Refresh();
+    }
+
     public static void Build()
     {
         var cfg = Util.LoadConfig<BuildToolsConfig>(Constant.CLIENT_CONFIG_NAME);
@@ -67,6 +81,8 @@ public class ResUtil
         var hash2Path = new Dictionary<string, string>();
         var mainBundleList = new List<string>();
         var configItemMap = new Dictionary<string, BuildToolsConfig.BuildToolsConfigItem>();
+
+        BuildLuaScripts();
 
         foreach (var cur in cfg.itemList)
         {

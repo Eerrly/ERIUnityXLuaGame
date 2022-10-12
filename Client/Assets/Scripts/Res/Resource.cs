@@ -127,4 +127,9 @@ public class Resource : ReferenceCountBase
         return sprite;
     }
 
+    public void LoadScript(Dictionary<string, byte[]> dict)
+    {
+        _bundle.LoadScript(dict);
+    }
+
 }

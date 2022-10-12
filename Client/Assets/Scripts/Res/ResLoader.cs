@@ -12,11 +12,11 @@ public partial class ResLoader : IEnumerator, System.IDisposable
     {
         if (isAsync)
         {
-            ResManager.Instance.LoadAsync(path, name, OnLoaded);
+            Global.Instance.ResManager.LoadAsync(path, name, OnLoaded);
         }
         else
         {
-            ResManager.Instance.LoadSync(path, name, OnLoaded);
+            Global.Instance.ResManager.LoadSync(path, name, OnLoaded);
         }
     }
 
@@ -155,10 +155,10 @@ public partial class ResLoader
 
     public static IEnumerator CoLoadTask(LoadingTask task)
     {
-        var loadingBundles = ResManager.Instance.loadingBundles;
-        var loadedBundles = ResManager.Instance.loadedBundles;
-        var unloadBundleMap = ResManager.Instance.unloadBundleMap;
-        var manifest = ResManager.Instance.manifest;
+        var loadingBundles = Global.Instance.ResManager.loadingBundles;
+        var loadedBundles = Global.Instance.ResManager.loadedBundles;
+        var unloadBundleMap = Global.Instance.ResManager.unloadBundleMap;
+        var manifest = Global.Instance.ResManager.manifest;
 
         ResourceBundle bundle = null;
         if (loadingBundles.Contains(task.hash)) {
@@ -192,7 +192,7 @@ public partial class ResLoader
             }
             BundleGroup bundleGroup;
             string error = null;
-            var location = ResManager.Instance.ToLocation(task.hash);
+            var location = Global.Instance.ResManager.ToLocation(task.hash);
             if(unloadBundleMap.TryGetValue(task.hash, out bundleGroup))
             {
                 unloadBundleMap.Remove(task.hash);
@@ -210,7 +210,7 @@ public partial class ResLoader
                         var item = manifest.GetItem(task.hash);
                         if(item != null && item.packageItem != null)
                         {
-                            var packageLocation = ResManager.Instance.ToLocation(item.packageItem);
+                            var packageLocation = Global.Instance.ResManager.ToLocation(item.packageItem);
                             try
                             {
                                 packageAssetBundleRequest = AssetBundle.LoadFromFileAsync(packageLocation.path, 0, item.packageItem.offset);
@@ -254,7 +254,7 @@ public partial class ResLoader
                         var item = manifest.GetItem(task.hash);
                         if(item != null && item.packageItem != null)
                         {
-                            var packageLocation = ResManager.Instance.ToLocation(item.packageItem);
+                            var packageLocation = Global.Instance.ResManager.ToLocation(item.packageItem);
                             try
                             {
                                 bundleGroup.packageBundle = AssetBundle.LoadFromFile(packageLocation.path, 0, item.packageItem.offset);
@@ -277,7 +277,7 @@ public partial class ResLoader
                 task.state = ELoadingState.Finished;
                 yield break;
             }
-            bundle = new ResourceBundle(task.hash, bundleGroup.rawBundle, bundleGroup.packageBundle, ResManager.Instance);
+            bundle = new ResourceBundle(task.hash, bundleGroup.rawBundle, bundleGroup.packageBundle, Global.Instance.ResManager);
             loadedBundles.Add(task.hash, bundle);
             loadingBundles.Remove(task.hash);
         }
@@ -401,6 +401,10 @@ public partial class ResLoader
                         loadedFiles[index++] = bundle.LoadAsset(kv.Key + task.extension);
                     }
                     task.file = new Resource(task.path, loadedFiles, bundle, null);
+                }
+                else
+                {
+                    task.file = new Resource(task.path, bundle.LoadAllAssets(), bundle, null);
                 }
             }
         }

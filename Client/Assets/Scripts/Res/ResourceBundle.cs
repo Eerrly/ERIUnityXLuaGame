@@ -75,6 +75,7 @@ public class ResourceBundle : ReferenceCountBase
             var names = RawBundle.GetAllAssetNames();
             for (int i = 0; i < names.Length; i++)
             {
+                // skip: .bytes
                 var name = names[i].Substring(0, names[i].Length - 6);
                 var bytes = RawBundle.LoadAsset<TextAsset>(names[i]).bytes;
                 dict.Add(name, bytes);
@@ -85,6 +86,7 @@ public class ResourceBundle : ReferenceCountBase
             var names = PackageBundle.GetAllAssetNames();
             for (int i = 0; i < names.Length; i++)
             {
+                // skip: .bytes
                 var name = names[i].Substring(0, names[i].Length - 6);
                 var bytes = PackageBundle.LoadAsset<TextAsset>(names[i]).bytes;
                 dict.Add(name, bytes);
@@ -156,6 +158,46 @@ public class ResourceBundle : ReferenceCountBase
         if (packageRequest != null)
         {
             var assets = packageRequest.allAssets;
+            foreach (var asset in assets)
+            {
+                var find = false;
+                if (rawAssets != null)
+                {
+                    foreach (var rawAsset in rawAssets)
+                    {
+                        if ((rawAsset.GetType() == asset.GetType() && rawAsset.name == asset.name))
+                        {
+                            find = true;
+                            break;
+                        }
+                    }
+                }
+                if (!find)
+                {
+                    _tempList.Add(asset);
+                }
+            }
+        }
+        var results = _tempList.ToArray();
+        _tempList.Clear();
+        return results;
+    }
+
+    public Object[] LoadAllAssets()
+    {
+        _tempList.Clear();
+        Object[] rawAssets = null;
+        if (RawBundle != null)
+        {
+            rawAssets = RawBundle.LoadAllAssets();
+            foreach (var rawAsset in rawAssets)
+            {
+                _tempList.Add(rawAsset);
+            }
+        }
+        if (PackageBundle != null)
+        {
+            var assets = PackageBundle.LoadAllAssets();
             foreach (var asset in assets)
             {
                 var find = false;

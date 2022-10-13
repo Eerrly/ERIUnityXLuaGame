@@ -78,8 +78,29 @@ public class UIWindow : MonoBehaviour
         }
     }
 
+    public void OnShow(System.Action callback = null)
+    {
+        isShow = true;
+        Util.SetGameObjectLayer(gameObject, Setting.LAYER_UI, true);
+        if(callback != null)
+        {
+            callback();
+        }
+    }
+
+    public void OnHide(System.Action callback = null)
+    {
+        isShow = false;
+        Util.SetGameObjectLayer(gameObject, Setting.LAYER_HIDE, true);
+        if(callback != null)
+        {
+            callback();
+        }
+    }
+
     private void OnDestroy()
     {
+        isShow = false;
         behaviour.Release();
     }
 

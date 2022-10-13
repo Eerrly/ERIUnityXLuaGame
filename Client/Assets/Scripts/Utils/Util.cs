@@ -3,10 +3,15 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using UnityEngine;
+using System.Collections.Generic;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 
 public class Util
 {
+    private static List<Transform> _setGameObjectLayerList = new List<Transform>();
+
     public static T GetOrAddComponent<T>(GameObject go) where T : Component
     {
         T t = null;
@@ -19,6 +24,26 @@ public class Util
             }
         }
         return t;
+    }
+
+    public static void SetGameObjectLayer(GameObject go, int layer, bool includeChildren)
+    {
+        if(null != go && go.layer != layer)
+        {
+            if (includeChildren)
+            {
+                _setGameObjectLayerList.Clear();
+                go.GetComponentsInChildren<Transform>(true, _setGameObjectLayerList);
+                foreach (var igo in _setGameObjectLayerList)
+                {
+                    igo.gameObject.layer = layer;
+                }
+            }
+            else
+            {
+                go.layer = layer;
+            }
+        }
     }
 
     public static void InvokeAttributeCall(object obj, Type classType, bool parengInherit, Type methodType, bool methodInherit)

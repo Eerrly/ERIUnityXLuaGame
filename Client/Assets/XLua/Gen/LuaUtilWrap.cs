@@ -31,11 +31,12 @@ namespace XLua.CSObjectWrap
 			Utils.EndObjectRegister(type, L, translator, null, null,
 			    null, null, null);
 
-		    Utils.BeginClassRegister(type, L, __CreateInstance, 6, 0, 0);
+		    Utils.BeginClassRegister(type, L, __CreateInstance, 7, 0, 0);
 			Utils.RegisterFunc(L, Utils.CLS_IDX, "ClearDontDestroyObjs", _m_ClearDontDestroyObjs_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "DontDestroyOnLoad", _m_DontDestroyOnLoad_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "IsNull", _m_IsNull_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "CreateWindow", _m_CreateWindow_xlua_st_);
+            Utils.RegisterFunc(L, Utils.CLS_IDX, "DestroyWindow", _m_DestroyWindow_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "LoadScene", _m_LoadScene_xlua_st_);
             
 			
@@ -215,6 +216,31 @@ namespace XLua.CSObjectWrap
             }
             
             return LuaAPI.luaL_error(L, "invalid arguments to LuaUtil.CreateWindow!");
+            
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_DestroyWindow_xlua_st_(RealStatePtr L)
+        {
+		    try {
+            
+            
+            
+                
+                {
+                    int _id = LuaAPI.xlua_tointeger(L, 1);
+                    bool _destroy = LuaAPI.lua_toboolean(L, 2);
+                    
+                    LuaUtil.DestroyWindow( _id, _destroy );
+                    
+                    
+                    
+                    return 0;
+                }
+                
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
             
         }
         

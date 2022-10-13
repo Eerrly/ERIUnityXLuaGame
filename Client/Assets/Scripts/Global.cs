@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 
 public class Global : Singleton<Global>
 {
@@ -27,6 +28,9 @@ public class Global : Singleton<Global>
     {
         managers = new List<IManager>();
         OnGameStart = new UnityEvent();
+
+        Util.GetOrAddComponent<EventSystem>(gameObject);
+        Util.GetOrAddComponent<StandaloneInputModule>(gameObject);
 
         _resManager = Util.GetOrAddComponent<ResManager>(gameObject);
         _luaManager = Util.GetOrAddComponent<LuaManager>(gameObject);

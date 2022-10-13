@@ -110,7 +110,10 @@ public partial class UIManager : MonoBehaviour, IManager
             }
             if (_creatingWindows.Remove(id))
             {
-                win = Util.GetOrAddComponent<UIWindow>(prefab);
+                GameObject winObj = InstantiateWindowObject(prefab);
+                winObj.SetActive(true);
+
+                win = Util.GetOrAddComponent<UIWindow>(winObj);
                 win.transform.localPosition = Vector3.zero;
                 win.transform.localScale = Vector3.one;
                 win.transform.localRotation = Quaternion.identity;
@@ -123,7 +126,8 @@ public partial class UIManager : MonoBehaviour, IManager
                     _windows.TryGetValue(parentId, out parent);
                 }
                 win.Create(parent, id, prefab.name, path, this, layer, property, obj);
-                if(callback != null)
+                win.OnShow();
+                if (callback != null)
                 {
                     callback(id);
                 }
@@ -139,7 +143,8 @@ public partial class UIManager : MonoBehaviour, IManager
                 _windows.TryGetValue(parentId, out parent);
             }
             win.Create(parent, id, win.name, win.path, this, layer, property, obj);
-            if(callback != null)
+            win.OnShow();
+            if (callback != null)
             {
                 callback(id);
             }
@@ -162,13 +167,43 @@ public partial class UIManager : MonoBehaviour, IManager
             if(_windows.TryGetValue(id, out window))
             {
                 _windows.Remove(id);
-                if (isDestroy)
+                window.OnHide(() => 
                 {
-                    window.gameObject.SetActive(false);
-                    GameObject.DestroyImmediate(window.gameObject);
-                }
+                    if (isDestroy)
+                    {
+                        window.gameObject.SetActive(false);
+                        GameObject.DestroyImmediate(window.gameObject);
+                    }
+                    else
+                    {
+                        CacheWindow(window);
+                    }
+                });
             }
         }
+    }
+
+    private void CacheWindow(UIWindow win)
+    {
+        _cacheWindows.AddLast(win);
+        while(_cacheWindows.Count > Constant.CacheUICount)
+        {
+            var head = _cacheWindows.First;
+            _cacheWindows.RemoveFirst();
+            if(head.Value != null)
+            {
+                GameObject.DestroyImmediate(head.Value.gameObject);
+            }
+        }
+    }
+
+    public GameObject InstantiateWindowObject(GameObject prefab)
+    {
+        var canvas = Util.GetOrAddComponent<Canvas>(prefab);
+        canvas.renderMode = RenderMode.ScreenSpaceCamera;
+        canvas.worldCamera = UICamera;
+        canvas.planeDistance = 0;
+        return prefab;
     }
 
     public void OnRelease()

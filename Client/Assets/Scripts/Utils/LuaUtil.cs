@@ -40,6 +40,11 @@ public class LuaUtil
         });
     }
 
+    public static void DestroyWindow(int id, bool destroy)
+    {
+        Global.Instance.UIManager.DestroyWindow(id, destroy);
+    }
+
     public static void LoadScene(string scene, LuaFunction callback)
     {
         Global.Instance.SceneManager.LoadScene(scene, (state, progress) =>

@@ -25,6 +25,7 @@
 ---@field ClearDontDestroyObjs fun()
 ---@field CreateWindow fun(path:string, layer:int32, property:int32, args:LuaTable, callback:LuaFunction):int32
 ---@field CreateWindow fun(parentId:int32, path:string, layer:int32, property:int32, args:LuaTable, callback:LuaFunction):int32
+---@field DestroyWindow fun(id:int32, destroy:boolean)
 ---@field DontDestroyOnLoad fun(obj:Object, isDontDestroy:boolean)
 ---@field IsNull fun(obj:Object):boolean
 ---@field LoadScene fun(scene:string, callback:LuaFunction)

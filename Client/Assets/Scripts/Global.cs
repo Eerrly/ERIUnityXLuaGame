@@ -19,10 +19,7 @@ public class Global : Singleton<Global>
     {
         managers = new List<IManager>();
         OnGameStart = new UnityEvent();
-    }
 
-    private void Start()
-    {
         _resManager = Util.GetOrAddComponent<ResManager>(gameObject);
         _luaManager = Util.GetOrAddComponent<LuaManager>(gameObject);
         managers.Add(_resManager);

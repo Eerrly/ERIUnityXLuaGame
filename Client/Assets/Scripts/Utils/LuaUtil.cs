@@ -26,7 +26,7 @@ public class LuaUtil
 
     public static int CreateWindow(string path, int layer, int property, LuaTable args, LuaFunction callback)
     {
-        return UIManager.Instance.CreateWindow(-1, path, layer, property, args, (id) =>
+        return Global.Instance.UIManager.CreateWindow(-1, path, layer, property, args, (id) =>
         {
             callback.Call(id);
         });
@@ -34,9 +34,17 @@ public class LuaUtil
 
     public static int CreateWindow(int parentId, string path, int layer, int property, LuaTable args, LuaFunction callback)
     {
-        return UIManager.Instance.CreateWindow(parentId, path, layer, property, args, (id) => 
+        return Global.Instance.UIManager.CreateWindow(parentId, path, layer, property, args, (id) => 
         {
             callback.Call(id);
+        });
+    }
+
+    public static void LoadScene(string scene, LuaFunction callback)
+    {
+        Global.Instance.SceneManager.LoadScene(scene, (state, progress) =>
+        {
+            callback.Call((int)state, progress);
         });
     }
 

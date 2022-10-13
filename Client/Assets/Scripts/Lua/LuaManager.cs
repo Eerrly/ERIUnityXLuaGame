@@ -69,9 +69,9 @@ public class LuaManager : MonoBehaviour, IManager
         }
         else
         {
-            if (Directory.Exists(Path.Combine(Application.dataPath, Setting.RuntimeScriptBundleName)))
+            if (Directory.Exists(Path.Combine(Application.dataPath.Replace("/Assets", ""), Setting.EditorScriptRoot)))
             {
-                var filePath = Setting.RuntimeScriptBundleName + "/" + key + ".lua";
+                var filePath = Path.Combine(Application.dataPath.Replace("/Assets", ""), Setting.EditorScriptRoot) + "/" + key.Replace(".", "/") + ".lua";
                 if (File.Exists(filePath))
                 {
                     for (int i = 0; i < 3; i++)

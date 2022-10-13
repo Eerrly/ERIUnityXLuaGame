@@ -1,0 +1,41 @@
+ManifestFileVersion: 0
+CRC: 3127094366
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 8d09f8f4251b80cfff0f2c555c4e2572
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: c8bae1a65386edbbaa7b9b856ae1b6ce
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 20
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 81
+  Script: {instanceID: 0}
+- Class: 104
+  Script: {instanceID: 0}
+- Class: 108
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: 38554ad6d7994764b8504ee3a4d90ad7, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 7f868cd92c6d6e041a001b05870fd76d, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 66bbb6ab5de15cc46a26499ccc782940, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 157
+  Script: {instanceID: 0}
+- Class: 196
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/Sources/Scenes/Battle.unity
+Dependencies: []

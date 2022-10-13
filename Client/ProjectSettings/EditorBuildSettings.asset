@@ -5,7 +5,10 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: 
-    guid: 00000000000000000000000000000000
+  - enabled: 1
+    path: Assets/Sources/Scenes/Lua.unity
+    guid: aa20ba38072868745b86c0b931fb7122
+  - enabled: 1
+    path: Assets/Sources/Scenes/Loading.unity
+    guid: 317e715ebe6edcd4b912b4a2a7e847e8
   m_configObjects: {}

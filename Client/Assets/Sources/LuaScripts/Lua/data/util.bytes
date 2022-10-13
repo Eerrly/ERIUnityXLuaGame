@@ -12,6 +12,11 @@ local function DontDestroyOnLoad(obj, isDontDestroy)
     LuaUtil.DontDestroyOnLoad(obj, isDontDestroy)
 end
 
+local function LoadScene(scene, callback)
+    LuaUtil.LoadScene(scene, callback)
+end
+
 exports.CreateWindow = CreateWindow
 exports.IsNull = IsNull
 exports.DontDestroyOnLoad = DontDestroyOnLoad
+exports.LoadScene = LoadScene

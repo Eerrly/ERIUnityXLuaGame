@@ -131,6 +131,11 @@ public class ResManager : MonoBehaviour, IManager
         Load(path, name, ConvertPath(path), true, false, onLoaded);
     }
 
+    public void LoadAsync(string path, System.Action<Resource> onLoaded)
+    {
+        Load(path, null, ConvertPath(path), true, false, onLoaded);
+    }
+
     private void Load(string path, string name, uint hash, bool async, bool isDependency, System.Action<Resource> onLoaded, Dictionary<string, bool> namesDict = null, string extension = null)
     {
         if (preInitialized)

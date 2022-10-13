@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public partial class UIManager : Singleton<UIManager>
+public partial class UIManager : MonoBehaviour, IManager
 {
     public enum Property
     {
@@ -17,20 +17,58 @@ public partial class UIManager : Singleton<UIManager>
         UseCustomAnimation = 0x400,
     }
 
+    public bool IsInitialized { get; set; }
+
     private static int _dynamicID = 0;
 
     private Camera _camera;
     public Camera UICamera => _camera;
 
+    private Camera _noneCamera;
+    public Camera NoneCamera => _noneCamera;
+
     private Dictionary<int, UIWindow> _windows = new Dictionary<int, UIWindow>();
     private LinkedList<UIWindow> _cacheWindows = new LinkedList<UIWindow>();
     private Dictionary<int, Property> _creatingWindows = new Dictionary<int, Property>();
 
-    public override void OnInitialize()
+    public void OnInitialize()
+    {
+        StartCoroutine(nameof(CoInitialize));
+    }
+
+    private IEnumerator CoInitialize()
     {
         var go = new GameObject("UI");
+        go.transform.SetParent(Global.Instance.transform, true);
+
         _camera = go.AddComponent<Camera>();
         _camera.backgroundColor = new Color(0, 0, 0, 0);
+        _camera.clearFlags = CameraClearFlags.Depth;
+        _camera.cullingMask = 1 << Setting.LAYER_UI;
+        _camera.orthographic = true;
+        _camera.transform.position = new Vector2(Screen.width / 2, Screen.height / 2);
+        _camera.nearClipPlane = -200000;
+        _camera.farClipPlane = 200000;
+        _camera.depth = 1;
+        _camera.allowHDR = false;
+        _camera.allowMSAA = false;
+
+        if (_noneCamera == null)
+        {
+            var noneCamraGo = new GameObject("NoneCamera");
+            noneCamraGo.transform.parent = go.transform;
+            _noneCamera = noneCamraGo.AddComponent<Camera>();
+            _noneCamera.clearFlags = CameraClearFlags.SolidColor;
+            _noneCamera.backgroundColor = Color.black;
+            _noneCamera.depth = -50;
+            _noneCamera.cullingMask = 0;
+            _noneCamera.allowHDR = false;
+            _noneCamera.allowMSAA = false;
+            _noneCamera.useOcclusionCulling = false;
+        }
+
+        yield return null;
+        IsInitialized = true;
     }
 
     private int NewID()
@@ -114,6 +152,46 @@ public partial class UIManager : Singleton<UIManager>
         _creatingWindows.Add(id, (Property)property);
         StartCoroutine(CoCreateWindows(parentId, id, path, layer, property, obj, callback));
         return id;
+    }
+
+    public void DestroyWindow(int id, bool isDestroy)
+    {
+        if (!_creatingWindows.Remove(id) && _windows.ContainsKey(id))
+        {
+            UIWindow window = null;
+            if(_windows.TryGetValue(id, out window))
+            {
+                _windows.Remove(id);
+                if (isDestroy)
+                {
+                    window.gameObject.SetActive(false);
+                    GameObject.DestroyImmediate(window.gameObject);
+                }
+            }
+        }
+    }
+
+    public void OnRelease()
+    {
+        if(_camera != null)
+        {
+            _camera.enabled = false;
+        }
+        IsInitialized = false;
+        var list = new List<int>();
+        using (var e = _windows.GetEnumerator())
+        {
+            while (e.MoveNext())
+            {
+                list.Add(e.Current.Key);
+            }
+        }
+        for (var i = 0; i < list.Count; ++i)
+        {
+            DestroyWindow(list[i], true);
+        }
+        _windows.Clear();
+        _creatingWindows.Clear();
     }
 
 }

@@ -12,8 +12,16 @@ public class Global : Singleton<Global>
     private LuaManager _luaManager;
     public LuaManager LuaManager => _luaManager;
 
+    private UIManager _uiManager;
+    public UIManager UIManager => _uiManager;
+
+    private SceneManager _sceneManager;
+    public SceneManager SceneManager => _sceneManager;
+
     public List<IManager> managers;
+
     public UnityEvent OnGameStart;
+    public UnityEvent OnSceneChanged;
 
     public override void OnInitialize()
     {
@@ -22,8 +30,12 @@ public class Global : Singleton<Global>
 
         _resManager = Util.GetOrAddComponent<ResManager>(gameObject);
         _luaManager = Util.GetOrAddComponent<LuaManager>(gameObject);
+        _uiManager = Util.GetOrAddComponent<UIManager>(gameObject);
+        _sceneManager = Util.GetOrAddComponent<SceneManager>(gameObject);
         managers.Add(_resManager);
         managers.Add(_luaManager);
+        managers.Add(_uiManager);
+        managers.Add(_sceneManager);
     }
 
     public void Run()

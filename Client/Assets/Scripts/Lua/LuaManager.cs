@@ -120,6 +120,11 @@ public class LuaManager : MonoBehaviour, IManager
             _luaEnv.DoString("require('preinit')");
             IsInitialized = true;
         }
+        else
+        {
+            _luaEnv.DoString("require('preinit')");
+            IsInitialized = true;
+        }
     }
 
 }

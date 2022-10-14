@@ -113,6 +113,11 @@ public class Resource : ReferenceCountBase
                 if (Assets[i].name == name)
                 {
                     sprite = Assets[i] as Sprite;
+                    if(sprite == null && Assets[i] != null)
+                    {
+                        var tex = Assets[i] as Texture2D;
+                        sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero);
+                    }
                     if (sprite != null)
                     {
                         break;
@@ -123,6 +128,11 @@ public class Resource : ReferenceCountBase
         if (sprite == null && Asset != null)
         {
             sprite = Asset as Sprite;
+            if (sprite == null && Asset != null)
+            {
+                var tex = Asset as Texture2D;
+                sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero);
+            }
         }
         return sprite;
     }

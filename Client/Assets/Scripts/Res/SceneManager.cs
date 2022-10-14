@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 #if UNITY_EDITOR
 using UnityEditor;
+using UnityEditor.SceneManagement;
 #endif
 
 public class SceneManager : MonoBehaviour, IManager
@@ -139,10 +141,14 @@ public class SceneManager : MonoBehaviour, IManager
 
             if (isAddive)
             {
-                EditorApplication.LoadLevelAdditiveInPlayMode(System.IO.Path.Combine(Setting.EditorBundlePath, "Scene/" + name + ".unity"));
+                var parameters = new LoadSceneParameters() { loadSceneMode = LoadSceneMode.Additive, localPhysicsMode = LocalPhysicsMode.None };
+                EditorSceneManager.LoadSceneInPlayMode(System.IO.Path.Combine(Setting.EditorBundlePath, string.Format("Scenes/{0}.unity", name)), parameters);
             }
             else
-                request = EditorApplication.LoadLevelAsyncInPlayMode(System.IO.Path.Combine(Setting.EditorBundlePath, "Scene/" + name + ".unity"));
+            {
+                var parameters = new LoadSceneParameters() { loadSceneMode = LoadSceneMode.Single, localPhysicsMode = LocalPhysicsMode.None };
+                request = EditorSceneManager.LoadSceneAsyncInPlayMode(System.IO.Path.Combine(Setting.EditorBundlePath, string.Format("Scenes/{0}.unity", name)), parameters);
+            }
 
             if (request != null)
             {

@@ -53,4 +53,20 @@ public class LuaUtil
         });
     }
 
+    public static void HttpGet(string url, int timeout, LuaFunction callback = null)
+    {
+        Global.Instance.PatchingManager.CoHttpGet(url, timeout, (state, text) =>
+        {
+            callback.Call(state, text);
+        });
+    }
+
+    public static void HttpDownload(string url, string path, LuaFunction progress = null, LuaFunction callback = null)
+    {
+        Global.Instance.PatchingManager.CoHttpDownload(url, path, (pro) => { progress.Call(progress); }, (state, text) =>
+        {
+            callback.Call(state, text);
+        });
+    }
+
 }

@@ -8,14 +8,6 @@ public class Test : MonoBehaviour
     {
         Global.Instance.OnGameStart.AddListener(LuaStart);
         Global.Instance.Run();
-        //StartCoroutine(nameof(CoLoadStart));
-    }
-
-    IEnumerator CoLoadStart()
-    {
-        var loader = new ResLoader("UI/A.prefab", null, false);
-        yield return loader;
-        loader.Res.GetGameObjectInstance();
     }
 
     void LuaStart()

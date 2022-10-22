@@ -20,8 +20,18 @@ local function LoadScene(scene, callback)
     LuaUtil.LoadScene(scene, callback)
 end
 
+local function HttpGet(url, timeout, callback)
+    LuaUtil.HttpGet(url, timeout, callback)
+end
+
+local function HttpDownload(url, path, progress, callback)
+    LuaUtil.HttpDownload(url, path, progress, callback)
+end
+
 exports.CreateWindow = CreateWindow
 exports.IsNull = IsNull
 exports.DontDestroyOnLoad = DontDestroyOnLoad
 exports.LoadScene = LoadScene
 exports.DestroyWindow = DestroyWindow
+exports.HttpGet = HttpGet
+exports.HttpDownload = HttpDownload

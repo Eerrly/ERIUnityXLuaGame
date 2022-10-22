@@ -19,6 +19,9 @@ public class Global : Singleton<Global>
     private SceneManager _sceneManager;
     public SceneManager SceneManager => _sceneManager;
 
+    private PatchingManager _patchingManager;
+    public PatchingManager PatchingManager => _patchingManager;
+
     public List<IManager> managers;
 
     public UnityEvent OnGameStart;
@@ -36,10 +39,12 @@ public class Global : Singleton<Global>
         _luaManager = Util.GetOrAddComponent<LuaManager>(gameObject);
         _uiManager = Util.GetOrAddComponent<UIManager>(gameObject);
         _sceneManager = Util.GetOrAddComponent<SceneManager>(gameObject);
+        _patchingManager = Util.GetOrAddComponent<PatchingManager>(gameObject);
         managers.Add(_resManager);
         managers.Add(_luaManager);
         managers.Add(_uiManager);
         managers.Add(_sceneManager);
+        managers.Add(_patchingManager);
     }
 
     public void Run()

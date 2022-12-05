@@ -75,6 +75,11 @@ public class Util
             return null;
         }
         var bytes = System.Text.Encoding.UTF8.GetBytes(str);
+        return MD5(bytes);
+    }
+
+    public static string MD5(byte[] bytes)
+    {
         using (var md5 = new System.Security.Cryptography.MD5CryptoServiceProvider())
         {
             var result = md5.ComputeHash(bytes);

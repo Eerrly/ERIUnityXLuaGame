@@ -1,3 +1,4 @@
+---@class test : ViewBase
 local test = {}
 
 local LoadingState = {

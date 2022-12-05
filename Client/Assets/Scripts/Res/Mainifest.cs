@@ -12,6 +12,7 @@ public class ManifestItem
     public string packageResourcePath;
     public bool packageResource = false;
     public bool isPatching = false;
+    public string md5;
 
     [System.NonSerialized] 
     public ManifestItem packageItem = null;

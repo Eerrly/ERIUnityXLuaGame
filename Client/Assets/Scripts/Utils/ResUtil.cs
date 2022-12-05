@@ -218,6 +218,7 @@ public class ResUtil
                     directories = configItemMap[bundleNames[i]].directories,
                     extension = configItemMap[bundleNames[i]].extension,
                     packageResourcePath = hash2Path.ContainsKey(bundleNames[i]) ? hash2Path[bundleNames[i]] : string.Empty,
+                    md5 = Util.MD5(bytes),
                 });
             }
             offset += (uint)bytes.Length;

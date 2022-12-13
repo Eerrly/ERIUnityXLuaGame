@@ -43,6 +43,11 @@ public class FrameBuffer
             return string.Format("raw:{0}, yaw:{1}, btn:{2}", raw, yaw, key);
         }
 
+        public byte ToByte()
+        {
+            return raw;
+        }
+
     }
 
 }

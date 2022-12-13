@@ -12,6 +12,9 @@ public class BattleManager : MonoBehaviour
     private IBattleController _battle;
     public IBattleController battle => _battle;
 
+    private BattleNetworkController _battleNetController;
+    public BattleNetworkController battleNetController => _battleNetController;
+
     private static BattleManager _instance = null;
     public static BattleManager Instance
     {
@@ -77,11 +80,14 @@ public class BattleManager : MonoBehaviour
         this._battleStarted = true;
         this.selfPlayerId = selfPlayerId;
         _battle = new BattleController(_battleClientData);
+        _battleNetController = new BattleNetworkController();
         _battleView.InitView(_battleClientData);
         Util.InvokeAttributeCall(this, typeof(EntitySystem), false, typeof(EntitySystem.Initialize), false);
         _frameEngine.RegisterFrameUpdateListener(EngineUpdate);
+        _frameEngine.RegisterNetUpdateListener(NetUpdate);
         _frameEngine.StartEngine(1 / BattleConstant.FrameInterval);
         _battle.Initialize();
+        _battleNetController.Initialize();
     }
 
     private void EngineUpdate()
@@ -90,6 +96,19 @@ public class BattleManager : MonoBehaviour
         {
             _battle.LogicUpdate();
             _battle.SwitchProceedingStatus(_paused);
+        }
+        catch (Exception e)
+        {
+            Debug.LogException(e);
+        }
+    }
+
+    private void NetUpdate()
+    {
+        try
+        {
+            _battleNetController.Update();
+            _battleNetController.SendInputToServer(1, new System.Collections.Generic.List<FrameBuffer.Input>() { BattleManager.Instance.GetInput() });
         }
         catch (Exception e)
         {

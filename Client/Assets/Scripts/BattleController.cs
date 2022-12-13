@@ -1,4 +1,6 @@
-﻿public class BattleController : IBattleController
+﻿using System.IO;
+
+public class BattleController : IBattleController
 {
     public int nextFrame;
 

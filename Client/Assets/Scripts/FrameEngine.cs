@@ -102,6 +102,11 @@ public class FrameEngine
             _logicThread.Join();
             _logicThread = null;
         }
+        if(_netThread != null)
+        {
+            _netThread.Join();
+            _netThread = null;
+        }
         _threadStop = false;
     }
 

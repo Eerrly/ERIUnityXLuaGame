@@ -1,9 +1,9 @@
 ﻿using System.IO;
+using System.Collections.Generic;
 
 public class BattleController : IBattleController
 {
-    public int nextFrame;
-
+    public Dictionary<int, FrameBuffer.Input> frameInputs;
     public BattleEntity battleEntity { get; set; }
 
     private long _enterMilliseconds = 0;
@@ -28,6 +28,7 @@ public class BattleController : IBattleController
 
     public override void Initialize()
     {
+        frameInputs = new Dictionary<int, FrameBuffer.Input>();
         battleEntity.deltaTime = FrameEngine.frameInterval * battleEntity.timeScale;
     }
 
@@ -111,7 +112,7 @@ public class BattleController : IBattleController
     }
 
     public void UpdateInput() {
-        var input = BattleManager.Instance.GetInput();
+        var input = BattleManager.Instance.GetInput(BattleManager.Instance.logicFrame);
         battleEntity.selfPlayerEntity.input.yaw = input.yaw - MathManager.YawOffset;
         battleEntity.selfPlayerEntity.input.key = input.key;
     }

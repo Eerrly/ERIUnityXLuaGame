@@ -43,7 +43,7 @@ public class BattleNetworkController
         }
     }
 
-    public void SendInputToServer(int frame, FrameBuffer.Input input)
+    public void SendInputToServer(int playerId, int frame, FrameBuffer.Input input)
     {
         try
         {
@@ -53,6 +53,7 @@ public class BattleNetworkController
                 lock (_sendLock)
                 {
                     buffer.Clear();
+                    buffer.WriteInt(playerId);
                     buffer.WriteInt(frame);
                     buffer.WriteByte(input.ToByte());
                     if (client != null)

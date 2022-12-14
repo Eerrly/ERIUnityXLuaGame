@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 public class BattleEntity : BaseEntity
 {
+    public int frame;
 
     public float deltaTime;
 
@@ -19,6 +20,7 @@ public class BattleEntity : BaseEntity
 
     internal void Init()
     {
+        frame = -1;
         deltaTime = 0.0f;
         time = 0.0f;
         timeScale = 1.0f;

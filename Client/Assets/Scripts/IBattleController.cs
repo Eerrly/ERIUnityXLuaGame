@@ -1,6 +1,5 @@
 ﻿public abstract class IBattleController
 {
-
     public bool Paused { get; private set; }
 
     public abstract void Initialize();

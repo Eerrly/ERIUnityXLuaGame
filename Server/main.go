@@ -23,14 +23,14 @@ func main() {
 // 处理连接
 func handleConnection(conn net.Conn) {
 	fmt.Println("client connect ...")
-	buffer := make([]byte, 4096)
+	buffer := make([]byte, 256)
 	for {
 		n, err := conn.Read(buffer)
 		if err != nil {
 			fmt.Println("conn.Read ", err)
 			return
 		}
-		fmt.Println(conn.RemoteAddr().String(), "receive data string: ", string(buffer[:n]))
+		fmt.Println(conn.RemoteAddr().String(), "receive data length : ", n)
 
 		_, err = conn.Write(buffer[:n])
 		if err != nil {

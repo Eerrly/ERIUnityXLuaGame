@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using UnityEngine;
 
 public class BattleManager : MonoBehaviour
@@ -47,6 +48,9 @@ public class BattleManager : MonoBehaviour
 
     public int selfPlayerId { get; set; }
 
+    private byte[] recvBuffer;
+    private MemoryStream _receiveStream = new MemoryStream(256);
+    private BinaryReader _binaryReader;
 
     private void Awake()
     {
@@ -62,6 +66,8 @@ public class BattleManager : MonoBehaviour
         {
             _playerInput.AddKey(new KeyCode() { _name = BattleConstant.buttonNames[i] });
         }
+        recvBuffer = new byte[4096];
+        _binaryReader = new BinaryReader(_receiveStream);
     }
 
     public FrameBuffer.Input GetInput()
@@ -88,6 +94,7 @@ public class BattleManager : MonoBehaviour
         _frameEngine.StartEngine(1 / BattleConstant.FrameInterval);
         _battle.Initialize();
         _battleNetController.Initialize();
+        _battleNetController.Connect("127.0.0.1", 10086);
     }
 
     private void EngineUpdate()
@@ -107,12 +114,40 @@ public class BattleManager : MonoBehaviour
     {
         try
         {
-            _battleNetController.Update();
-            _battleNetController.SendInputToServer(1, new System.Collections.Generic.List<FrameBuffer.Input>() { BattleManager.Instance.GetInput() });
+            if (_battleNetController.IsConnected)
+            {
+                _battleNetController.Update();
+                _battleNetController.SendInputToServer(1, BattleManager.Instance.GetInput() );
+                _battleNetController.RecvData(ref recvBuffer, 0, recvBuffer.Length);
+                HandleRecvData(recvBuffer, 0, recvBuffer.Length);
+                DebugLogRecvData();
+            }
         }
         catch (Exception e)
         {
             Debug.LogException(e);
+        }
+        System.Threading.Thread.Sleep(1);
+    }
+
+    private void HandleRecvData(byte[] data, int offset, int length)
+    {
+        _receiveStream.Position = 0;
+        _receiveStream.SetLength(0);
+        if (null != data)
+        {
+            _receiveStream.Write(data, offset, length);
+        }
+        _receiveStream.Seek(0, SeekOrigin.Begin);
+    }
+
+    private void DebugLogRecvData()
+    {
+        while (_binaryReader.BaseStream.Position < _binaryReader.BaseStream.Length - 24)
+        {
+            int frame = _binaryReader.ReadInt32();
+            byte raw = _binaryReader.ReadByte();
+            UnityEngine.Debug.Log("RecvData frame:" + frame + ", raw:" + raw);
         }
     }
 
@@ -140,6 +175,7 @@ public class BattleManager : MonoBehaviour
     private void OnDestroy()
     {
         _frameEngine.UnRegisterFrameUpdateListener();
+        _frameEngine.UnRegisterNetUpdateListener();
         _frameEngine.StopEngine();
     }
 

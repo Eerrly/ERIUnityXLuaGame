@@ -166,7 +166,7 @@ class UDPClient
         if (mSocket == null)
             return;
 
-        if (0 == mNextUpdateTime || mKCP.CurrentMS >= mNextUpdateTime)
+        if (mKCP !=null && (0 == mNextUpdateTime || mKCP.CurrentMS >= mNextUpdateTime))
         {
             mKCP.Update();
             mNextUpdateTime = mKCP.Check();

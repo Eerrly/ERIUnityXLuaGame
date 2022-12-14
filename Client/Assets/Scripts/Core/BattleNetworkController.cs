@@ -5,7 +5,17 @@ public class BattleNetworkController
     private UDPClient client;
     private object _sendLock = new object();
 
-    public bool IsConnected => client.IsConnected;
+    public bool IsConnected
+    {
+        get
+        {
+            if (client != null && client.IsConnected)
+            {
+                return true;
+            }
+            return false;
+        }
+    }
 
     private static BattleNetworkController _instance = null;
     public static BattleNetworkController Instance => _instance;
@@ -33,13 +43,13 @@ public class BattleNetworkController
         }
     }
 
-    public void SendInputToServer(int frame, List<FrameBuffer.Input> playerInputs)
+    public void SendInputToServer(int frame, FrameBuffer.Input input)
     {
         try
         {
-            ByteBuffer buffer = ByteBuffer.Allocate(8, true);
-            foreach (var input in playerInputs)
+            if (client != null && client.IsConnected)
             {
+                ByteBuffer buffer = ByteBuffer.Allocate(8, true);
                 lock (_sendLock)
                 {
                     buffer.Clear();
@@ -59,9 +69,17 @@ public class BattleNetworkController
         }
     }
 
+    public void RecvData(ref byte[] buffer, int index, int length)
+    {
+        if (client != null && client.IsConnected)
+        {
+            client.Recv(buffer, index, length);
+        }
+    }
+
     public void Update()
     {
-        if(client != null)
+        if(client != null && client.IsConnected)
         {
             client.Update();
         }

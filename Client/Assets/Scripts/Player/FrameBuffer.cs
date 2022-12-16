@@ -48,6 +48,11 @@ public class FrameBuffer
             return raw;
         }
 
+        public bool Compare(Input other)
+        {
+            return raw == other.raw;
+        }
+
     }
 
 }

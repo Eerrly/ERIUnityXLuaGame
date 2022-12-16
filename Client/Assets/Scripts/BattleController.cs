@@ -112,7 +112,7 @@ public class BattleController : IBattleController
     }
 
     public void UpdateInput() {
-        var input = BattleManager.Instance.GetInput(BattleManager.Instance.logicFrame);
+        var input = BattleManager.Instance.GetInput();
         battleEntity.selfPlayerEntity.input.yaw = input.yaw - MathManager.YawOffset;
         battleEntity.selfPlayerEntity.input.key = input.key;
     }

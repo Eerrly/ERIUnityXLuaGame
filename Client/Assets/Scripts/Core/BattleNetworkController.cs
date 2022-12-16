@@ -4,6 +4,7 @@ public class BattleNetworkController
 {
     private UDPClient client;
     private object _sendLock = new object();
+    private object _recvLock = new object();
 
     public bool IsConnected
     {
@@ -70,12 +71,24 @@ public class BattleNetworkController
         }
     }
 
-    public void RecvData(ref byte[] buffer, int index, int length)
+    public int RecvData(ref byte[] buffer, int index, int length)
     {
-        if (client != null && client.IsConnected)
+        try
         {
-            client.Recv(buffer, index, length);
+            if (client != null && client.IsConnected)
+            {
+                lock (_recvLock)
+                {
+                    return client.Recv(buffer, index, length);
+                }
+            }
+            return 0;
         }
+        catch(System.Exception ex)
+        {
+            UnityEngine.Debug.LogException(ex);
+        }
+        return 0;
     }
 
     public void Update()

@@ -96,17 +96,22 @@ public class Util
     public static void SaveConfig(object data, string fileName)
     {
         string json = Regex.Unescape(JsonUtility.ToJson(data));
-        File.WriteAllText(FileUtil.CombinePaths(Setting.EditorConfigPath, fileName), json, Encoding.UTF8);
+        File.WriteAllText(FileUtil.CombinePaths(Setting.EditorResourcePath, Setting.EditorConfigPath, fileName), json, Encoding.UTF8);
     }
 
     public static T LoadConfig<T>(string fileName)
     {
         string path = FileUtil.CombinePaths(Setting.EditorConfigPath, fileName);
-        if (File.Exists(path))
+        string configPath = path.Substring(0, path.LastIndexOf("."));
+        try
         {
-            string json = File.ReadAllText(path, Encoding.UTF8);
+            string json = System.Text.ASCIIEncoding.Default.GetString(Resources.Load<TextAsset>(configPath).bytes);
             T t = JsonUtility.FromJson<T>(json);
             return t;
+        }
+        catch(Exception ex)
+        {
+            UnityEngine.Debug.LogException(ex);
         }
         var obj = default(T);
         if(null == obj)

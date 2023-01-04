@@ -11,7 +11,7 @@
         {
             pos = new float[3] { 0, 0, 0 };
             rot = new float[4] { 0, 0, 0, 1 };
-            fwd = default(float[]);
+            fwd = new float[3] { 0, 0, 1 };
         }
     }
 

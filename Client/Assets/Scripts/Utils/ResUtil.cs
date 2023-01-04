@@ -6,6 +6,7 @@ using UnityEditor;
 
 public class ResUtil
 {
+
     public static string GetAtlasPathBySpritePath(string spritePath)
     {
         var atlasName = FileUtil.CombinePaths("Sources", Path.GetDirectoryName(spritePath)).Replace("/", "_").ToLower();

@@ -3,11 +3,8 @@ public class PlayerMoveState : PlayerBaseState
 {
     public override void OnEnter(PlayerEntity playerEntity, BattleEntity battleEntity)
     {
-        playerEntity.animation.loop = true;
-        playerEntity.animation.fixedTransitionDuration = 0.1f;
         playerEntity.movement.moveSpeed = PlayerPropertyConstant.MoveSpeed;
         playerEntity.movement.turnSpeed = PlayerPropertyConstant.TurnSpeed;
-        AnimationSystem.ChangePlayerAnimation(playerEntity, EAnimationID.Run);
     }
 
     public override void OnUpdate(PlayerEntity playerEntity, BattleEntity battleEntity)

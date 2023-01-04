@@ -26,7 +26,7 @@ public class ResManager : MonoBehaviour, IManager
         if (!string.IsNullOrEmpty(path))
         {
             path = path.ToLower().Replace("assets/sources/", "");
-            if(!cacheFileMap.TryGetValue(path, out result))
+            if (!cacheFileMap.TryGetValue(path, out result))
             {
                 result = Util.HashPath(path);
                 cacheFileMap.Add(path, result);
@@ -74,17 +74,19 @@ public class ResManager : MonoBehaviour, IManager
     private void InitializeClientConfig()
     {
         ManifestConfig config = Util.LoadConfig<ManifestConfig>(Constant.ASSETBUNDLES_CONFIG_NAME);
+
         manifest = new Manifest()
         {
             ManifestDict = new Dictionary<uint, ManifestItem>(config.items.Length + 1),
         };
-        if(config != null)
+        var strMainRootPath = FileUtil.CombinePaths(Setting.StreamingBundleRoot, "main.s");
+        if (config != null)
         {
             for (int i = 0; i < config.items.Length; i++)
             {
                 var item = config.items[i];
                 item.packageResource = true;
-                item.packageResourcePath = FileUtil.CombinePaths(Setting.StreamingBundleRoot, "main.s");
+                item.packageResourcePath = strMainRootPath;
                 manifest.ManifestDict.Add(item.hash, item);
             }
         }
@@ -105,7 +107,7 @@ public class ResManager : MonoBehaviour, IManager
         if (item.packageResource)
         {
             location.location = ELoadingLocation.Package;
-            if(item.offset == 0)
+            if (item.offset == 0)
             {
                 location.path = System.IO.Path.Combine(Setting.StreamingBundleRoot, item.hash + ".s");
             }
@@ -114,7 +116,8 @@ public class ResManager : MonoBehaviour, IManager
                 location.path = item.packageResourcePath;
             }
         }
-        else {
+        else
+        {
             location.location = ELoadingLocation.Cache;
             location.path = System.IO.Path.Combine(Setting.CacheRoot, item.hash + ".s");
         }
@@ -140,22 +143,22 @@ public class ResManager : MonoBehaviour, IManager
     {
         if (preInitialized)
         {
-            if(Setting.Config.useAssetBundle && (manifest == null || !manifest.Exist(hash)))
+            if (Setting.Config.useAssetBundle && (manifest == null || !manifest.Exist(hash)))
             {
-                if(onLoaded != null) onLoaded(errorResource);
+                if (onLoaded != null) onLoaded(errorResource);
             }
         }
         name = name == null ? "" : name.ToLower();
         LoadingTask task = null;
         for (int i = 0; i < loadingTasks.Count; i++)
         {
-            if(loadingTasks[i].state == ELoadingState.None)
+            if (loadingTasks[i].state == ELoadingState.None)
             {
                 task = loadingTasks[i];
                 break;
             }
         }
-        if(task == null)
+        if (task == null)
         {
             task = new LoadingTask();
             loadingTasks.Add(task);
@@ -169,7 +172,7 @@ public class ResManager : MonoBehaviour, IManager
         task.namesDict = namesDict;
         task.async = async;
         task.isDependency = isDependency;
-        if(manifest != null)
+        if (manifest != null)
         {
             var dependencies = manifest.GetDependencies(task.hash, out task.offset);
             for (int i = 0; i < dependencies.Length; i++)
@@ -178,7 +181,7 @@ public class ResManager : MonoBehaviour, IManager
                 for (int j = 0; j < loadingTasks.Count; j++)
                 {
                     var tmpTask = loadingTasks[j];
-                    if((tmpTask.state == ELoadingState.Ready || tmpTask.state == ELoadingState.Loading) && task.hash == dependencies[i])
+                    if ((tmpTask.state == ELoadingState.Ready || tmpTask.state == ELoadingState.Loading) && task.hash == dependencies[i])
                     {
                         loadingTasks[j].dependencyRefCount++;
                         found = true;
@@ -192,7 +195,7 @@ public class ResManager : MonoBehaviour, IManager
                     {
                         foreach (var unloadBundle in unloadResourceBundles)
                         {
-                            if(unloadBundle.Hash == dependencies[i])
+                            if (unloadBundle.Hash == dependencies[i])
                             {
                                 unload = true;
                                 break;
@@ -200,7 +203,7 @@ public class ResManager : MonoBehaviour, IManager
                         }
                     }
                     ResourceBundle bundle = null;
-                    if(unload || !loadedBundles.TryGetValue(hash, out bundle))
+                    if (unload || !loadedBundles.TryGetValue(hash, out bundle))
                     {
                         Load("", null, dependencies[i], async, true, null);
                     }
@@ -211,7 +214,7 @@ public class ResManager : MonoBehaviour, IManager
                 }
             }
         }
-        if(onLoaded != null)
+        if (onLoaded != null)
         {
             task.onLoadedCallbacks.Add(onLoaded);
         }
@@ -222,16 +225,16 @@ public class ResManager : MonoBehaviour, IManager
         if (preInitialized)
         {
             ResourceBundle bundle;
-            if(loadedBundles.TryGetValue(hash, out bundle))
+            if (loadedBundles.TryGetValue(hash, out bundle))
             {
                 loadedBundles.Remove(hash);
-                if(manifest != null)
+                if (manifest != null)
                 {
                     var dependencies = manifest.GetDependencies(hash);
                     for (int i = 0; i < dependencies.Length; i++)
                     {
                         ResourceBundle tmpBundle;
-                        if(loadedBundles.TryGetValue(dependencies[i], out tmpBundle))
+                        if (loadedBundles.TryGetValue(dependencies[i], out tmpBundle))
                         {
                             if (tmpBundle != null) tmpBundle.Release();
                         }
@@ -245,11 +248,11 @@ public class ResManager : MonoBehaviour, IManager
     {
         if (preInitialized)
         {
-            if(unloadResourceBundles.Count > 0)
+            if (unloadResourceBundles.Count > 0)
             {
                 lock (unloadResourceBundlesLock)
                 {
-                    while(unloadResourceBundles.Count > 0)
+                    while (unloadResourceBundles.Count > 0)
                     {
                         var bundle = unloadResourceBundles.Dequeue();
                         bundle.RealUnload();
@@ -260,7 +263,7 @@ public class ResManager : MonoBehaviour, IManager
             for (int i = 0; i < loadingTasks.Count; i++)
             {
                 var task = loadingTasks[i];
-                if(task.state == ELoadingState.Loading)
+                if (task.state == ELoadingState.Loading)
                 {
                     loadingCount++;
                 }
@@ -268,7 +271,7 @@ public class ResManager : MonoBehaviour, IManager
                 {
                     break;
                 }
-                if(task.state == ELoadingState.Ready)
+                if (task.state == ELoadingState.Ready)
                 {
                     task.state = ELoadingState.Loading;
 #if UNITY_EDITOR
@@ -295,7 +298,7 @@ public class ResManager : MonoBehaviour, IManager
                 var task = finishedList[i];
                 for (int j = 0; j < task.onLoadedCallbacks.Count; j++)
                 {
-                    if(task.file != null)
+                    if (task.file != null)
                     {
                         task.file.Retain();
                         task.onLoadedCallbacks[j](task.file);
@@ -315,7 +318,7 @@ public class ResManager : MonoBehaviour, IManager
         while (e.MoveNext())
         {
             var bundle = e.Current.Value;
-            if(bundle != null)
+            if (bundle != null)
             {
                 bundle.Release();
             }
@@ -325,11 +328,11 @@ public class ResManager : MonoBehaviour, IManager
         loadingTasks.Clear();
         finishedList.Clear();
         ResLoader.requestList.Clear();
-        if(unloadResourceBundles.Count > 0)
+        if (unloadResourceBundles.Count > 0)
         {
             lock (unloadResourceBundlesLock)
             {
-                while(unloadResourceBundles.Count > 0)
+                while (unloadResourceBundles.Count > 0)
                 {
                     var bundle = unloadResourceBundles.Dequeue();
                     bundle.RealUnload();

@@ -34,7 +34,6 @@ public class BuildToolsEditorWin : OdinEditorWindow
             itemList.Add(new BuildToolsItemEidtor(this, item));
         }
     }
-    
 
     [Title("游戏及构建资源配置")]
     [LabelText("是否使用热更 (enablePatching)"), LabelWidth(300)]

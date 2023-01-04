@@ -2,17 +2,15 @@ using UnityEngine;
 
 public class BattleConstant
 {
-    public static readonly int MyCamp = 1;
+    public static readonly int SelfID = 1;
 
     public static readonly int FrameInterval = 30;
 
     public static readonly float normalPlayerPositionOffset = 40f;
 
-    public static readonly string playerCharacterPath = "Prefabs/Player";
+    public static readonly string playerCharacterPath = "Prefabs/Cube";
 
-    public static readonly string enemyCharacterPath = "Prefabs/Enemy";
-
-    public static readonly string[] buttonNames = new string[] { "tab", "j", "k", "l" };
+    public static readonly string[] buttonNames = new string[] { "j", "k", "l" };
 
     public static readonly uint randomSeed = 114514;
 

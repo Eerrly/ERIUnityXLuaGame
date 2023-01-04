@@ -16,12 +16,10 @@ public class SectorSystem
             for (int j = 0; j < cellEntities.Count; j++)
             {
                 var other = cellEntities[j];
-                if (other.property.camp == entity.property.camp)
-                    continue;
                 var playerPos = MathManager.ToVector3(entity.transform.pos);
                 var otherPos = MathManager.ToVector3(other.transform.pos);
                 var distance = (otherPos - playerPos).magnitude;
-                if (distance <= Mathf.Pow(PlayerPropertyConstant.AttackDistance + EnemyPropertyConstant.CollisionRadius, 2))
+                if (distance <= Mathf.Pow(PlayerPropertyConstant.AttackDistance + PlayerPropertyConstant.CollisionRadius, 2))
                 {
                     var forward = MathManager.ToVector3(entity.transform.fwd);
                     var angle = Vector3.Angle(forward, otherPos - playerPos);
@@ -46,20 +44,7 @@ public class SectorSystem
             var cellEntities = aroundCellList[i].entities;
             for (int j = 0; j < cellEntities.Count; j++)
             {
-                var other = cellEntities[j];
-                if (other.property.camp == entity.property.camp)
-                    continue;
-                if (isActive)
-                {
-                    if(other.property.hp > 0)
-                    {
-                        entities.Add(other);
-                    }
-                }
-                else
-                {
-                    entities.Add(other);
-                }
+                entities.Add(cellEntities[j]);
             }
         }
 

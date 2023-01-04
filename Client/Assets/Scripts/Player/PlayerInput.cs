@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class KeyCode
+public class InputKeyCode
 {
     public string _name;
     public bool _state = false;
@@ -33,16 +33,17 @@ public class PlayerInput : MonoBehaviour
     private byte _keyState;
     private Vector3 _lastMoveInput = Vector3.zero;
 
-    public List<KeyCode> keys = new List<KeyCode>();
+    public List<InputKeyCode> keys = new List<InputKeyCode>();
 
-    public void AddKey(KeyCode key)
+    public void AddKey(InputKeyCode key)
     {
         keys.Add(key);
     }
 
-    public FrameBuffer.Input GetPlayerInput()
+    public FrameBuffer.Input GetPlayerInput(int playerId)
     {
         _input = new FrameBuffer.Input();
+        _input.pos = (byte)playerId;
         _input.yaw = (byte)MathManager.Format8DirInput(_moveInput);
         _input.key = _keyState;
         return _input;

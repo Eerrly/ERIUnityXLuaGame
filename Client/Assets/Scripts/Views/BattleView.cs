@@ -8,17 +8,17 @@ public class BattleView : MonoBehaviour
 
     public void InitView(BattleCommonData data)
     {
-        InitEntityView(data);
         var spaceX = transform.localScale.x * BattleConstant.spaceX;
         var spaceZ = transform.localScale.z * BattleConstant.spaceZ;
         SpacePartition.Init(spaceX, spaceZ, BattleConstant.cellSize);
+        InitEntityView(data);
     }
 
     private void InitEntityView(BattleCommonData data)
     {
         for (int i = 0; i < data.players.Length; i++)
         {
-            var player = new GameObject(string.Format("{0}(ID:{1}, CAMP:{2})", data.players[i].name, data.players[i].pos, data.players[i].camp));
+            var player = new GameObject(string.Format("ID:{0}", data.players[i].pos));
             player.transform.position = new Vector3(Random.insideUnitCircle.x * BattleConstant.normalPlayerPositionOffset, 0, Random.insideUnitCircle.y * BattleConstant.normalPlayerPositionOffset);
             PlayerView playerView = player.AddComponent<PlayerView>();
             playerView.Init(data.players[i]);

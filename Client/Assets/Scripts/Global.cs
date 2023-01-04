@@ -45,6 +45,8 @@ public class Global : Singleton<Global>
         managers.Add(_uiManager);
         managers.Add(_sceneManager);
         managers.Add(_patchingManager);
+
+        InitializeDebugLogSystem();
     }
 
     public void Run()
@@ -76,6 +78,42 @@ public class Global : Singleton<Global>
         }
 
         OnGameStart.Invoke();
+    }
+
+    public void InitializeDebugLogSystem()
+    {
+        try
+        {
+            var currentLoggerPath = FileUtil.CombinePaths(Application.persistentDataPath, "game.log");
+
+            Logger.Initialize(currentLoggerPath, new Logger());
+            Logger.SetLoggerLevel((int)LogLevel.Exception | (int)LogLevel.LuaException | (int)LogLevel.LuaError | (int)LogLevel.Info | (int)LogLevel.LuaInfo);
+            Debug.unityLogger.logEnabled = true;
+
+            Logger.log = Debug.Log;
+            Logger.logError = Debug.LogError;
+            Logger.logWarning = Debug.LogWarning;
+
+            var console = transform.Find("__Console__");
+
+            if (console == null)
+            {
+                var prefab = Resources.Load<GameObject>("Console");
+
+                console = GameObject.Instantiate(prefab).transform;
+                console.name = "__Console__";
+                console.hideFlags = HideFlags.HideInHierarchy | HideFlags.HideInInspector;
+                console.SetParent(transform);
+            }
+            console.gameObject.SetActive(true);
+
+            Logger.Log(LogLevel.Info, "create log at " + System.DateTime.Now.ToString());
+        }
+        catch(System.Exception e)
+        {
+            Debug.LogException(e);
+        }
+        
     }
 
     public override void OnRelease()

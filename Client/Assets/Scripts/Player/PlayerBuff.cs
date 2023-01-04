@@ -120,7 +120,7 @@ public class PlayerBuff
             buffExtra[foundIndex] = data;
         }
 #if UNITY_EDITOR && UNITY_DEBUG
-        UnityEngine.Debug.Log(string.Format("buffExtra count:{0} [0].type:{1} [0].value:{2}", buffExtra.Count, buffExtra[0].type, buffExtra[0].value));
+        Logger.Log(LogLevel.Info, string.Format("buffExtra count:{0} [0].type:{1} [0].value:{2}", buffExtra.Count, buffExtra[0].type, buffExtra[0].value));
 #endif
     }
 

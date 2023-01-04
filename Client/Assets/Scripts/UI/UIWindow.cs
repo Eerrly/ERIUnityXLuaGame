@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIWindow : MonoBehaviour
 {
@@ -19,6 +20,7 @@ public class UIWindow : MonoBehaviour
     [System.NonSerialized] public UIWindow parent;
     [System.NonSerialized] public Transform root;
     [System.NonSerialized] public bool isShow;
+    [System.NonSerialized] public GraphicRaycaster raycaster;
 
     public LuaBehaviour behaviour;
 
@@ -46,6 +48,7 @@ public class UIWindow : MonoBehaviour
             canvas = gameObject.AddComponent<Canvas>();
         }
         canvas.pixelPerfect = false;
+        raycaster = GetComponent<GraphicRaycaster>();
         this.layer = layer;
         canvas.sortingOrder = layer * 10;
         canvas.planeDistance = 8000 - canvas.sortingOrder;
@@ -80,6 +83,7 @@ public class UIWindow : MonoBehaviour
 
     public void OnShow(System.Action callback = null)
     {
+        raycaster.enabled = true;
         isShow = true;
         Util.SetGameObjectLayer(gameObject, Setting.LAYER_UI, true);
         if(callback != null)
@@ -90,6 +94,7 @@ public class UIWindow : MonoBehaviour
 
     public void OnHide(System.Action callback = null)
     {
+        raycaster.enabled = false;
         isShow = false;
         Util.SetGameObjectLayer(gameObject, Setting.LAYER_HIDE, true);
         if(callback != null)

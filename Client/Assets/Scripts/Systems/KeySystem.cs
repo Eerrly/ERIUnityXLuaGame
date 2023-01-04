@@ -7,6 +7,7 @@ public class KeySystem
         for (int i = 0; i < players.Count; i++)
         {
             var player = (PlayerEntity)players[i];
+            player.input.pos = player.ID;
             player.input.yaw = MathManager.YawStop;
             player.input.key = 0;
         }
@@ -48,11 +49,6 @@ public class KeySystem
     {
         var result = (playerEntity.input.key & 0x8) > 0;
         return result;
-    }
-
-    public static bool CheckKeyCodeSpaceDown(PlayerEntity playerEntity)
-    {
-        return (playerEntity.input.key & 0x1) > 0;
     }
 
 }

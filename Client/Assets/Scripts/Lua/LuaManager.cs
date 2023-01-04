@@ -112,7 +112,7 @@ public class LuaManager : MonoBehaviour, IManager
             }
             catch (System.Exception e)
             {
-                UnityEngine.Debug.LogException(e);
+                Logger.Log(LogLevel.Exception, e.Message);
             }
             loader.Dispose();
             loader = null;

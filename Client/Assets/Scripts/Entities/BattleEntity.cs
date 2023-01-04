@@ -13,11 +13,6 @@ public class BattleEntity : BaseEntity
 
     public List<BaseEntity> entities = new List<BaseEntity>();
 
-    public PlayerEntity selfPlayerEntity
-    {
-        get { return (PlayerEntity)entities[BattleManager.Instance.selfPlayerId]; }
-    }
-
     internal void Init()
     {
         frame = -1;

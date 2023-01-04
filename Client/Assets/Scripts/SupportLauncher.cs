@@ -14,15 +14,13 @@ public class SupportLauncher : MonoBehaviour
     private void OnGUI()
     {
         int index = 1;
-        PlayerEntity playerEntity = (BattleManager.Instance.battle as BattleController).battleEntity.selfPlayerEntity;
+        PlayerEntity playerEntity = (PlayerEntity)((BattleManager.Instance.battle as BattleController).battleEntity.FindEntity(BattleConstant.SelfID));
         GUI.Label(new Rect(20, index++ * nGuiLabelHeight, nGuiLabelWidth, nGuiLabelHeight),
-            string.Format("[player]\tid:{0}, hp:{1}", playerEntity.ID, playerEntity.property.hp));
+            string.Format("[player]\tid:{0}", playerEntity.ID));
         GUI.Label(new Rect(20, index++ * nGuiLabelHeight, nGuiLabelWidth, nGuiLabelHeight),
-            string.Format("[input]\tyaw:{0}, key:{1}", playerEntity.input.yaw, playerEntity.input.key));
+            string.Format("[input]\tpos:{0}, yaw:{1}, key:{2}", playerEntity.input.pos, playerEntity.input.yaw, playerEntity.input.key));
         GUI.Label(new Rect(20, index++ * nGuiLabelHeight, nGuiLabelWidth, nGuiLabelHeight),
             string.Format("[state]\t{0}", Enum.GetName(typeof(EPlayerState), playerEntity.curStateId)));
-        GUI.Label(new Rect(20, index++ * nGuiLabelHeight, nGuiLabelWidth, nGuiLabelHeight),
-            string.Format("[anim]\tanimId:{0}, normalizedTime:{1}", Enum.GetName(typeof(EAnimationID), playerEntity.animation.animId), playerEntity.animation.normalizedTime));
         GUI.Label(new Rect(20, index++ * nGuiLabelHeight, nGuiLabelWidth, nGuiLabelHeight),
             string.Format("[move]\tposition:{0}, rotation:{1}", MathManager.ToVector3(playerEntity.movement.position).ToString(), MathManager.ToQuaternion(playerEntity.movement.rotation).ToString()));
 
@@ -44,13 +42,16 @@ public class SupportLauncher : MonoBehaviour
     {
         if (BattleManager.Instance == null || BattleManager.Instance.battle == null)
             return;
-        PlayerEntity playerEntity = (BattleManager.Instance.battle as BattleController).battleEntity.selfPlayerEntity;
-        DrawAroundCellList(playerEntity);
+        PlayerEntity playerEntity = (PlayerEntity)((BattleManager.Instance.battle as BattleController).battleEntity.FindEntity(BattleConstant.SelfID));
+        if (playerEntity != null)
+        {
+            DrawAroundCellList(playerEntity);
 
-        Gizmos.color = Color.green;
-        Vector3 position = MathManager.ToVector3(playerEntity.transform.pos);
-        Vector3 forward = MathManager.ToVector3(playerEntity.transform.fwd);
-        DrawWireSemicircle(position, forward, PlayerPropertyConstant.AttackDistance, BattleConstant.angle, Vector3.up);
+            Gizmos.color = Color.green;
+            Vector3 position = MathManager.ToVector3(playerEntity.transform.pos);
+            Vector3 forward = MathManager.ToVector3(playerEntity.transform.fwd);
+            DrawWireSemicircle(position, forward, PlayerPropertyConstant.AttackDistance, BattleConstant.angle, Vector3.up);
+        }
     }
 
     private void DrawCellList()

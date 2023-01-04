@@ -38,9 +38,9 @@ public class BattleNetworkController
             }
             client.Connect(ip, port);
         }
-        catch(System.Exception ex)
+        catch(System.Exception e)
         {
-            UnityEngine.Debug.LogException(ex);
+            Logger.Log(LogLevel.Exception, e.Message);
         }
     }
 
@@ -65,9 +65,9 @@ public class BattleNetworkController
                 }
             }
         }
-        catch(System.Exception ex)
+        catch(System.Exception e)
         {
-            UnityEngine.Debug.LogException(ex);
+            Logger.Log(LogLevel.Exception, e.Message);
         }
     }
 
@@ -84,9 +84,9 @@ public class BattleNetworkController
             }
             return 0;
         }
-        catch(System.Exception ex)
+        catch(System.Exception e)
         {
-            UnityEngine.Debug.LogException(ex);
+            Logger.Log(LogLevel.Exception, e.Message);
         }
         return 0;
     }

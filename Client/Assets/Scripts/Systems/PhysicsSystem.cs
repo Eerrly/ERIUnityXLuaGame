@@ -91,13 +91,15 @@ public class PhysicsSystem
         }
         source.movement.position = MathManager.ToFloat3(sMove);
 
-        if (Vector3.Dot(vecT2S, sMove) > 0.0f)
+        var state = PlayerStateMachine.Instance.GetState(source.state.curStateId) as PlayerBaseState;
+        if (state != null)
         {
-            (PlayerStateMachine.Instance.GetState(source.state.curStateId) as PlayerBaseState)?.OnCollision(source, target, battleEntity);
-            (EnemyStateMachine.Instance.GetState(target.state.curStateId) as EnemyBaseState)?.OnCollision(target, source, battleEntity);
+            if (Vector3.Dot(vecT2S, sMove) > 0.0f)
+            {
+                state.OnCollision(source, target, battleEntity);
+            }
+            state.OnPostCollision(source, target, battleEntity);
         }
-
-        (PlayerStateMachine.Instance.GetState(source.state.curStateId) as PlayerBaseState)?.OnPostCollision(source, target, battleEntity);
     }
 
     private static Vector3 CombineForce(Vector3 aDeltaMove, Vector3 bDeltaMove)

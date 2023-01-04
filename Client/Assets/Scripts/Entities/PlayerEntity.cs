@@ -5,24 +5,13 @@
     {
         ID = data.pos;
 
+        input.pos = ID;
         input.yaw = MathManager.YawStop;
         input.key = 0;
 
-        animation.fixedTransitionDuration = 0.0f;
-        animation.layer = -1;
-        animation.fixedTimeOffset = 0.0f;
-        animation.normalizedTransitionTime = 0.0f;
-        animation.enable = true;
-
-        attack.targets = new int[PlayerPropertyConstant.atkMaxCount];
-        attack.atk = PlayerPropertyConstant.Attack;
-        attack.attackDistance = PlayerPropertyConstant.AttackDistance;
-        attack.lastAttackTime = -1;
-
         runtimeProperty.seed = BattleConstant.randomSeed;
 
-        property.hp = PlayerPropertyConstant.HP;
-        property.camp = (ECamp)data.camp;
+        property.pos = data.pos;
 
         collision.collsionSize = PlayerPropertyConstant.CollisionRadius;
 

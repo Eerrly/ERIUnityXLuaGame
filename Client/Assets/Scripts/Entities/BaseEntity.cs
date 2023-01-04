@@ -6,11 +6,9 @@
 
     #region Components
     public InputComponent input = new InputComponent();
-    public AttackComponent attack = new AttackComponent();
     public TransformComponent transform = new TransformComponent();
     public MoveComponent movement = new MoveComponent();
     public StateComponent state = new StateComponent();
-    public AnimationComponent animation = new AnimationComponent();
     public RuntimePropertyComponent runtimeProperty = new RuntimePropertyComponent();
     public PropertyComponent property = new PropertyComponent();
     public CollisionComponent collision = new CollisionComponent();

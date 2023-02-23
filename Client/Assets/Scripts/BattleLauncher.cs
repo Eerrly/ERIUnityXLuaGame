@@ -12,7 +12,10 @@ public class BattleLauncher : MonoBehaviour
     void InitBattleCommonData()
     {
         battleCommonData = new BattleCommonData();
-        battleCommonData.players = new BattlePlayerCommonData[] { new BattlePlayerCommonData() { pos = BattleConstant.SelfID } };
+        battleCommonData.players = new BattlePlayerCommonData[] {
+            new BattlePlayerCommonData() { pos = 0 },
+            new BattlePlayerCommonData() { pos = 1 }
+        };
     }
 
     void Start()

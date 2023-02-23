@@ -14,9 +14,10 @@ public class SupportLauncher : MonoBehaviour
     private void OnGUI()
     {
         int index = 1;
-        PlayerEntity playerEntity = (PlayerEntity)((BattleManager.Instance.battle as BattleController).battleEntity.FindEntity(BattleConstant.SelfID));
+        BattleEntity battleEntity = (BattleManager.Instance.battle as BattleController).battleEntity;
+        PlayerEntity playerEntity = (PlayerEntity)battleEntity.FindEntity(BattleConstant.SelfID);
         GUI.Label(new Rect(20, index++ * nGuiLabelHeight, nGuiLabelWidth, nGuiLabelHeight),
-            string.Format("[player]\tid:{0}", playerEntity.ID));
+            string.Format("[player]\tid:{0} time:{1:N3}", playerEntity.ID, battleEntity.time));
         GUI.Label(new Rect(20, index++ * nGuiLabelHeight, nGuiLabelWidth, nGuiLabelHeight),
             string.Format("[input]\tpos:{0}, yaw:{1}, key:{2}", playerEntity.input.pos, playerEntity.input.yaw, playerEntity.input.key));
         GUI.Label(new Rect(20, index++ * nGuiLabelHeight, nGuiLabelWidth, nGuiLabelHeight),

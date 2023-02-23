@@ -96,7 +96,7 @@ public class BattleManager : MonoBehaviour
         Util.InvokeAttributeCall(this, typeof(EntitySystem), false, typeof(EntitySystem.Initialize), false);
         _frameEngine.RegisterFrameUpdateListener(EngineUpdate);
         _frameEngine.RegisterNetUpdateListener(NetUpdate);
-        _frameEngine.StartEngine(1 / BattleConstant.FrameInterval);
+        _frameEngine.StartEngine(1 / (float)BattleConstant.FrameInterval);
         _battle.Initialize();
         _battleNetController.Initialize();
         _battleNetController.Connect("127.0.0.1", 10086);

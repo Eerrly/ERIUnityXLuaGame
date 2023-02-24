@@ -151,6 +151,7 @@ public class SpriteAtlasToolsEditorWin : OdinEditorWindow
             conf.itemList.Add(item);
         }
         Util.SaveConfig(conf, Constant.ATLAS_CONFIG_NAME);
+        this.ShowTip("保存成功！");
     }
 
 }

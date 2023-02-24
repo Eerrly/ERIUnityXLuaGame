@@ -71,6 +71,7 @@ public class BuildToolsEditorWin : OdinEditorWindow
             cfg.itemList.Add(c);
         }
         Util.SaveConfig(cfg, Constant.CLIENT_CONFIG_NAME);
+        this.ShowTip("保存成功！");
     }
 
     [Button("开始构建", ButtonSizes.Large)]

@@ -19,7 +19,7 @@ public class BattleView : MonoBehaviour
         for (int i = 0; i < data.players.Length; i++)
         {
             var player = new GameObject(string.Format("ID:{0}", data.players[i].pos));
-            player.transform.position = new Vector3(Random.insideUnitCircle.x * BattleConstant.normalPlayerPositionOffset, 0, Random.insideUnitCircle.y * BattleConstant.normalPlayerPositionOffset);
+            player.transform.position = new Vector3(data.players[i].pos * BattleConstant.normalPlayerPositionOffset, 0, data.players[i].pos * BattleConstant.normalPlayerPositionOffset);
             PlayerView playerView = player.AddComponent<PlayerView>();
             playerView.Init(data.players[i]);
             _playerViews.Add(playerView);

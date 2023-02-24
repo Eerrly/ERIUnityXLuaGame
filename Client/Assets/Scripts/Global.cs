@@ -29,6 +29,9 @@ public class Global : Singleton<Global>
 
     public override void OnInitialize()
     {
+        Application.runInBackground = true;
+        Screen.sleepTimeout = SleepTimeout.NeverSleep;
+
         managers = new List<IManager>();
         OnGameStart = new UnityEvent();
 

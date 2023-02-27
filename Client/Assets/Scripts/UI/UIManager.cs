@@ -8,7 +8,7 @@ public partial class UIManager : MonoBehaviour, IManager
 {
     public bool IsInitialized { get; set; }
 
-    private static int _dynamicID = 0;
+    private static int _dynamicID = 1;
 
     private Camera _camera;
     public Camera UICamera => _camera;
@@ -158,6 +158,16 @@ public partial class UIManager : MonoBehaviour, IManager
                 _windows.Remove(id);
                 window.OnHide(() => 
                 {
+                    window.Destory();
+                    using(var e = _windows.GetEnumerator())
+                    {
+                        while (e.MoveNext()) { 
+                            if(e.Current.Value.parent == window)
+                            {
+                                e.Current.Value.parent = null;
+                            }
+                        }
+                    }
                     if (isDestroy)
                     {
                         window.gameObject.SetActive(false);
@@ -183,6 +193,26 @@ public partial class UIManager : MonoBehaviour, IManager
             {
                 GameObject.DestroyImmediate(head.Value.gameObject);
             }
+        }
+    }
+
+    public void ClearCache()
+    {
+        var iter = _cacheWindows.First;
+        while (iter != null)
+        {
+            var next = iter.Next;
+            _cacheWindows.Remove(iter);
+            if (iter.Value != null)
+            {
+                iter.Value.gameObject.SetActive(false);
+                GameObject.DestroyImmediate(iter.Value.gameObject);
+            }
+            else
+            {
+                Debug.LogError("Clear Cache UI: NULL");
+            }
+            iter = next;
         }
     }
 

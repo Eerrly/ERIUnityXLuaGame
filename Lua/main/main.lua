@@ -1,2 +1,2 @@
-local classA = require("ui/ViewA")
-local viewA = classA.new()
+View.Initialize(require("ui/mv"))
+View.Show(1)

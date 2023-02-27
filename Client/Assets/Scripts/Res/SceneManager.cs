@@ -62,6 +62,8 @@ public class SceneManager : MonoBehaviour, IManager
         yield return null;
         yield return StartCoroutine(CoRealLoadScene(name, progress, false));
         yield return null;
+
+        Global.Instance.UIManager.ClearCache();
         if (Global.Instance.OnSceneChanged != null)
         {
             Global.Instance.OnSceneChanged.Invoke();

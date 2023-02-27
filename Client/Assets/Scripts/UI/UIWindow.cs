@@ -95,10 +95,16 @@ public class UIWindow : MonoBehaviour
         }
     }
 
+    public void Destory()
+    {
+        OnDestroy();
+    }
+
     private void OnDestroy()
     {
         isShow = false;
         behaviour.Release();
+        behaviour = null;
     }
 
 }

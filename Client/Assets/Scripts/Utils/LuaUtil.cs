@@ -24,17 +24,9 @@ public class LuaUtil
         return obj == null;
     }
 
-    public static int CreateWindow(string path, int layer, int property, LuaTable args, LuaFunction callback)
+    public static int CreateWindow(int parentId, string path, int layer, LuaTable args, LuaFunction callback)
     {
-        return Global.Instance.UIManager.CreateWindow(-1, path, layer, property, args, (id) =>
-        {
-            callback.Call(id);
-        });
-    }
-
-    public static int CreateWindow(int parentId, string path, int layer, int property, LuaTable args, LuaFunction callback)
-    {
-        return Global.Instance.UIManager.CreateWindow(parentId, path, layer, property, args, (id) => 
+        return Global.Instance.UIManager.CreateWindow(parentId, path, layer, args, (id) => 
         {
             callback.Call(id);
         });

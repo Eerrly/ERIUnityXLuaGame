@@ -1,21 +1,11 @@
+local Const = require("ui/Const")
+
 ---@class test : ViewBase
 local test = {}
 
-local LoadingState = {
-    None = 0,
-    Ready = 1,
-    Loading = 2,
-    Finished = 3,
-    LoadDone = 4,
-}
-
-local EventID = {
-    ButtonClicked = 0,
-}
-
 function test:start()
     print("-------- test:start --------")
-    self.windowId = CreateWindow(-1, "A", 1, 0x10, self, function()
+    self.windowId = CreateWindow(-1, "A", 1, self, function()
         self:refresh()
     end)
 end
@@ -27,8 +17,8 @@ function test:refresh()
     self.View:SetImage(self.ID.Image2, "Textures/A", "gongchengshi.png")
     self.View:SetImage(self.ID.Image3, "Textures/A", "golden_finger.png")
 
-    self.View:BindEvent(EventID.ButtonClicked, self.ID.Button_Start, self.OnBtnStartClicked)
-    self.View:BindEvent(EventID.ButtonClicked, self.ID.Button_Get, self.OnBtnGetClicked)
+    self.View:BindEvent(Const.EventID.ButtonClicked, self.ID.Button_Start, self.OnBtnStartClicked)
+    self.View:BindEvent(Const.EventID.ButtonClicked, self.ID.Button_Get, self.OnBtnGetClicked)
 end
 
 function test:OnBtnGetClicked()
@@ -46,7 +36,7 @@ end
 
 function test:onloadedscene(state, progress)
     print("state:" .. state .. ", progress:" .. progress)
-    if state == LoadingState.LoadDone then
+    if state == Const.LoadingState.LoadDone then
         print("DestroyWindow !!!")
         DestroyWindow(self.windowId)
     end

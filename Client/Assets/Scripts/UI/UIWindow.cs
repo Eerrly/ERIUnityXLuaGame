@@ -16,7 +16,6 @@ public class UIWindow : MonoBehaviour
     [System.NonSerialized] public string path;
     [System.NonSerialized] new public string name;
     [System.NonSerialized] public int layer;
-    [System.NonSerialized] public int property;
     [System.NonSerialized] public UIWindow parent;
     [System.NonSerialized] public Transform root;
     [System.NonSerialized] public bool isShow;
@@ -26,7 +25,7 @@ public class UIWindow : MonoBehaviour
 
     public int realLayer => canvas.sortingOrder;
 
-    public void Create(UIWindow parent, int id, string name, string path, UIManager module, int layer, int property, object obj)
+    public void Create(UIWindow parent, int id, string name, string path, int layer, object obj)
     {
         if(root == null)
         {
@@ -41,7 +40,6 @@ public class UIWindow : MonoBehaviour
         this.id = id;
         this.name = name;
         this.path = path;
-        this.property = property;
         canvas = GetComponent<Canvas>();
         if(canvas == null)
         {

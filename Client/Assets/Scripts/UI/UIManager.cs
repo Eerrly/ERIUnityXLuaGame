@@ -6,17 +6,6 @@ using UnityEngine;
 
 public partial class UIManager : MonoBehaviour, IManager
 {
-    public enum Property
-    {
-        NoCache = 0x1,
-        SyncLoad = 0x2,
-        ShowScene = 0x8,
-        IgnoreShowScene = 0x10,
-        UseDefaultPopupAnimation = 0x100,
-        UseDefaultNormalAnimation = 0x200,
-        UseCustomAnimation = 0x400,
-    }
-
     public bool IsInitialized { get; set; }
 
     private static int _dynamicID = 0;
@@ -29,7 +18,7 @@ public partial class UIManager : MonoBehaviour, IManager
 
     private Dictionary<int, UIWindow> _windows = new Dictionary<int, UIWindow>();
     private LinkedList<UIWindow> _cacheWindows = new LinkedList<UIWindow>();
-    private Dictionary<int, Property> _creatingWindows = new Dictionary<int, Property>();
+    private List<int> _creatingWindows = new List<int>();
 
     public void OnInitialize()
     {
@@ -76,7 +65,7 @@ public partial class UIManager : MonoBehaviour, IManager
         return _dynamicID++;
     }
 
-    private IEnumerator CoCreateWindows(int parentId, int id, string path, int layer, int property, object obj, Action<int> callback)
+    private IEnumerator CoCreateWindows(int parentId, int id, string path, int layer, object obj, Action<int> callback)
     {
         UIWindow win = null;
         var iter = _cacheWindows.Last;
@@ -102,7 +91,7 @@ public partial class UIManager : MonoBehaviour, IManager
             }
             else
             {
-                if (_creatingWindows.ContainsKey(id))
+                if (_creatingWindows.Contains(id))
                 {
                     prefab = Instantiate(winRes.Asset) as GameObject;
                     prefab.name = string.IsNullOrEmpty(winRes.Name) ? Path.GetFileNameWithoutExtension(winRes.Path) : winRes.Name;
@@ -125,7 +114,7 @@ public partial class UIManager : MonoBehaviour, IManager
                 {
                     _windows.TryGetValue(parentId, out parent);
                 }
-                win.Create(parent, id, prefab.name, path, this, layer, property, obj);
+                win.Create(parent, id, prefab.name, path, layer, obj);
                 win.OnShow();
                 if (callback != null)
                 {
@@ -142,7 +131,7 @@ public partial class UIManager : MonoBehaviour, IManager
             {
                 _windows.TryGetValue(parentId, out parent);
             }
-            win.Create(parent, id, win.name, win.path, this, layer, property, obj);
+            win.Create(parent, id, win.name, win.path, layer, obj);
             win.OnShow();
             if (callback != null)
             {
@@ -151,11 +140,11 @@ public partial class UIManager : MonoBehaviour, IManager
         }
     }
 
-    public int CreateWindow(int parentId, string path, int layer, int property, object obj, Action<int> callback)
+    public int CreateWindow(int parentId, string path, int layer, object obj, Action<int> callback)
     {
         var id = NewID();
-        _creatingWindows.Add(id, (Property)property);
-        StartCoroutine(CoCreateWindows(parentId, id, path, layer, property, obj, callback));
+        _creatingWindows.Add(id);
+        StartCoroutine(CoCreateWindows(parentId, id, path, layer, obj, callback));
         return id;
     }
 

@@ -409,16 +409,6 @@ public partial class LuaBehaviour : MonoBehaviour
         Text c = null;
         if (TryGetControl(id, out c))
         {
-            Coroutine co = null;
-            if (CacheCoroutines.TryGetValue(id, out co))
-            {
-                if (co != null)
-                {
-                    c.StopCoroutine(co);
-                }
-                CacheCoroutines.Remove(id);
-            }
-
             c.text = text;
         }
     }

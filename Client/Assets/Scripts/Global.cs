@@ -27,6 +27,9 @@ public class Global : Singleton<Global>
     public UnityEvent OnGameStart;
     public UnityEvent OnSceneChanged;
 
+    /// <summary>
+    /// 初始化
+    /// </summary>
     public override void OnInitialize()
     {
         Application.runInBackground = true;
@@ -52,11 +55,18 @@ public class Global : Singleton<Global>
         InitializeDebugLogSystem();
     }
 
+    /// <summary>
+    /// 运行
+    /// </summary>
     public void Run()
     {
         StartCoroutine(nameof(CoStart));
     }
 
+    /// <summary>
+    /// 初始化管理器列表
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator CoStart()
     {
         for (int i = 0; i < managers.Count; i++)
@@ -83,6 +93,9 @@ public class Global : Singleton<Global>
         OnGameStart.Invoke();
     }
 
+    /// <summary>
+    /// 初始化日志系统
+    /// </summary>
     public void InitializeDebugLogSystem()
     {
         try
@@ -119,6 +132,9 @@ public class Global : Singleton<Global>
         
     }
 
+    /// <summary>
+    /// 释放
+    /// </summary>
     public override void OnRelease()
     {
         for (int i = 0; i < managers.Count; i++)

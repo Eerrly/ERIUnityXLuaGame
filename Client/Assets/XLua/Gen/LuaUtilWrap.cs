@@ -179,33 +179,15 @@ namespace XLua.CSObjectWrap
             
             
             
-			    int gen_param_count = LuaAPI.lua_gettop(L);
-            
-                if(gen_param_count == 5&& (LuaAPI.lua_isnil(L, 1) || LuaAPI.lua_type(L, 1) == LuaTypes.LUA_TSTRING)&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 2)&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 3)&& (LuaAPI.lua_isnil(L, 4) || LuaAPI.lua_type(L, 4) == LuaTypes.LUA_TTABLE)&& (LuaAPI.lua_isnil(L, 5) || LuaAPI.lua_type(L, 5) == LuaTypes.LUA_TFUNCTION)) 
-                {
-                    string _path = LuaAPI.lua_tostring(L, 1);
-                    int _layer = LuaAPI.xlua_tointeger(L, 2);
-                    int _property = LuaAPI.xlua_tointeger(L, 3);
-                    XLua.LuaTable _args = (XLua.LuaTable)translator.GetObject(L, 4, typeof(XLua.LuaTable));
-                    XLua.LuaFunction _callback = (XLua.LuaFunction)translator.GetObject(L, 5, typeof(XLua.LuaFunction));
-                    
-                        int gen_ret = LuaUtil.CreateWindow( _path, _layer, _property, _args, _callback );
-                        LuaAPI.xlua_pushinteger(L, gen_ret);
-                    
-                    
-                    
-                    return 1;
-                }
-                if(gen_param_count == 6&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 1)&& (LuaAPI.lua_isnil(L, 2) || LuaAPI.lua_type(L, 2) == LuaTypes.LUA_TSTRING)&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 3)&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 4)&& (LuaAPI.lua_isnil(L, 5) || LuaAPI.lua_type(L, 5) == LuaTypes.LUA_TTABLE)&& (LuaAPI.lua_isnil(L, 6) || LuaAPI.lua_type(L, 6) == LuaTypes.LUA_TFUNCTION)) 
+                
                 {
                     int _parentId = LuaAPI.xlua_tointeger(L, 1);
                     string _path = LuaAPI.lua_tostring(L, 2);
                     int _layer = LuaAPI.xlua_tointeger(L, 3);
-                    int _property = LuaAPI.xlua_tointeger(L, 4);
-                    XLua.LuaTable _args = (XLua.LuaTable)translator.GetObject(L, 5, typeof(XLua.LuaTable));
-                    XLua.LuaFunction _callback = (XLua.LuaFunction)translator.GetObject(L, 6, typeof(XLua.LuaFunction));
+                    XLua.LuaTable _args = (XLua.LuaTable)translator.GetObject(L, 4, typeof(XLua.LuaTable));
+                    XLua.LuaFunction _callback = (XLua.LuaFunction)translator.GetObject(L, 5, typeof(XLua.LuaFunction));
                     
-                        int gen_ret = LuaUtil.CreateWindow( _parentId, _path, _layer, _property, _args, _callback );
+                        int gen_ret = LuaUtil.CreateWindow( _parentId, _path, _layer, _args, _callback );
                         LuaAPI.xlua_pushinteger(L, gen_ret);
                     
                     
@@ -216,8 +198,6 @@ namespace XLua.CSObjectWrap
             } catch(System.Exception gen_e) {
                 return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
             }
-            
-            return LuaAPI.luaL_error(L, "invalid arguments to LuaUtil.CreateWindow!");
             
         }
         

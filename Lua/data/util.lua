@@ -1,7 +1,7 @@
 local LuaUtil = CS.LuaUtil
 
-local function CreateWindow(parentId, path, layer, property, args, callback)
-    return LuaUtil.CreateWindow(parentId, path, layer, property, args, callback)
+local function CreateWindow(parentId, path, layer, args, callback)
+    return LuaUtil.CreateWindow(parentId, path, layer, args, callback)
 end
 
 local function DestroyWindow(windowId, destroy)

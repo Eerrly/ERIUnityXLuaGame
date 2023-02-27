@@ -5,12 +5,6 @@ using UnityEngine.UI;
 
 public class UIWindow : MonoBehaviour
 {
-    public enum EventID
-    {
-        Create = 1,
-        Destroy = 2,
-    }
-
     [System.NonSerialized] public Canvas canvas;
     [System.NonSerialized] public int id;
     [System.NonSerialized] public string path;

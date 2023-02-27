@@ -1,2 +1,2 @@
-local Test = require("ui.Test")
-Test:start()
+local classA = require("ui/ViewA")
+local viewA = classA.new()

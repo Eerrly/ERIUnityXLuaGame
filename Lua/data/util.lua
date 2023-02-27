@@ -1,3 +1,4 @@
+---@type CS.LuaUtil
 local LuaUtil = CS.LuaUtil
 
 local function CreateWindow(parentId, path, layer, args, callback)
@@ -28,10 +29,12 @@ local function HttpDownload(url, path, progress, callback)
     LuaUtil.HttpDownload(url, path, progress, callback)
 end
 
-exports.CreateWindow = CreateWindow
-exports.IsNull = IsNull
-exports.DontDestroyOnLoad = DontDestroyOnLoad
-exports.LoadScene = LoadScene
-exports.DestroyWindow = DestroyWindow
-exports.HttpGet = HttpGet
-exports.HttpDownload = HttpDownload
+exports.Util = {
+    CreateWindow = CreateWindow,
+    IsNull = IsNull,
+    DontDestroyOnLoad = DontDestroyOnLoad,
+    LoadScene = LoadScene,
+    DestroyWindow = DestroyWindow,
+    HttpGet = HttpGet,
+    HttpDownload = HttpDownload,
+}

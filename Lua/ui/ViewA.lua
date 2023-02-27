@@ -1,16 +1,15 @@
 local Const = require("ui/Const")
 
----@class test : ViewBase
-local test = {}
+local ViewA = class("ViewA")
 
-function test:start()
-    print("-------- test:start --------")
-    self.windowId = CreateWindow(-1, "A", 1, self, function()
+function ViewA:ctor()
+    print("-------- ViewA:ctor --------")
+    self.windowId = Util.CreateWindow(-1, "A", 1, self, function()
         self:refresh()
     end)
 end
 
-function test:refresh()
+function ViewA:refresh()
     print("windowsId:" .. self.windowId .. ", ID.Text:" .. tostring(self.ID.Text))
     self.View:SetText(self.ID.Text, "SB")
     self.View:SetImage(self.ID.Image1, "Textures/B", "item_01.png")
@@ -21,25 +20,25 @@ function test:refresh()
     self.View:BindEvent(Const.EventID.ButtonClicked, self.ID.Button_Get, self.OnBtnGetClicked)
 end
 
-function test:OnBtnGetClicked()
-    HttpGet("http://freestyle2cdn.changyou.kr/resources/FreeStyle/1.120.1/version_2002.txt", 5, function(state, text)
+function ViewA:OnBtnGetClicked()
+    Util.HttpGet("http://freestyle2cdn.changyou.kr/resources/FreeStyle/1.120.1/version_2002.txt", 5, function(state, text)
         print("state:" .. tostring(state) .. ", text:\n" .. text)
     end)
 end
 
-function test:OnBtnStartClicked()
+function ViewA:OnBtnStartClicked()
     print("Click Button !!!!")
-    LoadScene("Battle", function(state, progress)
+    Util.LoadScene("Battle", function(state, progress)
         self:onloadedscene(state, progress)
     end)
 end
 
-function test:onloadedscene(state, progress)
+function ViewA:onloadedscene(state, progress)
     print("state:" .. state .. ", progress:" .. progress)
     if state == Const.LoadingState.LoadDone then
         print("DestroyWindow !!!")
-        DestroyWindow(self.windowId)
+        Util.DestroyWindow(self.windowId)
     end
 end
 
-return test
+return ViewA

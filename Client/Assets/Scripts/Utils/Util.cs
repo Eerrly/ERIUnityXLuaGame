@@ -168,6 +168,7 @@ public class Util
 
     public static int ExecuteBat(string dir, string bat, string arg)
     {
+#if UNITY_EDITOR
         var currDirectory = Directory.GetCurrentDirectory();
         Directory.SetCurrentDirectory(dir);
         try
@@ -196,6 +197,9 @@ public class Util
         {
             Directory.SetCurrentDirectory(currDirectory);
         }
+#else
+        return -1;
+#endif
     }
 
 }

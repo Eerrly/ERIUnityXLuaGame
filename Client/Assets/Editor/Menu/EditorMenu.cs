@@ -15,6 +15,12 @@ public class ToolbarEditorMenu
         BuildToolsEditorWin.Open();
     }
 
+    [MenuItem("工具/Patch Tools", false, 1000)]
+    public static void PatchTools()
+    {
+        PatchToolsEditorWin.Open();
+    }
+
 }
 
 public class RightClickEditorMenu

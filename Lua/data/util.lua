@@ -29,6 +29,10 @@ local function HttpDownload(url, path, progress, callback)
     LuaUtil.HttpDownload(url, path, progress, callback)
 end
 
+local function ClearUICache()
+    LuaUtil.ClearUICache()
+end
+
 exports.Util = {
     CreateWindow = CreateWindow,
     IsNull = IsNull,
@@ -37,4 +41,5 @@ exports.Util = {
     DestroyWindow = DestroyWindow,
     HttpGet = HttpGet,
     HttpDownload = HttpDownload,
+    ClearUICache = ClearUICache,
 }

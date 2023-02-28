@@ -37,6 +37,11 @@ public class LuaUtil
         Global.Instance.UIManager.DestroyWindow(id, destroy);
     }
 
+    public static void ClearUICache()
+    {
+        Global.Instance.UIManager.ClearCache();
+    }
+
     public static void LoadScene(string scene, LuaFunction callback)
     {
         Global.Instance.SceneManager.LoadScene(scene, (state, progress) =>

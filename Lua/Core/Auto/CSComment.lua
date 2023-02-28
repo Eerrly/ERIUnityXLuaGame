@@ -23,6 +23,7 @@
 
 ---@class CS.LuaUtil
 ---@field ClearDontDestroyObjs fun()
+---@field ClearUICache fun()
 ---@field CreateWindow fun(parentId:int32, path:string, layer:int32, args:LuaTable, callback:LuaFunction):int32
 ---@field DestroyWindow fun(id:int32, destroy:boolean)
 ---@field DontDestroyOnLoad fun(obj:Object, isDontDestroy:boolean)

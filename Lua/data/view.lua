@@ -210,8 +210,22 @@ local function Show(templateID, params, parentParams)
     end
 end
 
+local function HideAll(destroy)
+    local allWindows = { normalWindows, popupWindows, fixedWindows }
+    for n=1, #allWindows do
+        for i=#allWindows[n], 1, -1 do
+            _DestroyWindow(allWindows[n][i].id, destroy)
+            table.remove(allWindows[n], i)
+        end
+    end
+    if destroy then
+        Util.ClearUICache()
+    end
+end
+
 exports.View = {
     Initialize = Initialize,
     Show = Show,
     Hide = Hide,
+    HideAll = HideAll,
 }

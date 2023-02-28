@@ -29,7 +29,7 @@ function viewB:onloadedscene(state, progress)
     print("state:" .. state .. ", progress:" .. progress)
     if state == Const.LoadingState.LoadDone then
         print("DestroyWindow !!!")
-        Util.DestroyWindow()
+        View.HideAll()
     end
 end
 

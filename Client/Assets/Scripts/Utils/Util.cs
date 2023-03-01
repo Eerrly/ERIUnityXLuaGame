@@ -94,7 +94,7 @@ public class Util
 
     public static void SaveConfig(object data, string fileName)
     {
-        string json = Regex.Unescape(JsonUtility.ToJson(data));
+        string json = Regex.Unescape(Newtonsoft.Json.JsonConvert.SerializeObject(data));
         File.WriteAllText(FileUtil.CombinePaths(Setting.EditorResourcePath, Setting.EditorConfigPath, fileName), json, Encoding.UTF8);
     }
 
@@ -105,7 +105,7 @@ public class Util
         try
         {
             string json = System.Text.ASCIIEncoding.Default.GetString(Resources.Load<TextAsset>(configPath).bytes);
-            T t = JsonUtility.FromJson<T>(json);
+            T t = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(json);
             return t;
         }
         catch(Exception ex)

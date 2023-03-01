@@ -24,21 +24,20 @@ public class PatchToolsEditorWin : OdinEditorWindow
         endVersion = UnityEngine.PlayerPrefs.GetString("PATCH_TOOLS_END_VERSION", "ce5db4c7");
     }
 
-    private void OnGitVersionValueChanged()
-    {
-        UnityEngine.PlayerPrefs.SetString("PATCH_TOOLS_START_VERSION", startVersion);
-        UnityEngine.PlayerPrefs.SetString("PATCH_TOOLS_END_VERSION", endVersion);
-    }
-
     [HideLabel, LabelWidth(150)]
     [LabelText("起始版本（StartVersion）")]
-    [OnValueChanged("OnGitVersionValueChanged")]
     public string startVersion = "";
 
-    [HideLabel, LabelWidth(150)]
+    [HideLabel, HorizontalGroup("EndVersion"), LabelWidth(150)]
     [LabelText("结束版本（EndVersion）")]
-    [OnValueChanged("OnGitVersionValueChanged")]
     public string endVersion = "";
+
+    [HorizontalGroup("EndVersion")]
+    [Button("Head")]
+    public void GetGitHeadVersion()
+    {
+        endVersion = PatchUtil.GetGitVersion();
+    }
 
     [HideLabel, ReadOnly]
     [Title("热更文件列表")]
@@ -48,19 +47,10 @@ public class PatchToolsEditorWin : OdinEditorWindow
     [Button("获取热更文件列表", ButtonSizes.Large)]
     public void GetPatchFiles()
     {
-        var dir = FileUtil.CombinePaths(UnityEngine.Application.dataPath, "Sources");
-        var bat = FileUtil.CombinePaths(UnityEngine.Application.dataPath, "Editor/Tools/calclist.bat");
-        var output = FileUtil.CombinePaths(UnityEngine.Application.dataPath, "Editor/Tools/diff.txt");
-        var arg = string.Format("{0} {1} {2}", startVersion, endVersion, output);
-        if(Util.ExecuteBat(dir, bat, arg) == 0)
+        patchFiles = PatchUtil.GetPatchFiles(startVersion, endVersion);
+        if (patchFiles != null)
         {
-            System.Array.Clear(patchFiles, 0, patchFiles.Length);
-            patchFiles = File.ReadAllLines(output).Where(path=>path.StartsWith("Client/Assets/Sources/")).ToArray();
             this.ShowTip("获取成功！");
-        }
-        else
-        {
-            this.ShowTip("获取失败！");
         }
     }
 
@@ -68,6 +58,9 @@ public class PatchToolsEditorWin : OdinEditorWindow
     public void PatchFiles()
     {
         this.ShowTip("TODO");
+
+        UnityEngine.PlayerPrefs.SetString("PATCH_TOOLS_START_VERSION", startVersion);
+        UnityEngine.PlayerPrefs.SetString("PATCH_TOOLS_END_VERSION", endVersion);
     }
 
 }

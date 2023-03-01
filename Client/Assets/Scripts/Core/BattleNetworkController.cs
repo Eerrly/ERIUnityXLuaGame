@@ -65,7 +65,7 @@ public class BattleNetworkController
         {
             if (client != null && client.IsConnected)
             {
-                ByteBuffer buffer = ByteBuffer.Allocate(8, true);
+                ByteBuffer buffer = ByteBuffer.Allocate(9, true);
                 lock (_sendLock)
                 {
                     buffer.Clear();

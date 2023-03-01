@@ -75,9 +75,11 @@ public class PhysicsSystem
         var tMove = MathManager.ToVector3(target.movement.position);
 
         var vecS2T = MathManager.ToVector3(source.transform.pos) - MathManager.ToVector3(target.transform.pos);
+        vecS2T.y = 0;
         var vecT2S = MathManager.ToVector3(target.transform.pos) - MathManager.ToVector3(source.transform.pos);
+        vecT2S.y = 0;
 
-        if (Vector3.Dot(vecT2S, tMove) > 0.0f)
+        if (Vector3.Dot(vecS2T, tMove) > 0.0f)
         {
             sMove = CombineForce(tMove, sMove);
         }

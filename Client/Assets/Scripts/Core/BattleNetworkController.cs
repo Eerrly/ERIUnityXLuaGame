@@ -59,7 +59,7 @@ public class BattleNetworkController
         }
     }
 
-    public void SendInputToServer(int playerId, int frame, FrameBuffer.Input input)
+    public void SendInputToServer(int frame, FrameBuffer.Input input)
     {
         try
         {
@@ -73,8 +73,7 @@ public class BattleNetworkController
                     buffer.WriteByte(input.ToByte());
                     if (client != null)
                     {
-                        var result = buffer.ToArray();
-                        client.Send(result, 0, result.Length);
+                        client.Send(buffer.ToArray(), 0, 5);
                     }
                 }
             }

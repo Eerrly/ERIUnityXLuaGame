@@ -52,6 +52,12 @@ public class BattleManager : MonoBehaviour
     private MemoryStream _receiveStream = new MemoryStream(256);
     private BinaryReader _binaryReader;
 
+    private byte _raw;
+    private int _frame;
+    private const byte posMask = 0x01;
+    private const byte yawMask = 0xF0;
+    private const byte keyMask = 0x0E;
+
     public volatile int renderFrame = -1;
     public volatile int logicFrame = -1;
     private FrameBuffer.Input _lastSendPlayerInput;
@@ -126,7 +132,7 @@ public class BattleManager : MonoBehaviour
                 if (!input.Compare(_lastSendPlayerInput))
                 {
                     _lastSendPlayerInput = input;
-                    _battleNetController.SendInputToServer(input.pos, logicFrame, input);
+                    _battleNetController.SendInputToServer(logicFrame, input);
                 }
                 _battleNetController.Update();
                 if(_battleNetController.RecvData(ref recvBuffer, 0, recvBuffer.Length) > 0)
@@ -152,14 +158,14 @@ public class BattleManager : MonoBehaviour
         _receiveStream.Seek(0, SeekOrigin.Begin);
         while (_binaryReader.BaseStream.Position < _binaryReader.BaseStream.Length)
         {
-            int frame = _binaryReader.ReadInt32();
-            byte raw = _binaryReader.ReadByte();
+            _frame = _binaryReader.ReadInt32();
+            _raw = _binaryReader.ReadByte();
 
-            _lastRecvPlayerInput.pos = (byte)(0x01 & raw);
-            _lastRecvPlayerInput.yaw = (byte)((0xF0 & raw) >> 4);
-            _lastRecvPlayerInput.key = (byte)((0x0E & raw) >> 1);
+            _lastRecvPlayerInput.pos = (byte)(posMask & _raw);
+            _lastRecvPlayerInput.yaw = (byte)((yawMask & _raw) >> 4);
+            _lastRecvPlayerInput.key = (byte)((keyMask & _raw) >> 1);
 #if UNITY_DEBUG
-            Logger.Log(LogLevel.Info, "RecvData playerId:" + _lastRecvPlayerInput.pos + ", frame:" + frame + ", raw:" + raw);
+            Logger.Log(LogLevel.Info, "RecvData playerId:" + _lastRecvPlayerInput.pos + ", frame:" + _frame + ", raw:" + _raw);
 #endif
             ((BattleController)_battle).UpdateInput(_lastRecvPlayerInput);
         }

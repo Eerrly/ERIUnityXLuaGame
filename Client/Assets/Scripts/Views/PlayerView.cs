@@ -24,7 +24,9 @@ public class PlayerView : MonoBehaviour
     {
         BaseEntity entity = battleEntity.FindEntity(entityId);
         TransformUpdate(entity, deltaTime);
+#if UNITY_DEBUG
         SpacePartition.UpdateEntityCell(entity);
+#endif
     }
 
     private Vector3 p_startPosition;

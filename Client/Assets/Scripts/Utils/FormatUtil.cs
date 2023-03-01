@@ -14,24 +14,46 @@ public static class FormatUtil
 {
     private static MemoryStream stream = new MemoryStream();
 
-    public static byte[] SerializeToBinary(object obj)
+    public static byte[] Serialize(object obj)
     {
-        stream.Reset();
-        BinaryFormatter formatter = new BinaryFormatter();
-        formatter.Serialize(stream, obj);
-        byte[] data = stream.ToArray();
-        stream.Close();
+        byte[] data = null;
+        try
+        {
+            stream.Reset();
+            BinaryFormatter formatter = new BinaryFormatter();
+            formatter.Serialize(stream, obj);
+            data = stream.ToArray();
+        }
+        catch(System.Exception e)
+        {
+            Logger.Log(LogLevel.Exception, e.Message);
+        }
+        finally
+        {
+            stream.Close();
+        }
         return data;
     }
 
-    public static object DeserializeWithBinary(byte[] data)
+    public static object Deserialize(byte[] data)
     {
-        stream.Reset();
-        stream.Write(data, 0, data.Length);
-        stream.Position = 0;
-        BinaryFormatter formatter = new BinaryFormatter();
-        object obj = formatter.Deserialize(stream);
-        stream.Close();
+        object obj = null;
+        try
+        {
+            stream.Reset();
+            stream.Write(data, 0, data.Length);
+            stream.Position = 0;
+            BinaryFormatter formatter = new BinaryFormatter();
+            obj = formatter.Deserialize(stream);
+        }
+        catch(System.Exception e)
+        {
+            Logger.Log(LogLevel.Exception, e.Message);
+        }
+        finally
+        {
+            stream.Close();
+        }
         return obj;
     }
 

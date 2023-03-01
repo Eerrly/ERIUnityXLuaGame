@@ -71,7 +71,7 @@ public class BattleManager : MonoBehaviour
         {
             _playerInput.AddKey(new InputKeyCode() { _name = BattleConstant.buttonNames[i] });
         }
-        recvBuffer = new byte[9];
+        recvBuffer = new byte[5];
         _binaryReader = new BinaryReader(_receiveStream);
     }
 
@@ -152,15 +152,15 @@ public class BattleManager : MonoBehaviour
         _receiveStream.Seek(0, SeekOrigin.Begin);
         while (_binaryReader.BaseStream.Position < _binaryReader.BaseStream.Length)
         {
-            int playerId = _binaryReader.ReadInt32();
             int frame = _binaryReader.ReadInt32();
             byte raw = _binaryReader.ReadByte();
-#if UNITY_DEBUG
-            Logger.Log(LogLevel.Info, "RecvData playerId:" + playerId + ", frame:" + frame + ", raw:" + raw);
-#endif
-            _lastRecvPlayerInput.pos = (byte)playerId;
+
+            _lastRecvPlayerInput.pos = (byte)(0x01 & raw);
             _lastRecvPlayerInput.yaw = (byte)((0xF0 & raw) >> 4);
             _lastRecvPlayerInput.key = (byte)((0x0E & raw) >> 1);
+#if UNITY_DEBUG
+            Logger.Log(LogLevel.Info, "RecvData playerId:" + _lastRecvPlayerInput.pos + ", frame:" + frame + ", raw:" + raw);
+#endif
             ((BattleController)_battle).UpdateInput(_lastRecvPlayerInput);
         }
     }

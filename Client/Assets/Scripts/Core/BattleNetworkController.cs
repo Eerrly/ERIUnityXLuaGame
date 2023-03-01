@@ -65,11 +65,10 @@ public class BattleNetworkController
         {
             if (client != null && client.IsConnected)
             {
-                ByteBuffer buffer = ByteBuffer.Allocate(9, true);
+                ByteBuffer buffer = ByteBuffer.Allocate(5, true);
                 lock (_sendLock)
                 {
                     buffer.Clear();
-                    buffer.WriteInt(playerId);
                     buffer.WriteInt(frame);
                     buffer.WriteByte(input.ToByte());
                     if (client != null)

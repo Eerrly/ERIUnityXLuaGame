@@ -21,6 +21,10 @@ public class PatchingManager : MonoBehaviour, IManager
         {
             request = UnityWebRequest.Get(new Uri(url));
             await request.SendWebRequest().WithCancellation(timeoutController.Timeout(TimeSpan.FromSeconds(timeout)));
+#if UNITY_2019_4_37
+            _httpState = !request.isNetworkError && !request.isHttpError;
+            _httpText = _httpState ? request.downloadHandler.text : request.error;
+#else
             switch (request.result)
             {
                 case UnityWebRequest.Result.InProgress:
@@ -35,6 +39,7 @@ public class PatchingManager : MonoBehaviour, IManager
                     _httpText = request.downloadHandler.text;
                     break;
             }
+#endif
         }
         catch(System.Exception e)
         {
@@ -69,6 +74,10 @@ public class PatchingManager : MonoBehaviour, IManager
             downloadHandler = new DownloadHandlerFile(path, true);
             request = new UnityWebRequest(new Uri(url), UnityWebRequest.kHttpVerbGET, downloadHandler, null);
             await request.SendWebRequest().ToUniTask(Progress.Create<float>(_progress));
+#if UNITY_2019_4_37
+            _httpState = !request.isNetworkError && !request.isHttpError;
+            _httpText = _httpState ? request.downloadHandler.text : request.error;
+#else
             switch (request.result)
             {
                 case UnityWebRequest.Result.InProgress:
@@ -83,6 +92,7 @@ public class PatchingManager : MonoBehaviour, IManager
                     _httpText = request.downloadHandler.text;
                     break;
             }
+#endif
         }
         catch(System.Exception e)
         {

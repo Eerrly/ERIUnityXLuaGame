@@ -44,10 +44,19 @@ class UDPClient
         mRecvBuffer.Clear();
     }
 
+    public void DisConnect()
+    {
+        if (mSocket != null)
+        {
+            Close();
+        }
+    }
+
     public void Close()
     {
         if (mSocket != null)
         {
+            mSocket.Shutdown(SocketShutdown.Both);
             mSocket.Close();
             mSocket = null;
             mRecvBuffer.Clear();

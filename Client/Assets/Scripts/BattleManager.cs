@@ -192,6 +192,7 @@ public class BattleManager : MonoBehaviour
         _frameEngine.UnRegisterFrameUpdateListener();
         _frameEngine.UnRegisterNetUpdateListener();
         _frameEngine.StopEngine();
+        _battleNetController.DisConnect();
     }
 
 }

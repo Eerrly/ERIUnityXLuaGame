@@ -103,8 +103,11 @@ public class UIWindow : MonoBehaviour
     private void OnDestroy()
     {
         isShow = false;
-        behaviour.Release();
-        behaviour = null;
+        if(behaviour != null)
+        {
+            behaviour.Release();
+            behaviour = null;
+        }
     }
 
 }

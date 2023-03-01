@@ -1,7 +1,8 @@
+---@type CS.LuaUtil
 local LuaUtil = CS.LuaUtil
 
-local function CreateWindow(parentId, path, layer, property, args, callback)
-    return LuaUtil.CreateWindow(parentId, path, layer, property, args, callback)
+local function CreateWindow(parentId, path, layer, args, callback)
+    return LuaUtil.CreateWindow(parentId, path, layer, args, callback)
 end
 
 local function DestroyWindow(windowId, destroy)
@@ -28,10 +29,22 @@ local function HttpDownload(url, path, progress, callback)
     LuaUtil.HttpDownload(url, path, progress, callback)
 end
 
-exports.CreateWindow = CreateWindow
-exports.IsNull = IsNull
-exports.DontDestroyOnLoad = DontDestroyOnLoad
-exports.LoadScene = LoadScene
-exports.DestroyWindow = DestroyWindow
-exports.HttpGet = HttpGet
-exports.HttpDownload = HttpDownload
+local function ClearUICache()
+    LuaUtil.ClearUICache()
+end
+
+local function SetSelfPlayerId(id)
+    LuaUtil.SetSelfPlayerId(id)
+end
+
+exports.Util = {
+    CreateWindow = CreateWindow,
+    IsNull = IsNull,
+    DontDestroyOnLoad = DontDestroyOnLoad,
+    LoadScene = LoadScene,
+    DestroyWindow = DestroyWindow,
+    HttpGet = HttpGet,
+    HttpDownload = HttpDownload,
+    ClearUICache = ClearUICache,
+    SetSelfPlayerId = SetSelfPlayerId,
+}

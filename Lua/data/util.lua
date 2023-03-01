@@ -33,6 +33,10 @@ local function ClearUICache()
     LuaUtil.ClearUICache()
 end
 
+local function SetSelfPlayerId(id)
+    LuaUtil.SetSelfPlayerId(id)
+end
+
 exports.Util = {
     CreateWindow = CreateWindow,
     IsNull = IsNull,
@@ -42,4 +46,5 @@ exports.Util = {
     HttpGet = HttpGet,
     HttpDownload = HttpDownload,
     ClearUICache = ClearUICache,
+    SetSelfPlayerId = SetSelfPlayerId,
 }

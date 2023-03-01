@@ -44,6 +44,21 @@ public class BattleNetworkController
         }
     }
 
+    public void DisConnect()
+    {
+        try
+        {
+            if(client != null)
+            {
+                client.DisConnect();
+            }
+        }
+        catch(System.Exception e)
+        {
+            Logger.Log(LogLevel.Exception, e.Message);
+        }
+    }
+
     public void SendInputToServer(int playerId, int frame, FrameBuffer.Input input)
     {
         try

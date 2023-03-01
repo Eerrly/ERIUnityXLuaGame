@@ -31,4 +31,5 @@
 ---@field HttpGet fun(url:string, timeout:int32, callback:LuaFunction)
 ---@field IsNull fun(obj:Object):boolean
 ---@field LoadScene fun(scene:string, callback:LuaFunction)
+---@field SetSelfPlayerId fun(id:int32)
 

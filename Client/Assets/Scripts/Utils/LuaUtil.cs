@@ -66,4 +66,17 @@ public class LuaUtil
         });
     }
 
+    public static void SetSelfPlayerId(int id)
+    {
+        switch (id)
+        {
+            case 1:
+                BattleConstant.SelfID = 0;
+                break;
+            case 2:
+                BattleConstant.SelfID = 1;
+                break;
+        }
+    }
+
 }

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class BattleConstant
 {
-    public static readonly int SelfID = 0;
+    public static int SelfID = 0;
 
     public static readonly int FrameInterval = 30;
 

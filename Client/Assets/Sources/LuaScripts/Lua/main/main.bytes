@@ -1,2 +1,2 @@
-local Test = require("ui.Test")
-Test:start()
+View.Initialize(require("ui/mv"))
+View.Show(1)

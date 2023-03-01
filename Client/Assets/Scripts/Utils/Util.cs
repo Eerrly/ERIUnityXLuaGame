@@ -88,8 +88,7 @@ public class Util
             {
                 builder.Append(result[i].ToString("x2"));
             }
-            var value = builder.ToString();
-            return value;
+            return builder.ToString();
         }
     }
 

@@ -5,7 +5,7 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Sources/Scenes/Lua.unity
     guid: aa20ba38072868745b86c0b931fb7122
   - enabled: 1

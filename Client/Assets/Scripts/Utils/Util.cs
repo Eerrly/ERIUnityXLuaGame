@@ -165,4 +165,40 @@ public class Util
         return true;
     }
 
+    public static int ExecuteBat(string dir, string bat, string arg)
+    {
+#if UNITY_EDITOR
+        var currDirectory = Directory.GetCurrentDirectory();
+        Directory.SetCurrentDirectory(dir);
+        try
+        {
+            System.Diagnostics.Process process = new System.Diagnostics.Process();
+            process.StartInfo.FileName = bat;
+            process.StartInfo.Arguments = arg;
+
+            process.StartInfo.UseShellExecute = false;
+            process.StartInfo.CreateNoWindow = true;
+            process.StartInfo.RedirectStandardError = true;
+            process.StartInfo.RedirectStandardOutput = true;
+            process.Start();
+            process.WaitForExit();
+            var code = process.ExitCode;
+            process.Close();
+            Directory.SetCurrentDirectory(currDirectory);
+            return code;
+        }
+        catch(System.Exception e)
+        {
+            Logger.Log(LogLevel.Exception, e.Message);
+            return -1;
+        }
+        finally
+        {
+            Directory.SetCurrentDirectory(currDirectory);
+        }
+#else
+        return -1;
+#endif
+    }
+
 }

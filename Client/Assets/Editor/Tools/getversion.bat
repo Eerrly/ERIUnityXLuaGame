@@ -1,2 +1,2 @@
 @echo off
-@git rev-parse HEAD > %1
+@git rev-parse --short HEAD > %1

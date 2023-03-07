@@ -4,6 +4,8 @@ using UnityEngine;
 using System.IO;
 using UnityEditor;
 using System.Linq;
+using ICSharpCode.SharpZipLib.Zip;
+using System;
 
 public class ResUtil
 {
@@ -242,25 +244,33 @@ public class ResUtil
     public static void Patch(HashSet<string> patchList)
     {
         var patchMap = new Dictionary<string, string>();
-        var rawRes = new Dictionary<string, string>();
         var bundleList = new List<AssetBundleBuild>();
         var configMap = new Dictionary<string, BuildToolsConfig.BuildToolsConfigItem>();
         var hash2Name = new Dictionary<string, string>();
         var hash2Path = new Dictionary<string, string>();
 
+        var resourceVersion = PatchUtil.GetGitVersion();
+
         BuildLuaScripts();
+        var assetBundleNames = AssetDatabase.GetAllAssetBundleNames();
+        foreach (var assetBundleName in assetBundleNames)
+        {
+            AssetDatabase.RemoveAssetBundleName(assetBundleName, true);
+        }
+        var patchingNoteList = new System.Text.StringBuilder();
+
         foreach (var cur in Setting.Config.itemList)
         {
-            string[] items = null;
+            string[] files = null;
             if (cur.directories)
             {
-                items = Directory.GetDirectories(FileUtil.CombinePaths(Setting.EditorBundlePath, cur.root), cur.filter, (SearchOption)cur.searchoption);
+                files = Directory.GetDirectories(FileUtil.CombinePaths(Setting.EditorBundlePath, cur.root), cur.filter, (SearchOption)cur.searchoption);
             }
             else
             {
-                items = Directory.GetFiles(FileUtil.CombinePaths(Setting.EditorBundlePath, cur.root), cur.filter, (SearchOption)cur.searchoption);
+                files = Directory.GetFiles(FileUtil.CombinePaths(Setting.EditorBundlePath, cur.root), cur.filter, (SearchOption)cur.searchoption);
             }
-            foreach (var item in items)
+            foreach (var item in files)
             {
                 var path = FileUtil.Normalized(item).ToLower();
                 var keyPath = path.Replace("assets/sources/", "");
@@ -268,9 +278,10 @@ public class ResUtil
                 {
                     continue;
                 }
-                if(patchList.Contains(keyPath))
+                if(!cur.directories && patchList.Contains(keyPath))
                 {
                     patchMap.Add(keyPath, "");
+                    patchingNoteList.AppendLine("patch:" + keyPath);
                     patchList.Remove(keyPath);
                 }
 
@@ -300,6 +311,11 @@ public class ResUtil
                         {
                             newList.Add(patchItem);
                         }
+                    }
+
+                    if (newList.Count == 0)
+                    {
+                        continue;
                     }
 
                     var refItems = newList.ToArray();
@@ -360,14 +376,120 @@ public class ResUtil
                     {
                         var key = Util.HashPath(parent) + ".s";
                         BuildToolsConfig.BuildToolsConfigItem item = null;
-                        if (configMap.TryGetValue(key, out item))
+                        if (configMap.TryGetValue(key, out item) && !patchMap.ContainsKey(parent))
                         {
-
+                            patchMap.Add(parent, "");
+                            patchingNoteList.AppendLine("patch:" + parent);
                         }
                     }
                 }
             }
         }
+
+        AssetBundleManifest manifest = null;
+        FileUtil.CreateDirectory(Setting.EditorBundleBuildCachePath);
+        manifest = BuildPipeline.BuildAssetBundles(
+            Setting.EditorBundleBuildCachePath,
+            bundleList.ToArray(),
+            BuildAssetBundleOptions.ChunkBasedCompression | BuildAssetBundleOptions.DisableLoadAssetByFileName | BuildAssetBundleOptions.DisableLoadAssetByFileNameWithExtension,
+            EditorUserBuildSettings.activeBuildTarget);
+
+        var assetsRootPath = Application.dataPath.Replace("/Assets", "");
+        var patchFilePath = Path.Combine(assetsRootPath, UnityEditor.FileUtil.GetUniqueTempPathInProject());
+        var versionPatchFilePath = FileUtil.CombinePaths(patchFilePath, resourceVersion.ToString());
+        FileUtil.CreateDirectory(patchFilePath);
+        FileUtil.CreateDirectory(versionPatchFilePath);
+
+        var bundleNames = manifest.GetAllAssetBundles();
+        var bundleManifestFile = new ManifestConfig();
+        var items = new List<ManifestItem>(bundleNames.Length);
+
+        for (var i = 0; i < bundleNames.Length; ++i)
+        {
+            var isPatchAB = bundleNames[i].EndsWith(".p");
+            bundleNames[i] = isPatchAB ? bundleNames[i].Replace(".p", "") : bundleNames[i];
+            var hash = bundleNames[i].Substring(0, bundleNames[i].Length - 2);
+            var filnalName = hash + ".s";
+            if (patchMap.ContainsKey(hash2Path[filnalName]))
+            {
+                var destFile = FileUtil.CombinePaths(versionPatchFilePath, bundleNames[i]);
+                var sourceBytes = File.ReadAllBytes(FileUtil.CombinePaths(Setting.EditorBundleBuildCachePath, isPatchAB ? bundleNames[i] + ".p" : bundleNames[i]));
+                if (File.Exists(destFile)) File.Delete(destFile);
+                File.WriteAllBytes(destFile, sourceBytes);
+
+                var nameDependencies = manifest.GetAllDependencies(bundleNames[i]);
+                var dependencies = new uint[nameDependencies.Length];
+                for (var j = 0; j < nameDependencies.Length; ++j)
+                {
+                    dependencies[j] = uint.Parse(nameDependencies[j].Replace(".s", "").Replace(".p", ""));
+                }
+
+                var name = hash + ".s";
+                items.Add(new ManifestItem() {
+                    hash = uint.Parse(hash),
+                    dependencies = dependencies,
+                    offset = 0,
+                    size = sourceBytes.Length,
+                    directories = configMap[bundleNames[i]].directories,
+                    extension = configMap[bundleNames[i]].extension,
+                    md5 = Util.MD5(sourceBytes),
+                });
+            }
+        }
+
+        bundleManifestFile.items = items.ToArray();
+        AssetDatabase.ImportAsset(Setting.StreamingBundleRoot, ImportAssetOptions.ForceUpdate);
+
+        var jsonTexts = JsonUtility.ToJson(bundleManifestFile);
+        var listFile = Path.Combine(Setting.EditorBundleBuildCachePath, "rc_p.txt");
+        File.WriteAllText(listFile, jsonTexts);
+
+        var manifestFilePath = Path.Combine(versionPatchFilePath, "rc.bytes");
+        File.WriteAllText(manifestFilePath, jsonTexts);
+
+        File.WriteAllText(Path.Combine(patchFilePath, "v.bytes"), resourceVersion.ToString() + "," + Util.MD5(File.ReadAllBytes(manifestFilePath)));
+
+        var compressed = new MemoryStream();
+        ZipOutputStream compressor = new ZipOutputStream(compressed);
+        var fileMap = Directory.GetFiles(patchFilePath, "*.*", SearchOption.AllDirectories);
+        foreach (var file in fileMap)
+        {
+            var _filename = file.Substring(patchFilePath.Length, file.Length - patchFilePath.Length);
+            var _entry = new ZipEntry(_filename);
+            _entry.DateTime = new DateTime();
+            _entry.DosTime = 0;
+            compressor.PutNextEntry(_entry);
+            if (Directory.Exists(file))
+            {
+                continue;
+            }
+            var _bytes = File.ReadAllBytes(file);
+            var offset = 0;
+            compressor.Write(_bytes, offset, _bytes.Length - offset);
+        }
+        var filename = "NOTE_" + resourceVersion + ".txt";
+        var entry = new ZipEntry(filename);
+        entry.DateTime = new DateTime();
+        entry.DosTime = 0;
+        compressor.PutNextEntry(entry);
+        var bytes = System.Text.UTF8Encoding.Default.GetBytes(patchingNoteList.ToString());
+        compressor.Write(bytes, 0, bytes.Length);
+        compressor.Finish();
+        compressed.Flush();
+
+        var fileBytes = new byte[compressed.Length];
+        Array.Copy(compressed.GetBuffer(), fileBytes, fileBytes.Length);
+        var fileName = string.Format("{0}/{1}-{2}-{3}.zip",
+            Setting.EditorPatchPath,
+            resourceVersion,
+            DateTime.Now.ToString("yyyy.MM.dd_HH.mm.s"),
+            Util.MD5(fileBytes));
+        using(var fs = new FileStream(fileName, FileMode.Create, FileAccess.Write))
+        {
+            fs.Write(fileBytes, 0, fileBytes.Length);
+        }
+
+        AssetDatabase.Refresh();
     }
 
 #endif

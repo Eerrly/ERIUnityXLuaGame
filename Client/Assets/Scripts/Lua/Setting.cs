@@ -10,6 +10,7 @@ public partial class Setting
     public static readonly string EditorSpriteAtlasPath = EditorBundlePath + "/SpriteAtlas";
     public static readonly string RuntimeScriptBundleName = EditorBundlePath + "/LuaScripts/Lua";
     public static readonly string EditorConfigPath = "Configs";
+    public static readonly string EditorPatchPath = "Patch";
 
     public static string StreamingRoot => Application.streamingAssetsPath;
 

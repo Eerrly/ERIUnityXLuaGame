@@ -55,7 +55,13 @@ public class PatchToolsEditorWin : OdinEditorWindow
                 !path.EndsWith(".meta") ||
                 path.EndsWith(".meta") && !patchFiles.Contains(path.Replace(".meta", "")) && System.IO.File.Exists(path.Replace(".meta", ""));
             })
-            .Select((path) => path.Replace("Client/Assets/Sources/", "").ToLower()).ToList();
+            .Select((path) => {
+                if (path.StartsWith("Client/Assets/Sources/LuaScripts/Lua"))
+                {
+                    path.Replace(".bytes", ".lua");
+                }
+                return path.Replace("Client/Assets/Sources/", "").ToLower();
+            }).ToList();
             patchFiles = fileList.ToArray();
         }
         if (patchFiles != null)
@@ -72,6 +78,8 @@ public class PatchToolsEditorWin : OdinEditorWindow
 
         UnityEngine.PlayerPrefs.SetString("PATCH_TOOLS_START_VERSION", startVersion);
         UnityEngine.PlayerPrefs.SetString("PATCH_TOOLS_END_VERSION", endVersion);
+
+        this.ShowTip("构建成功！");
     }
 
 }

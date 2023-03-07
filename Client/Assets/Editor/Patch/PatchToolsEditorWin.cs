@@ -18,11 +18,11 @@ public class PatchToolsEditorWin : OdinEditorWindow
     protected override void OnEnable()
     {
         base.OnEnable();
-        startVersion = UnityEngine.PlayerPrefs.GetString("PATCH_TOOLS_START_VERSION", "202e42c3");
-        endVersion = UnityEngine.PlayerPrefs.GetString("PATCH_TOOLS_END_VERSION", "ce5db4c7");
+        startVersion = UnityEngine.PlayerPrefs.GetString("PATCH_TOOLS_START_VERSION", "");
+        endVersion = UnityEngine.PlayerPrefs.GetString("PATCH_TOOLS_END_VERSION", "");
     }
 
-    [HideLabel, LabelWidth(150)]
+    [HideLabel, ReadOnly, LabelWidth(150)]
     [LabelText("起始版本（StartVersion）")]
     public string startVersion = "";
 
@@ -46,15 +46,18 @@ public class PatchToolsEditorWin : OdinEditorWindow
     public void GetPatchFiles()
     {
         patchFiles = PatchUtil.GetPatchFiles(startVersion, endVersion);
-        var fileList = patchFiles
-            .Where((path)=> {
-                var withoutExtension = path.Replace(".meta", "");
-                return 
-                !path.EndsWith(".meta") || 
-                path.EndsWith(".meta") && !patchFiles.Contains(withoutExtension) && System.IO.File.Exists(withoutExtension);
+        if (patchFiles.Length > 0)
+        {
+            List<string> fileList = patchFiles
+            .Where((path) =>
+            {
+                return
+                !path.EndsWith(".meta") ||
+                path.EndsWith(".meta") && !patchFiles.Contains(path.Replace(".meta", "")) && System.IO.File.Exists(path.Replace(".meta", ""));
             })
-            .Select((path)=>path.Replace("Client/", "").ToLower()).ToList();
-        patchFiles = fileList.ToArray();
+            .Select((path) => path.Replace("Client/Assets/Sources/", "").ToLower()).ToList();
+            patchFiles = fileList.ToArray();
+        }
         if (patchFiles != null)
         {
             this.ShowTip("获取成功！");

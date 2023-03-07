@@ -35,7 +35,7 @@ public class PatchUtil
         var arg = string.Format("{0}", output);
         if (Util.ExecuteBat(dir, getversion, arg) == 0)
         {
-            return System.IO.File.ReadAllText(output);
+            return System.IO.File.ReadLines(output).First();
         }
 #endif
         return string.Empty;

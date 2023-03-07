@@ -80,6 +80,10 @@ public class BuildToolsEditorWin : OdinEditorWindow
         EditorUtility.DisplayProgressBar("Progress", "assetbundle building ...", 0);
         ResUtil.Build();
         EditorUtility.ClearProgressBar();
+
+        var curVersion = PatchUtil.GetGitVersion();
+        UnityEngine.PlayerPrefs.SetString("PATCH_TOOLS_START_VERSION", curVersion);
+
         this.ShowTip("构建成功！");
     }
 }

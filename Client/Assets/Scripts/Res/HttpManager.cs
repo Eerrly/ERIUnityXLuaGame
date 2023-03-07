@@ -19,7 +19,7 @@ public class HttpManager : MonoBehaviour, IManager
         UnityWebRequest request = null;
         try
         {
-            request = UnityWebRequest.Get(new Uri(url));
+            request = UnityWebRequest.Get(url);
             await request.SendWebRequest().WithCancellation(timeoutController.Timeout(TimeSpan.FromSeconds(timeout)));
 #if UNITY_2019_4_37
             _httpState = !request.isNetworkError && !request.isHttpError;

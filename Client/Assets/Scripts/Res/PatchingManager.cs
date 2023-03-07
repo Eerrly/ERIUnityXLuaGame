@@ -20,7 +20,7 @@ public class PatchingManager : MonoBehaviour, IManager
 
         FileUtil.CreateDirectory(Setting.CacheBundleRoot);
         _callback?.Call(o, "ready");
-        await Global.Instance.HttpManager.CoHttpGet(FileUtil.CombinePaths(remoteUrl, "v.bytes"), 5, CoPatchingCallBack);
+        await Global.Instance.HttpManager.CoHttpGet(remoteUrl, 5, CoPatchingCallBack);
     }
 
     public void CoPatchingCallBack(bool httpState, string httpText)
@@ -28,12 +28,12 @@ public class PatchingManager : MonoBehaviour, IManager
         var localVersion = System.IO.File.Exists(vBytesFilePath) ? System.IO.File.ReadAllText(vBytesFilePath) : "";
         if (!httpState)
         {
-            Logger.Log(LogLevel.Error, string.Format($"CoPatching {_remoteUrl} Error!! Msg : {httpText}"));
+            Logger.Log(LogLevel.Error, $"CoPatching {_remoteUrl} Error!! Msg : {httpText}");
             return;
         }
         if (!string.IsNullOrEmpty(httpText) && localVersion != httpText)
         {
-            Logger.Log(LogLevel.Info, string.Format($"CoPatching Get Success!! Msg : {httpText}"));
+            Logger.Log(LogLevel.Info, $"CoPatching Get Success!! Msg : {httpText}");
             _callback?.Call(0, "got");
         }
     }

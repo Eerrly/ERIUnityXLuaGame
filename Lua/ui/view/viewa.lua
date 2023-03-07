@@ -19,7 +19,7 @@ function viewA:refresh()
 end
 
 function viewA:OnBtnGetClicked()
-    Util.HttpGet("http://freestyle2cdn.changyou.kr/resources/FreeStyle/1.120.1/version_2002.txt", 5, function(state, text)
+    Util.Patching("http://streetball2cdn.lmdgame.us/resources/FreeStyle/1.124.1/version_10001.txt", self, function(state, text)
         print("state:" .. tostring(state) .. ", text:\n" .. text)
     end)
 end

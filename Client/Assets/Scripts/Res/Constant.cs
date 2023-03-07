@@ -14,4 +14,5 @@ public partial class Constant
 
     public static string ATLASSPRITE_EXTENSION => ".spriteatlas";
 
+    public static string VERSION_TXT_NAME => "version.txt";
 }

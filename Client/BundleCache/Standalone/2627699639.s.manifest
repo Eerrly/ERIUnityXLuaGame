@@ -1,0 +1,19 @@
+ManifestFileVersion: 0
+CRC: 1868081842
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: aa0eb9e277bc4ef91c4dc6444f427c75
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 27295f96fcdc2b917bd061e8817c7e02
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/Sources/UI/C.prefab
+Dependencies: []

@@ -1,10 +1,8 @@
-using System.IO;
 using System.Collections.Generic;
 using Sirenix.OdinInspector.Editor;
 using Sirenix.Utilities.Editor;
 using Sirenix.Utilities;
 using Sirenix.OdinInspector;
-using UnityEditor;
 using System.Linq;
 
 public class PatchToolsEditorWin : OdinEditorWindow
@@ -42,12 +40,21 @@ public class PatchToolsEditorWin : OdinEditorWindow
     [HideLabel, ReadOnly]
     [Title("热更文件列表")]
     [LabelText("列表")]
-    public string[] patchFiles;
+    public string[] patchFiles = new string[] { };
 
     [Button("获取热更文件列表", ButtonSizes.Large)]
     public void GetPatchFiles()
     {
         patchFiles = PatchUtil.GetPatchFiles(startVersion, endVersion);
+        var fileList = patchFiles
+            .Where((path)=> {
+                var withoutExtension = path.Replace(".meta", "");
+                return 
+                !path.EndsWith(".meta") || 
+                path.EndsWith(".meta") && !patchFiles.Contains(withoutExtension) && System.IO.File.Exists(withoutExtension);
+            })
+            .Select((path)=>path.Replace("Client/", "").ToLower()).ToList();
+        patchFiles = fileList.ToArray();
         if (patchFiles != null)
         {
             this.ShowTip("获取成功！");
@@ -57,7 +64,8 @@ public class PatchToolsEditorWin : OdinEditorWindow
     [Button("开始热更", ButtonSizes.Large)]
     public void PatchFiles()
     {
-        this.ShowTip("TODO");
+        HashSet<string> patchList = new HashSet<string>(patchFiles);
+        ResUtil.Patch(patchList);
 
         UnityEngine.PlayerPrefs.SetString("PATCH_TOOLS_START_VERSION", startVersion);
         UnityEngine.PlayerPrefs.SetString("PATCH_TOOLS_END_VERSION", endVersion);

@@ -1,15 +1,17 @@
 ManifestFileVersion: 0
-CRC: 3728641944
+CRC: 413047846
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 048724b39b62f626b9fecb27e1188f8f
+    Hash: 8634f8fffa8654f8e62234ac255d65ce
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 7fa64817ba62febae75f6e089586c3d7
+    Hash: 7cc9077cf0a8b9b7599ab689047fe477
 HashAppended: 0
 ClassTypes:
 - Class: 1
+  Script: {instanceID: 0}
+- Class: 4
   Script: {instanceID: 0}
 - Class: 21
   Script: {instanceID: 0}
@@ -42,4 +44,5 @@ ClassTypes:
 SerializeReferenceClassIdentifiers: []
 Assets:
 - Assets/Sources/UI/B.prefab
-Dependencies: []
+Dependencies:
+- G:/SampleGame/Client/BundleCache/Standalone/2627699639.s

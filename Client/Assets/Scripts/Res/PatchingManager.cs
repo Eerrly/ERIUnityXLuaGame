@@ -1,135 +1,54 @@
 ﻿using Cysharp.Threading.Tasks;
-using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Networking;
 
 public class PatchingManager : MonoBehaviour, IManager
 {
     public bool IsInitialized { get; set; }
 
-    private TimeoutController timeoutController;
-    private bool _httpState;
-    private string _httpText;
+    public string vBytesFilePath;
+    public string rcBytesFilePath;
 
-    public bool HttpState => _httpState;
-    public string HttpText => _httpText;
+    private string _remoteUrl;
+    private XLua.LuaFunction _callback;
 
-    private async UniTask UniHttpGet(string url, int timeout)
+    public async void CoPatching(string remoteUrl, XLua.LuaFunction callback, object o)
     {
-        UnityWebRequest request = null;
-        try
-        {
-            request = UnityWebRequest.Get(new Uri(url));
-            await request.SendWebRequest().WithCancellation(timeoutController.Timeout(TimeSpan.FromSeconds(timeout)));
-#if UNITY_2019_4_37
-            _httpState = !request.isNetworkError && !request.isHttpError;
-            _httpText = _httpState ? request.downloadHandler.text : request.error;
-#else
-            switch (request.result)
-            {
-                case UnityWebRequest.Result.InProgress:
-                case UnityWebRequest.Result.ConnectionError:
-                case UnityWebRequest.Result.ProtocolError:
-                case UnityWebRequest.Result.DataProcessingError:
-                    _httpState = false;
-                    _httpText = request.error;
-                    break;
-                case UnityWebRequest.Result.Success:
-                    _httpState = true;
-                    _httpText = request.downloadHandler.text;
-                    break;
-            }
-#endif
-        }
-        catch(System.Exception e)
-        {
-            Logger.Log(LogLevel.Exception, e.Message);
-        }
-        finally
-        {
-            if(request != null)
-            {
-                request.Dispose();
-                request = null;
-            }
-            timeoutController.Reset();
-        }
+        _remoteUrl = remoteUrl;
+        _callback = callback;
+
+        FileUtil.CreateDirectory(Setting.CacheBundleRoot);
+        _callback?.Call(o, "ready");
+        await Global.Instance.HttpManager.CoHttpGet(FileUtil.CombinePaths(remoteUrl, "v.bytes"), 5, CoPatchingCallBack);
     }
 
-    public async void CoHttpGet(string url, int timeout, System.Action<bool, string> callback = null)
+    public void CoPatchingCallBack(bool httpState, string httpText)
     {
-        await UniHttpGet(url, timeout);
-        if (callback != null)
+        var localVersion = System.IO.File.Exists(vBytesFilePath) ? System.IO.File.ReadAllText(vBytesFilePath) : "";
+        if (!httpState)
         {
-            callback(HttpState, HttpText);
+            Logger.Log(LogLevel.Error, string.Format($"CoPatching {_remoteUrl} Error!! Msg : {httpText}"));
+            return;
         }
-    }
-
-    private async UniTask UniHttpDownload(string url, string path, System.Action<float> _progress = null)
-    {
-        DownloadHandlerFile downloadHandler = null;
-        UnityWebRequest request = null;
-        try
+        if (!string.IsNullOrEmpty(httpText) && localVersion != httpText)
         {
-            downloadHandler = new DownloadHandlerFile(path, true);
-            request = new UnityWebRequest(new Uri(url), UnityWebRequest.kHttpVerbGET, downloadHandler, null);
-            await request.SendWebRequest().ToUniTask(Progress.Create<float>(_progress));
-#if UNITY_2019_4_37
-            _httpState = !request.isNetworkError && !request.isHttpError;
-            _httpText = _httpState ? request.downloadHandler.text : request.error;
-#else
-            switch (request.result)
-            {
-                case UnityWebRequest.Result.InProgress:
-                case UnityWebRequest.Result.ConnectionError:
-                case UnityWebRequest.Result.ProtocolError:
-                case UnityWebRequest.Result.DataProcessingError:
-                    _httpState = false;
-                    _httpText = request.error;
-                    break;
-                case UnityWebRequest.Result.Success:
-                    _httpState = true;
-                    _httpText = request.downloadHandler.text;
-                    break;
-            }
-#endif
+            Logger.Log(LogLevel.Info, string.Format($"CoPatching Get Success!! Msg : {httpText}"));
+            _callback?.Call(0, "got");
         }
-        catch(System.Exception e)
-        {
-            Logger.Log(LogLevel.Exception, e.Message);
-        }
-        finally
-        {
-            if (request != null)
-            {
-                request.Dispose();
-                request = null;
-            }
-            if(downloadHandler != null)
-            {
-                downloadHandler.Dispose();
-                downloadHandler = null;
-            }
-        }
-    }
-
-    public async void CoHttpDownload(string url, string path, System.Action<float> progress = null, System.Action<bool, string> callback = null)
-    {
-        await UniHttpDownload(url, path, progress);
-        callback?.Invoke(HttpState, HttpText);
     }
 
     public void OnInitialize()
     {
-        _httpState = false;
-        timeoutController = new TimeoutController();
+        vBytesFilePath = FileUtil.CombinePaths(Setting.CacheBundleRoot, "v.bytes");
+        rcBytesFilePath = FileUtil.CombinePaths(Setting.CacheBundleRoot, "rc.bytes");
         IsInitialized = true;
     }
 
     public void OnRelease()
     {
-        timeoutController?.Reset();
-        timeoutController = null;
         IsInitialized = false;
+        _remoteUrl = string.Empty;
+        _callback = null;
     }
 }

@@ -50,20 +50,9 @@ public class LuaUtil
         });
     }
 
-    public static void HttpGet(string url, int timeout, LuaFunction callback = null)
+    public static void Patching(string url, object o, LuaFunction callback = null)
     {
-        Global.Instance.PatchingManager.CoHttpGet(url, timeout, (state, text) =>
-        {
-            callback.Call(state, text);
-        });
-    }
-
-    public static void HttpDownload(string url, string path, LuaFunction progress = null, LuaFunction callback = null)
-    {
-        Global.Instance.PatchingManager.CoHttpDownload(url, path, (pro) => { progress.Call(progress); }, (state, text) =>
-        {
-            callback.Call(state, text);
-        });
+        Global.Instance.PatchingManager.CoPatching(url, callback, o);
     }
 
     public static void SetSelfPlayerId(int id)

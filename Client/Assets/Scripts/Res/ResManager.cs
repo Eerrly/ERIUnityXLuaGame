@@ -119,7 +119,7 @@ public class ResManager : MonoBehaviour, IManager
         else
         {
             location.location = ELoadingLocation.Cache;
-            location.path = System.IO.Path.Combine(Setting.CacheRoot, item.hash + ".s");
+            location.path = System.IO.Path.Combine(Setting.CacheBundleRoot, item.hash + ".s");
         }
         return location;
     }

@@ -80,6 +80,7 @@ public class BuildToolsEditorWin : OdinEditorWindow
         EditorUtility.DisplayProgressBar("Progress", "assetbundle building ...", 0);
         ResUtil.Build();
         EditorUtility.ClearProgressBar();
+        this.ShowTip("构建成功！");
     }
 }
 

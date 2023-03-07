@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using UnityEditor;
+using System.Linq;
 
 public class ResUtil
 {
@@ -76,6 +77,11 @@ public class ResUtil
 
     public static void Build()
     {
+        var version = PatchUtil.GetGitVersion();
+        var version_path = FileUtil.CombinePaths(Setting.EditorResourcePath, Setting.EditorConfigPath, Constant.VERSION_TXT_NAME);
+        File.WriteAllText(version_path, version);
+        AssetDatabase.ImportAsset(version_path, ImportAssetOptions.ForceUpdate);
+
         var cfg = Util.LoadConfig<BuildToolsConfig>(Constant.CLIENT_CONFIG_NAME);
         var bundleList = new List<AssetBundleBuild>();
         var hash2Name = new Dictionary<string, string>();
@@ -231,6 +237,137 @@ public class ResUtil
         Util.SaveConfig(bundleManifest, Constant.ASSETBUNDLES_CONFIG_NAME);
 
         AssetDatabase.Refresh();
+    }
+
+    public static void Patch(HashSet<string> patchList)
+    {
+        var patchMap = new Dictionary<string, string>();
+        var rawRes = new Dictionary<string, string>();
+        var bundleList = new List<AssetBundleBuild>();
+        var configMap = new Dictionary<string, BuildToolsConfig.BuildToolsConfigItem>();
+        var hash2Name = new Dictionary<string, string>();
+        var hash2Path = new Dictionary<string, string>();
+
+        BuildLuaScripts();
+        foreach (var cur in Setting.Config.itemList)
+        {
+            string[] items = null;
+            if (cur.directories)
+            {
+                items = Directory.GetDirectories(FileUtil.CombinePaths(Setting.EditorBundlePath, cur.root), cur.filter, (SearchOption)cur.searchoption);
+            }
+            else
+            {
+                items = Directory.GetFiles(FileUtil.CombinePaths(Setting.EditorBundlePath, cur.root), cur.filter, (SearchOption)cur.searchoption);
+            }
+            foreach (var item in items)
+            {
+                var path = FileUtil.Normalized(item).ToLower();
+                var keyPath = path.Replace("assets/sources/", "");
+                if (keyPath.EndsWith(".meta"))
+                {
+                    continue;
+                }
+                if(patchList.Contains(keyPath))
+                {
+                    patchMap.Add(keyPath, "");
+                    patchList.Remove(keyPath);
+                }
+
+                var name = Util.HashPath(keyPath).ToString() + ".s";
+                configMap.Add(name, cur);
+                hash2Name.Add(name, path);
+                hash2Path.Add(name, keyPath);
+
+                if (cur.directories)
+                {
+                    var patchItems = Directory.GetFiles(item, "*.*", SearchOption.AllDirectories);
+                    var newList = new List<string>();
+                    foreach (var patchItem in patchItems)
+                    {
+                        if (patchItem.EndsWith(".meta"))
+                        {
+                            continue;
+                        }
+
+                        if (!Path.GetFileName(patchItem).Contains("."))
+                        {
+                            continue;
+                        }
+
+                        var patchPath = patchItem.Replace('\\', '/').ToLower();
+                        if (patchList.Contains(patchPath))
+                        {
+                            newList.Add(patchItem);
+                        }
+                    }
+
+                    var refItems = newList.ToArray();
+                    bundleList.Add(new AssetBundleBuild()
+                    {
+                        assetBundleName = name + ".p",
+                        assetNames = refItems,
+                        addressableNames = GetAddressableNames(path, refItems)
+                    });
+                }
+                else
+                {
+                    bundleList.Add(new AssetBundleBuild()
+                    {
+                        assetBundleName = name,
+                        addressableNames = new string[] { "_" },
+                        assetNames = new string[] { item },
+                    });
+                }
+            }
+        }
+
+        if (patchList.Count > 0)
+        {
+            var withoutExtensions = new List<string>() { ".prefab", ".unity", ".mat" };
+            var files = Directory.GetFiles(Setting.EditorBundlePath, "*.*", SearchOption.AllDirectories)
+                    .Where(s => withoutExtensions.Contains(Path.GetExtension(s).ToLower())).ToArray();
+            var depMap = new Dictionary<string, List<string>>(files.Length);
+            foreach (var file in files)
+            {
+                var rawFile = file.Replace("\\", "/");
+                var keyPath = rawFile.ToLower().Replace("assets/sources/", "");
+                var deps = AssetDatabase.GetDependencies(rawFile, false);
+                foreach (var dep in deps)
+                {
+                    var depKeyPath = dep.ToLower().Replace("\\", "/").Replace("assets/sources/", "");
+                    List<string> list = null;
+                    if (!depMap.TryGetValue(depKeyPath, out list))
+                    {
+                        list = new List<string>();
+                        depMap.Add(depKeyPath, list);
+                    }
+                    list.Add(keyPath);
+                }
+            }
+            var checkQueue = new Queue<string>();
+            foreach (var patch in patchList)
+            {
+                checkQueue.Enqueue(patch);
+            }
+            while (checkQueue.Count > 0)
+            {
+                var patch = checkQueue.Dequeue();
+                if (depMap.ContainsKey(patch))
+                {
+                    var list = depMap[patch];
+                    foreach (var parent in list)
+                    {
+                        var key = Util.HashPath(parent) + ".s";
+                        BuildToolsConfig.BuildToolsConfigItem item = null;
+                        if (configMap.TryGetValue(key, out item))
+                        {
+
+                        }
+                    }
+                }
+            }
+        }
     }
 
 #endif

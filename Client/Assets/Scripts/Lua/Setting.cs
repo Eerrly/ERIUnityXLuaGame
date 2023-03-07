@@ -52,6 +52,19 @@ public partial class Setting
         }
     }
 
+    private static string _cacheBundleRoot = null;
+    public static string CacheBundleRoot
+    {
+        get
+        {
+            if (string.IsNullOrEmpty(_cacheBundleRoot))
+            {
+                _cacheBundleRoot = Path.Combine(CacheRoot, "Bundle");
+            }
+            return _cacheBundleRoot;
+        }
+    }
+
     private static string _platForm = null;
     public static string Platform
     {

@@ -21,12 +21,8 @@ local function LoadScene(scene, callback)
     LuaUtil.LoadScene(scene, callback)
 end
 
-local function HttpGet(url, timeout, callback)
-    LuaUtil.HttpGet(url, timeout, callback)
-end
-
-local function HttpDownload(url, path, progress, callback)
-    LuaUtil.HttpDownload(url, path, progress, callback)
+local function Patching(url, self, callback)
+    LuaUtil.Patching(url, self, callback)
 end
 
 local function ClearUICache()
@@ -43,8 +39,7 @@ exports.Util = {
     DontDestroyOnLoad = DontDestroyOnLoad,
     LoadScene = LoadScene,
     DestroyWindow = DestroyWindow,
-    HttpGet = HttpGet,
-    HttpDownload = HttpDownload,
+    Patching = Patching,
     ClearUICache = ClearUICache,
     SetSelfPlayerId = SetSelfPlayerId,
 }

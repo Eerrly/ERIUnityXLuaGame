@@ -92,6 +92,20 @@ public class Util
         }
     }
 
+    public static string MD5(FileStream fs)
+    {
+        using (var md5 = new System.Security.Cryptography.MD5CryptoServiceProvider())
+        {
+            var result = md5.ComputeHash(fs);
+            var builder = new System.Text.StringBuilder();
+            for (int i = 0; i < result.Length; i++)
+            {
+                builder.Append(result[i].ToString("x2"));
+            }
+            return builder.ToString();
+        }
+    }
+
     public static void SaveConfig(object data, string fileName)
     {
         string json = Regex.Unescape(Newtonsoft.Json.JsonConvert.SerializeObject(data));

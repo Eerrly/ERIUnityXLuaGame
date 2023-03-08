@@ -10,9 +10,11 @@ public class HttpManager : MonoBehaviour, IManager
     private TimeoutController timeoutController;
     private bool _httpState;
     private string _httpText;
+    private byte[] _httpBytes;
 
     public bool HttpState => _httpState;
     public string HttpText => _httpText;
+    public byte[] HttpBytes => _httpBytes;
 
     private async UniTask UniHttpGet(string url, int timeout)
     {
@@ -62,18 +64,19 @@ public class HttpManager : MonoBehaviour, IManager
         callback?.Invoke(HttpState, HttpText);
     }
 
-    private async UniTask UniHttpDownload(string url, string path, System.Action<float> _progress = null)
+    private async UniTask UniHttpDownload(string url, string path, bool append, System.Action<float> _progress = null)
     {
         DownloadHandlerFile downloadHandler = null;
         UnityWebRequest request = null;
         try
         {
-            downloadHandler = new DownloadHandlerFile(path, true);
+            downloadHandler = new DownloadHandlerFile(path, append);
             request = new UnityWebRequest(new Uri(url), UnityWebRequest.kHttpVerbGET, downloadHandler, null);
             await request.SendWebRequest().ToUniTask(Progress.Create<float>(_progress));
 #if UNITY_2019_4_37
             _httpState = !request.isNetworkError && !request.isHttpError;
             _httpText = _httpState ? request.downloadHandler.text : request.error;
+            _httpBytes = _httpState ? request.downloadHandler.data : null;
 #else
             switch (request.result)
             {
@@ -87,11 +90,12 @@ public class HttpManager : MonoBehaviour, IManager
                 case UnityWebRequest.Result.Success:
                     _httpState = true;
                     _httpText = request.downloadHandler.text;
+                    _httpBytes = _httpState ? request.downloadHandler.data : null;
                     break;
             }
 #endif
         }
-        catch(System.Exception e)
+        catch (System.Exception e)
         {
             Logger.Log(LogLevel.Exception, e.Message);
         }
@@ -110,9 +114,9 @@ public class HttpManager : MonoBehaviour, IManager
         }
     }
 
-    public async UniTask CoHttpDownload(string url, string path, System.Action<float> progress = null, System.Action<bool, string> callback = null)
+    public async UniTask CoHttpDownload(string url, string path, bool append, System.Action<float> progress = null, System.Action<bool, string> callback = null)
     {
-        await UniHttpDownload(url, path, progress);
+        await UniHttpDownload(url, path, append, progress);
         callback?.Invoke(HttpState, HttpText);
     }
 

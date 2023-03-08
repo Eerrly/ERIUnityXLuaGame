@@ -10,10 +10,11 @@ public class ManifestItem
     public bool directories = false;
     public string extension;
     public string packageResourcePath;
-    public bool packageResource = false;
     public bool isPatching = false;
     public string md5;
 
+    [System.NonSerialized]
+    public bool packageResource = true;
     [System.NonSerialized] 
     public ManifestItem packageItem = null;
 }

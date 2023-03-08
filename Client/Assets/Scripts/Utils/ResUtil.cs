@@ -441,7 +441,7 @@ public class ResUtil
         AssetDatabase.ImportAsset(Setting.StreamingBundleRoot, ImportAssetOptions.ForceUpdate);
 
         var jsonTexts = JsonUtility.ToJson(bundleManifestFile);
-        var listFile = Path.Combine(Setting.EditorBundleBuildCachePath, "rc_p.txt");
+        var listFile = Path.Combine(Setting.EditorBundleBuildCachePath, "rc.txt");
         File.WriteAllText(listFile, jsonTexts);
 
         var manifestFilePath = Path.Combine(versionPatchFilePath, "rc.bytes");

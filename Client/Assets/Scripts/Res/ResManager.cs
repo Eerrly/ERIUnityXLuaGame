@@ -79,6 +79,22 @@ public class ResManager : MonoBehaviour, IManager
         {
             ManifestDict = new Dictionary<uint, ManifestItem>(config.items.Length + 1),
         };
+
+        ManifestConfig patchConfig = null;
+        if (Setting.Config.enablePatching)
+        {
+            var patchRcFilePath = FileUtil.CombinePaths(Setting.CacheBundleRoot, "rc.bytes");
+            if (System.IO.File.Exists(patchRcFilePath))
+            {
+                var confJson = System.Text.ASCIIEncoding.Default.GetString(System.IO.File.ReadAllBytes(patchRcFilePath));
+                patchConfig = Newtonsoft.Json.JsonConvert.DeserializeObject<ManifestConfig>(confJson);
+            }
+            else
+            {
+                Logger.Log(LogLevel.Warning, $"Enabled Patching But Not Found {patchRcFilePath}");
+            }
+        }
+
         var strMainRootPath = FileUtil.CombinePaths(Setting.StreamingBundleRoot, "main.s");
         if (config != null)
         {
@@ -90,6 +106,25 @@ public class ResManager : MonoBehaviour, IManager
                 manifest.ManifestDict.Add(item.hash, item);
             }
         }
+
+        if(patchConfig != null)
+        {
+            for (int i = 0; i < patchConfig.items.Length; i++)
+            {
+                var item = patchConfig.items[i];
+                item.packageResource = false;
+                if (manifest.ManifestDict.ContainsKey(item.hash))
+                {
+                    item.packageItem = manifest.ManifestDict[item.hash];
+                    manifest.ManifestDict[item.hash] = item;
+                }
+                else
+                {
+                    manifest.ManifestDict.Add(item.hash, item);
+                }
+            }
+        }
+
     }
 
     public LoadingLocation ToLocation(ManifestItem item)

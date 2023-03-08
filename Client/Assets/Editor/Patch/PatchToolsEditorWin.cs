@@ -70,7 +70,7 @@ public class PatchToolsEditorWin : OdinEditorWindow
         }
     }
 
-    [Button("开始热更", ButtonSizes.Large)]
+    [Button("构建热更", ButtonSizes.Large)]
     public void PatchFiles()
     {
         HashSet<string> patchList = new HashSet<string>(patchFiles);

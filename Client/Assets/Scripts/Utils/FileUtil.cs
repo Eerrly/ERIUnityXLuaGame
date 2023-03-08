@@ -114,4 +114,38 @@ public class FileUtil
         File.Copy(source, target, overwrite);
     }
 
+    /// <summary>
+    /// 删除文件
+    /// </summary>
+    /// <param name="path"></param>
+    /// <returns></returns>
+    public static bool DeleteFile(string path)
+    {
+        for (var i = 0; i < 3; ++i)
+        {
+            if (System.IO.File.Exists(path))
+            {
+                var failed = false;
+                try
+                {
+                    System.IO.File.Delete(path);
+                    return true;
+                }
+                catch (System.Exception e)
+                {
+                    failed = true;
+                    if (i == 2)
+                    {
+                        UnityEngine.Debug.LogException(e);
+                    }
+                }
+                if (!failed)
+                {
+                    break;
+                }
+            }
+        }
+        return false;
+    }
+
 }

@@ -19,14 +19,16 @@ function viewA:refresh()
 end
 
 function viewA:OnBtnGetClicked()
-    Util.Patching("http://streetball2cdn.lmdgame.us/resources/FreeStyle/1.124.1/version_10001.txt", self, self.OnPatchingEvent)
+    Util.Patching("http://192.168.16.158/resources", self, self.OnPatchingEvent)
 end
 
 function viewA:OnPatchingEvent(event, arg1, arg2)
     if event == "ready" then
         print("OnPatchingEvent ready !!!")
-    elseif event == "got" then
-        print("OnPatchingEvent got !!! arg1:" .. tostring(arg1) .. ", arg2:" .. tostring(arg2))
+    elseif event == "download" then
+        print("OnPatchingEvent download !!! arg1:" .. tostring(arg1))
+    elseif event == "done" then
+        print("OnPatchingEvent done !!!")
     end
 end
 

@@ -34,7 +34,7 @@ public class PatchingManager : MonoBehaviour, IManager
         if (!string.IsNullOrEmpty(httpText) && localVersion != httpText)
         {
             Logger.Log(LogLevel.Info, $"CoPatching Get Success!! Msg : {httpText}");
-            _callback?.Call(0, "got");
+            _callback?.Call(0, "got", httpState, httpText);
         }
     }
 

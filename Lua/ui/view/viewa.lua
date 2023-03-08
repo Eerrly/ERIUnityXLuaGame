@@ -19,17 +19,20 @@ function viewA:refresh()
 end
 
 function viewA:OnBtnGetClicked()
-    Util.Patching("http://streetball2cdn.lmdgame.us/resources/FreeStyle/1.124.1/version_10001.txt", self, function(state, text)
-        print("state:" .. tostring(state) .. ", text:\n" .. text)
-    end)
+    Util.Patching("http://streetball2cdn.lmdgame.us/resources/FreeStyle/1.124.1/version_10001.txt", self, self.OnPatchingEvent)
+end
+
+function viewA:OnPatchingEvent(event, arg1, arg2)
+    if event == "ready" then
+        print("OnPatchingEvent ready !!!")
+    elseif event == "got" then
+        print("OnPatchingEvent got !!! arg1:" .. tostring(arg1) .. ", arg2:" .. tostring(arg2))
+    end
 end
 
 function viewA:OnBtnStartClicked()
     print("Click Button !!!!")
     View.Show(2)
-    -- Util.LoadScene("Battle", function(state, progress)
-    --     self:onloadedscene(state, progress)
-    -- end)
 end
 
 return viewA

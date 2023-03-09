@@ -71,6 +71,8 @@ public class BuildToolsEditorWin : OdinEditorWindow
             cfg.itemList.Add(c);
         }
         Util.SaveConfig(cfg, Constant.CLIENT_CONFIG_NAME);
+
+        AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
         this.ShowTip("保存成功！");
     }
 

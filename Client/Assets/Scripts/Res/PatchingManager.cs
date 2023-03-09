@@ -13,7 +13,8 @@ public class PatchingManager : MonoBehaviour, IManager
     private string _remoteUrl;
     private XLua.LuaFunction _callback;
 
-    private string remoteVersion = "";
+    private string localVersionText = "";
+    private string remoteVersionText = "";
     private bool bSaveRc = false;
     private List<ManifestItem> downloadList = null;
 
@@ -26,7 +27,7 @@ public class PatchingManager : MonoBehaviour, IManager
 
         downloadList = new List<ManifestItem>();
         var localMd5Map = new Dictionary<uint, string>();
-        var localVersionText = File.Exists(vBytesFilePath) ? File.ReadAllText(vBytesFilePath) : "";
+        localVersionText = File.Exists(vBytesFilePath) ? File.ReadAllText(vBytesFilePath) : "";
         bSaveRc = string.IsNullOrEmpty(localVersionText);
 
         var remoteVerPath = FileUtil.CombinePaths(remoteUrl, "v.bytes");
@@ -35,13 +36,12 @@ public class PatchingManager : MonoBehaviour, IManager
             if (!state)
             {
                 Logger.Log(LogLevel.Error, $"CoPatching CoHttpGet {remoteVerPath} Error!!! Msg : {text}");
-                return;
             }
             else
             {
                 Logger.Log(LogLevel.Info, $"CoPatching CoHttpGet Success!! Msg : {text}");
-                remoteVersion = text.Split(',')[0];
-                bSaveRc = bSaveRc || localVersionText.Split(',')[0] != remoteVersion;
+                remoteVersionText = text.Split(',')[0];
+                bSaveRc = bSaveRc || localVersionText != remoteVersionText;
             }
         });
         if (bSaveRc)
@@ -56,6 +56,7 @@ public class PatchingManager : MonoBehaviour, IManager
                 }
             }
 
+            var remoteVersion = remoteVersionText.Split(',')[0];
             var tmpLocalRcFilePath = rcBytesFilePath + ".tmp";
             var remoteRcPath = FileUtil.CombinePaths(remoteUrl, remoteVersion, "rc.bytes");
             await Global.Instance.HttpManager.CoHttpDownload(remoteRcPath, tmpLocalRcFilePath, false, null, (state, text) =>
@@ -63,7 +64,6 @@ public class PatchingManager : MonoBehaviour, IManager
                 if (!state)
                 {
                     Logger.Log(LogLevel.Error, $"CoPatching CoHttpDownload {remoteRcPath} Error!!! Msg : {text}");
-                    return;
                 }
             });
             if (File.Exists(tmpLocalRcFilePath))
@@ -79,54 +79,44 @@ public class PatchingManager : MonoBehaviour, IManager
                         downloadList.Add(item);
                     }
                 }
-            }
-            while (downloadList.Count > 0)
-            {
-                for (int i = downloadList.Count - 1; i >= 0; --i)
+
+                var remoteFilePath = "";
+                var localFilePath = "";
+                while (downloadList.Count > 0)
                 {
-                    var remoteFilePath = FileUtil.CombinePaths(remoteUrl, remoteVersion, downloadList[i].hash + ".s");
-                    var localFilePath = FileUtil.CombinePaths(Setting.CacheBundleRoot, downloadList[i].hash + ".s");
-                    await Global.Instance.HttpManager.CoHttpDownload(
-                        remoteFilePath,
-                        localFilePath,
-                        true,
-                        (progress) =>
-                        {
-                            Logger.Log(LogLevel.Info, $"CoPatching CoHttpDownload {remoteFilePath} Progress : {progress}");
-                            _callback?.Call(0, "donwload", progress);
-                        },
-                        (state, text) =>
-                        {
-                            if (!state)
+                    for (int i = downloadList.Count - 1; i >= 0; --i)
+                    {
+                        remoteFilePath = FileUtil.CombinePaths(remoteUrl, remoteVersion, downloadList[i].hash + ".s");
+                        localFilePath = FileUtil.CombinePaths(Setting.CacheBundleRoot, downloadList[i].hash + ".s");
+                        await Global.Instance.HttpManager.CoHttpDownload(
+                            remoteFilePath,
+                            localFilePath,
+                            true,
+                            (progress) =>
                             {
-                                Logger.Log(LogLevel.Error, $"CoPatching CoHttpDownload {remoteFilePath} Error!!! Msg : {text}");
-                            }
-                            else
+                                Logger.Log(LogLevel.Info, $"CoPatching CoHttpDownload {remoteFilePath} Progress : {progress}");
+                                _callback?.Call(0, "donwload", progress);
+                            },
+                            (state, text) =>
                             {
-                                downloadList.RemoveAt(i);
-                            }
-                        });
+                                if (!state)
+                                {
+                                    Logger.Log(LogLevel.Error, $"CoPatching CoHttpDownload {remoteFilePath} Error!!! Msg : {text}");
+                                }
+                                else
+                                {
+                                    downloadList.RemoveAt(i);
+                                }
+                            });
+                    }
                 }
+                File.Copy(tmpLocalRcFilePath, rcBytesFilePath, true);
+                FileUtil.DeleteFile(tmpLocalRcFilePath);
+
+                File.WriteAllText(vBytesFilePath, remoteVersionText);
             }
-            File.Copy(tmpLocalRcFilePath, rcBytesFilePath, true);
-            FileUtil.DeleteFile(tmpLocalRcFilePath);
         }
         callback?.Call(o, "done");
-    }
-
-    public void CoPatchingCallBack(bool httpState, string httpText)
-    {
-        var localVersion = System.IO.File.Exists(vBytesFilePath) ? System.IO.File.ReadAllText(vBytesFilePath) : "";
-        if (!httpState)
-        {
-            Logger.Log(LogLevel.Error, $"CoPatching {_remoteUrl} Error!! Msg : {httpText}");
-            return;
-        }
-        if (!string.IsNullOrEmpty(httpText) && localVersion != httpText)
-        {
-            Logger.Log(LogLevel.Info, $"CoPatching Get Success!! Msg : {httpText}");
-            _callback?.Call(0, "got", httpState, httpText);
-        }
     }
 
     public void OnInitialize()

@@ -1,8 +1,14 @@
+Client/Assets/Editor/Patch/PatchToolsEditorWin.cs
+Client/Assets/Editor/Tools/diff.txt
 Client/Assets/Resources/Configs/asset_bundles.json
 Client/Assets/Resources/Configs/version.txt
+Client/Assets/Scripts/Res/HttpManager.cs
+Client/Assets/Scripts/Res/Mainifest.cs
 Client/Assets/Scripts/Res/PatchingManager.cs
+Client/Assets/Scripts/Res/ResManager.cs
+Client/Assets/Scripts/Utils/FileUtil.cs
+Client/Assets/Scripts/Utils/ResUtil.cs
 Client/Assets/Sources/LuaScripts/Lua/ui/view/viewa.bytes
-Client/Assets/Sources/UI/C.prefab
 Client/Assets/StreamingAssets/Bundle/main.s
 Client/BundleCache/Standalone/1829105156.s.manifest
 Client/BundleCache/Standalone/2627699639.s
@@ -11,4 +17,11 @@ Client/BundleCache/Standalone/3236385332.s
 Client/BundleCache/Standalone/3236385332.s.manifest
 Client/BundleCache/Standalone/Standalone
 Client/BundleCache/Standalone/Standalone.manifest
+Client/BundleCache/Standalone/rc_p.txt
+Client/Patch/1009cbe-2023.03.08_16.59.54-e9bfc2b9868c435e4eb300cfd1672609.zip
+Client/Patch/1009cbe-2023.03.08_16.59.54-e9bfc2b9868c435e4eb300cfd1672609/1009cbe/2627699639.s
+Client/Patch/1009cbe-2023.03.08_16.59.54-e9bfc2b9868c435e4eb300cfd1672609/1009cbe/rc.bytes
+Client/Patch/1009cbe-2023.03.08_16.59.54-e9bfc2b9868c435e4eb300cfd1672609/NOTE_1009cbe.txt
+Client/Patch/1009cbe-2023.03.08_16.59.54-e9bfc2b9868c435e4eb300cfd1672609/v.bytes
+Client/Patch/5e15bacc81470a684de5be92236fc5d7a3e1e573-2023.03.07_18.43.9-604ca53b2cb2832a4f0538998d741a9a.zip
 Lua/ui/view/viewa.lua

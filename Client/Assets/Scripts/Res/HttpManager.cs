@@ -71,7 +71,7 @@ public class HttpManager : MonoBehaviour, IManager
         try
         {
             downloadHandler = new DownloadHandlerFile(path, append);
-            request = new UnityWebRequest(new Uri(url), UnityWebRequest.kHttpVerbGET, downloadHandler, null);
+            request = new UnityWebRequest(url, UnityWebRequest.kHttpVerbGET, downloadHandler, null);
             await request.SendWebRequest().ToUniTask(Progress.Create<float>(_progress));
 #if UNITY_2019_4_37
             _httpState = !request.isNetworkError && !request.isHttpError;

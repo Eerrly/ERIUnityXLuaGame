@@ -467,13 +467,17 @@ public class ResUtil
             var offset = 0;
             compressor.Write(_bytes, offset, _bytes.Length - offset);
         }
-        var filename = "NOTE_" + resourceVersion + ".txt";
-        var entry = new ZipEntry(filename);
-        entry.DateTime = new DateTime();
-        entry.DosTime = 0;
-        compressor.PutNextEntry(entry);
-        var bytes = System.Text.UTF8Encoding.Default.GetBytes(patchingNoteList.ToString());
-        compressor.Write(bytes, 0, bytes.Length);
+        if (patchingNoteList.Length > 0)
+        {
+            var filename = "NOTE_" + resourceVersion + ".txt";
+            var entry = new ZipEntry(filename);
+            entry.DateTime = new DateTime();
+            entry.DosTime = 0;
+            compressor.PutNextEntry(entry);
+            var bytes = System.Text.UTF8Encoding.Default.GetBytes(patchingNoteList.ToString());
+            compressor.Write(bytes, 0, bytes.Length);
+        }
+        
         compressor.Finish();
         compressed.Flush();
 

@@ -90,7 +90,7 @@ public class HttpManager : MonoBehaviour, IManager
                 case UnityWebRequest.Result.Success:
                     _httpState = true;
                     _httpText = request.downloadHandler.text;
-                    _httpBytes = _httpState ? request.downloadHandler.data : null;
+                    _httpBytes = request.downloadHandler.data;
                     break;
             }
 #endif

@@ -1,28 +1,19 @@
 ManifestFileVersion: 0
-CRC: 3473220287
+CRC: 1357721668
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
-      Name: 533238153.s
-      Dependencies: {}
-    Info_1:
-      Name: 533238154.s
-      Dependencies: {}
-    Info_2:
       Name: 2100422461.s
       Dependencies: {}
-    Info_3:
+    Info_1:
       Name: 1829105156.s
       Dependencies: {}
-    Info_4:
-      Name: 3236385332.s
-      Dependencies: {}
-    Info_5:
+    Info_2:
       Name: 3432609834.s
       Dependencies: {}
-    Info_6:
+    Info_3:
       Name: 1258184006.s
       Dependencies: {}
-    Info_7:
+    Info_4:
       Name: 3343917143.s
       Dependencies: {}

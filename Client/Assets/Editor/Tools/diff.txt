@@ -2,3 +2,4 @@ Client/Assets/Editor/Build/BuildToolsEditorWin.cs
 Client/Assets/Editor/Patch/PatchToolsEditorWin.cs
 Client/Assets/Editor/Tools/diff.txt
 Client/Assets/Resources/Configs/version.txt
+Client/Assets/Sources/UI/B.prefab

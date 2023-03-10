@@ -42,7 +42,7 @@ public class PatchingManager : MonoBehaviour, IManager
                 bSaveRc = bSaveRc || localVersionText != remoteVersionText;
             }
         });
-        if (bSaveRc)
+        if (bSaveRc || true)
         {
             if (File.Exists(rcBytesFilePath))
             {

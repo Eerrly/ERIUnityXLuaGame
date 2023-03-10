@@ -78,7 +78,7 @@ public class PatchToolsEditorWin : OdinEditorWindow
 
         UnityEngine.PlayerPrefs.SetString("PATCH_TOOLS_START_VERSION", startVersion);
         UnityEngine.PlayerPrefs.SetString("PATCH_TOOLS_END_VERSION", endVersion);
-
+        UnityEngine.PlayerPrefs.Save();
         this.ShowTip("构建成功！");
     }
 

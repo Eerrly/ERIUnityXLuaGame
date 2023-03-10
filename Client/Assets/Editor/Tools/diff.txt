@@ -1,12 +1,3 @@
 Client/Assets/Editor/Tools/diff.txt
-Client/Assets/Resources/Configs/asset_bundles.json
 Client/Assets/Resources/Configs/version.txt
-Client/Assets/Scripts/Utils/Util.cs
-Client/Assets/Sources/LuaScripts/Lua/ui/view/viewa.bytes
-Client/Assets/StreamingAssets/Bundle/main.s
-Client/BundleCache/Standalone/1829105156.s.manifest
-Client/BundleCache/Standalone/3236385332.s
-Client/BundleCache/Standalone/3236385332.s.manifest
-Client/BundleCache/Standalone/Standalone
-Client/BundleCache/Standalone/Standalone.manifest
-Lua/ui/view/viewa.lua
+Client/Assets/Sources/UI/B.prefab

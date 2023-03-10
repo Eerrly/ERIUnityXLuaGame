@@ -85,7 +85,7 @@ public class BuildToolsEditorWin : OdinEditorWindow
 
         var curVersion = PatchUtil.GetGitVersion();
         UnityEngine.PlayerPrefs.SetString("PATCH_TOOLS_START_VERSION", curVersion);
-
+        UnityEngine.PlayerPrefs.Save();
         this.ShowTip("构建成功！");
     }
 }

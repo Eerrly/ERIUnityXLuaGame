@@ -19,7 +19,7 @@ function viewA:refresh()
 end
 
 function viewA:OnBtnGetClicked()
-    Util.Patching("http://192.168.16.158/resources", self, self.OnPatchingEvent)
+    Util.Patching("http://192.168.31.219:8080/pres", self, self.OnPatchingEvent)
 end
 
 function viewA:OnPatchingEvent(event, arg1, arg2)

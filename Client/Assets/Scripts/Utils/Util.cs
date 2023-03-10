@@ -10,6 +10,7 @@ using UnityEditor;
 
 public class Util
 {
+    private static Encoding UTF8 = new System.Text.UTF8Encoding(false);
     private static List<Transform> _setGameObjectLayerList = new List<Transform>();
 
     public static T GetOrAddComponent<T>(GameObject go) where T : Component
@@ -109,7 +110,7 @@ public class Util
     public static void SaveConfig(object data, string fileName)
     {
         string json = Regex.Unescape(Newtonsoft.Json.JsonConvert.SerializeObject(data));
-        File.WriteAllText(FileUtil.CombinePaths(Setting.EditorResourcePath, Setting.EditorConfigPath, fileName), json, Encoding.UTF8);
+        File.WriteAllText(FileUtil.CombinePaths(Setting.EditorResourcePath, Setting.EditorConfigPath, fileName), json, UTF8);
     }
 
     public static T LoadConfig<T>(string fileName)
@@ -118,7 +119,7 @@ public class Util
         string configPath = path.Substring(0, path.LastIndexOf("."));
         try
         {
-            string json = System.Text.ASCIIEncoding.UTF8.GetString(Resources.Load<TextAsset>(configPath).bytes);
+            string json = UTF8.GetString(Resources.Load<TextAsset>(configPath).bytes);
             T t = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(json);
             return t;
         }

@@ -10,7 +10,6 @@ public class PatchingManager : MonoBehaviour, IManager
     public string vBytesFilePath;
     public string rcBytesFilePath;
 
-    private string _remoteUrl;
     private XLua.LuaFunction _callback;
 
     private string localVersionText = "";
@@ -22,7 +21,6 @@ public class PatchingManager : MonoBehaviour, IManager
     {
         FileUtil.CreateDirectory(Setting.CacheBundleRoot);
 
-        _remoteUrl = remoteUrl;
         _callback = callback;
 
         downloadList = new List<ManifestItem>();
@@ -31,7 +29,7 @@ public class PatchingManager : MonoBehaviour, IManager
         bSaveRc = string.IsNullOrEmpty(localVersionText);
 
         var remoteVerPath = FileUtil.CombinePaths(remoteUrl, "v.bytes");
-        await Global.Instance.HttpManager.CoHttpGet(FileUtil.CombinePaths(remoteUrl, "v.bytes"), 5, (state, text) =>
+        await Global.Instance.HttpManager.CoHttpGet(remoteVerPath, 5, (state, text) =>
         {
             if (!state)
             {
@@ -129,7 +127,6 @@ public class PatchingManager : MonoBehaviour, IManager
     public void OnRelease()
     {
         IsInitialized = false;
-        _remoteUrl = string.Empty;
         _callback = null;
         bSaveRc = false;
         downloadList.Clear();

@@ -118,13 +118,13 @@ public class Util
         string configPath = path.Substring(0, path.LastIndexOf("."));
         try
         {
-            string json = System.Text.ASCIIEncoding.Default.GetString(Resources.Load<TextAsset>(configPath).bytes);
+            string json = System.Text.ASCIIEncoding.UTF8.GetString(Resources.Load<TextAsset>(configPath).bytes);
             T t = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(json);
             return t;
         }
-        catch(Exception ex)
+        catch(Exception e)
         {
-            UnityEngine.Debug.LogException(ex);
+            UnityEngine.Debug.LogError($"LoadConfig {path} Error !! Msg : {e.Message}");
         }
         var obj = default(T);
         if(null == obj)
@@ -203,7 +203,7 @@ public class Util
         }
         catch(System.Exception e)
         {
-            Logger.Log(LogLevel.Exception, e.Message);
+            UnityEngine.Debug.LogError($"ExecuteBat {bat} Error !! Msg : {e.Message}");
             return -1;
         }
         finally

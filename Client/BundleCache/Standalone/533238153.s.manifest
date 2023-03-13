@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 2078305736
+CRC: 2527393559
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 99732ac246ddcae0b9d2d296d98743fa
+    Hash: 5f4a4a04ee785080ed2ae15fcd6c056e
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 0d677c6dec2405a43fe6dd294cca7c3e
+    Hash: c4d5dee85f6c263eb0adbea350984ae1
 HashAppended: 0
 ClassTypes:
 - Class: 28
@@ -17,28 +17,28 @@ ClassTypes:
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
-- Assets/Sources/Textures/A/Pic/04_pic_fwsd.png
-- Assets/Sources/Textures/A/activity_yellow_ore_01.png
-- Assets/Sources/Textures/A/Gift/gift_castle.png
-- Assets/Sources/Textures/A/activity_red_ore.png
-- Assets/Sources/Textures/A/activity_yellow_ore.png
-- Assets/Sources/Textures/A/gongchengshi.png
-- Assets/Sources/Textures/A/Gift/gift_sundae.png
-- Assets/Sources/Textures/A/Gift/gift_pudding.png
 - Assets/Sources/Textures/A/banyungong.png
-- Assets/Sources/Textures/A/golden_finger.png
-- Assets/Sources/Textures/A/Gift/gift_diamond.png
-- Assets/Sources/Textures/A/Pic/04_pic_drts.png
-- Assets/Sources/Textures/A/Pic/04_pic_juesetisheng.png
-- Assets/Sources/Textures/A/Pic/04_pic_zhuangbeiqianghua.png
-- Assets/Sources/Textures/A/anypiece.png
-- Assets/Sources/Textures/A/Pic/04_pic_zd.png
-- Assets/Sources/Textures/A/Gift/gift_candy.png
-- Assets/Sources/Textures/A/activity_blue_ore.png
-- Assets/Sources/Textures/A/activity_licence.png
-- Assets/Sources/Textures/A/Pic/04_pic_dtts.png
-- Assets/Sources/Textures/A/Pic/04_pic_tongyong.png
-- Assets/Sources/Textures/A/Pic/04_pic_fwlc.png
 - Assets/Sources/Textures/A/Pic/04_pic_lt.png
+- Assets/Sources/Textures/A/golden_finger.png
+- Assets/Sources/Textures/A/Pic/04_pic_dtts.png
+- Assets/Sources/Textures/A/Pic/04_pic_drts.png
+- Assets/Sources/Textures/A/activity_red_ore.png
+- Assets/Sources/Textures/A/activity_yellow_ore_01.png
+- Assets/Sources/Textures/A/activity_yellow_ore.png
+- Assets/Sources/Textures/A/Gift/gift_diamond.png
+- Assets/Sources/Textures/A/Pic/04_pic_fwlc.png
+- Assets/Sources/Textures/A/activity_licence.png
+- Assets/Sources/Textures/A/Pic/04_pic_zhuangbeiqianghua.png
 - Assets/Sources/Textures/A/Pic/04_pic_yinxiongzhaomu.png
+- Assets/Sources/Textures/A/Gift/gift_candy.png
+- Assets/Sources/Textures/A/Gift/gift_sundae.png
+- Assets/Sources/Textures/A/Pic/04_pic_tongyong.png
+- Assets/Sources/Textures/A/activity_blue_ore.png
+- Assets/Sources/Textures/A/Pic/04_pic_fwsd.png
+- Assets/Sources/Textures/A/Pic/04_pic_zd.png
+- Assets/Sources/Textures/A/Gift/gift_pudding.png
+- Assets/Sources/Textures/A/Gift/gift_castle.png
+- Assets/Sources/Textures/A/gongchengshi.png
+- Assets/Sources/Textures/A/Pic/04_pic_juesetisheng.png
+- Assets/Sources/Textures/A/anypiece.png
 Dependencies: []

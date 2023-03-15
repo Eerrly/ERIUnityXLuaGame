@@ -1,21 +1,29 @@
 ManifestFileVersion: 0
-CRC: 2854367170
+CRC: 814205405
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 5e2ec331d86fbd8bd8e66128fb3961e3
+    Hash: e7fdc1c56ec3e7cbe72f725ac5a75549
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 7fa64817ba62febae75f6e089586c3d7
+    Hash: eca548b9d3efc9e6510da1fadadcd4ba
 HashAppended: 0
 ClassTypes:
 - Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 20
   Script: {instanceID: 0}
 - Class: 21
   Script: {instanceID: 0}
 - Class: 28
   Script: {instanceID: 0}
 - Class: 48
+  Script: {instanceID: 0}
+- Class: 81
+  Script: {instanceID: 0}
+- Class: 104
   Script: {instanceID: 0}
 - Class: 114
   Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
@@ -26,10 +34,22 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: d199490a83bb2b844b9695cbf13b01ef, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 4f231c4fb786f3946a6b90b886c48677, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 5ba65cf68bc41674db8158457d3b91eb, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 128
+  Script: {instanceID: 0}
+- Class: 157
+  Script: {instanceID: 0}
+- Class: 196
   Script: {instanceID: 0}
 - Class: 213
   Script: {instanceID: 0}
@@ -41,5 +61,5 @@ ClassTypes:
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
-- Assets/Sources/UI/A.prefab
+- Assets/Sources/Scenes/ChatGPT.unity
 Dependencies: []

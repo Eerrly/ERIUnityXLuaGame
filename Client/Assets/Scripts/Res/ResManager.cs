@@ -115,7 +115,10 @@ public class ResManager : MonoBehaviour, IManager
                 item.packageResource = false;
                 if (manifest.ManifestDict.ContainsKey(item.hash))
                 {
-                    item.packageItem = manifest.ManifestDict[item.hash];
+                    if (item.directories)
+                    {
+                        item.packageItem = manifest.ManifestDict[item.hash];
+                    }
                     manifest.ManifestDict[item.hash] = item;
                 }
                 else

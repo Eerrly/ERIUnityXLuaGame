@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 1993138216
+CRC: 3571853029
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 9cc6642dc10e8f92282970c83a663897
+    Hash: 3dbaff09351fdcc4df8e59ceb71e04d8
   TypeTreeHash:
     serializedVersion: 2
     Hash: 5ad585dd02dfb5016c0dad519eab8f49
@@ -20,6 +20,7 @@ Assets:
 - Assets/Sources/LuaScripts/Lua/Core/Auto/CSComment.bytes
 - Assets/Sources/LuaScripts/Lua/ui/const.bytes
 - Assets/Sources/LuaScripts/Lua/ui/view/viewa.bytes
+- Assets/Sources/LuaScripts/Lua/ui/view/viewbase.bytes
 - Assets/Sources/LuaScripts/Lua/ui/view/viewb.bytes
 - Assets/Sources/LuaScripts/Lua/ui/model/modela.bytes
 - Assets/Sources/LuaScripts/Lua/main/main.bytes

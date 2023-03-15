@@ -348,7 +348,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Download
+  m_Text: ChatGPT
 --- !u!1 &2331101669941361704
 GameObject:
   m_ObjectHideFlags: 0
@@ -362,7 +362,7 @@ GameObject:
   - component: {fileID: 2100335873714441990}
   - component: {fileID: 8625724321037846669}
   m_Layer: 0
-  m_Name: '@Button_Download'
+  m_Name: '@Button_ChatGPT'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

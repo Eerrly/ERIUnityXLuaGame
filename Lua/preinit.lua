@@ -1,6 +1,7 @@
 local __g = _G
 
 -- export global variable
+---@type _G
 exports = {
 }
 

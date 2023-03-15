@@ -42,7 +42,7 @@ local function class(name, super)
             for k, v in pairs(cls) do
                 instance[k] = v
             end
-            instance.classs = cls
+            instance.class = cls
             instance:ctor(...)
             return instance
         end

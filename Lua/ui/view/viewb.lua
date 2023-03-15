@@ -1,8 +1,10 @@
 local Const = require("ui/const")
+local viewbase = require("ui/view/viewbase")
 
-local viewB = class("viewb")
+local viewB = class("viewb", viewbase)
 
 function viewB:onCreate()
+    self.super.onCreate(self)
     print("-------- viewB:onCreate --------")
     self:onRefresh()
 end

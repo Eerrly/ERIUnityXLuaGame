@@ -75,8 +75,8 @@ public class HttpManager : MonoBehaviour, IManager
             await request.SendWebRequest().ToUniTask(Progress.Create<float>(_progress));
 #if UNITY_2019_4_37
             _httpState = !request.isNetworkError && !request.isHttpError;
-            _httpText = _httpState ? request.downloadHandler.text : request.error;
-            _httpBytes = _httpState ? request.downloadHandler.data : null;
+            if (!_httpState)
+                _httpText = request.error;
 #else
             switch (request.result)
             {
@@ -89,8 +89,6 @@ public class HttpManager : MonoBehaviour, IManager
                     break;
                 case UnityWebRequest.Result.Success:
                     _httpState = true;
-                    _httpText = request.downloadHandler.text;
-                    _httpBytes = request.downloadHandler.data;
                     break;
             }
 #endif

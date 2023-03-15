@@ -9,6 +9,7 @@ using UnityEngine.UI;
     public string model;
     public string prompt;
     public float temperature;
+    public int max_tokens;
 }
 
 [System.Serializable] public class ChatGPTCallBackData
@@ -32,6 +33,7 @@ public class TestChatGPT : MonoBehaviour
 {
     private const string chatGPTUri = "https://api.openai.com/v1/completions";
     private const string chatGPTKey = "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";
+    private const int max_tokens = 3072;
     private ChatGPTPostData chatGPTPostData;
 
     [Header("ChatGPT Model")]public string model;
@@ -71,6 +73,7 @@ public class TestChatGPT : MonoBehaviour
             model = model,
             temperature = temperature,
             prompt = msg,
+            max_tokens = max_tokens,
         };
         StartCoroutine(PostData(ChatGPTCallBack));
     }

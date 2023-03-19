@@ -1,4 +1,4 @@
-# SampleGame
+# ERIUnitySimpleGame
 ## 说明：
 ***仅供个人学习使用***
 ## 介绍：

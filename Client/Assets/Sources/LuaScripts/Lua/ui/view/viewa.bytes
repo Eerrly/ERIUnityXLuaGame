@@ -16,7 +16,6 @@ function viewA:refresh()
 
     self.View:BindEvent(Const.EventID.ButtonClicked, self.ID.Button_Start, self.OnBtnStartClicked)
     self.View:BindEvent(Const.EventID.ButtonClicked, self.ID.Button_Get, self.OnBtnGetClicked)
-    self.View:BindEvent(Const.EventID.ButtonClicked, self.ID.Button_ChatGPT, self.OnBtnChatGPTClicked)
 end
 
 function viewA:OnBtnGetClicked()
@@ -31,13 +30,6 @@ function viewA:OnPatchingEvent(event, arg1, arg2)
     elseif event == "done" then
         print("OnPatchingEvent done !!!")
     end
-end
-
-function viewA:OnBtnChatGPTClicked()
-    print("Click ChatGPT Button !!!!")
-    Util.LoadScene("ChatGPT", function(state, progress)
-        self:onloadedscene(state, progress)
-    end)
 end
 
 function viewA:OnBtnStartClicked()

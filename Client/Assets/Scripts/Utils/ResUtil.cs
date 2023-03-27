@@ -100,14 +100,19 @@ public class ResUtil
         }
 
         var hasError = false;
-        var luajitDir = FileUtil.CombinePaths(Application.dataPath, string.Format("Examples/Tools/LuaJit/{0}", tag));
-        var luajitName = string.Format("luajit{0}", tag);
+        var luajit = FileUtil.CombinePaths(Application.dataPath, string.Format("Examples/Tools/LuaJit/{0}/luajit{0}.exe", tag));
         var L = XLua.LuaDLL.Lua.luaL_newstate();
         try
         {
             for (int i = 0; i < files.Count; i++)
             {
                 var targetFile = FileUtil.CombinePaths(luaTargetDirectory, files[i].Replace(".lua", ".bytes").Replace(luaDirectory, ""));
+                var index = targetFile.LastIndexOf("/");
+                var targetFileDir = targetFile.Substring(0, index);
+                if (!Directory.Exists(targetFileDir))
+                {
+                    FileUtil.CreateDirectory(targetFileDir);
+                }
                 if (!Directory.Exists(files[i]))
                 {
                     var bytes = File.ReadAllBytes(files[i]);
@@ -126,7 +131,7 @@ public class ResUtil
                             UnityEngine.Debug.LogError(error);
                         }
                     }
-                    if (Util.ExecuteBat(luajitDir, luajitName, string.Format("{0} {1} {2}", "-b", files[i], targetFile)) == 1)
+                    if (Util.ExecuteBat(Setting.Root, luajit, string.Format("{0} {1} {2}", "-b", files[i], targetFile)) == 1)
                     {
                         hasError = true;
                         UnityEngine.Debug.LogError("luajit compile failed:" + files[i]);

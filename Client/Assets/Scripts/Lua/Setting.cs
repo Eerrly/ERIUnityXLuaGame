@@ -8,7 +8,7 @@ public partial class Setting
     public static readonly string EditorScriptRoot = "../Lua";
     public static readonly string EditorBundleBuildCachePath = "BundleCache/" + Platform;
     public static readonly string EditorSpriteAtlasPath = EditorBundlePath + "/SpriteAtlas";
-    public static readonly string RuntimeScriptBundleName = EditorBundlePath + "/LuaScripts/Lua";
+    public static readonly string RuntimeScriptBundleName = EditorBundlePath + "/Lua";
     public static readonly string EditorConfigPath = "Configs";
     public static readonly string EditorPatchPath = "Patch";
 
@@ -37,6 +37,19 @@ public partial class Setting
                 _uniqueID = Util.MD5(Application.persistentDataPath);
             }
             return _uniqueID;
+        }
+    }
+
+    private static string _root = null;
+    public static string Root
+    {
+        get
+        {
+            if(_root == null)
+            {
+                _root = UnityEngine.Application.dataPath.Replace("/Client/Assets", "");
+            }
+            return _root;
         }
     }
 

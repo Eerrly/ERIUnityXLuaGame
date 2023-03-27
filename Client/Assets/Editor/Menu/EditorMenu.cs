@@ -21,6 +21,15 @@ public class ToolbarEditorMenu
         PatchToolsEditorWin.Open();
     }
 
+    [MenuItem("工具/Test", false, 1000)]
+    public static void Test()
+    {
+        var luajit = Path.Combine(Setting.Root, @"Client\Assets\Examples\Tools\LuaJit\64\luajit64.exe");
+        var s = Path.Combine(Setting.Root, @"Lua\init.lua");
+        var t = Path.Combine(Setting.Root, @"Client\Assets\Sources\Lua\init.bytes");
+        var r = Util.ExecuteBat(Setting.Root, luajit, string.Format("{0} {1} {2}", "-b", s, t));
+        UnityEngine.Debug.Log("r : " + r);
+    }
 }
 
 public class RightClickEditorMenu

@@ -63,18 +63,88 @@ public class ResUtil
     }
 
 #if UNITY_EDITOR
-    private static void BuildLuaScripts()
+    public static void BuildLuaScripts()
     {
-        var luaDirectory = Path.Combine(Application.dataPath.Replace("/Assets", ""), Setting.EditorScriptRoot);
-        var luaTargetDirectory = Path.Combine(Application.dataPath.Replace("Assets", ""), Setting.RuntimeScriptBundleName);
-        Directory.Delete(luaTargetDirectory, true);
-        var files = Directory.GetFiles(luaDirectory, "*.lua", SearchOption.AllDirectories);
-        for (int i = 0; i < files.Length; i++)
+        var start = System.DateTime.Now;
+        try
         {
-            var localFilePath = files[i].Replace(luaDirectory, "").Replace(".lua", ".bytes");
-            FileUtil.CopyFile(files[i], luaTargetDirectory + "/" + localFilePath);
+            var luaDirectory = FileUtil.CombinePaths(Application.dataPath.Replace("/Assets", ""), Setting.EditorScriptRoot);
+            var files = Directory.GetFiles(luaDirectory, "*.lua", SearchOption.AllDirectories).ToList();
+            if (!(ComplieFiles(files, "32", true) && ComplieFiles(files, "64", true)))
+            {
+                Debug.LogError("build scripts has error !!");
+            }
+            AssetDatabase.Refresh();
         }
-        AssetDatabase.Refresh();
+        catch(System.Exception e)
+        {
+            UnityEngine.Debug.LogException(e);
+        }
+        finally
+        {
+            UnityEngine.Debug.Log("build all scripts cost time : " + (System.DateTime.Now - start).TotalMilliseconds + " ms");
+        }
+    }
+
+    private static bool ComplieFiles(List<string> files, string tag, bool checkError)
+    {
+        var luaDirectory = FileUtil.CombinePaths(Application.dataPath.Replace("/Assets", ""), Setting.EditorScriptRoot);
+        var luaTargetDirectory = FileUtil.CombinePaths(Application.dataPath.Replace("/Assets", ""), Setting.RuntimeScriptBundleName, tag);
+        if (!Directory.Exists(luaTargetDirectory))
+        {
+            Directory.CreateDirectory(luaTargetDirectory);
+        }
+        else
+        {
+            Directory.Delete(luaTargetDirectory, true);
+        }
+
+        var hasError = false;
+        var luajitDir = FileUtil.CombinePaths(Application.dataPath, string.Format("Examples/Tools/LuaJit/{0}", tag));
+        var luajitName = string.Format("luajit{0}", tag);
+        var L = XLua.LuaDLL.Lua.luaL_newstate();
+        try
+        {
+            for (int i = 0; i < files.Count; i++)
+            {
+                var targetFile = FileUtil.CombinePaths(luaTargetDirectory, files[i].Replace(".lua", ".bytes").Replace(luaDirectory, ""));
+                if (!Directory.Exists(files[i]))
+                {
+                    var bytes = File.ReadAllBytes(files[i]);
+                    if (bytes.Length > 3 && bytes[0] == 0xEF && bytes[1] == 0xBB && bytes[2] == 0xBF)
+                    {
+                        var temp = new byte[bytes.Length - 3];
+                        Array.Copy(bytes, 3, temp, 0, bytes.Length - 3);
+                        bytes = temp;
+                    }
+                    if (checkError)
+                    {
+                        if (XLua.LuaDLL.Lua.xluaL_loadbuffer(L, bytes, bytes.Length, files[i]) != 0)
+                        {
+                            hasError = true;
+                            var error = XLua.LuaDLL.Lua.lua_tostring(L, -1);
+                            UnityEngine.Debug.LogError(error);
+                        }
+                    }
+                    if (Util.ExecuteBat(luajitDir, luajitName, string.Format("{0} {1} {2}", "-b", files[i], targetFile)) == 1)
+                    {
+                        hasError = true;
+                        UnityEngine.Debug.LogError("luajit compile failed:" + files[i]);
+                    }
+                }
+            }
+            AssetDatabase.ImportAsset(luaTargetDirectory, ImportAssetOptions.Default);
+        }
+        catch(System.Exception e)
+        {
+            UnityEngine.Debug.LogException(e);
+        }
+        finally
+        {
+            XLua.LuaDLL.Lua.lua_close(L);
+        }
+
+        return !hasError;
     }
 
     public static void Build()

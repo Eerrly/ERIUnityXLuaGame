@@ -183,11 +183,13 @@ public class Util
     public static int ExecuteBat(string dir, string bat, string arg)
     {
 #if UNITY_EDITOR
+        System.Diagnostics.Process process = null;
         var currDirectory = Directory.GetCurrentDirectory();
         Directory.SetCurrentDirectory(dir);
         try
         {
-            System.Diagnostics.Process process = new System.Diagnostics.Process();
+            process = new System.Diagnostics.Process();
+            process.StartInfo.WorkingDirectory = dir;
             process.StartInfo.FileName = bat;
             process.StartInfo.Arguments = arg;
 
@@ -198,6 +200,7 @@ public class Util
             process.Start();
             process.WaitForExit();
             var code = process.ExitCode;
+            process.StartInfo.WorkingDirectory = currDirectory;
             process.Close();
             Directory.SetCurrentDirectory(currDirectory);
             return code;
@@ -209,6 +212,12 @@ public class Util
         }
         finally
         {
+            if (process != null)
+            {
+                process.StartInfo.WorkingDirectory = currDirectory;
+                process.Close();
+                process = null;
+            }
             Directory.SetCurrentDirectory(currDirectory);
         }
 #else

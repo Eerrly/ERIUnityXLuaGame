@@ -71,6 +71,9 @@ public class ResManager : MonoBehaviour, IManager
         IsInitialized = true;
     }
 
+    /// <summary>
+    /// 初始化AB资源配置文件
+    /// </summary>
     private void InitializeClientConfig()
     {
         ManifestConfig config = Util.LoadConfig<ManifestConfig>(Constant.ASSETBUNDLES_CONFIG_NAME);
@@ -147,7 +150,7 @@ public class ResManager : MonoBehaviour, IManager
             location.location = ELoadingLocation.Package;
             if (item.offset == 0)
             {
-                location.path = System.IO.Path.Combine(Setting.StreamingBundleRoot, item.hash + ".s");
+                location.path = FileUtil.CombinePaths(Setting.StreamingBundleRoot, item.hash + ".s");
             }
             else
             {
@@ -157,7 +160,7 @@ public class ResManager : MonoBehaviour, IManager
         else
         {
             location.location = ELoadingLocation.Cache;
-            location.path = System.IO.Path.Combine(Setting.CacheBundleRoot, item.hash + ".s");
+            location.path = FileUtil.CombinePaths(Setting.CacheBundleRoot, item.hash + ".s");
         }
         return location;
     }
@@ -177,6 +180,9 @@ public class ResManager : MonoBehaviour, IManager
         Load(path, null, ConvertPath(path), true, false, onLoaded);
     }
 
+    /// <summary>
+    /// 将需要加载的资源加到 加载资源的任务列表中
+    /// </summary>
     private void Load(string path, string name, uint hash, bool async, bool isDependency, System.Action<Resource> onLoaded, Dictionary<string, bool> namesDict = null, string extension = null)
     {
         if (preInitialized)

@@ -9,6 +9,7 @@ using System;
 
 public class ResUtil
 {
+    
 
     public static string GetAtlasPathBySpritePath(string spritePath)
     {
@@ -68,8 +69,7 @@ public class ResUtil
         var start = System.DateTime.Now;
         try
         {
-            var luaDirectory = FileUtil.CombinePaths(Application.dataPath.Replace("/Assets", ""), Setting.EditorScriptRoot);
-            var files = Directory.GetFiles(luaDirectory, "*.lua", SearchOption.AllDirectories).ToList();
+            var files = Directory.GetFiles(Setting.EditorLuaScriptRoot, "*.lua", SearchOption.AllDirectories).ToList();
             if (!(ComplieFiles(files, "32", true) && ComplieFiles(files, "64", true)))
             {
                 Debug.LogError("build scripts has error !!");
@@ -88,15 +88,10 @@ public class ResUtil
 
     private static bool ComplieFiles(List<string> files, string tag, bool checkError)
     {
-        var luaDirectory = FileUtil.CombinePaths(Application.dataPath.Replace("/Assets", ""), Setting.EditorScriptRoot);
         var luaTargetDirectory = FileUtil.CombinePaths(Application.dataPath.Replace("/Assets", ""), Setting.EditorScriptBundleName, tag);
         if (!Directory.Exists(luaTargetDirectory))
         {
             Directory.CreateDirectory(luaTargetDirectory);
-        }
-        else
-        {
-            Directory.Delete(luaTargetDirectory, true);
         }
 
         var hasError = false;
@@ -106,7 +101,7 @@ public class ResUtil
         {
             for (int i = 0; i < files.Count; i++)
             {
-                var targetFile = FileUtil.CombinePaths(luaTargetDirectory, files[i].Replace(".lua", ".bytes").Replace(luaDirectory, ""));
+                var targetFile = FileUtil.CombinePaths(luaTargetDirectory, files[i].Replace(".lua", ".bytes").Replace(Setting.EditorLuaScriptRoot, ""));
                 var index = targetFile.LastIndexOf("/");
                 var targetFileDir = targetFile.Substring(0, index);
                 if (!Directory.Exists(targetFileDir))
@@ -470,7 +465,7 @@ public class ResUtil
             EditorUserBuildSettings.activeBuildTarget);
 
         var assetsRootPath = Application.dataPath.Replace("/Assets", "");
-        var patchFilePath = Path.Combine(assetsRootPath, UnityEditor.FileUtil.GetUniqueTempPathInProject());
+        var patchFilePath = FileUtil.CombinePaths(assetsRootPath, UnityEditor.FileUtil.GetUniqueTempPathInProject());
         var versionPatchFilePath = FileUtil.CombinePaths(patchFilePath, resourceVersion.ToString());
         FileUtil.CreateDirectory(patchFilePath);
         FileUtil.CreateDirectory(versionPatchFilePath);
@@ -516,13 +511,13 @@ public class ResUtil
         AssetDatabase.ImportAsset(Setting.StreamingBundleRoot, ImportAssetOptions.ForceUpdate);
 
         var jsonTexts = JsonUtility.ToJson(bundleManifestFile);
-        var listFile = Path.Combine(Setting.EditorBundleBuildCachePath, "rc.txt");
+        var listFile = FileUtil.CombinePaths(Setting.EditorBundleBuildCachePath, "rc.txt");
         File.WriteAllText(listFile, jsonTexts);
 
-        var manifestFilePath = Path.Combine(versionPatchFilePath, "rc.bytes");
+        var manifestFilePath = FileUtil.CombinePaths(versionPatchFilePath, "rc.bytes");
         File.WriteAllText(manifestFilePath, jsonTexts);
 
-        File.WriteAllText(Path.Combine(patchFilePath, "v.bytes"), resourceVersion.ToString() + "," + Util.MD5(File.ReadAllBytes(manifestFilePath)));
+        File.WriteAllText(FileUtil.CombinePaths(patchFilePath, "v.bytes"), resourceVersion.ToString() + "," + Util.MD5(File.ReadAllBytes(manifestFilePath)));
 
         var compressed = new MemoryStream();
         ZipOutputStream compressor = new ZipOutputStream(compressed);

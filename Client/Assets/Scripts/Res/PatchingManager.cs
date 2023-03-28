@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 
+/// <summary>
+/// 热更管理器
+/// </summary>
 public class PatchingManager : MonoBehaviour, IManager
 {
     public bool IsInitialized { get; set; }
@@ -17,6 +20,12 @@ public class PatchingManager : MonoBehaviour, IManager
     private bool bSaveRc = false;
     private List<ManifestItem> downloadList = null;
 
+    /// <summary>
+    /// 热更
+    /// </summary>
+    /// <param name="remoteUrl">远端链接地址</param>
+    /// <param name="callback">Lua回调函数</param>
+    /// <param name="o">Lua对象</param>
     public async void CoPatching(string remoteUrl, XLua.LuaFunction callback, object o)
     {
         FileUtil.CreateDirectory(Setting.CacheBundleRoot);

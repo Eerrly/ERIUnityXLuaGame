@@ -20,6 +20,12 @@ public class LuaManager : MonoBehaviour, IManager
         return _luaDic[fileName];
     }
 
+    /// <summary>
+    /// 绑定Lua对象
+    /// </summary>
+    /// <param name="view">LuaBehaviour对象</param>
+    /// <param name="name2id">Name-Id的字典</param>
+    /// <param name="instance">Lua Table</param>
     public void BindInstance(LuaBehaviour view, Dictionary<string, int> name2id, object instance)
     {
         LuaTable self = (LuaTable)instance;
@@ -55,6 +61,11 @@ public class LuaManager : MonoBehaviour, IManager
         OnRelease();
     }
 
+    /// <summary>
+    /// Lua脚本加载器
+    /// </summary>
+    /// <param name="path">Lua脚本路径</param>
+    /// <returns>byte数组</returns>
     public byte[] Loader(ref string path)
     {
         var key = path.ToLower().Replace(".", "/");
@@ -69,9 +80,9 @@ public class LuaManager : MonoBehaviour, IManager
         }
         else
         {
-            if (Directory.Exists(Path.Combine(Application.dataPath.Replace("/Assets", ""), Setting.EditorScriptRoot)))
+            if (Directory.Exists(Setting.EditorLuaScriptRoot))
             {
-                var filePath = Path.Combine(Application.dataPath.Replace("/Assets", ""), Setting.EditorScriptRoot) + "/" + key.Replace(".", "/") + ".lua";
+                var filePath = Setting.EditorLuaScriptRoot + "/" + key.Replace(".", "/") + ".lua";
                 if (File.Exists(filePath))
                 {
                     for (int i = 0; i < 3; i++)
@@ -99,6 +110,10 @@ public class LuaManager : MonoBehaviour, IManager
         }
     }
 
+    /// <summary>
+    /// 异步加载全部Lua脚本资源
+    /// </summary>
+    /// <returns></returns>
     public IEnumerator CoLoadScript()
     {
         if (Setting.Config.useAssetBundle)

@@ -144,12 +144,12 @@ public class SceneManager : MonoBehaviour, IManager
             if (isAddive)
             {
                 var parameters = new LoadSceneParameters() { loadSceneMode = LoadSceneMode.Additive, localPhysicsMode = LocalPhysicsMode.None };
-                EditorSceneManager.LoadSceneInPlayMode(System.IO.Path.Combine(Setting.EditorBundlePath, string.Format("Scenes/{0}.unity", name)), parameters);
+                EditorSceneManager.LoadSceneInPlayMode(FileUtil.CombinePaths(Setting.EditorBundlePath, string.Format("Scenes/{0}.unity", name)), parameters);
             }
             else
             {
                 var parameters = new LoadSceneParameters() { loadSceneMode = LoadSceneMode.Single, localPhysicsMode = LocalPhysicsMode.None };
-                request = EditorSceneManager.LoadSceneAsyncInPlayMode(System.IO.Path.Combine(Setting.EditorBundlePath, string.Format("Scenes/{0}.unity", name)), parameters);
+                request = EditorSceneManager.LoadSceneAsyncInPlayMode(FileUtil.CombinePaths(Setting.EditorBundlePath, string.Format("Scenes/{0}.unity", name)), parameters);
             }
 
             if (request != null)

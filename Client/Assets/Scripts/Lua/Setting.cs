@@ -36,7 +36,7 @@ public partial class Setting
         {
             if (string.IsNullOrEmpty(_streamingBundleRoot))
             {
-                _streamingBundleRoot = Path.Combine(StreamingRoot, "Bundle");
+                _streamingBundleRoot = FileUtil.CombinePaths(StreamingRoot, "Bundle");
             }
             return _streamingBundleRoot;
         }
@@ -68,6 +68,19 @@ public partial class Setting
         }
     }
 
+    private static string _clientRoot = null;
+    public static string ClientRoot
+    {
+        get
+        {
+            if(_clientRoot == null)
+            {
+                _clientRoot = UnityEngine.Application.dataPath.Replace("/Assets", "");
+            }
+            return _clientRoot;
+        }
+    }
+
     private static string _cacheRoot = null;
     public static string CacheRoot
     {
@@ -75,7 +88,7 @@ public partial class Setting
         {
             if (string.IsNullOrEmpty(_cacheRoot))
             {
-                _cacheRoot = Path.Combine(Application.persistentDataPath, UniqueID);
+                _cacheRoot = FileUtil.CombinePaths(Application.persistentDataPath, UniqueID);
             }
             return _cacheRoot;
         }
@@ -88,7 +101,7 @@ public partial class Setting
         {
             if (string.IsNullOrEmpty(_cacheBundleRoot))
             {
-                _cacheBundleRoot = Path.Combine(CacheRoot, "Bundle");
+                _cacheBundleRoot = FileUtil.CombinePaths(CacheRoot, "Bundle");
             }
             return _cacheBundleRoot;
         }
@@ -131,6 +144,11 @@ public partial class Setting
             return _platForm;
         }
     }
+
+    /// <summary>
+    /// Lua文件目录
+    /// </summary>
+    public static string EditorLuaScriptRoot => FileUtil.CombinePaths(ClientRoot, EditorScriptRoot);
 
     public static readonly int LAYER_DEFAULT = 0;
     public static readonly int LAYER_UI = 5;

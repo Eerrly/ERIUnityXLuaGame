@@ -21,24 +21,6 @@ public class ToolbarEditorMenu
         PatchToolsEditorWin.Open();
     }
 
-    [MenuItem("工具/Test", false, 1000)]
-    public static void Test()
-    {
-        var l = FileUtil.CombinePaths(UnityEngine.Application.dataPath, @"Examples\Tools\LuaJit\luajit64.exe");
-        var s = @"E:\GitProjects\ERIUnitySimpleGame\Lua\init.lua";
-        var t = @"E:\GitProjects\ERIUnitySimpleGame\Client\Assets\Sources\Lua\init.bytes";
-        var r = Util.ExecuteBat(
-            Path.GetDirectoryName(l),
-            l, 
-            string.Format("{0} {1} {2}", "-b", s, t));
-        UnityEngine.Debug.Log("r : " + r);
-        //ResUtil.BuildLuaScripts();
-
-        var luaEnv = new XLua.LuaEnv();
-        luaEnv.DoString(File.ReadAllBytes(t));
-        luaEnv.Dispose();
-        luaEnv = null;
-    }
 }
 
 public class RightClickEditorMenu

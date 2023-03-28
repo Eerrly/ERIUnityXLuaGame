@@ -77,19 +77,24 @@ public partial class ResLoader
     public static List<AssetBundleCreateRequest> requestList = new List<AssetBundleCreateRequest>();
 
 #if UNITY_EDITOR
+    /// <summary>
+    /// 编辑器模式下加载资源核心方法
+    /// </summary>
+    /// <param name="task">加载资源的任务</param>
+    /// <returns></returns>
     public static IEnumerator CoEditorLoadTask(LoadingTask task)
     {
         var path = task.path;
         if (!task.path.Contains(Setting.EditorBundlePath))
         {
-            path = System.IO.Path.Combine(Setting.EditorBundlePath, task.path);
+            path = FileUtil.CombinePaths(Setting.EditorBundlePath, task.path);
         }
         if (System.IO.Directory.Exists(path) && task.namesDict != null && task.namesDict.Count > 0)
         {
             var loadedFiles = new List<Object>();
             foreach (var kv in task.namesDict)
             {
-                var filePath = System.IO.Path.Combine(path, kv.Key + task.extension);
+                var filePath = FileUtil.CombinePaths(path, kv.Key + task.extension);
                 loadedFiles.Add(AssetDatabase.LoadMainAssetAtPath(filePath));
             }
             task.file = new Resource(task.path, loadedFiles.ToArray(), null, null);
@@ -111,7 +116,7 @@ public partial class ResLoader
         {
             if (!string.IsNullOrEmpty(task.name))
             {
-                var filePath = System.IO.Path.Combine(path, task.name);
+                var filePath = FileUtil.CombinePaths(path, task.name);
                 if (System.IO.File.Exists(filePath))
                 {
                     var asset = AssetDatabase.LoadMainAssetAtPath(filePath);
@@ -134,7 +139,7 @@ public partial class ResLoader
                         {
                             if (!f.EndsWith(".meta") && f.Contains(task.name))
                             {
-                                var asset = AssetDatabase.LoadMainAssetAtPath(System.IO.Path.Combine(path, task.name + System.IO.Path.GetExtension(f)));
+                                var asset = AssetDatabase.LoadMainAssetAtPath(FileUtil.CombinePaths(path, task.name + System.IO.Path.GetExtension(f)));
                                 task.file = new Resource(task.path, task.name, asset, null, null);
                             }
                         }
@@ -153,6 +158,11 @@ public partial class ResLoader
 
 #endif
 
+    /// <summary>
+    /// 非编辑器模式下加载资源的核心代码
+    /// </summary>
+    /// <param name="task">加载资源的任务</param>
+    /// <returns></returns>
     public static IEnumerator CoLoadTask(LoadingTask task)
     {
         var loadingBundles = Global.Instance.ResManager.loadingBundles;

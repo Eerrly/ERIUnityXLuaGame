@@ -89,7 +89,7 @@ public class ResUtil
     private static bool ComplieFiles(List<string> files, string tag, bool checkError)
     {
         var luaDirectory = FileUtil.CombinePaths(Application.dataPath.Replace("/Assets", ""), Setting.EditorScriptRoot);
-        var luaTargetDirectory = FileUtil.CombinePaths(Application.dataPath.Replace("/Assets", ""), Setting.RuntimeScriptBundleName, tag);
+        var luaTargetDirectory = FileUtil.CombinePaths(Application.dataPath.Replace("/Assets", ""), Setting.EditorScriptBundleName, tag);
         if (!Directory.Exists(luaTargetDirectory))
         {
             Directory.CreateDirectory(luaTargetDirectory);
@@ -100,7 +100,7 @@ public class ResUtil
         }
 
         var hasError = false;
-        var luajit = FileUtil.CombinePaths(Application.dataPath, string.Format("Examples/Tools/LuaJit/{0}/luajit{0}.exe", tag));
+        var luajit = FileUtil.CombinePaths(Application.dataPath, string.Format("Examples/Tools/LuaJit/luajit{0}.exe", tag));
         var L = XLua.LuaDLL.Lua.luaL_newstate();
         try
         {
@@ -131,7 +131,7 @@ public class ResUtil
                             UnityEngine.Debug.LogError(error);
                         }
                     }
-                    if (Util.ExecuteBat(Setting.Root, luajit, string.Format("{0} {1} {2}", "-b", files[i], targetFile)) == 1)
+                    if (Util.ExecuteBat(Path.GetDirectoryName(luajit), luajit, string.Format("{0} {1} {2}", "-b", files[i], targetFile)) == 1)
                     {
                         hasError = true;
                         UnityEngine.Debug.LogError("luajit compile failed:" + files[i]);

@@ -8,11 +8,26 @@ public partial class Setting
     public static readonly string EditorScriptRoot = "../Lua";
     public static readonly string EditorBundleBuildCachePath = "BundleCache/" + Platform;
     public static readonly string EditorSpriteAtlasPath = EditorBundlePath + "/SpriteAtlas";
-    public static readonly string RuntimeScriptBundleName = EditorBundlePath + "/Lua";
+    public static readonly string EditorScriptBundleName = EditorBundlePath + "/Lua";
     public static readonly string EditorConfigPath = "Configs";
     public static readonly string EditorPatchPath = "Patch";
 
     public static string StreamingRoot => Application.streamingAssetsPath;
+
+    public static string RuntimeScriptBundleName
+    {
+        get
+        {
+            if(System.IntPtr.Size == 4)
+            {
+                return EditorBundlePath + "/Lua/32";
+            }
+            else
+            {
+                return EditorBundlePath + "/Lua/64";
+            }
+        }
+    }
 
     private static string _streamingBundleRoot = null;
     public static string StreamingBundleRoot

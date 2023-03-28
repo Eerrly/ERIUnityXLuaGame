@@ -189,7 +189,6 @@ public class Util
         try
         {
             process = new System.Diagnostics.Process();
-            process.StartInfo.WorkingDirectory = dir;
             process.StartInfo.FileName = bat;
             process.StartInfo.Arguments = arg;
 
@@ -200,7 +199,6 @@ public class Util
             process.Start();
             process.WaitForExit();
             var code = process.ExitCode;
-            process.StartInfo.WorkingDirectory = currDirectory;
             process.Close();
             Directory.SetCurrentDirectory(currDirectory);
             return code;
@@ -214,7 +212,6 @@ public class Util
         {
             if (process != null)
             {
-                process.StartInfo.WorkingDirectory = currDirectory;
                 process.Close();
                 process = null;
             }

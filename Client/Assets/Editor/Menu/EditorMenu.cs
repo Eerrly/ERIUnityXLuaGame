@@ -24,12 +24,20 @@ public class ToolbarEditorMenu
     [MenuItem("工具/Test", false, 1000)]
     public static void Test()
     {
-        //var luajit = Path.Combine(Setting.Root, @"Client\Assets\Examples\Tools\LuaJit\64\luajit64.exe");
-        //var s = Path.Combine(Setting.Root, @"Lua\data\common.lua");
-        //var t = Path.Combine(Setting.Root, @"Client\Assets\Sources\Lua\data\common.bytes");
-        //var r = Util.ExecuteBat(Setting.Root, luajit, string.Format("{0} {1} {2}", "-b", s, t));
-        //UnityEngine.Debug.Log("r : " + r);
-        ResUtil.BuildLuaScripts();
+        var l = FileUtil.CombinePaths(UnityEngine.Application.dataPath, @"Examples\Tools\LuaJit\luajit64.exe");
+        var s = @"E:\GitProjects\ERIUnitySimpleGame\Lua\init.lua";
+        var t = @"E:\GitProjects\ERIUnitySimpleGame\Client\Assets\Sources\Lua\init.bytes";
+        var r = Util.ExecuteBat(
+            Path.GetDirectoryName(l),
+            l, 
+            string.Format("{0} {1} {2}", "-b", s, t));
+        UnityEngine.Debug.Log("r : " + r);
+        //ResUtil.BuildLuaScripts();
+
+        var luaEnv = new XLua.LuaEnv();
+        luaEnv.DoString(File.ReadAllBytes(t));
+        luaEnv.Dispose();
+        luaEnv = null;
     }
 }
 

@@ -3,18 +3,27 @@ using UnityEditor;
 
 public class ToolbarEditorMenu
 {
+    /// <summary>
+    /// 图集工具
+    /// </summary>
     [MenuItem("工具/SpriteAtlas Tools", false, 1000)]
     public static void SpriteAtlasTools()
     {
         SpriteAtlasToolsEditorWin.Open();
     }
 
+    /// <summary>
+    /// 构建AB工具
+    /// </summary>
     [MenuItem("工具/Build Tools", false, 1000)]
     public static void BuildTools()
     {
         BuildToolsEditorWin.Open();
     }
 
+    /// <summary>
+    /// 构建热更工具
+    /// </summary>
     [MenuItem("工具/Patch Tools", false, 1000)]
     public static void PatchTools()
     {

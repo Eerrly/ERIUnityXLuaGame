@@ -6,8 +6,14 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 #endif
 
+/// <summary>
+/// 场景管理器
+/// </summary>
 public class SceneManager : MonoBehaviour, IManager
 {
+    /// <summary>
+    /// 加载状态
+    /// </summary>
     public enum LoadingState
     {
         None,
@@ -35,12 +41,23 @@ public class SceneManager : MonoBehaviour, IManager
         IsInitialized = false;
     }
 
+    /// <summary>
+    /// 加载场景
+    /// </summary>
+    /// <param name="name">场景名</param>
+    /// <param name="progress">进度回调</param>
     public void LoadScene(string name, System.Action<LoadingState, float> progress)
     {
         StopAllCoroutines();
         StartCoroutine(CoLoadScene(name, progress));
     }
 
+    /// <summary>
+    /// 加载场景
+    /// </summary>
+    /// <param name="name">场景名</param>
+    /// <param name="progress">进度回调</param>
+    /// <returns></returns>
     IEnumerator CoLoadScene(string name, System.Action<LoadingState, float> progress)
     {
         if(progress != null)
@@ -95,6 +112,13 @@ public class SceneManager : MonoBehaviour, IManager
         }
     }
 
+    /// <summary>
+    /// 异步加载场景
+    /// </summary>
+    /// <param name="name">场景名</param>
+    /// <param name="progress">回调</param>
+    /// <param name="isAddive">是否不移除旧场景</param>
+    /// <returns></returns>
     IEnumerator CoRealLoadScene(string name, System.Action<LoadingState, float> progress, bool isAddive)
     {
         if (Setting.Config.useAssetBundle)

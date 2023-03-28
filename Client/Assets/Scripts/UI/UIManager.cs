@@ -25,6 +25,10 @@ public partial class UIManager : MonoBehaviour, IManager
         StartCoroutine(nameof(CoInitialize));
     }
 
+    /// <summary>
+    /// 初始化UI相机
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator CoInitialize()
     {
         var go = new GameObject("UI");
@@ -65,6 +69,16 @@ public partial class UIManager : MonoBehaviour, IManager
         return _dynamicID++;
     }
 
+    /// <summary>
+    /// 创建窗口
+    /// </summary>
+    /// <param name="parentId">父窗口ID</param>
+    /// <param name="id">窗口ID</param>
+    /// <param name="path">窗口Prefab路径</param>
+    /// <param name="layer">窗口层级</param>
+    /// <param name="obj">Lua对象</param>
+    /// <param name="callback">回调</param>
+    /// <returns></returns>
     private IEnumerator CoCreateWindows(int parentId, int id, string path, int layer, object obj, Action<int> callback)
     {
         UIWindow win = null;
@@ -140,6 +154,15 @@ public partial class UIManager : MonoBehaviour, IManager
         }
     }
 
+    /// <summary>
+    /// 创建窗口
+    /// </summary>
+    /// <param name="parentId">父窗口ID</param>
+    /// <param name="path">窗口Prefab路径</param>
+    /// <param name="layer">窗口层级</param>
+    /// <param name="obj">Lua对象</param>
+    /// <param name="callback">回调</param>
+    /// <returns></returns>
     public int CreateWindow(int parentId, string path, int layer, object obj, Action<int> callback)
     {
         var id = NewID();
@@ -148,6 +171,11 @@ public partial class UIManager : MonoBehaviour, IManager
         return id;
     }
 
+    /// <summary>
+    /// 关闭窗口
+    /// </summary>
+    /// <param name="id">窗口ID</param>
+    /// <param name="isDestroy">是否删除窗口</param>
     public void DestroyWindow(int id, bool isDestroy)
     {
         if (!_creatingWindows.Remove(id) && _windows.ContainsKey(id))
@@ -182,6 +210,10 @@ public partial class UIManager : MonoBehaviour, IManager
         }
     }
 
+    /// <summary>
+    /// 缓存窗口
+    /// </summary>
+    /// <param name="win"></param>
     private void CacheWindow(UIWindow win)
     {
         _cacheWindows.AddLast(win);
@@ -196,6 +228,9 @@ public partial class UIManager : MonoBehaviour, IManager
         }
     }
 
+    /// <summary>
+    /// 清除所有缓存的窗口
+    /// </summary>
     public void ClearCache()
     {
         var iter = _cacheWindows.First;
@@ -216,6 +251,11 @@ public partial class UIManager : MonoBehaviour, IManager
         }
     }
 
+    /// <summary>
+    /// 实例化窗口对象
+    /// </summary>
+    /// <param name="prefab">窗口对象</param>
+    /// <returns></returns>
     public GameObject InstantiateWindowObject(GameObject prefab)
     {
         var canvas = Util.GetOrAddComponent<Canvas>(prefab);
@@ -252,7 +292,13 @@ public partial class UIManager : MonoBehaviour, IManager
 
 public partial class UIManager
 {
-
+    /// <summary>
+    /// 加载Prefab
+    /// </summary>
+    /// <param name="path">Prefab路径</param>
+    /// <param name="isAsync">是否异步</param>
+    /// <param name="callback">回调</param>
+    /// <returns></returns>
     public IEnumerator LoadPrefab(string path, bool isAsync, Action<Resource> callback)
     {
         var loader = new ResLoader(FileUtil.CombinePaths("UI", path + ".prefab"), null, isAsync);

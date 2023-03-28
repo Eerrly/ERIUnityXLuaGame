@@ -19,6 +19,15 @@ public class UIWindow : MonoBehaviour
 
     public int realLayer => canvas.sortingOrder;
 
+    /// <summary>
+    /// 创建UI窗口
+    /// </summary>
+    /// <param name="parent">父窗口</param>
+    /// <param name="id">窗口ID</param>
+    /// <param name="name"></param>
+    /// <param name="path"></param>
+    /// <param name="layer"></param>
+    /// <param name="obj"></param>
     public void Create(UIWindow parent, int id, string name, string path, int layer, object obj)
     {
         if(root == null)
@@ -60,6 +69,9 @@ public class UIWindow : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 设置Root的锚点
+    /// </summary>
     private void SetRoot()
     {
         if (root != null)
@@ -73,6 +85,10 @@ public class UIWindow : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 显示窗口
+    /// </summary>
+    /// <param name="callback">回调</param>
     public void OnShow(System.Action callback = null)
     {
         raycaster.enabled = true;
@@ -84,6 +100,10 @@ public class UIWindow : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 隐藏窗口
+    /// </summary>
+    /// <param name="callback">回调</param>
     public void OnHide(System.Action callback = null)
     {
         raycaster.enabled = false;

@@ -64,6 +64,9 @@ public class ResUtil
     }
 
 #if UNITY_EDITOR
+    /// <summary>
+    /// 构建Lua脚本资源
+    /// </summary>
     public static void BuildLuaScripts()
     {
         var start = System.DateTime.Now;
@@ -86,6 +89,13 @@ public class ResUtil
         }
     }
 
+    /// <summary>
+    /// 通过LuaJit编译Lua脚本
+    /// </summary>
+    /// <param name="files">Lua脚本列表</param>
+    /// <param name="tag">系统架构</param>
+    /// <param name="checkError">是否检测Lua错误</param>
+    /// <returns></returns>
     private static bool ComplieFiles(List<string> files, string tag, bool checkError)
     {
         var luaTargetDirectory = FileUtil.CombinePaths(Application.dataPath.Replace("/Assets", ""), Setting.EditorScriptBundleName, tag);
@@ -147,6 +157,9 @@ public class ResUtil
         return !hasError;
     }
 
+    /// <summary>
+    /// 构建资源
+    /// </summary>
     public static void Build()
     {
         var version = PatchUtil.GetGitVersion();
@@ -311,6 +324,10 @@ public class ResUtil
         AssetDatabase.Refresh();
     }
 
+    /// <summary>
+    /// 构建热更
+    /// </summary>
+    /// <param name="patchList">热更文件列表</param>
     public static void Patch(HashSet<string> patchList)
     {
         var patchMap = new Dictionary<string, string>();

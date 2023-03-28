@@ -3,6 +3,9 @@ using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 战斗管理器
+/// </summary>
 public class BattleManager : MonoBehaviour
 {
     private volatile bool _paused = false;
@@ -71,6 +74,9 @@ public class BattleManager : MonoBehaviour
         Util.InvokeAttributeCall(this, typeof(EntitySystem), false, typeof(EntitySystem.Initialize), false);
     }
 
+    /// <summary>
+    /// 初始化
+    /// </summary>
     public void Initialize()
     {
         for (int i = 0; i < BattleConstant.buttonNames.Length; i++)

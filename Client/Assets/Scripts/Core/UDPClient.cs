@@ -14,7 +14,13 @@ class UDPClient
     private UInt32 mNextUpdateTime = 0;
 
     public bool IsConnected { get { return mSocket != null && mSocket.Connected; } }
+    /// <summary>
+    /// 写入数据等待
+    /// </summary>
     public bool WriteDelay { get; set; }
+    /// <summary>
+    /// 不等待
+    /// </summary>
     public bool AckNoDelay { get; set; }
 
     public IPEndPoint RemoteAddress { get; private set; }
@@ -22,6 +28,11 @@ class UDPClient
 
     private uint _conv = 0;
 
+    /// <summary>
+    /// 连接
+    /// </summary>
+    /// <param name="host">IP地址</param>
+    /// <param name="port">端口号</param>
     public void Connect(string host, int port)
     {
         IPHostEntry hostEntry = Dns.GetHostEntry(host);
@@ -44,6 +55,9 @@ class UDPClient
         mRecvBuffer.Clear();
     }
 
+    /// <summary>
+    /// 断开连接
+    /// </summary>
     public void DisConnect()
     {
         if (mSocket != null)
@@ -52,6 +66,9 @@ class UDPClient
         }
     }
 
+    /// <summary>
+    /// 关闭
+    /// </summary>
     public void Close()
     {
         if (mSocket != null)
@@ -63,6 +80,11 @@ class UDPClient
         }
     }
 
+    /// <summary>
+    /// 发送原始数据
+    /// </summary>
+    /// <param name="data">数据</param>
+    /// <param name="length">长度</param>
     private void rawSend(byte[] data, int length)
     {
         if (mSocket != null)
@@ -71,6 +93,13 @@ class UDPClient
         }
     }
 
+    /// <summary>
+    /// 发送数据
+    /// </summary>
+    /// <param name="data">数据</param>
+    /// <param name="index">起始索引</param>
+    /// <param name="length">长度</param>
+    /// <returns></returns>
     public int Send(byte[] data, int index, int length)
     {
         if (mSocket == null)

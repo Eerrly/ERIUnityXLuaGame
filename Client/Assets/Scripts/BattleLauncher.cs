@@ -1,5 +1,8 @@
 ﻿using UnityEngine;
 
+/// <summary>
+/// 战斗启动器
+/// </summary>
 public class BattleLauncher : MonoBehaviour
 {
     private BattleCommonData battleCommonData;
@@ -9,6 +12,9 @@ public class BattleLauncher : MonoBehaviour
         InitBattleCommonData();
     }
 
+    /// <summary>
+    /// 初始化战斗基本数据
+    /// </summary>
     void InitBattleCommonData()
     {
         battleCommonData = new BattleCommonData();
@@ -18,6 +24,9 @@ public class BattleLauncher : MonoBehaviour
         };
     }
 
+    /// <summary>
+    /// 开始
+    /// </summary>
     void Start()
     {
         BattleManager.Instance.Initialize();

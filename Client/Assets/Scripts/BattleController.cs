@@ -1,6 +1,9 @@
 ﻿using System.IO;
 using System.Collections.Generic;
 
+/// <summary>
+/// 战斗管理器
+/// </summary>
 public class BattleController : IBattleController
 {
     public Dictionary<int, FrameBuffer.Input> frameInputs;

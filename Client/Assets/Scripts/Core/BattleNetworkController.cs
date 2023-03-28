@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
 
+/// <summary>
+/// 战斗网络执行器
+/// </summary>
 public class BattleNetworkController
 {
     private UDPClient client;
@@ -26,6 +29,11 @@ public class BattleNetworkController
         _instance = this;
     }
 
+    /// <summary>
+    /// 连接服务器
+    /// </summary>
+    /// <param name="ip">IP地址</param>
+    /// <param name="port">端口号</param>
     public void Connect(string ip, int port)
     {
         try
@@ -44,6 +52,9 @@ public class BattleNetworkController
         }
     }
 
+    /// <summary>
+    /// 断开连接
+    /// </summary>
     public void DisConnect()
     {
         try
@@ -59,6 +70,11 @@ public class BattleNetworkController
         }
     }
 
+    /// <summary>
+    /// 将操作数据发给服务器
+    /// </summary>
+    /// <param name="frame">帧</param>
+    /// <param name="input">操作</param>
     public void SendInputToServer(int frame, FrameBuffer.Input input)
     {
         try
@@ -84,6 +100,13 @@ public class BattleNetworkController
         }
     }
 
+    /// <summary>
+    /// 接受数据
+    /// </summary>
+    /// <param name="buffer">数据</param>
+    /// <param name="index">起始索引</param>
+    /// <param name="length">长度</param>
+    /// <returns></returns>
     public int RecvData(ref byte[] buffer, int index, int length)
     {
         try
@@ -104,6 +127,9 @@ public class BattleNetworkController
         return 0;
     }
 
+    /// <summary>
+    /// 轮询
+    /// </summary>
     public void Update()
     {
         if(client != null && client.IsConnected)

@@ -1,4 +1,7 @@
-﻿public enum EPlayerState
+﻿/// <summary>
+/// 玩家状态
+/// </summary>
+public enum EPlayerState
 {
 
     None = 0,

@@ -274,13 +274,29 @@ public class KCP
 
     Int32 reserved;
 
-    // send windowd & recv window
+    /// <summary>
+    /// 发送窗口大小
+    /// </summary>
     public UInt32 SndWnd { get { return snd_wnd; } }
+
+    /// <summary>
+    /// 接受窗口大小
+    /// </summary>
     public UInt32 RcvWnd { get { return rcv_wnd; } }
+
+    /// <summary>
+    /// 远端接收窗口大小
+    /// </summary>
     public UInt32 RmtWnd { get { return rmt_wnd; } }
+
+    /// <summary>
+    /// 最大分片
+    /// </summary>
     public UInt32 Mss { get { return mss; } }
 
-    // get how many packet is waiting to be sent
+    /// <summary>
+    /// 等待发送的数据包数
+    /// </summary>
     public int WaitSnd { get { return snd_buf.Count + snd_queue.Count; } }
 
     // internal time.

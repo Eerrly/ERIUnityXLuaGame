@@ -13,6 +13,12 @@ public class Util
     private static Encoding UTF8 = new System.Text.UTF8Encoding(false);
     private static List<Transform> _setGameObjectLayerList = new List<Transform>();
 
+    /// <summary>
+    /// 获取或者添加组件
+    /// </summary>
+    /// <typeparam name="T">组件</typeparam>
+    /// <param name="go">物体</param>
+    /// <returns></returns>
     public static T GetOrAddComponent<T>(GameObject go) where T : Component
     {
         T t = null;
@@ -27,6 +33,12 @@ public class Util
         return t;
     }
 
+    /// <summary>
+    /// 设置GameObject的Layer
+    /// </summary>
+    /// <param name="go">物体</param>
+    /// <param name="layer">层级</param>
+    /// <param name="includeChildren">是否包括他的全部子物体</param>
     public static void SetGameObjectLayer(GameObject go, int layer, bool includeChildren)
     {
         if(null != go && go.layer != layer)
@@ -47,6 +59,14 @@ public class Util
         }
     }
 
+    /// <summary>
+    /// 执行属性类方法
+    /// </summary>
+    /// <param name="obj">对象</param>
+    /// <param name="classType">类类型</param>
+    /// <param name="parengInherit">是否类继承</param>
+    /// <param name="methodType">方法类型</param>
+    /// <param name="methodInherit">是否方法继承</param>
     public static void InvokeAttributeCall(object obj, Type classType, bool parengInherit, Type methodType, bool methodInherit)
     {
         if (null != obj)
@@ -69,6 +89,11 @@ public class Util
         }
     }
 
+    /// <summary>
+    /// 从字符串获取MD5值
+    /// </summary>
+    /// <param name="str">字符串</param>
+    /// <returns></returns>
     public static string MD5(string str)
     {
         if (string.IsNullOrEmpty(str))
@@ -79,6 +104,11 @@ public class Util
         return MD5(bytes);
     }
 
+    /// <summary>
+    /// 从二进制数据获取MD5值
+    /// </summary>
+    /// <param name="bytes">二进制数据</param>
+    /// <returns></returns>
     public static string MD5(byte[] bytes)
     {
         using (var md5 = new System.Security.Cryptography.MD5CryptoServiceProvider())
@@ -93,6 +123,11 @@ public class Util
         }
     }
 
+    /// <summary>
+    /// 从文件流获取MD5值
+    /// </summary>
+    /// <param name="fs">文件流</param>
+    /// <returns></returns>
     public static string MD5(FileStream fs)
     {
         using (var md5 = new System.Security.Cryptography.MD5CryptoServiceProvider())
@@ -107,12 +142,23 @@ public class Util
         }
     }
 
+    /// <summary>
+    /// 保存配置表
+    /// </summary>
+    /// <param name="data">配置表类实例</param>
+    /// <param name="fileName">需要保存的配置表文件名</param>
     public static void SaveConfig(object data, string fileName)
     {
         string json = Regex.Unescape(Newtonsoft.Json.JsonConvert.SerializeObject(data));
         File.WriteAllText(FileUtil.CombinePaths(Setting.EditorResourcePath, Setting.EditorConfigPath, fileName), json, UTF8);
     }
 
+    /// <summary>
+    /// 加载配置表
+    /// </summary>
+    /// <typeparam name="T">配置表类</typeparam>
+    /// <param name="fileName">配置表资源路径</param>
+    /// <returns></returns>
     public static T LoadConfig<T>(string fileName)
     {
         string path = FileUtil.CombinePaths(Setting.EditorConfigPath, fileName);
@@ -135,14 +181,11 @@ public class Util
         return obj;
     }
 
-    public static string GetAssetAbsolutePath(string assetPath)
-    {
-        string path = Application.dataPath;
-        path = path.Substring(0, path.Length - 6);
-        path += assetPath;
-        return path;
-    }
-
+    /// <summary>
+    /// 编辑器模式下，设置路径为当前选择
+    /// </summary>
+    /// <param name="path">路径</param>
+    /// <returns></returns>
     public static bool SetPathToSelection(string path)
     {
 #if UNITY_EDITOR
@@ -156,6 +199,11 @@ public class Util
         return false;
     }
 
+    /// <summary>
+    /// 将路径转换为Hash值
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns>
     unsafe public static uint HashPath(string input)
     {
         uint h = 2166136261;
@@ -170,6 +218,12 @@ public class Util
         return h;
     }
 
+    /// <summary>
+    /// 检测是否为空或者False，提示错误
+    /// </summary>
+    /// <param name="o"></param>
+    /// <param name="error"></param>
+    /// <returns></returns>
     public static bool CheckAndLogError(object o, string error)
     {
         if (o == null || (o is bool && !(bool)o))
@@ -180,6 +234,13 @@ public class Util
         return true;
     }
 
+    /// <summary>
+    /// 执行批处理
+    /// </summary>
+    /// <param name="dir">需要执行批处理所需要的当前目录</param>
+    /// <param name="bat">批处理路径</param>
+    /// <param name="arg">参数</param>
+    /// <returns></returns>
     public static int ExecuteBat(string dir, string bat, string arg)
     {
 #if UNITY_EDITOR

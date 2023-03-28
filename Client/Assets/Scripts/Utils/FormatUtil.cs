@@ -10,10 +10,18 @@ public static class MemoryStreamEx
     }
 }
 
+/// <summary>
+/// 序列化工具类
+/// </summary>
 public static class FormatUtil
 {
     private static MemoryStream stream = new MemoryStream();
 
+    /// <summary>
+    /// 将对象序列化为二进制数据数组
+    /// </summary>
+    /// <param name="obj">对象</param>
+    /// <returns>二进制数据数组</returns>
     public static byte[] Serialize(object obj)
     {
         byte[] data = null;
@@ -35,6 +43,11 @@ public static class FormatUtil
         return data;
     }
 
+    /// <summary>
+    /// 将二进制数据数组反序列化为对象
+    /// </summary>
+    /// <param name="data">二进制数据数组</param>
+    /// <returns>对象</returns>
     public static object Deserialize(byte[] data)
     {
         object obj = null;

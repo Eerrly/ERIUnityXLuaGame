@@ -14,10 +14,10 @@ public class SupportLauncher : MonoBehaviour
     private void OnGUI()
     {
         int index = 1;
-        BattleEntity battleEntity = (BattleManager.Instance.battle as BattleController).battleEntity;
+        BattleEntity battleEntity = BattleManager.Instance.battle.battleEntity;
         PlayerEntity playerEntity = (PlayerEntity)battleEntity.FindEntity(BattleConstant.SelfID);
         GUI.Label(new Rect(20, index++ * nGuiLabelHeight, nGuiLabelWidth, nGuiLabelHeight),
-            string.Format("[player]\tid:{0} time:{1:N3}", playerEntity.ID, battleEntity.time));
+            string.Format("[player]\tid:{0} frame:{1} time:{2:N3}", playerEntity.ID, battleEntity.frame, battleEntity.time));
         GUI.Label(new Rect(20, index++ * nGuiLabelHeight, nGuiLabelWidth, nGuiLabelHeight),
             string.Format("[input]\tpos:{0}, yaw:{1}, key:{2}", playerEntity.input.pos, playerEntity.input.yaw, playerEntity.input.key));
         GUI.Label(new Rect(20, index++ * nGuiLabelHeight, nGuiLabelWidth, nGuiLabelHeight),
@@ -43,7 +43,7 @@ public class SupportLauncher : MonoBehaviour
     {
         if (BattleManager.Instance == null || BattleManager.Instance.battle == null)
             return;
-        PlayerEntity playerEntity = (PlayerEntity)((BattleManager.Instance.battle as BattleController).battleEntity.FindEntity(BattleConstant.SelfID));
+        PlayerEntity playerEntity = (PlayerEntity)BattleManager.Instance.battle.battleEntity.FindEntity(BattleConstant.SelfID);
         if (playerEntity != null)
         {
             DrawAroundCellList(playerEntity);

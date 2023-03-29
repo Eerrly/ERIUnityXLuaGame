@@ -46,6 +46,7 @@ public class BattleController : IBattleController
             {
                 if (!Paused)
                 {
+                    battleEntity.frame += 1;
                     battleEntity.deltaTime = FrameEngine.frameInterval * battleEntity.timeScale;
                     battleEntity.time += battleEntity.deltaTime;
 

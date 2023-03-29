@@ -3,7 +3,7 @@
 /// <summary>
 /// 战斗网络执行器
 /// </summary>
-public class BattleNetworkController
+public class BattleNetController
 {
     private UDPClient client;
     private object _sendLock = new object();
@@ -21,13 +21,7 @@ public class BattleNetworkController
         }
     }
 
-    private static BattleNetworkController _instance = null;
-    public static BattleNetworkController Instance => _instance;
-
-    public void Initialize()
-    {
-        _instance = this;
-    }
+    public void Initialize() { }
 
     /// <summary>
     /// 连接服务器
@@ -59,7 +53,7 @@ public class BattleNetworkController
     {
         try
         {
-            if(client != null)
+            if(client != null && client.IsConnected)
             {
                 client.DisConnect();
             }

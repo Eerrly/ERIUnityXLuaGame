@@ -13,11 +13,11 @@ public class BattleManager : MonoBehaviour
     public static int mainThreadId;
     public static bool IsMainThread => System.Threading.Thread.CurrentThread.ManagedThreadId == mainThreadId;
 
-    private IBattleController _battle;
-    public IBattleController battle => _battle;
+    private BattleController _battle;
+    public BattleController battle => _battle;
 
-    private BattleNetworkController _battleNetController;
-    public BattleNetworkController battleNetController => _battleNetController;
+    private BattleNetController _battleNetController;
+    public BattleNetController battleNetController => _battleNetController;
 
     private static BattleManager _instance = null;
     public static BattleManager Instance
@@ -103,7 +103,7 @@ public class BattleManager : MonoBehaviour
         this._battleStarted = true;
         this.selfPlayerId = selfPlayerId;
         _battle = new BattleController(_battleClientData);
-        _battleNetController = new BattleNetworkController();
+        _battleNetController = new BattleNetController();
         _battleView.InitView(_battleClientData);
         Util.InvokeAttributeCall(this, typeof(EntitySystem), false, typeof(EntitySystem.Initialize), false);
         _frameEngine.RegisterFrameUpdateListener(EngineUpdate);
@@ -118,7 +118,6 @@ public class BattleManager : MonoBehaviour
     {
         try
         {
-            logicFrame = logicFrame + 1;
             _battle.LogicUpdate();
             _battle.SwitchProceedingStatus(_paused);
         }
@@ -134,11 +133,11 @@ public class BattleManager : MonoBehaviour
         {
             if (_battleNetController.IsConnected)
             {
-                FrameBuffer.Input input = BattleManager.Instance.GetInput();
+                FrameBuffer.Input input = GetInput();
                 if (!input.Compare(_lastSendPlayerInput))
                 {
                     _lastSendPlayerInput = input;
-                    _battleNetController.SendInputToServer(logicFrame, input);
+                    _battleNetController.SendInputToServer(_battle.battleEntity.frame, input);
                 }
                 _battleNetController.Update();
                 if(_battleNetController.RecvData(ref recvBuffer, 0, recvBuffer.Length) > 0)
@@ -173,7 +172,7 @@ public class BattleManager : MonoBehaviour
 #if UNITY_DEBUG
             Logger.Log(LogLevel.Info, "RecvData playerId:" + _lastRecvPlayerInput.pos + ", frame:" + _frame + ", raw:" + _raw);
 #endif
-            ((BattleController)_battle).UpdateInput(_lastRecvPlayerInput);
+            _battle.UpdateInput(_lastRecvPlayerInput);
         }
     }
 

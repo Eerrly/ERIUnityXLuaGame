@@ -3,7 +3,7 @@
 
     public const float MoveSpeed = 5f;
 
-    public const float TurnSpeed = 15.0f;
+    public const float TurnSpeed = 5.0f;
 
     public const float Defensiveness = 5.0f;
 

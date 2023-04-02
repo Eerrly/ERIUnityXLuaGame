@@ -18,12 +18,15 @@ public class BattleView : MonoBehaviour
     {
         for (int i = 0; i < data.players.Length; i++)
         {
-            var player = new GameObject(string.Format("ID:{0}", data.players[i].pos));
-            player.transform.position = new Vector3(data.players[i].pos * BattleConstant.normalPlayerPositionOffset, 0, data.players[i].pos * BattleConstant.normalPlayerPositionOffset);
+            var player = new GameObject(string.Format("Player:{0}", data.players[i].pos));
+            player.transform.position = BattleConstant.InitPlayerPos[i];
+            player.transform.rotation = BattleConstant.InitPlayerRot[i];
+
             PlayerView playerView = player.AddComponent<PlayerView>();
             playerView.Init(data.players[i]);
             _playerViews.Add(playerView);
         }
+        BattleManager.Instance.cameraControl.m_Targets = _playerViews.ToArray();
     }
 
     public PlayerView FindPlayerView(int playerId)

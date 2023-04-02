@@ -46,9 +46,9 @@ public class FrameBuffer
             raw = value;
         }
 
-        public Input(byte pos, uint value)
+        public Input(byte pos, byte value)
         {
-            raw = (byte)(~0xF & value | (byte)(0x01 & pos));
+            raw = (byte)(~0x01 & (value << 1) | pos);
         }
 
         public override string ToString()
@@ -74,13 +74,15 @@ public class FrameBuffer
         public int frame;
         public int playerCount;
         public Input i0;
+        public Input i1;
 
         public static readonly Input defInput = new Input();
         public static readonly Frame defFrame = new Frame()
         {
             frame = 0,
             playerCount = 0,
-            i0 = new Input(0),
+            i0 = new Input(0, 0),
+            i1 = new Input(1, 0),
         };
 
         public int Length
@@ -100,6 +102,7 @@ public class FrameBuffer
                     switch (index)
                     {
                         case 0: return i0;
+                        case 1: return i1;
                     }
                 }
                 return defInput;
@@ -111,6 +114,7 @@ public class FrameBuffer
                     switch (index)
                     {
                         case 0: i0 = value; break;
+                        case 1: i1 = value; break;
                     }
                 }
             }
@@ -122,6 +126,14 @@ public class FrameBuffer
             {
                 i0 = result;
             }
+            else if(i1.pos == pos)
+            {
+                i1 = result;
+            }
+            else
+            {
+                Logger.Log(LogLevel.Warning, $"FrameBuffer.SetInputByPos pos not found! {pos},{playerCount},{frame}");
+            }
         }
 
         public bool GetInputByPos(int pos, ref Input result)
@@ -131,12 +143,21 @@ public class FrameBuffer
                 result = i0;
                 return true;
             }
+            else if(i1.pos == pos)
+            {
+                result = i1;
+                return true;
+            }
             else
             {
+                Logger.Log(LogLevel.Warning, $"FrameBuffer.GetInputByPos pos not found! {pos},{playerCount},{frame}");
                 return false;
             }
         }
 
     }
+
+
+
 
 }

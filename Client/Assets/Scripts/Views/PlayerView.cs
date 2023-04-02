@@ -16,7 +16,12 @@ public class PlayerView : MonoBehaviour
     public async UniTask<GameObject> CoLoadCharacter()
     {
         GameObject character = await Resources.LoadAsync<GameObject>(BattleConstant.playerCharacterPath) as GameObject;
-        GameObject go = Instantiate(character, transform, false);
+        GameObject go = Instantiate(character, Vector3.zero, Quaternion.identity);
+        go.transform.SetParent(transform, false);
+
+        var renderers = go.transform.GetComponentsInChildren<MeshRenderer>();
+        for (int j = 0; j < renderers.Length; j++)
+            renderers[j].material.color = BattleConstant.InitPlayerColor[_entityId];
         return go;
     }
 

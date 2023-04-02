@@ -46,6 +46,8 @@ public class BattleController : IBattleController
             {
                 if (!Paused)
                 {
+                    BattleManager.Instance.logicFrame += 1;
+
                     battleEntity.frame += 1;
                     battleEntity.deltaTime = FrameEngine.frameInterval * battleEntity.timeScale;
                     battleEntity.time += battleEntity.deltaTime;
@@ -94,6 +96,7 @@ public class BattleController : IBattleController
     {
         try
         {
+            BattleManager.Instance.renderFrame += 1;
             BattleManager.Instance.battleView.RenderUpdate(battleEntity);
         }
         catch (System.Exception e)

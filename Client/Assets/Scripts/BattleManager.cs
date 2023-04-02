@@ -9,6 +9,7 @@ using UnityEngine;
 public class BattleManager : MonoBehaviour
 {
     private volatile bool _paused = false;
+    private byte[] readies = new byte[] { 0, 0 };
 
     public static int mainThreadId;
     public static bool IsMainThread => System.Threading.Thread.CurrentThread.ManagedThreadId == mainThreadId;
@@ -40,6 +41,13 @@ public class BattleManager : MonoBehaviour
         private set { _playerInput = value; }
     }
 
+    private CameraControl _cameraControl;
+    public CameraControl cameraControl
+    {
+        get { return _cameraControl; }
+        private set { _cameraControl = value; }
+    }
+
     private long _time;
     public long Time => _time;
 
@@ -55,20 +63,22 @@ public class BattleManager : MonoBehaviour
     private MemoryStream _receiveStream = new MemoryStream(256);
     private BinaryReader _binaryReader;
 
+    private byte _act;
     private byte _raw;
     private int _frame;
     private const byte posMask = 0x01;
     private const byte yawMask = 0xF0;
     private const byte keyMask = 0x0E;
 
-    public volatile int renderFrame = -1;
-    public volatile int logicFrame = -1;
+    [System.NonSerialized] public volatile int renderFrame = -1;
+    [System.NonSerialized] public volatile int logicFrame = -1;
     private FrameBuffer.Input _lastSendPlayerInput;
     private FrameBuffer.Input _lastRecvPlayerInput = new FrameBuffer.Input(0);
 
     private void Awake()
     {
         Instance = this;
+        _cameraControl = Util.GetOrAddComponent<CameraControl>(Camera.main.transform.parent.gameObject);
         _battleView = Util.GetOrAddComponent<BattleView>(gameObject);
         _playerInput = Util.GetOrAddComponent<PlayerInput>(gameObject);
         Util.InvokeAttributeCall(this, typeof(EntitySystem), false, typeof(EntitySystem.Initialize), false);
@@ -83,7 +93,7 @@ public class BattleManager : MonoBehaviour
         {
             _playerInput.AddKey(new InputKeyCode() { _name = BattleConstant.buttonNames[i] });
         }
-        recvBuffer = new byte[5];
+        recvBuffer = new byte[6];
         _binaryReader = new BinaryReader(_receiveStream);
     }
 
@@ -111,15 +121,18 @@ public class BattleManager : MonoBehaviour
         _frameEngine.StartEngine(1 / (float)BattleConstant.FrameInterval);
         _battle.Initialize();
         _battleNetController.Initialize();
-        _battleNetController.Connect("127.0.0.1", 10086);
+        _battleNetController.Connect("192.168.1.2", 10086);
     }
 
     private void EngineUpdate()
     {
         try
         {
-            _battle.LogicUpdate();
-            _battle.SwitchProceedingStatus(_paused);
+            if (_battleStarted)
+            {
+                _battle.LogicUpdate();
+                _battle.SwitchProceedingStatus(_paused);
+            }
         }
         catch (Exception e)
         {
@@ -133,11 +146,14 @@ public class BattleManager : MonoBehaviour
         {
             if (_battleNetController.IsConnected)
             {
-                FrameBuffer.Input input = GetInput();
-                if (!input.Compare(_lastSendPlayerInput))
+                if (_battleStarted)
                 {
-                    _lastSendPlayerInput = input;
-                    _battleNetController.SendInputToServer(_battle.battleEntity.frame, input);
+                    FrameBuffer.Input input = GetInput();
+                    if (!input.Compare(_lastSendPlayerInput))
+                    {
+                        _lastSendPlayerInput = input;
+                        _battleNetController.SendInputMsg(_battle.battleEntity.frame, input);
+                    }
                 }
                 _battleNetController.Update();
                 if(_battleNetController.RecvData(ref recvBuffer, 0, recvBuffer.Length) > 0)
@@ -163,6 +179,7 @@ public class BattleManager : MonoBehaviour
         _receiveStream.Seek(0, SeekOrigin.Begin);
         while (_binaryReader.BaseStream.Position < _binaryReader.BaseStream.Length)
         {
+            _act = _binaryReader.ReadByte();
             _frame = _binaryReader.ReadInt32();
             _raw = _binaryReader.ReadByte();
 
@@ -170,7 +187,7 @@ public class BattleManager : MonoBehaviour
             _lastRecvPlayerInput.yaw = (byte)((yawMask & _raw) >> 4);
             _lastRecvPlayerInput.key = (byte)((keyMask & _raw) >> 1);
 #if UNITY_DEBUG
-            Logger.Log(LogLevel.Info, "RecvData playerId:" + _lastRecvPlayerInput.pos + ", frame:" + _frame + ", raw:" + _raw);
+            Logger.Log(LogLevel.Info, "RecvData act:" + _act + ", playerId:" + _lastRecvPlayerInput.pos + ", frame:" + _frame + ", raw:" + _raw);
 #endif
             _battle.UpdateInput(_lastRecvPlayerInput);
         }

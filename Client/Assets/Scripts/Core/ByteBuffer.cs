@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-class ByteBuffer : ICloneable
+public class ByteBuffer : ICloneable
 {
     //字节缓存区
     private byte[] buf;

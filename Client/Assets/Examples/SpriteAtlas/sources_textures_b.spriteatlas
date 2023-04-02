@@ -7,6 +7,7 @@ SpriteAtlas:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: sources_textures_b
+  serializedVersion: 2
   m_EditorData:
     serializedVersion: 2
     textureSettings:
@@ -28,6 +29,8 @@ SpriteAtlas:
       allowAlphaSplitting: 0
       enableRotation: 0
       enableTightPacking: 0
+      enableAlphaDilation: 0
+    secondaryTextureSettings: {}
     variantMultiplier: 1
     packables:
     - {fileID: 21300000, guid: 16e9ece006d785f4bb1d98d924cb113d, type: 3}
@@ -36,6 +39,8 @@ SpriteAtlas:
     - {fileID: 21300000, guid: b36c6729d1d7dad4ea80cc0a934ea293, type: 3}
     - {fileID: 21300000, guid: 731f8cb735d372d45b2d43f683bb8101, type: 3}
     bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
   - {fileID: 21300000, guid: 16e9ece006d785f4bb1d98d924cb113d, type: 3}
@@ -49,5 +54,7 @@ SpriteAtlas:
   - item_06
   - item_05
   - item_02
+  m_RenderDataMap: {}
   m_Tag: sources_textures_b
   m_IsVariant: 0
+  m_IsPlaceholder: 0

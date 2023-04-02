@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 2810787514
+CRC: 4133385494
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: bcc73fdded57f7e7f7010dcab0a2ab90
+    Hash: d2cb38cc7ac9d8387fd14320797f2f2f
   TypeTreeHash:
     serializedVersion: 2
-    Hash: c4d5dee85f6c263eb0adbea350984ae1
+    Hash: 0d677c6dec2405a43fe6dd294cca7c3e
 HashAppended: 0
 ClassTypes:
 - Class: 28
@@ -17,9 +17,9 @@ ClassTypes:
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
-- Assets/Sources/Textures/B/item_01.png
-- Assets/Sources/Textures/B/item_03.png
 - Assets/Sources/Textures/B/item_06.png
+- Assets/Sources/Textures/B/item_01.png
 - Assets/Sources/Textures/B/item_05.png
 - Assets/Sources/Textures/B/item_02.png
+- Assets/Sources/Textures/B/item_03.png
 Dependencies: []

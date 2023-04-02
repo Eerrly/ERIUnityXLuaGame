@@ -108,7 +108,7 @@ public class Global : Singleton<Global>
             var currentLoggerPath = FileUtil.CombinePaths(Application.persistentDataPath, "game.log");
 
             Logger.Initialize(currentLoggerPath, new Logger());
-            Logger.SetLoggerLevel((int)LogLevel.Exception | (int)LogLevel.LuaException | (int)LogLevel.LuaError | (int)LogLevel.Info | (int)LogLevel.LuaInfo);
+            Logger.SetLoggerLevel((int)LogLevel.Exception | (int)LogLevel.LuaException | (int)LogLevel.Error | (int)LogLevel.LuaError | (int)LogLevel.Info | (int)LogLevel.LuaInfo);
             Debug.unityLogger.logEnabled = true;
 
             Logger.log = Debug.Log;

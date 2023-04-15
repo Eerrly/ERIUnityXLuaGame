@@ -24,7 +24,7 @@ public class SupportLauncher : MonoBehaviour
         GUI.Label(new Rect(20, index++ * nGuiLabelHeight, nGuiLabelWidth, nGuiLabelHeight),
             string.Format("[state]\t{0}", Enum.GetName(typeof(EPlayerState), playerEntity.curStateId)));
         GUI.Label(new Rect(20, index++ * nGuiLabelHeight, nGuiLabelWidth, nGuiLabelHeight),
-            string.Format("[move]\tposition:{0}, rotation:{1}", MathManager.ToVector3(playerEntity.movement.position).ToString(), MathManager.ToQuaternion(playerEntity.movement.rotation).ToString()));
+            string.Format("[move]\tposition:{0}, rotation:{1}", playerEntity.movement.position.ToString(), playerEntity.movement.rotation.ToString()));
 
         List<Cell> aroundCellList = SpacePartition.GetAroundCellList(playerEntity);
         string strCellInfo = "[cell]\t";
@@ -48,11 +48,6 @@ public class SupportLauncher : MonoBehaviour
         if (playerEntity != null)
         {
             DrawAroundCellList(playerEntity);
-
-            Gizmos.color = Color.green;
-            Vector3 position = MathManager.ToVector3(playerEntity.transform.pos);
-            Vector3 forward = MathManager.ToVector3(playerEntity.transform.fwd);
-            DrawWireSemicircle(position, forward, PlayerPropertyConstant.AttackDistance, BattleConstant.angle, Vector3.up);
         }
     }
 
@@ -119,7 +114,7 @@ public class SupportLauncher : MonoBehaviour
                 var entity = aroundCellList[i].entities[j];
                 if ((int)entity.curStateId != entity.state.count - 1)
                 {
-                    Gizmos.DrawLine(MathManager.ToVector3(playerEntity.transform.pos), MathManager.ToVector3(entity.transform.pos));
+                    Gizmos.DrawLine(playerEntity.transform.pos.ToVector3(), entity.transform.pos.ToVector3());
                 }
             }
         }

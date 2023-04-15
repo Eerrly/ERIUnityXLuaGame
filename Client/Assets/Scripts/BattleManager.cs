@@ -74,6 +74,7 @@ public class BattleManager : MonoBehaviour
     [System.NonSerialized] public volatile int logicFrame = -1;
     private FrameBuffer.Input _lastSendPlayerInput;
     private FrameBuffer.Input _lastRecvPlayerInput = new FrameBuffer.Input(0);
+    private int _realSentFrame = 0;
 
     private void Awake()
     {
@@ -121,7 +122,7 @@ public class BattleManager : MonoBehaviour
         _frameEngine.StartEngine(1 / (float)BattleConstant.FrameInterval);
         _battle.Initialize();
         _battleNetController.Initialize();
-        _battleNetController.Connect("192.168.1.2", 10086);
+        _battleNetController.Connect("192.168.31.219", 10086);
     }
 
     private void EngineUpdate()
@@ -149,9 +150,10 @@ public class BattleManager : MonoBehaviour
                 if (_battleStarted)
                 {
                     FrameBuffer.Input input = GetInput();
-                    if (!input.Compare(_lastSendPlayerInput))
+                    if (_realSentFrame != _battle.battleEntity.frame && !input.Compare(_lastSendPlayerInput))
                     {
                         _lastSendPlayerInput = input;
+                        _realSentFrame = _battle.battleEntity.frame;
                         _battleNetController.SendInputMsg(_battle.battleEntity.frame, input);
                     }
                 }

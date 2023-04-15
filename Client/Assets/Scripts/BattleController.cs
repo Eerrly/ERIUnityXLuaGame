@@ -48,34 +48,10 @@ public class BattleController : IBattleController
                 {
                     BattleManager.Instance.logicFrame += 1;
 
-                    battleEntity.frame += 1;
-                    battleEntity.deltaTime = FrameEngine.frameInterval * battleEntity.timeScale;
-                    battleEntity.time += battleEntity.deltaTime;
+                    RefreshBattleEntity(battleEntity);
 
-                    var entities = battleEntity.entities;
+                    UpdatePlayerState(battleEntity);
 
-                    BattleStateMachine.Instance.Update(battleEntity, null);
-                    for (int i = 0; i < entities.Count; i++)
-                    {
-                        var playerEntity = (PlayerEntity)entities[i];
-                        PlayerStateMachine.Instance.Update(playerEntity, battleEntity);
-                    }
-
-                    BattleStateMachine.Instance.LateUpdate(battleEntity, null);
-                    for (int i = 0; i < entities.Count; i++)
-                    {
-                        var playerEntity = (PlayerEntity)entities[i];
-                        PlayerStateMachine.Instance.LateUpdate(playerEntity, battleEntity);
-                    }
-
-                    PhysicsSystem.Update(battleEntity);
-
-                    BattleStateMachine.Instance.DoChangeState(battleEntity, null);
-                    for (int i = 0; i < entities.Count; i++)
-                    {
-                        var playerEntity = (PlayerEntity)entities[i];
-                        PlayerStateMachine.Instance.DoChangeState(playerEntity, battleEntity);
-                    }
                 }
             }
             catch (System.Exception e)
@@ -84,6 +60,41 @@ public class BattleController : IBattleController
             }
         }
         
+    }
+
+    public void UpdatePlayerState(BattleEntity battleEntity)
+    {
+        var entities = battleEntity.entities;
+
+        BattleStateMachine.Instance.Update(battleEntity, null);
+        for (int i = 0; i < entities.Count; i++)
+        {
+            var playerEntity = (PlayerEntity)entities[i];
+            PlayerStateMachine.Instance.Update(playerEntity, battleEntity);
+        }
+
+        BattleStateMachine.Instance.LateUpdate(battleEntity, null);
+        for (int i = 0; i < entities.Count; i++)
+        {
+            var playerEntity = (PlayerEntity)entities[i];
+            PlayerStateMachine.Instance.LateUpdate(playerEntity, battleEntity);
+        }
+
+        PhysicsSystem.Update(battleEntity);
+
+        BattleStateMachine.Instance.DoChangeState(battleEntity, null);
+        for (int i = 0; i < entities.Count; i++)
+        {
+            var playerEntity = (PlayerEntity)entities[i];
+            PlayerStateMachine.Instance.DoChangeState(playerEntity, battleEntity);
+        }
+    }
+
+    public void RefreshBattleEntity(BattleEntity battleEntity)
+    {
+        battleEntity.frame += 1;
+        battleEntity.deltaTime = FrameEngine.frameInterval * battleEntity.timeScale;
+        battleEntity.time += battleEntity.deltaTime;
     }
 
     public void UpdateInput(FrameBuffer.Input input) {

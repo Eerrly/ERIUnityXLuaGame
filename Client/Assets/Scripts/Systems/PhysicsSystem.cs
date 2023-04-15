@@ -49,8 +49,8 @@ public class PhysicsSystem
                     continue;
                 }
                 var radius = source.GetCollisionRadius(battleEntity) + target.GetCollisionRadius(battleEntity);
-                var sqrMagnitude = (MathManager.ToVector3(target.transform.pos) - MathManager.ToVector3(source.transform.pos)).sqrMagnitude;
-                if (sqrMagnitude <= radius * radius)
+                var sqrMagnitudeXZ = (target.transform.pos - source.transform.pos).sqrMagnitudeLongXZ;
+                if (sqrMagnitudeXZ <= radius * radius)
                 {
                     source.runtimeProperty.closedPlayers.Add(new PhysisPlayer() { id = target.ID });
                 }
@@ -71,32 +71,30 @@ public class PhysicsSystem
 
     private static void UpdateCollision(BaseEntity source, BaseEntity target, BattleEntity battleEntity)
     {
-        var sMove = MathManager.ToVector3(source.movement.position);
-        var tMove = MathManager.ToVector3(target.movement.position);
+        var sMove = source.movement.position;
+        var tMove = target.movement.position;
 
-        var vecS2T = MathManager.ToVector3(source.transform.pos) - MathManager.ToVector3(target.transform.pos);
-        vecS2T.y = 0;
-        var vecT2S = MathManager.ToVector3(target.transform.pos) - MathManager.ToVector3(source.transform.pos);
-        vecT2S.y = 0;
+        var vecS2T = (source.transform.pos - target.transform.pos).YZero();
+        var vecT2S = (target.transform.pos - source.transform.pos).YZero();
 
-        if (Vector3.Dot(vecS2T, tMove) > 0.0f)
+        if (FixedVector3.Dot(ref vecS2T, ref tMove) > FixedNumber.Zero)
         {
             sMove = CombineForce(tMove, sMove);
         }
         else
         {
             vecS2T = -vecS2T;
-            if (Vector3.Dot(sMove, vecS2T) > 0.0f)
+            if (FixedVector3.Dot(sMove, vecS2T) > FixedNumber.Zero)
             {
-                sMove -= Vector3.Project(sMove, vecS2T);
+                sMove -= FixedVector3.Project(sMove, vecS2T);
             }
         }
-        source.movement.position = MathManager.ToFloat3(sMove);
+        source.movement.position = sMove;
 
         var state = PlayerStateMachine.Instance.GetState(source.state.curStateId) as PlayerBaseState;
         if (state != null)
         {
-            if (Vector3.Dot(vecT2S, sMove) > 0.0f)
+            if (FixedVector3.Dot(vecT2S, sMove) > FixedNumber.Zero)
             {
                 state.OnCollision(source, target, battleEntity);
             }
@@ -104,19 +102,19 @@ public class PhysicsSystem
         }
     }
 
-    private static Vector3 CombineForce(Vector3 aDeltaMove, Vector3 bDeltaMove)
+    private static FixedVector3 CombineForce(FixedVector3 aDeltaMove, FixedVector3 bDeltaMove)
     {
-        var lenB = bDeltaMove.magnitude;
-        var lenA = aDeltaMove.magnitude;
+        var lenB = bDeltaMove.Magnitude;
+        var lenA = aDeltaMove.Magnitude;
 
-        var normalB = bDeltaMove.normalized;
-        var normalA = aDeltaMove.normalized;
+        var normalB = bDeltaMove.Normalized;
+        var normalA = aDeltaMove.Normalized;
 
-        var dot = Vector3.Dot(normalB, normalA);
+        var dot = FixedVector3.Dot(normalB, normalA);
         var lenC = dot * lenA;
         var cDeltaMove = normalA * lenC;
 
-        lenC = Mathf.Max(lenB, lenC);
+        lenC = FixedMath.Max(lenB, lenC);
         return normalB * lenC + (bDeltaMove - cDeltaMove);
     }
 
@@ -129,8 +127,8 @@ public class PhysicsSystem
     public static void CheckCollisionDir(BaseEntity source, BaseEntity target)
     {
         source.collision.collisionDir = 0;
-        var direction = MathManager.ToVector3(target.transform.pos) - MathManager.ToVector3(source.transform.pos);
-        var angle = Vector3.SignedAngle(MathManager.ToVector3(source.transform.fwd), direction.normalized, Vector3.up);
+        var direction = target.transform.pos - source.transform.pos;
+        var angle = FixedVector3.AngleIntSingle(source.transform.fwd, direction.YZero().Normalized);
         if(-45 < angle && angle < 45)
         {
             source.collision.collisionDir = (int)ECollisionDir.Forward;

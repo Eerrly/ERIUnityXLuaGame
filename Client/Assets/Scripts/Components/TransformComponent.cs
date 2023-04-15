@@ -3,33 +3,33 @@
     [System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Auto, Pack = 4)]
     internal struct Common
     {
-        public float[] pos;
-        public float[] rot;
-        public float[] fwd;
+        public FixedVector3 pos;
+        public FixedQuaternion rot;
+        public FixedVector3 fwd;
 
         public Common(int no)
         {
-            pos = new float[3] { 0, 0, 0 };
-            rot = new float[4] { 0, 0, 0, 1 };
-            fwd = new float[3] { 0, 0, 1 };
+            pos = FixedVector3.Zero;
+            rot = default(FixedQuaternion);
+            fwd = default(FixedVector3);
         }
     }
 
     private Common common = new Common(0);
 
-    public float[] pos
+    public FixedVector3 pos
     {
         get { return common.pos; }
         set { common.pos = value; }
     }
 
-    public float[] rot
+    public FixedQuaternion rot
     {
         get { return common.rot; }
         set { common.rot = value; }
     }
 
-    public float[] fwd
+    public FixedVector3 fwd
     {
         get { return common.fwd; }
         set { common.fwd = value; }

@@ -45,7 +45,7 @@ public class PlayerEntity : BaseEntity
     /// </summary>
     /// <param name="battleEntity">战斗实体</param>
     /// <returns>半径</returns>
-    public override float GetCollisionRadius(BattleEntity battleEntity)
+    public override FixedNumber GetCollisionRadius(BattleEntity battleEntity)
     {
         return collision.collsionSize;
     }

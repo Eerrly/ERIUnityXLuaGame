@@ -27,9 +27,9 @@ public class PlayerMoveState : PlayerBaseState
 
     public override void OnExit(PlayerEntity playerEntity, BattleEntity battleEntity)
     {
-        playerEntity.movement.position = MathManager.Vector3Zero;
-        playerEntity.movement.rotation = MathManager.QuaternionIdentity;
-        playerEntity.movement.moveSpeed = 0.0f;
-        playerEntity.movement.turnSpeed = 0.0f;
+        playerEntity.movement.position = FixedVector3.Zero;
+        playerEntity.movement.rotation = FixedQuaternion.Identity;
+        playerEntity.movement.moveSpeed = FixedNumber.Zero;
+        playerEntity.movement.turnSpeed = 0f;
     }
 }

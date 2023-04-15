@@ -29,7 +29,7 @@ public class BattleConstant
     public static readonly float spaceZ = 100f;
 
     // 面向角度
-    public static readonly int angle = 90;
+    public static readonly FixedNumber angle = FixedNumber.MakeFixNum(90 * FixedMath.DataConrvertScale, FixedMath.DataConrvertScale);
 
     // 格子尺寸
     public static readonly Vector3 cellSize = new Vector3(10f, 0, 10f);

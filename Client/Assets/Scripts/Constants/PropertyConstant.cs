@@ -1,9 +1,9 @@
 ﻿public class PlayerPropertyConstant
 {
 
-    public const float MoveSpeed = 5f;
+    public static readonly FixedNumber MoveSpeed = FixedNumber.MakeFixNum(5 * FixedMath.DataConrvertScale, FixedMath.DataConrvertScale);
 
-    public const float TurnSpeed = 5.0f;
+    public const float TurnSpeed = 15f;
 
     public const float Defensiveness = 5.0f;
 
@@ -15,7 +15,7 @@
 
     public const float KnockbackCumulativeValue = 30.0f;
 
-    public const float CollisionRadius = 0.5f;
+    public static readonly FixedNumber CollisionRadius = FixedNumber.MakeFixNum(3 * FixedMath.DataConrvertScale, FixedMath.DataConrvertScale);
 
     public const int atkMaxCount = 3;
 }

@@ -33,7 +33,7 @@
 
     public virtual void Reset() { }
 
-    public virtual float GetCollisionRadius(BattleEntity battleEntity) { return float.MaxValue; }
+    public virtual FixedNumber GetCollisionRadius(BattleEntity battleEntity) { return default(FixedNumber); }
 
     internal virtual void Init(BattlePlayerCommonData data) { }
 

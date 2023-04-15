@@ -34,38 +34,30 @@ public class PlayerView : MonoBehaviour
 #endif
     }
 
-    private Vector3 p_startPosition;
-    private Vector3 p_position;
-    private Vector3 p_pos;
-    private Quaternion p_startRotation;
-    private Quaternion p_rotation;
-    private Quaternion p_qua;
     private void TransformUpdate(BaseEntity entity, float deltaTime)
     {
         if (!gameObject.activeSelf)
             return;
 
-        p_startPosition = transform.position;
-        p_position = MathManager.ToVector3(entity.transform.pos);
-        if(Vector3.zero == p_position || p_position == transform.position)
+        var currentPosition = transform.position;
+        var nextDetlaPosition = currentPosition + entity.movement.position.ToVector3();
+        if((currentPosition - nextDetlaPosition).sqrMagnitude >= 4)
         {
-            p_position = MathManager.ToVector3(entity.movement.position);
+            currentPosition = Vector3.Lerp(currentPosition, nextDetlaPosition, deltaTime);
         }
-        p_pos = Vector3.Lerp(p_startPosition + p_position * deltaTime, Vector3.zero, 0.0f);
-        transform.position = p_pos;
-
-        p_startRotation = transform.rotation;
-        p_rotation = MathManager.ToQuaternion(entity.transform.rot);
-        if (Quaternion.identity == p_rotation || p_rotation == transform.rotation)
+        var currentRotation = transform.rotation;
+        var nextDetlaRotation = entity.movement.rotation.ToQuaternion();
+        if(currentRotation != nextDetlaRotation)
         {
-            p_rotation = MathManager.ToQuaternion(entity.movement.rotation);
+            currentRotation = Quaternion.Lerp(transform.rotation, nextDetlaRotation, entity.movement.turnSpeed * deltaTime);
         }
-        p_qua = Quaternion.Lerp(p_startRotation, p_rotation, entity.movement.turnSpeed * deltaTime);
-        transform.rotation = p_qua;
 
-        entity.transform.pos = MathManager.ToFloat3(transform.position);
-        entity.transform.rot = MathManager.ToFloat4(transform.rotation);
-        entity.transform.fwd = MathManager.ToFloat3(transform.rotation * Vector3.forward);
+        transform.position = currentPosition;
+        transform.rotation = currentRotation;
+
+        entity.transform.pos = new FixedVector3(currentPosition);
+        entity.transform.rot = new FixedQuaternion(currentRotation);
+        entity.transform.fwd = new FixedVector3(currentRotation * Vector3.forward);
     }
 
 }

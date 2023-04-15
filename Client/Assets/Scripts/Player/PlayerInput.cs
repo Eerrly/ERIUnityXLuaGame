@@ -44,13 +44,14 @@ public class PlayerInput : MonoBehaviour
     {
         _input = new FrameBuffer.Input();
         _input.pos = (byte)playerId;
-        _input.yaw = (byte)MathManager.Format8DirInput(_moveInput);
+        _input.yaw = (byte)FixedMath.Format8DirInput(new FixedVector3(_moveInput));
         _input.key = _keyState;
         return _input;
     }
 
     void Update()
     {
+        // °´¼ü
         byte _tmpKeyState = 0;
         for (var i = 0; i < keys.Count; ++i)
         {
@@ -62,15 +63,12 @@ public class PlayerInput : MonoBehaviour
         }
         _keyState = _tmpKeyState;
 
+        // Ò£¸Ð
         Vector3 moveInput = (InputManager.Vertical * Vector3.forward) + (InputManager.Horizontal * Vector3.right);
-        if(_lastMoveInput != Vector3.zero && moveInput != Vector3.zero)
-        {
+        if(_lastMoveInput != Vector3.zero && moveInput == Vector3.zero)
             _moveInput = _lastMoveInput;
-        }
         else
-        {
             _moveInput = moveInput.normalized;
-        }
         _lastMoveInput = moveInput.normalized;
     }
 

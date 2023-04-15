@@ -1,1 +1,0 @@
-{"items":[{"hash":1829105156,"dependencies":[],"offset":0,"size":10647,"directories":false,"extension":"","packageResourcePath":"","isPatching":false,"md5":"9939fc29d996ae7282c714813e34de9e"}]}

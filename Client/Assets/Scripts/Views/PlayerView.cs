@@ -49,7 +49,7 @@ public class PlayerView : MonoBehaviour
         var nextDetlaRotation = entity.movement.rotation.ToQuaternion();
         if(currentRotation != nextDetlaRotation)
         {
-            currentRotation = Quaternion.Lerp(transform.rotation, nextDetlaRotation, entity.movement.turnSpeed * deltaTime);
+            currentRotation = Quaternion.RotateTowards(transform.rotation, nextDetlaRotation, entity.movement.turnSpeed * deltaTime);
         }
 
         transform.position = currentPosition;

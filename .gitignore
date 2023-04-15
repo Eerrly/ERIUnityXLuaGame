@@ -4,7 +4,7 @@
 [Cc]lient/Builds/
 [Cc]lient/Logs/
 [Cc]lient/BundleCache/
-[Cc]lient/Assets/StreamingAssets/Bundle
+[Cc]lient/Assets/StreamingAssets/Bundle/
 [Oo]utput/
 
 # Visual Studio cache directory

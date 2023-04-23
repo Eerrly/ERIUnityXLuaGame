@@ -20,12 +20,17 @@ public class ResManager : MonoBehaviour, IManager
     public Dictionary<uint, ResourceBundle> loadedBundles = new Dictionary<uint, ResourceBundle>();
     public Dictionary<uint, BundleGroup> unloadBundleMap = new Dictionary<uint, BundleGroup>();
 
+    /// <summary>
+    /// 将路径转化为Hash值
+    /// </summary>
+    /// <param name="path">路径</param>
+    /// <returns>转换后的Hash值</returns>
     uint ConvertPath(string path)
     {
         uint result = 0;
         if (!string.IsNullOrEmpty(path))
         {
-            path = path.ToLower().Replace("assets/sources/", "");
+            path = FileUtil.Normalized(path).ToLower().Replace("assets/sources/", "");
             if (!cacheFileMap.TryGetValue(path, out result))
             {
                 result = Util.HashPath(path);
@@ -115,6 +120,12 @@ public class ResManager : MonoBehaviour, IManager
             for (int i = 0; i < patchConfig.items.Length; i++)
             {
                 var item = patchConfig.items[i];
+                var patchFilePath = FileUtil.CombinePaths(Setting.CacheBundleRoot, item.hash + ".s");
+                if (!System.IO.File.Exists(patchFilePath))
+                {
+                    continue;
+                }
+
                 item.packageResource = false;
                 if (manifest.ManifestDict.ContainsKey(item.hash))
                 {

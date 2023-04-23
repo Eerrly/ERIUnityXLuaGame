@@ -87,6 +87,11 @@ public class PatchingManager : MonoBehaviour, IManager
                     }
                 }
 
+                if(downloadList.Count > 0)
+                {
+                    await CallLuaPatchDownloadInfo(o);
+                }
+
                 var remoteFilePath = "";
                 var localFilePath = "";
                 while (downloadList.Count > 0)
@@ -102,7 +107,7 @@ public class PatchingManager : MonoBehaviour, IManager
                             (progress) =>
                             {
                                 Logger.Log(LogLevel.Info, $"CoPatching CoHttpDownload {remoteFilePath} Progress : {progress}");
-                                _callback?.Call(0, "donwload", progress);
+                                _callback?.Call(o, "donwload", progress);
                             },
                             (state, text) =>
                             {
@@ -124,6 +129,37 @@ public class PatchingManager : MonoBehaviour, IManager
             }
         }
         callback?.Call(o, "done");
+    }
+
+    private System.Collections.IEnumerator CallLuaPatchDownloadInfo(object o)
+    {
+        var bytes = 0;
+        foreach (var file in downloadList)
+        {
+            bytes += file.size;
+        }
+        _callback?.Call(o, "setdownload", downloadList.Count, bytes);
+
+        var canDownload = true;
+        while (true)
+        {
+            var state = _callback?.Func<object, string, int>(o, "candownload");
+            if (state == 1)
+            {
+                canDownload = true;
+                break;
+            }
+            else if (state == 2)
+            {
+                canDownload = false;
+                break;
+            }
+            yield return null;
+        }
+        if (!canDownload)
+        {
+            _callback?.Call(o, "error");
+        }
     }
 
     public void OnInitialize()

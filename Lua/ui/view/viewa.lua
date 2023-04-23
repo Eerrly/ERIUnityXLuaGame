@@ -25,10 +25,17 @@ end
 function viewA:OnPatchingEvent(event, arg1, arg2)
     if event == "ready" then
         print("OnPatchingEvent ready !!!")
+    elseif event == "setdownload" then
+        print("OnPatchingEvent setdownload !!!" .. ", file count:" .. arg1 .. ", size:" .. arg2)
+    elseif event == "candownload" then
+        print("OnPatchingEvent candownload !!!")
+        return 1
     elseif event == "download" then
         print("OnPatchingEvent download !!! arg1:" .. tostring(arg1))
     elseif event == "done" then
         print("OnPatchingEvent done !!!")
+    elseif event == "error" then
+        print("OnPatchingEvent error !!!")
     end
 end
 

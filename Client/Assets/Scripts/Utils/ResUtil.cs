@@ -568,6 +568,10 @@ public class ResUtil
         compressor.Finish();
         compressed.Flush();
 
+        if (!Directory.Exists(Setting.EditorPatchPath))
+        {
+            Directory.CreateDirectory(Setting.EditorPatchPath);
+        }
         var fileBytes = new byte[compressed.Length];
         Array.Copy(compressed.GetBuffer(), fileBytes, fileBytes.Length);
         var fileName = string.Format("{0}/{1}-{2}-{3}.zip",

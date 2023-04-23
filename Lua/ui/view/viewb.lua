@@ -5,7 +5,7 @@ local viewB = class("viewb", viewbase)
 
 function viewB:onCreate()
     self.super.onCreate(self)
-    print("-------- viewB:onCreate --------")
+    print("-------- viewB:onCreate > --------")
     self:onRefresh()
 end
 

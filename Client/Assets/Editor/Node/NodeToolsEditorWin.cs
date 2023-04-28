@@ -25,8 +25,6 @@ public class NodeToolsEditorWin : EditorWindow
     private NodeToolsConnectionPoint selectedInPoint;
     private NodeToolsConnectionPoint selectedOutPoint;
 
-    private Vector2 drag;
-
     public static NodeToolsEditorWin Open()
     {
         NodeToolsEditorWin window = GetWindow<NodeToolsEditorWin>();
@@ -134,34 +132,24 @@ public class NodeToolsEditorWin : EditorWindow
     /// <param name="e"></param>
     private void ProcessEvents(Event e)
     {
-        drag = Vector2.zero;
-
         switch (e.type)
         {
             case EventType.MouseDown:
-                if(e.button == 1)
-                {
-                    ProcessContextMenu(e.mousePosition);
-                }
+                if(e.button == 1) ProcessContextMenu(e.mousePosition);
                 break;
             case EventType.MouseDrag:
-                if(e.button == 0)
-                {
-                    OnDrag(e.delta);
-                }
+                if(e.button == 0) OnDrag(e.delta);
                 break;
         }
     }
 
     private void OnDrag(Vector2 delta)
     {
-        drag = delta;
-
         if (nodes != null)
         {
-            foreach (var item in nodes)
+            for (int i = nodes.Count - 1; i >= 0; i--)
             {
-                item.Drag(delta);
+                nodes[i]?.Drag(delta);
             }
         }
         GUI.changed = true;
@@ -203,7 +191,7 @@ public class NodeToolsEditorWin : EditorWindow
         {
             nodes = new List<NodeToolsEditorItem>();
         }
-        nodes.Add(new NodeToolsEditorItem(mousePosition, 200, 200, nodeStyle, selectedNodeStyle, inPointStyle, outPointStyle, OnClickInPoint, OnClickOutPoint, OnClickRemoveNode));
+        nodes.Add(new NodeToolsEditorItem(mousePosition, 200, 100, nodeStyle, selectedNodeStyle, inPointStyle, outPointStyle, OnClickInPoint, OnClickOutPoint, OnClickRemoveNode));
     }
 
     private void OnClickInPoint(NodeToolsConnectionPoint inPoint)

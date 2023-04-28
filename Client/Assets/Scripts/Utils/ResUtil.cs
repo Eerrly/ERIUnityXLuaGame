@@ -393,7 +393,11 @@ public class ResUtil
                             continue;
                         }
 
-                        var patchPath = patchItem.Replace('\\', '/').ToLower();
+                        var patchPath = patchItem.Replace('\\', '/').ToLower().Replace("assets/sources/", "");
+                        if(patchPath.StartsWith("lua/32/", StringComparison.OrdinalIgnoreCase) || patchPath.StartsWith("lua/64/", StringComparison.OrdinalIgnoreCase))
+                        {
+                            patchPath = patchPath.Substring(7, patchPath.Length - 7);
+                        }
                         if (patchList.Contains(patchPath))
                         {
                             newList.Add(patchItem);

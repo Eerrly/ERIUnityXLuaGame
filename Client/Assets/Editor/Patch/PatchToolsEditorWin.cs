@@ -48,20 +48,19 @@ public class PatchToolsEditorWin : OdinEditorWindow
         patchFiles = PatchUtil.GetPatchFiles(startVersion, endVersion);
         if (patchFiles.Length > 0)
         {
-            List<string> fileList = patchFiles
-            .Where((path) =>
+            HashSet<string> fileList = new HashSet<string>();
+            for (int i = 0; i < patchFiles.Length; i++)
             {
-                return
-                !path.EndsWith(".meta") ||
-                path.EndsWith(".meta") && !patchFiles.Contains(path.Replace(".meta", "")) && System.IO.File.Exists(path.Replace(".meta", ""));
-            })
-            .Select((path) => {
-                if (path.StartsWith("Client/Assets/Sources/LuaScripts/Lua"))
+                var path = patchFiles[i].Substring(22, patchFiles[i].Length - 22);
+                if (path.EndsWith(".meta") && System.IO.File.Exists(path.Replace(".meta", "")))
                 {
-                    path.Replace(".bytes", ".lua");
+                    fileList.Add(path.Replace(".meta", ""));
                 }
-                return path.Replace("Client/Assets/Sources/", "").ToLower();
-            }).ToList();
+                if (path.StartsWith("Lua"))
+                {
+                    fileList.Add(path.Substring(7, path.Length - 7));
+                }
+            }
             patchFiles = fileList.ToArray();
         }
         if (patchFiles != null)

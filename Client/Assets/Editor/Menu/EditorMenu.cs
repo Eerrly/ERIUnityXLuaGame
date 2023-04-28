@@ -30,6 +30,15 @@ public class ToolbarEditorMenu
         PatchToolsEditorWin.Open();
     }
 
+    /// <summary>
+    /// 节点工具
+    /// </summary>
+    [MenuItem("工具/Node Tools", false, 1000)]
+    public static void NodeTools()
+    {
+        NodeToolsEditorWin.Open();
+    }
+
 }
 
 public class RightClickEditorMenu

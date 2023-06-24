@@ -3,19 +3,50 @@ using System;
 using UnityEngine;
 using UnityEngine.Networking;
 
+/// <summary>
+/// 网络管理器
+/// </summary>
 public class HttpManager : MonoBehaviour, IManager
 {
     public bool IsInitialized { get; set; }
 
+    /// <summary>
+    /// 超时控制器
+    /// </summary>
     private TimeoutController timeoutController;
-    private bool _httpState;
-    private string _httpText;
-    private byte[] _httpBytes;
 
-    public bool HttpState => _httpState;
-    public string HttpText => _httpText;
-    public byte[] HttpBytes => _httpBytes;
+    private bool _httpGetState;
+    /// <summary>
+    /// HttpGet 状态
+    /// </summary>
+    public bool HttpGetState => _httpGetState;
 
+    private string _httpGetText;
+    /// <summary>
+    /// HttpGet 接受到的数据
+    /// </summary>
+    public string HttpGetText => _httpGetText;
+
+    private bool _httpDownloadState;
+
+    /// <summary>
+    /// HttpDownload 状态
+    /// </summary>
+    public bool HttpDownloadState => _httpDownloadState;
+
+    private string _httpDownloadText;
+
+    /// <summary>
+    /// HttpDownload 接受到的数据
+    /// </summary>
+    public string HttpDownloadText => _httpDownloadText;
+
+    /// <summary>
+    /// Htttp Get
+    /// </summary>
+    /// <param name="url">链接</param>
+    /// <param name="timeout">超时</param>
+    /// <returns></returns>
     private async UniTask UniHttpGet(string url, int timeout)
     {
         UnityWebRequest request = null;
@@ -23,25 +54,16 @@ public class HttpManager : MonoBehaviour, IManager
         {
             request = UnityWebRequest.Get(url);
             await request.SendWebRequest().WithCancellation(timeoutController.Timeout(TimeSpan.FromSeconds(timeout)));
-#if UNITY_2019_4_37
-            _httpState = !request.isNetworkError && !request.isHttpError;
-            _httpText = _httpState ? request.downloadHandler.text : request.error;
-#else
-            switch (request.result)
+            if(request.isNetworkError || request.isHttpError)
             {
-                case UnityWebRequest.Result.InProgress:
-                case UnityWebRequest.Result.ConnectionError:
-                case UnityWebRequest.Result.ProtocolError:
-                case UnityWebRequest.Result.DataProcessingError:
-                    _httpState = false;
-                    _httpText = request.error;
-                    break;
-                case UnityWebRequest.Result.Success:
-                    _httpState = true;
-                    _httpText = request.downloadHandler.text;
-                    break;
+                _httpGetState = false;
+                _httpGetText = request.error;
             }
-#endif
+            else
+            {
+                _httpGetState = true;
+                _httpGetText = request.downloadHandler.text;
+            }
         }
         catch(System.Exception e)
         {
@@ -58,12 +80,27 @@ public class HttpManager : MonoBehaviour, IManager
         }
     }
 
+    /// <summary>
+    /// Http Get
+    /// </summary>
+    /// <param name="url">链接</param>
+    /// <param name="timeout">超时</param>
+    /// <param name="callback">完成回调</param>
+    /// <returns></returns>
     public async UniTask CoHttpGet(string url, int timeout, System.Action<bool, string> callback = null)
     {
         await UniHttpGet(url, timeout);
-        callback?.Invoke(HttpState, HttpText);
+        callback?.Invoke(HttpGetState, HttpGetText);
     }
 
+    /// <summary>
+    /// Http Download
+    /// </summary>
+    /// <param name="url">链接</param>
+    /// <param name="path">路径</param>
+    /// <param name="append">断点续传</param>
+    /// <param name="_progress">进度回调</param>
+    /// <returns></returns>
     private async UniTask UniHttpDownload(string url, string path, bool append, System.Action<float> _progress = null)
     {
         DownloadHandlerFile downloadHandler = null;
@@ -73,25 +110,16 @@ public class HttpManager : MonoBehaviour, IManager
             downloadHandler = new DownloadHandlerFile(path, append);
             request = new UnityWebRequest(url, UnityWebRequest.kHttpVerbGET, downloadHandler, null);
             await request.SendWebRequest().ToUniTask(Progress.Create<float>(_progress));
-#if UNITY_2019_4_37
-            _httpState = !request.isNetworkError && !request.isHttpError;
-            if (!_httpState)
-                _httpText = request.error;
-#else
-            switch (request.result)
+            if (request.isNetworkError || request.isHttpError)
             {
-                case UnityWebRequest.Result.InProgress:
-                case UnityWebRequest.Result.ConnectionError:
-                case UnityWebRequest.Result.ProtocolError:
-                case UnityWebRequest.Result.DataProcessingError:
-                    _httpState = false;
-                    _httpText = request.error;
-                    break;
-                case UnityWebRequest.Result.Success:
-                    _httpState = true;
-                    break;
+                _httpDownloadState = false;
+                _httpDownloadText = request.error;
             }
-#endif
+            else
+            {
+                _httpDownloadState = true;
+                _httpDownloadText = request.downloadHandler.text;
+            }
         }
         catch (System.Exception e)
         {
@@ -112,15 +140,28 @@ public class HttpManager : MonoBehaviour, IManager
         }
     }
 
+    /// <summary>
+    /// Http Donwload
+    /// </summary>
+    /// <param name="url">链接</param>
+    /// <param name="path">路径</param>
+    /// <param name="append">断点续传</param>
+    /// <param name="progress">进度回调</param>
+    /// <param name="callback">完成回调</param>
+    /// <returns></returns>
     public async UniTask CoHttpDownload(string url, string path, bool append, System.Action<float> progress = null, System.Action<bool, string> callback = null)
     {
         await UniHttpDownload(url, path, append, progress);
-        callback?.Invoke(HttpState, HttpText);
+        callback?.Invoke(HttpDownloadState, HttpDownloadText);
     }
 
+    /// <summary>
+    /// 初始化
+    /// </summary>
     public void OnInitialize()
     {
-        _httpState = false;
+        _httpGetState = false;
+        _httpDownloadState = false;
         timeoutController = new TimeoutController();
         IsInitialized = true;
     }

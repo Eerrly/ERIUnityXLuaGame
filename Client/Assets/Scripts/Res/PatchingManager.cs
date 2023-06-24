@@ -162,6 +162,9 @@ public class PatchingManager : MonoBehaviour, IManager
         }
     }
 
+    /// <summary>
+    /// 初始化
+    /// </summary>
     public void OnInitialize()
     {
         vBytesFilePath = FileUtil.CombinePaths(Setting.CacheBundleRoot, "v.bytes");

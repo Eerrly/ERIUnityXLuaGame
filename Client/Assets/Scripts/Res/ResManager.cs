@@ -40,6 +40,10 @@ public class ResManager : MonoBehaviour, IManager
         return result;
     }
 
+    /// <summary>
+    /// 当引用计数为0时触发
+    /// </summary>
+    /// <param name="bundle"></param>
     public void OnReferenceBecameInvalid(ResourceBundle bundle)
     {
         lock (unloadResourceBundlesLock)
@@ -115,6 +119,7 @@ public class ResManager : MonoBehaviour, IManager
             }
         }
 
+        // 热更资源相关配置
         if(patchConfig != null)
         {
             for (int i = 0; i < patchConfig.items.Length; i++)
@@ -176,16 +181,33 @@ public class ResManager : MonoBehaviour, IManager
         return location;
     }
 
+    /// <summary>
+    /// 同步加载
+    /// </summary>
+    /// <param name="path">路径</param>
+    /// <param name="name">资源名</param>
+    /// <param name="onLoaded">加载完成回调方法</param>
     public void LoadSync(string path, string name, System.Action<Resource> onLoaded)
     {
         Load(path, name, ConvertPath(path), false, false, onLoaded);
     }
 
+    /// <summary>
+    /// 异步加载
+    /// </summary>
+    /// <param name="path">路径</param>
+    /// <param name="name">资源名</param>
+    /// <param name="onLoaded">加载完成回调方法</param>
     public void LoadAsync(string path, string name, System.Action<Resource> onLoaded)
     {
         Load(path, name, ConvertPath(path), true, false, onLoaded);
     }
 
+    /// <summary>
+    /// 异步加载
+    /// </summary>
+    /// <param name="path">路径</param>
+    /// <param name="onLoaded">加载完成回调方法</param>
     public void LoadAsync(string path, System.Action<Resource> onLoaded)
     {
         Load(path, null, ConvertPath(path), true, false, onLoaded);

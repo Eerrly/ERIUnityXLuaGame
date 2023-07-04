@@ -8,24 +8,45 @@ public class Global : Singleton<Global>
 {
 
     private ResManager _resManager;
+    /// <summary>
+    /// 资源管理器
+    /// </summary>
     public ResManager ResManager => _resManager;
 
     private LuaManager _luaManager;
+    /// <summary>
+    /// Lua管理器
+    /// </summary>
     public LuaManager LuaManager => _luaManager;
 
     private UIManager _uiManager;
+    /// <summary>
+    /// UI管理器
+    /// </summary>
     public UIManager UIManager => _uiManager;
 
     private SceneManager _sceneManager;
+    /// <summary>
+    /// 场景管理器
+    /// </summary>
     public SceneManager SceneManager => _sceneManager;
 
     private HttpManager _httpManager;
+    /// <summary>
+    /// Http管理器
+    /// </summary>
     public HttpManager HttpManager => _httpManager;
 
     private PatchingManager _patchingManager;
+    /// <summary>
+    /// 热更管理器
+    /// </summary>
     public PatchingManager PatchingManager => _patchingManager;
 
-    public List<IManager> managers;
+    /// <summary>
+    /// 管理器列表
+    /// </summary>
+    public List<IManager> Managers;
 
     public UnityEvent OnGameStart;
     public UnityEvent OnSceneChanged;
@@ -38,7 +59,7 @@ public class Global : Singleton<Global>
         Application.runInBackground = true;
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
 
-        managers = new List<IManager>();
+        Managers = new List<IManager>(10);
         OnGameStart = new UnityEvent();
 
         Util.GetOrAddComponent<EventSystem>(gameObject);
@@ -50,12 +71,12 @@ public class Global : Singleton<Global>
         _sceneManager = Util.GetOrAddComponent<SceneManager>(gameObject);
         _httpManager = Util.GetOrAddComponent<HttpManager>(gameObject);
         _patchingManager = Util.GetOrAddComponent<PatchingManager>(gameObject);
-        managers.Add(_resManager);
-        managers.Add(_luaManager);
-        managers.Add(_uiManager);
-        managers.Add(_sceneManager);
-        managers.Add(_httpManager);
-        managers.Add(_patchingManager);
+        Managers.Add(_resManager);
+        Managers.Add(_luaManager);
+        Managers.Add(_uiManager);
+        Managers.Add(_sceneManager);
+        Managers.Add(_httpManager);
+        Managers.Add(_patchingManager);
 
         InitializeDebugLogSystem();
     }
@@ -74,16 +95,16 @@ public class Global : Singleton<Global>
     /// <returns></returns>
     private IEnumerator CoStart()
     {
-        for (int i = 0; i < managers.Count; i++)
+        for (int i = 0; i < Managers.Count; i++)
         {
-            managers[i].OnInitialize();
+            Managers[i].OnInitialize();
         }
         while (true)
         {
             var _IsAllInitialized = true;
-            for (int i = 0; i < managers.Count; i++)
+            for (int i = 0; i < Managers.Count; i++)
             {
-                if (!managers[i].IsInitialized)
+                if (!Managers[i].IsInitialized)
                 {
                     _IsAllInitialized = false;
                 }
@@ -142,9 +163,9 @@ public class Global : Singleton<Global>
     /// </summary>
     public override void OnRelease()
     {
-        for (int i = 0; i < managers.Count; i++)
+        for (int i = 0; i < Managers.Count; i++)
         {
-            managers[i].OnRelease();
+            Managers[i].OnRelease();
         }
     }
 

@@ -1,1 +1,114 @@
-{"items":[{"hash":1193447771,"dependencies":[],"offset":4,"size":8623,"directories":true,"extension":"","packageResourcePath":"lua/32","isPatching":false,"md5":"455560df041c14eeeb6ee22a13b827ff"},{"hash":1243780630,"dependencies":[],"offset":8627,"size":8650,"directories":true,"extension":"","packageResourcePath":"lua/64","isPatching":false,"md5":"55dd719c007ce58e2f2dbcc18723d359"},{"hash":1258184006,"dependencies":[],"offset":17277,"size":4371,"directories":false,"extension":"","packageResourcePath":"scenes/loading.unity","isPatching":false,"md5":"83eaf5ec88e3a5737027ee4c675e3a3a"},{"hash":1282920260,"dependencies":[],"offset":21648,"size":46385,"directories":false,"extension":"","packageResourcePath":"scenes/test.unity","isPatching":false,"md5":"c60155225de502ee2438c15bc40432db"},{"hash":1829105156,"dependencies":[],"offset":68033,"size":49544,"directories":false,"extension":"","packageResourcePath":"ui/b.prefab","isPatching":false,"md5":"1416529c8b7136d7e7da0190793975aa"},{"hash":2100422461,"dependencies":[],"offset":117577,"size":49533,"directories":false,"extension":"","packageResourcePath":"ui/a.prefab","isPatching":false,"md5":"faa5c428357851a27a6724ae505269dc"},{"hash":3343917143,"dependencies":[],"offset":167110,"size":5460,"directories":false,"extension":"","packageResourcePath":"scenes/main.unity","isPatching":false,"md5":"f806db1efb2eb65ca93dc10fa25214f2"},{"hash":3432609834,"dependencies":[],"offset":172570,"size":7425331,"directories":false,"extension":"","packageResourcePath":"scenes/battle.unity","isPatching":false,"md5":"65cd8c71b44bf2e5697f7340f91e9387"},{"hash":533238153,"dependencies":[],"offset":7597901,"size":110847,"directories":true,"extension":"","packageResourcePath":"textures/a","isPatching":false,"md5":"eeccfd662dae40d4617f6b80e424fcbb"},{"hash":533238154,"dependencies":[],"offset":7708748,"size":30849,"directories":true,"extension":"","packageResourcePath":"textures/b","isPatching":false,"md5":"ef6f5193ed296284af7178e8c0a4e88d"}]}
+{
+    "items": [
+        {
+            "hash": 1193447771,
+            "dependencies": [],
+            "offset": 4,
+            "size": 8625,
+            "directories": true,
+            "extension": "",
+            "packageResourcePath": "lua/32",
+            "isPatching": false,
+            "md5": "433e335289325e8db90a90d6098c8592"
+        },
+        {
+            "hash": 1243780630,
+            "dependencies": [],
+            "offset": 8629,
+            "size": 8647,
+            "directories": true,
+            "extension": "",
+            "packageResourcePath": "lua/64",
+            "isPatching": false,
+            "md5": "c82048db8822d06ab21b035749cd4280"
+        },
+        {
+            "hash": 1258184006,
+            "dependencies": [],
+            "offset": 17276,
+            "size": 4375,
+            "directories": false,
+            "extension": "",
+            "packageResourcePath": "scenes/loading.unity",
+            "isPatching": false,
+            "md5": "ca50e2e9591f65faca795fff486377f7"
+        },
+        {
+            "hash": 1282920260,
+            "dependencies": [],
+            "offset": 21651,
+            "size": 46389,
+            "directories": false,
+            "extension": "",
+            "packageResourcePath": "scenes/test.unity",
+            "isPatching": false,
+            "md5": "039a955d32135aa4d7402bca39fd737c"
+        },
+        {
+            "hash": 1829105156,
+            "dependencies": [],
+            "offset": 68040,
+            "size": 49656,
+            "directories": false,
+            "extension": "",
+            "packageResourcePath": "ui/b.prefab",
+            "isPatching": false,
+            "md5": "3283800787b6f132d2f88d28c0d3b275"
+        },
+        {
+            "hash": 2100422461,
+            "dependencies": [],
+            "offset": 117696,
+            "size": 49648,
+            "directories": false,
+            "extension": "",
+            "packageResourcePath": "ui/a.prefab",
+            "isPatching": false,
+            "md5": "e60275177fe493c1fb7c68b513eac484"
+        },
+        {
+            "hash": 3343917143,
+            "dependencies": [],
+            "offset": 167344,
+            "size": 5459,
+            "directories": false,
+            "extension": "",
+            "packageResourcePath": "scenes/main.unity",
+            "isPatching": false,
+            "md5": "09e0e829e06e435e8a3943d108cbdcb5"
+        },
+        {
+            "hash": 3432609834,
+            "dependencies": [],
+            "offset": 172803,
+            "size": 7425330,
+            "directories": false,
+            "extension": "",
+            "packageResourcePath": "scenes/battle.unity",
+            "isPatching": false,
+            "md5": "213cdf56371e8fd551f1ee50299de15b"
+        },
+        {
+            "hash": 533238153,
+            "dependencies": [],
+            "offset": 7598133,
+            "size": 110973,
+            "directories": true,
+            "extension": "",
+            "packageResourcePath": "textures/a",
+            "isPatching": false,
+            "md5": "20ba8e2fc207619066be8e6bec927d96"
+        },
+        {
+            "hash": 533238154,
+            "dependencies": [],
+            "offset": 7709106,
+            "size": 30979,
+            "directories": true,
+            "extension": "",
+            "packageResourcePath": "textures/b",
+            "isPatching": false,
+            "md5": "79e29162f9d9d874800aa669fbf3e58c"
+        }
+    ]
+}

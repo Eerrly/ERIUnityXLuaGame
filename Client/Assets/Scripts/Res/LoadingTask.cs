@@ -1,7 +1,13 @@
 ﻿using System.Collections.Generic;
 
+/// <summary>
+/// 加载任务
+/// </summary>
 public class LoadingTask
 {
+    /// <summary>
+    /// 加载任务的状态
+    /// </summary>
     public ELoadingState state;
     public string path;
     public string name;
@@ -16,6 +22,9 @@ public class LoadingTask
     public Dictionary<string, bool> namesDict = new Dictionary<string, bool>();
     public List<System.Action<Resource>> onLoadedCallbacks = new List<System.Action<Resource>>();
 
+    /// <summary>
+    /// 重置数据
+    /// </summary>
     public void Reset()
     {
         state = ELoadingState.None;

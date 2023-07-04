@@ -9,18 +9,31 @@ using System;
 [LuaCallCSharp, GenComment]
 public partial class LuaBehaviour : MonoBehaviour
 {
+    /// <summary>
+    /// UI事件
+    /// </summary>
     internal struct Event
     {
         public int eventId;
         public int id;
     }
 
+    /// <summary>
+    /// UI事件ID
+    /// </summary>
     internal enum EventID
     {
         ButtonClicked = 0,
     }
 
+    /// <summary>
+    /// 节点组件ID索引对应组件
+    /// </summary>
     private UIBehaviour[] id2ui;
+
+    /// <summary>
+    /// 节点名对应组件ID
+    /// </summary>
     private Dictionary<string, int> name2id;
     private Dictionary<int, Coroutine> _cacheCoroutines = null;
     private List<Resource> _loadedCache = null;
@@ -30,6 +43,9 @@ public partial class LuaBehaviour : MonoBehaviour
     private List<Event> events;
     private int index;
 
+    /// <summary>
+    /// 当前Lua执行器运行时所使用到的协程列表
+    /// </summary>
     public Dictionary<int, Coroutine> CacheCoroutines
     {
         get
@@ -42,6 +58,9 @@ public partial class LuaBehaviour : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 当前Lua执行器运行时所加载资源的缓存列表
+    /// </summary>
     public List<Resource> LoadedCache
     {
         get
@@ -79,12 +98,20 @@ public partial class LuaBehaviour : MonoBehaviour
                 {
                     ui = uis[i].gameObject.AddComponent<LuaBehaviourNode>();
                 }
+                // 子节点名对应组件ID
                 name2id.Add(name, id);
+                // 子节点组件ID索引组件
                 id2ui[id++] = ui;
             }
         }
     }
 
+    /// <summary>
+    /// 实例化
+    /// </summary>
+    /// <param name="instance">Lua对象</param>
+    /// <param name="root">父节点Lua执行器</param>
+    /// <param name="index">索引</param>
     [NoComment]
     public void Initialize(object instance, LuaBehaviour root = null, int index = 0)
     {
@@ -101,6 +128,10 @@ public partial class LuaBehaviour : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 绑定Lua
+    /// </summary>
+    /// <param name="instance">Lua对象</param>
     [NoComment]
     public void BindInstance(object instance)
     {
@@ -116,6 +147,14 @@ public partial class LuaBehaviour : MonoBehaviour
         return id;
     }
 
+    /// <summary>
+    /// 尝试获取任意一个继承自MonoBehaviour的组件
+    /// </summary>
+    /// <typeparam name="T">继承自MonoBehaviour的组件类</typeparam>
+    /// <param name="id">组件ID</param>
+    /// <param name="view">组件</param>
+    /// <param name="addIfNotExist">如果没有是否添加一个</param>
+    /// <returns></returns>
     [NoComment]
     public bool TryGetControl<T>(int id, out T view, bool addIfNotExist = false) where T : MonoBehaviour
     {
@@ -144,6 +183,12 @@ public partial class LuaBehaviour : MonoBehaviour
         return true;
     }
 
+    /// <summary>
+    /// 执行Lua函数
+    /// </summary>
+    /// <param name="callBack">Lua函数</param>
+    /// <param name="args">参数</param>
+    /// <returns></returns>
     [NoComment]
     public object[] InvokeLuaCallback(LuaFunction callBack, params object[] args)
     {
@@ -170,6 +215,12 @@ public partial class LuaBehaviour : MonoBehaviour
         return default(object[]);
     }
 
+    /// <summary>
+    /// 组合2个数组参数
+    /// </summary>
+    /// <param name="args">原数组</param>
+    /// <param name="insert">插入数组</param>
+    /// <returns></returns>
     [NoComment]
     public object[] MixArgs(object[] args, params object[] insert)
     {
@@ -196,6 +247,12 @@ public partial class LuaBehaviour : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 绑定各种UI事件
+    /// </summary>
+    /// <param name="eventId">UI事件ID</param>
+    /// <param name="id">组件ID</param>
+    /// <param name="callBack">触发函数</param>
     public void BindEvent(int eventId, int id, LuaFunction callBack)
     {
         for (int i = events.Count - 1; i >= 0; i--)
@@ -221,6 +278,9 @@ public partial class LuaBehaviour : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Lua执行器释放
+    /// </summary>
     [NoComment]
     public void Release()
     {
@@ -260,7 +320,11 @@ public partial class LuaBehaviour : MonoBehaviour
 
 public partial class LuaBehaviour : MonoBehaviour
 {
-
+    /// <summary>
+    /// 物体是否激活
+    /// </summary>
+    /// <param name="id">组件ID</param>
+    /// <returns></returns>
     public bool IsActive(int id)
     {
         UIBehaviour c = null;
@@ -271,6 +335,11 @@ public partial class LuaBehaviour : MonoBehaviour
         return false;
     }
 
+    /// <summary>
+    /// 设置CanvasGroup的Alpha
+    /// </summary>
+    /// <param name="id">组件ID</param>
+    /// <param name="alpha">Alpha</param>
     public void SetCanvasGroupAlpha(int id, float alpha)
     {
         MonoBehaviour c = null;
@@ -285,6 +354,11 @@ public partial class LuaBehaviour : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 设置物体激活
+    /// </summary>
+    /// <param name="id">组件ID</param>
+    /// <param name="active">是否激活</param>
     public void SetActive(int id, bool active)
     {
         UIBehaviour c = null;
@@ -297,6 +371,12 @@ public partial class LuaBehaviour : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 设置父节点
+    /// </summary>
+    /// <param name="id1">当前节点组件ID</param>
+    /// <param name="id2">父节点组件ID</param>
+    /// <param name="worldPositionStays">保持与以前相同的世界空间位置、旋转和缩放</param>
     public void SetParent(int id1, int id2, bool worldPositionStays)
     {
         UIBehaviour c1 = null;
@@ -307,6 +387,11 @@ public partial class LuaBehaviour : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 获取UI组件开关
+    /// </summary>
+    /// <param name="id">组件ID</param>
+    /// <returns></returns>
     public bool IsEnable(int id)
     {
         UIBehaviour c = null;
@@ -317,6 +402,11 @@ public partial class LuaBehaviour : MonoBehaviour
         return false;
     }
 
+    /// <summary>
+    /// 设置UI组件开关
+    /// </summary>
+    /// <param name="id">组件ID</param>
+    /// <param name="enabled">开关</param>
     public void SetEnable(int id, bool enabled)
     {
         UIBehaviour c = null;
@@ -326,6 +416,13 @@ public partial class LuaBehaviour : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 设置Position
+    /// </summary>
+    /// <param name="id">组件ID</param>
+    /// <param name="x">X</param>
+    /// <param name="y">Y</param>
+    /// <param name="z">Z</param>
     public void SetPosition(int id, float x, float y, float z)
     {
         MonoBehaviour c = null;
@@ -335,6 +432,13 @@ public partial class LuaBehaviour : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 设置旋转
+    /// </summary>
+    /// <param name="id">组件ID</param>
+    /// <param name="x">X</param>
+    /// <param name="y">Y</param>
+    /// <param name="z">Z</param>
     public void SetRotation(int id, float x, float y, float z)
     {
         MonoBehaviour c = null;
@@ -344,6 +448,13 @@ public partial class LuaBehaviour : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 设置Scale
+    /// </summary>
+    /// <param name="id">组件ID</param>
+    /// <param name="x">X</param>
+    /// <param name="y">Y</param>
+    /// <param name="z">Z</param>
     public void SetScale(int id, float x, float y, float z)
     {
         MonoBehaviour c = null;
@@ -353,6 +464,13 @@ public partial class LuaBehaviour : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 设置AnchoredPosition
+    /// </summary>
+    /// <param name="id">组件ID</param>
+    /// <param name="x">X</param>
+    /// <param name="y">Y</param>
+    /// <param name="z">Z</param>
     public void SetAnchoredPosition(int id, float x, float y, float z)
     {
         MonoBehaviour c = null;
@@ -366,6 +484,11 @@ public partial class LuaBehaviour : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 设置激活状态
+    /// </summary>
+    /// <param name="id">组件ID</param>
+    /// <param name="interactable">是否激活</param>
     public void SetInteractable(int id, bool interactable)
     {
         Selectable s = null;
@@ -375,7 +498,12 @@ public partial class LuaBehaviour : MonoBehaviour
         }
     }
 
-    public bool IsInteractable(int id, bool interactable)
+    /// <summary>
+    /// 是否为激活状态
+    /// </summary>
+    /// <param name="id">组件ID</param>
+    /// <returns>是否为激活状态</returns>
+    public bool IsInteractable(int id)
     {
         Selectable s = null;
         if (TryGetControl(id, out s))
@@ -385,6 +513,11 @@ public partial class LuaBehaviour : MonoBehaviour
         return false;
     }
 
+    /// <summary>
+    /// 设置按钮组件开关
+    /// </summary>
+    /// <param name="id">组件ID</param>
+    /// <param name="enabled">开关</param>
     public void SetButtonEnable(int id, bool enabled)
     {
         Button c = null;
@@ -394,6 +527,11 @@ public partial class LuaBehaviour : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 获取文本
+    /// </summary>
+    /// <param name="id">组件ID</param>
+    /// <returns>文本</returns>
     public string GetText(int id)
     {
         Text c = null;
@@ -404,6 +542,11 @@ public partial class LuaBehaviour : MonoBehaviour
         return "";
     }
 
+    /// <summary>
+    /// 设置文本
+    /// </summary>
+    /// <param name="id">组件ID</param>
+    /// <param name="text">文本</param>
     public void SetText(int id, string text)
     {
         Text c = null;
@@ -413,6 +556,11 @@ public partial class LuaBehaviour : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 设置字体大小
+    /// </summary>
+    /// <param name="id">组件ID</param>
+    /// <param name="size">字体大小</param>
     public void SetFontSize(int id, int size)
     {
         Text c = null;
@@ -422,6 +570,14 @@ public partial class LuaBehaviour : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 设置图片
+    /// </summary>
+    /// <param name="id">组件ID</param>
+    /// <param name="dir">目录</param>
+    /// <param name="spriteName">图片名</param>
+    /// <param name="resetSize">是否使用默认尺寸</param>
+    /// <param name="sizeRatio">尺寸缩放比例</param>
     public void SetImage(int id, string dir, string spriteName, bool resetSize = false, float sizeRatio = 1)
     {
         Image c = null;
@@ -442,6 +598,14 @@ public partial class LuaBehaviour : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 设置图片
+    /// </summary>
+    /// <param name="c">Image</param>
+    /// <param name="sprite">Sprite</param>
+    /// <param name="cache">资源缓存</param>
+    /// <param name="resetSize">是否使用默认尺寸</param>
+    /// <param name="sizeRatio">尺寸缩放比例</param>
     private void SetImage(Image c, Sprite sprite, Resource cache, bool resetSize, float sizeRatio)
     {
         LoadedCache.Add(cache);
@@ -457,6 +621,16 @@ public partial class LuaBehaviour : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 设置图片
+    /// </summary>
+    /// <param name="id">加载资源的协程ID</param>
+    /// <param name="c">Image</param>
+    /// <param name="dir">目录</param>
+    /// <param name="spriteName">图片资源名</param>
+    /// <param name="resetSize">是否使用默认尺寸</param>
+    /// <param name="sizeRatio">尺寸缩放比例</param>
+    /// <returns></returns>
     private IEnumerator CoSetImage(int id, Image c, string dir, string spriteName, bool resetSize, float sizeRatio)
     {
         var loader = new ResLoader(dir, spriteName, false);

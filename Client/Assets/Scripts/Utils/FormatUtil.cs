@@ -1,6 +1,10 @@
 ﻿using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
+/// <summary>
+/// MemoryStream的扩展类
+/// 注意：类与方法都必须是静态，第一个参数必须传递"this System.IO.MemoryStream stream"
+/// </summary>
 public static class MemoryStreamEx
 {
     public static void Reset(this System.IO.MemoryStream stream)

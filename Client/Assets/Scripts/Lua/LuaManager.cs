@@ -10,6 +10,9 @@ public class LuaManager : MonoBehaviour, IManager
 
     private Dictionary<string, byte[]> _codes = new Dictionary<string, byte[]>();
     private LuaEnv _luaEnv;
+    /// <summary>
+    /// Lua与C#的桥接对象
+    /// </summary>
     public LuaEnv luaEnv => _luaEnv;
 
     private Dictionary<string, object[]> _luaDic = new Dictionary<string, object[]>();
@@ -21,11 +24,11 @@ public class LuaManager : MonoBehaviour, IManager
     }
 
     /// <summary>
-    /// 绑定Lua对象
+    /// 将所有预制好的组件与Lua对象进行绑定
     /// </summary>
-    /// <param name="view">LuaBehaviour对象</param>
+    /// <param name="view">Lua执行器</param>
     /// <param name="name2id">Name-Id的字典</param>
-    /// <param name="instance">Lua Table</param>
+    /// <param name="instance">Lua对象</param>
     public void BindInstance(LuaBehaviour view, Dictionary<string, int> name2id, object instance)
     {
         LuaTable self = (LuaTable)instance;
@@ -41,6 +44,9 @@ public class LuaManager : MonoBehaviour, IManager
         self.Set<string, LuaTable>("ID", id);
     }
 
+    /// <summary>
+    /// 释放
+    /// </summary>
     public void OnRelease() {
         if (_luaEnv != null)
             _luaEnv.Dispose();
@@ -48,6 +54,9 @@ public class LuaManager : MonoBehaviour, IManager
         IsInitialized = false;
     }
 
+    /// <summary>
+    /// 初始化
+    /// </summary>
     public void OnInitialize()
     {
         _luaDic.Clear();
@@ -62,10 +71,10 @@ public class LuaManager : MonoBehaviour, IManager
     }
 
     /// <summary>
-    /// Lua脚本加载器
+    /// 自定义Lua脚本加载器
     /// </summary>
     /// <param name="path">Lua脚本路径</param>
-    /// <returns>byte数组</returns>
+    /// <returns>字节流</returns>
     public byte[] Loader(ref string path)
     {
         var key = path.ToLower().Replace(".", "/");
@@ -111,7 +120,7 @@ public class LuaManager : MonoBehaviour, IManager
     }
 
     /// <summary>
-    /// 异步加载全部Lua脚本资源
+    /// 加载Lua脚本资源
     /// </summary>
     /// <returns></returns>
     public IEnumerator CoLoadScript()

@@ -171,6 +171,7 @@ public partial class ResLoader
         var manifest = Global.Instance.ResManager.manifest;
 
         ResourceBundle bundle = null;
+        // 正在加载的就等加载完
         if (loadingBundles.Contains(task.hash)) {
             while (true)
             {
@@ -181,8 +182,11 @@ public partial class ResLoader
                 yield return null;
             }
         }
+        // 没有加载过的
         if(!loadedBundles.TryGetValue(task.hash, out bundle)){
             loadingBundles.Add(task.hash);
+
+            // 依赖资源是否加载完了都
             var dependencies = manifest.GetDependencies(task.hash);
             while (true)
             {
@@ -207,6 +211,7 @@ public partial class ResLoader
             {
                 unloadBundleMap.Remove(task.hash);
             }
+            // 加载AssetBundle
             else if (task.hash != default(uint))
             {
                 if (task.async)
@@ -291,6 +296,7 @@ public partial class ResLoader
             loadedBundles.Add(task.hash, bundle);
             loadingBundles.Remove(task.hash);
         }
+        // 已经加载过有缓存的
         else
         {
             bundle.Retain();
@@ -334,7 +340,7 @@ public partial class ResLoader
             if (!string.IsNullOrEmpty(name))
             {
                 var item = manifest.GetItem(task.hash);
-                if (item != null && item.isPatching)
+                if (item != null && item.directories)
                 {
                     task.file = new Resource(task.path, task.name, bundle.LoadAsset(name), bundle, null);
                 }
@@ -361,7 +367,7 @@ public partial class ResLoader
                     var item = manifest.GetItem(task.hash);
                     foreach (var kv in task.namesDict)
                     {
-                        if(item != null && item.isPatching)
+                        if(item != null && item.directories)
                         {
                             loadedFiles[index++] = bundle.LoadAsset(kv.Key + task.extension);
                         }

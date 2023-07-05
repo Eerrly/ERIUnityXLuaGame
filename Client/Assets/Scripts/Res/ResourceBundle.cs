@@ -6,6 +6,9 @@ public class ResourceBundle : ReferenceCountBase
 
     private ResManager _manager;
 
+    /// <summary>
+    /// 资源管理器
+    /// </summary>
     public ResManager Manager => _manager;
 
     public uint Hash { get; private set; }
@@ -18,6 +21,9 @@ public class ResourceBundle : ReferenceCountBase
 
     public Object SharedAsset;
 
+    /// <summary>
+    /// 是否为流式加载的场景资源
+    /// </summary>
     public bool isStreamedSceneAssetBundle => RawBundle != null && RawBundle.isStreamedSceneAssetBundle;
 
     public bool isSingleObject => RawBundle != null && RawBundle.GetAllAssetNames().Length == 1;
@@ -30,11 +36,17 @@ public class ResourceBundle : ReferenceCountBase
         PackageBundle = packageBundle;
     }
 
+    /// <summary>
+    /// 当引用计数为0时触发
+    /// </summary>
     public override void OnReferenceBecameInvalid()
     {
         Manager.OnReferenceBecameInvalid(this);
     }
 
+    /// <summary>
+    /// 卸载AssetBundle但是保留已经加载出来的物体
+    /// </summary>
     public void UnloadCache()
     {
         CacheUnload = true;
@@ -42,6 +54,9 @@ public class ResourceBundle : ReferenceCountBase
         PackageBundle?.Unload(false);
     }
 
+    /// <summary>
+    /// 释放AssetBundle并且卸载已经加载出来的物体
+    /// </summary>
     public void UnloadBundle()
     {
         RawBundle?.Unload(true);
@@ -68,6 +83,10 @@ public class ResourceBundle : ReferenceCountBase
         }
     }
 
+    /// <summary>
+    /// 加载Lua脚本
+    /// </summary>
+    /// <param name="dict">脚本名-字节流</param>
     public void LoadScript(Dictionary<string, byte[]> dict)
     {
         if(RawBundle != null)
@@ -94,6 +113,11 @@ public class ResourceBundle : ReferenceCountBase
         }
     }
 
+    /// <summary>
+    /// 加载资源
+    /// </summary>
+    /// <param name="name">资源名</param>
+    /// <returns></returns>
     public Object LoadAsset(string name)
     {
         if(RawBundle != null)
@@ -115,6 +139,11 @@ public class ResourceBundle : ReferenceCountBase
         return null;
     }
 
+    /// <summary>
+    /// 异步加载资源
+    /// </summary>
+    /// <param name="name">资源名</param>
+    /// <returns></returns>
     public AssetBundleRequest LoadAssetAsync(string name)
     {
         if(RawBundle != null)
@@ -128,6 +157,12 @@ public class ResourceBundle : ReferenceCountBase
         return null;
     }
 
+    /// <summary>
+    /// 异步加载所有资源
+    /// </summary>
+    /// <param name="type">类型</param>
+    /// <param name="packageRequest">AssetBundleRequest</param>
+    /// <returns></returns>
     public AssetBundleRequest LoadAllAssetsAsync(System.Type type, out AssetBundleRequest packageRequest)
     {
         packageRequest = null;

@@ -15,10 +15,27 @@ public class LoadingTask
     public uint hash;
     public Resource file;
     public string error;
+
+    /// <summary>
+    /// 字节偏移
+    /// </summary>
     public uint offset;
+
+    /// <summary>
+    /// 是否为异步加载
+    /// </summary>
     public bool async;
+
+    /// <summary>
+    /// 是否为依赖资源
+    /// </summary>
     public bool isDependency;
+
+    /// <summary>
+    /// 多少个依赖引用
+    /// </summary>
     public int dependencyRefCount;
+
     public Dictionary<string, bool> namesDict = new Dictionary<string, bool>();
     public List<System.Action<Resource>> onLoadedCallbacks = new List<System.Action<Resource>>();
 

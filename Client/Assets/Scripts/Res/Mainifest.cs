@@ -7,6 +7,9 @@ public class ManifestItem
     public uint[] dependencies;
     public uint offset;
     public int size;
+    /// <summary>
+    /// 以文件夹打包
+    /// </summary>
     public bool directories = false;
     public string extension;
     public string packageResourcePath;

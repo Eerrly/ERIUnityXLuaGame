@@ -714,9 +714,8 @@ namespace XLua.CSObjectWrap
                 
                 {
                     int _id = LuaAPI.xlua_tointeger(L, 2);
-                    bool _interactable = LuaAPI.lua_toboolean(L, 3);
                     
-                        bool gen_ret = gen_to_be_invoked.IsInteractable( _id, _interactable );
+                        bool gen_ret = gen_to_be_invoked.IsInteractable( _id );
                         LuaAPI.lua_pushboolean(L, gen_ret);
                     
                     

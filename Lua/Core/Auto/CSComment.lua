@@ -6,7 +6,7 @@
 ---@field GetText fun(self:CS.LuaBehaviour,id:int32):string
 ---@field IsActive fun(self:CS.LuaBehaviour,id:int32):boolean
 ---@field IsEnable fun(self:CS.LuaBehaviour,id:int32):boolean
----@field IsInteractable fun(self:CS.LuaBehaviour,id:int32, interactable:boolean):boolean
+---@field IsInteractable fun(self:CS.LuaBehaviour,id:int32):boolean
 ---@field SetActive fun(self:CS.LuaBehaviour,id:int32, active:boolean)
 ---@field SetAnchoredPosition fun(self:CS.LuaBehaviour,id:int32, x:single, y:single, z:single)
 ---@field SetButtonEnable fun(self:CS.LuaBehaviour,id:int32, enabled:boolean)

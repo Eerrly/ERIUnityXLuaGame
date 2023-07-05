@@ -46,6 +46,9 @@ public class Resource : ReferenceCountBase
         Error = error;
     }
 
+    /// <summary>
+    /// 引用计数为0时触发
+    /// </summary>
     public override void OnReferenceBecameInvalid()
     {
         if(_bundle != null)
@@ -55,12 +58,21 @@ public class Resource : ReferenceCountBase
         }
     }
 
+    /// <summary>
+    /// 获取GameObject
+    /// </summary>
+    /// <returns></returns>
     public GameObject GetGameObject()
     {
         GameObject go = Asset as GameObject;
         return go;
     }
 
+    /// <summary>
+    /// 获取GameObject
+    /// </summary>
+    /// <param name="name">资源名</param>
+    /// <returns></returns>
     public GameObject GetGameObject(string name)
     {
         if(Assets != null)
@@ -76,6 +88,10 @@ public class Resource : ReferenceCountBase
         return null;
     }
 
+    /// <summary>
+    /// 获取GameObject实例
+    /// </summary>
+    /// <returns></returns>
     public GameObject GetGameObjectInstance()
     {
         GameObject go = Asset as GameObject;
@@ -84,6 +100,11 @@ public class Resource : ReferenceCountBase
         return instance;
     }
 
+    /// <summary>
+    /// 获取GameObject实例
+    /// </summary>
+    /// <param name="name">资源名</param>
+    /// <returns></returns>
     public GameObject GetGameObjectInstance(string name)
     {
         if (Assets != null)
@@ -102,6 +123,11 @@ public class Resource : ReferenceCountBase
         return null;
     }
 
+    /// <summary>
+    /// 获取图片
+    /// </summary>
+    /// <param name="name">资源名</param>
+    /// <returns></returns>
     public Sprite GetSprite(string name = null)
     {
         Sprite sprite = null;
@@ -136,6 +162,10 @@ public class Resource : ReferenceCountBase
         return sprite;
     }
 
+    /// <summary>
+    /// 加载Lua脚本
+    /// </summary>
+    /// <param name="dict">脚本名-字节流</param>
     public void LoadScript(Dictionary<string, byte[]> dict)
     {
         _bundle.LoadScript(dict);

@@ -111,13 +111,20 @@ public struct BuildToolsItemEidtor
     [HorizontalGroup("Path")]
     public string filter;
 
-    [LabelText("是否以文件夹为单位"), LabelWidth(300)]
+    [LabelText("是否以文件夹为单位"), LabelWidth(120)]
     [HideLabel]
+    [HorizontalGroup("Setting")]
     public bool directories;
 
-    [LabelText("搜索选项"), LabelWidth(300)]
+    [LabelText(",搜索选项"), LabelWidth(80)]
     [HideLabel]
+    [HorizontalGroup("Setting")]
     public SearchOption searchoption;
+
+    [LabelText("资源列表"), LabelWidth(300)]
+    [HideLabel]
+    [HorizontalGroup("Assets")]
+    public string[] assets;
 
     public BuildToolsItemEidtor(BuildToolsEditorWin win, BuildToolsConfig.BuildToolsConfigItem item)
     {
@@ -130,6 +137,8 @@ public struct BuildToolsItemEidtor
         searchoption = (SearchOption)item.searchoption;
         extension = string.IsNullOrEmpty(item.extension) ? "" : item.extension;
         filter = string.IsNullOrEmpty(item.filter) ? "*.*" : item.filter;
+        assets = Util.FindAssets(EAssetSearchType.All, new string[] { FileUtil.CombinePaths(Setting.EditorBundlePath, root) });
+
         this.win = win;
     }
 

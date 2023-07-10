@@ -283,4 +283,42 @@ public class Util
 #endif
     }
 
+    /// <summary>
+    /// 查找所有的资源
+    /// </summary>
+    /// <param name="searchType">搜索的资源类型</param>
+    /// <param name="searchInFolders">指定搜索的文件夹</param>
+    /// <returns></returns>
+    public static string[] FindAssets(EAssetSearchType searchType, string[] searchInFolders)
+    {
+        // 注意：AssetDatabase.FindAssets()不支持末尾带分隔符的文件夹路径
+        for (int i = 0; i < searchInFolders.Length; i++)
+        {
+            string folderPath = searchInFolders[i];
+            searchInFolders[i] = folderPath.TrimEnd('/');
+        }
+
+        // 注意：获取指定目录下的所有资源对象（包括子文件夹）
+        string[] guids;
+        if (searchType == EAssetSearchType.All)
+            guids = AssetDatabase.FindAssets(string.Empty, searchInFolders);
+        else
+            guids = AssetDatabase.FindAssets($"t:{searchType}", searchInFolders);
+
+        // 注意：AssetDatabase.FindAssets()可能会获取到重复的资源
+        List<string> result = new List<string>();
+        for (int i = 0; i < guids.Length; i++)
+        {
+            string guid = guids[i];
+            string assetPath = AssetDatabase.GUIDToAssetPath(guid);
+            if (result.Contains(assetPath) == false)
+            {
+                result.Add(assetPath);
+            }
+        }
+
+        // 返回结果
+        return result.ToArray();
+    }
+
 }

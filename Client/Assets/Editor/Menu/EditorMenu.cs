@@ -22,6 +22,15 @@ public class ToolbarEditorMenu
     }
 
     /// <summary>
+    /// AB资源查看工具
+    /// </summary>
+    [MenuItem("工具/AssetBundle Tools", false, 1000)]
+    public static void AssetBundleTools()
+    {
+        AssetBundleToolsEditorWin.Open();
+    }
+
+    /// <summary>
     /// 构建热更工具
     /// </summary>
     [MenuItem("工具/Patch Tools", false, 1000)]

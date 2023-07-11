@@ -283,6 +283,8 @@ public class Util
 #endif
     }
 
+#if UNITY_EDITOR
+
     /// <summary>
     /// 查找所有的资源
     /// </summary>
@@ -320,5 +322,7 @@ public class Util
         // 返回结果
         return result.ToArray();
     }
+
+#endif
 
 }

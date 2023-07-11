@@ -89,6 +89,7 @@ public class LuaManager : MonoBehaviour, IManager
         }
         else
         {
+            // 在不使用AB包加载资源时，直接加载对应的Lua文件
             if (Directory.Exists(Setting.EditorLuaScriptRoot))
             {
                 var filePath = Setting.EditorLuaScriptRoot + "/" + key.Replace(".", "/") + ".lua";

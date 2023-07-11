@@ -52,6 +52,9 @@ public class ResManager : MonoBehaviour, IManager
         }
     }
 
+    /// <summary>
+    /// 初始化
+    /// </summary>
     public void OnInitialize()
     {
         preInitialized = true;
@@ -108,6 +111,7 @@ public class ResManager : MonoBehaviour, IManager
         }
 
         var strMainRootPath = FileUtil.CombinePaths(Setting.StreamingBundleRoot, "main.s");
+        // 整包资源相关配置
         if (config != null)
         {
             for (int i = 0; i < config.items.Length; i++)
@@ -299,22 +303,28 @@ public class ResManager : MonoBehaviour, IManager
 
     public void Unload(uint hash)
     {
-        if (preInitialized)
+        if (!preInitialized)
         {
-            ResourceBundle bundle;
-            if (loadedBundles.TryGetValue(hash, out bundle))
+            return;
+        }
+
+        ResourceBundle bundle;
+        if (loadedBundles.TryGetValue(hash, out bundle))
+        {
+            loadedBundles.Remove(hash);
+            if (manifest == null)
             {
-                loadedBundles.Remove(hash);
-                if (manifest != null)
+                return;
+            }
+            var dependencies = manifest.GetDependencies(hash);
+            for (int i = 0; i < dependencies.Length; i++)
+            {
+                ResourceBundle tmpBundle;
+                if (loadedBundles.TryGetValue(dependencies[i], out tmpBundle))
                 {
-                    var dependencies = manifest.GetDependencies(hash);
-                    for (int i = 0; i < dependencies.Length; i++)
+                    if (tmpBundle != null)
                     {
-                        ResourceBundle tmpBundle;
-                        if (loadedBundles.TryGetValue(dependencies[i], out tmpBundle))
-                        {
-                            if (tmpBundle != null) tmpBundle.Release();
-                        }
+                        tmpBundle.Release();
                     }
                 }
             }
@@ -323,67 +333,92 @@ public class ResManager : MonoBehaviour, IManager
 
     private void LateUpdate()
     {
-        if (preInitialized)
+        if (!preInitialized)
         {
-            if (unloadResourceBundles.Count > 0)
+            return;
+        }
+
+        ReleaseUnloadResourceBundles();
+
+        int loadingCount = 0;
+        for (int i = 0; i < loadingTasks.Count; i++)
+        {
+            var task = loadingTasks[i];
+            if (task.state == ELoadingState.Loading)
             {
-                lock (unloadResourceBundlesLock)
-                {
-                    while (unloadResourceBundles.Count > 0)
-                    {
-                        var bundle = unloadResourceBundles.Dequeue();
-                        bundle.RealUnload();
-                    }
-                }
+                loadingCount++;
             }
-            int loadingCount = 0;
-            for (int i = 0; i < loadingTasks.Count; i++)
+            if (loadingCount > Constant.MaxLoadingTaskCount)
             {
-                var task = loadingTasks[i];
-                if (task.state == ELoadingState.Loading)
-                {
-                    loadingCount++;
-                }
-                if (loadingCount > Constant.MaxLoadingTaskCount)
-                {
-                    break;
-                }
-                if (task.state == ELoadingState.Ready)
-                {
-                    task.state = ELoadingState.Loading;
+                break;
+            }
+            if (task.state == ELoadingState.Ready)
+            {
+                task.state = ELoadingState.Loading;
 #if UNITY_EDITOR
-                    if (Setting.Config.useAssetBundle)
-                    {
-                        StartCoroutine(ResLoader.CoLoadTask(task));
-                    }
-                    else
-                    {
-                        StartCoroutine(ResLoader.CoEditorLoadTask(task));
-                    }
+                if (Setting.Config.useAssetBundle)
+                {
+                    StartCoroutine(ResLoader.CoLoadTask(task));
+                }
+                else
+                {
+                    StartCoroutine(ResLoader.CoEditorLoadTask(task));
+                }
 #else
                     StartCoroutine(ResLoader.CoLoadTask(task));
 #endif
-                }
-                if (task.state == ELoadingState.Finished)
-                {
-                    task.state = ELoadingState.None;
-                    finishedList.Add(task);
-                }
             }
-            for (int i = 0; i < finishedList.Count; i++)
+            if (task.state == ELoadingState.Finished)
             {
-                var task = finishedList[i];
-                for (int j = 0; j < task.onLoadedCallbacks.Count; j++)
+                task.state = ELoadingState.None;
+                finishedList.Add(task);
+            }
+        }
+
+        CallBackFinishedResourceBundles();
+    }
+
+    /// <summary>
+    /// 触发所有已经完成的资源的完成回调
+    /// </summary>
+    private void CallBackFinishedResourceBundles()
+    {
+        if(finishedList.Count <= 0)
+        {
+            return;
+        }
+        for (int i = 0; i < finishedList.Count; i++)
+        {
+            var task = finishedList[i];
+            for (int j = 0; j < task.onLoadedCallbacks.Count; j++)
+            {
+                if (task.file != null)
                 {
-                    if (task.file != null)
-                    {
-                        task.file.Retain();
-                        task.onLoadedCallbacks[j](task.file);
-                        task.file.Release();
-                    }
+                    task.file.Retain();
+                    task.onLoadedCallbacks[j](task.file);
+                    task.file.Release();
                 }
             }
-            finishedList.Clear();
+        }
+        finishedList.Clear();
+    }
+
+    /// <summary>
+    /// 释放掉所有需要被卸载的资源
+    /// </summary>
+    private void ReleaseUnloadResourceBundles()
+    {
+        if(unloadResourceBundles.Count <= 0)
+        {
+            return;
+        }
+        lock (unloadResourceBundlesLock)
+        {
+            while (unloadResourceBundles.Count > 0)
+            {
+                var bundle = unloadResourceBundles.Dequeue();
+                bundle.RealUnload();
+            }
         }
     }
 
@@ -405,17 +440,7 @@ public class ResManager : MonoBehaviour, IManager
         loadingTasks.Clear();
         finishedList.Clear();
         ResLoader.requestList.Clear();
-        if (unloadResourceBundles.Count > 0)
-        {
-            lock (unloadResourceBundlesLock)
-            {
-                while (unloadResourceBundles.Count > 0)
-                {
-                    var bundle = unloadResourceBundles.Dequeue();
-                    bundle.RealUnload();
-                }
-            }
-        }
+        ReleaseUnloadResourceBundles();
         IsInitialized = false;
     }
 

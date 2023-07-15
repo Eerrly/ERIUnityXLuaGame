@@ -4,6 +4,9 @@ using System.Text;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using System.Collections.Generic;
+using System.Runtime.ConstrainedExecution;
+using System.Diagnostics.Eventing.Reader;
+using System.Linq;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -291,34 +294,24 @@ public class Util
     /// <param name="searchType">搜索的资源类型</param>
     /// <param name="searchInFolders">指定搜索的文件夹</param>
     /// <returns></returns>
-    public static string[] FindAssets(EAssetSearchType searchType, string[] searchInFolders)
+    public static string[] FindAssets(string searchInFolders, SearchOption searchOption, string filter, bool directories)
     {
-        // 注意：AssetDatabase.FindAssets()不支持末尾带分隔符的文件夹路径
-        for (int i = 0; i < searchInFolders.Length; i++)
+        List<string> result = null;
+        if (directories)
         {
-            string folderPath = searchInFolders[i];
-            searchInFolders[i] = folderPath.TrimEnd('/');
+            result = Directory.GetDirectories(searchInFolders, filter, searchOption).ToList();
         }
-
-        // 注意：获取指定目录下的所有资源对象（包括子文件夹）
-        string[] guids;
-        if (searchType == EAssetSearchType.All)
-            guids = AssetDatabase.FindAssets(string.Empty, searchInFolders);
         else
-            guids = AssetDatabase.FindAssets($"t:{searchType}", searchInFolders);
-
-        // 注意：AssetDatabase.FindAssets()可能会获取到重复的资源
-        List<string> result = new List<string>();
-        for (int i = 0; i < guids.Length; i++)
         {
-            string guid = guids[i];
-            string assetPath = AssetDatabase.GUIDToAssetPath(guid);
-            if (result.Contains(assetPath) == false)
+            result = Directory.GetFiles(searchInFolders, filter, searchOption).ToList();
+        }
+        for (int i = 0; i < result.Count; i++)
+        {
+            if (result[i].EndsWith(".meta"))
             {
-                result.Add(assetPath);
+                result.Remove(result[i]);
             }
         }
-
         // 返回结果
         return result.ToArray();
     }

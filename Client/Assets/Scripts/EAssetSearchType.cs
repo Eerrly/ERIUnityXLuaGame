@@ -3,22 +3,8 @@
 /// </summary>
 public enum EAssetSearchType
 {
+	//全部
 	All,
-	RuntimeAnimatorController,
-	AnimationClip,
-	AudioClip,
-	AudioMixer,
-	Font,
-	Material,
-	Mesh,
-	Model,
-	PhysicMaterial,
-	Prefab,
-	Scene,
-	Script,
-	Shader,
-	Sprite,
-	Texture,
-	TextAsset,
-	VideoClip,
+	//文件夹
+	Folder,
 }

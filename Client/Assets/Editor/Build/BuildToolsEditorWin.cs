@@ -137,7 +137,7 @@ public struct BuildToolsItemEidtor
         searchoption = (SearchOption)item.searchoption;
         extension = string.IsNullOrEmpty(item.extension) ? "" : item.extension;
         filter = string.IsNullOrEmpty(item.filter) ? "*.*" : item.filter;
-        assets = Util.FindAssets(EAssetSearchType.All, new string[] { FileUtil.CombinePaths(Setting.EditorBundlePath, root) });
+        assets = Util.FindAssets(FileUtil.CombinePaths(Setting.EditorBundlePath, root), searchoption, filter, directories);
 
         this.win = win;
     }

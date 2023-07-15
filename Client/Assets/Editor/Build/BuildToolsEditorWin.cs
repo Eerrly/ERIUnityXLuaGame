@@ -99,26 +99,31 @@ public struct BuildToolsItemEidtor
     [HideLabel]
     [FolderPath(AbsolutePath = false, ParentFolder = "Assets/Sources/", UseBackslashes = false, RequireExistingPath = true)]
     [HorizontalGroup("Path")]
+    [OnValueChanged("RefreshAssets")]
     public string root;
 
     [LabelText(",文件后缀"), LabelWidth(55)]
     [HideLabel]
     [HorizontalGroup("Path")]
+    [OnValueChanged("RefreshAssets")]
     public string extension;
 
     [LabelText(",筛选格式"), LabelWidth(55)]
     [HideLabel]
     [HorizontalGroup("Path")]
+    [OnValueChanged("RefreshAssets")]
     public string filter;
 
     [LabelText("是否以文件夹为单位"), LabelWidth(120)]
     [HideLabel]
     [HorizontalGroup("Setting")]
+    [OnValueChanged("RefreshAssets")]
     public bool directories;
 
     [LabelText(",搜索选项"), LabelWidth(80)]
     [HideLabel]
     [HorizontalGroup("Setting")]
+    [OnValueChanged("RefreshAssets")]
     public SearchOption searchoption;
 
     [LabelText("资源列表"), LabelWidth(300)]
@@ -140,6 +145,11 @@ public struct BuildToolsItemEidtor
         assets = Util.FindAssets(FileUtil.CombinePaths(Setting.EditorBundlePath, root), searchoption, filter, directories);
 
         this.win = win;
+    }
+
+    public void RefreshAssets()
+    {
+        assets = Util.FindAssets(FileUtil.CombinePaths(Setting.EditorBundlePath, root), searchoption, filter, directories);
     }
 
 }

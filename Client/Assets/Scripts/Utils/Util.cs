@@ -296,22 +296,26 @@ public class Util
     /// <returns></returns>
     public static string[] FindAssets(string searchInFolders, SearchOption searchOption, string filter, bool directories)
     {
-        List<string> result = null;
+        
+        string[] items;
         if (directories)
         {
-            result = Directory.GetDirectories(searchInFolders, filter, searchOption).ToList();
+            items = Directory.GetDirectories(searchInFolders, filter, searchOption);
         }
         else
         {
-            result = Directory.GetFiles(searchInFolders, filter, searchOption).ToList();
+            items = Directory.GetFiles(searchInFolders, filter, searchOption);
         }
-        for (int i = 0; i < result.Count; i++)
+
+        List<string> result = new List<string>();
+        for (int i = 0; i < items.Length; i++)
         {
-            if (result[i].EndsWith(".meta"))
+            if (!items[i].EndsWith(".meta"))
             {
-                result.Remove(result[i]);
+                result.Add(items[i]);
             }
         }
+
         // 返回结果
         return result.ToArray();
     }

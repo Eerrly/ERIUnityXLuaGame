@@ -32,7 +32,7 @@ public class LoadingTask
     public bool isDependency;
 
     /// <summary>
-    /// 多少个依赖引用
+    /// 依赖引用数量
     /// </summary>
     public int dependencyRefCount;
 

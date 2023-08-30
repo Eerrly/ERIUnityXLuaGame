@@ -1,6 +1,9 @@
 ﻿using System;
 using System.IO;
 
+/// <summary>
+/// 文件工具
+/// </summary>
 public class FileUtil
 {
     /// <summary>
@@ -22,7 +25,7 @@ public class FileUtil
     /// <returns></returns>
     public static string Normalized(string path)
     {
-        path = path.Replace("\\", "/");
+        path = path.Replace(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
         return path;
     }
 

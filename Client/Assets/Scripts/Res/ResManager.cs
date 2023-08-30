@@ -2,6 +2,9 @@
 using System.Collections;
 using UnityEngine;
 
+/// <summary>
+/// 资源管理器
+/// </summary>
 public class ResManager : MonoBehaviour, IManager
 {
     public bool IsInitialized { get; set; }
@@ -253,6 +256,8 @@ public class ResManager : MonoBehaviour, IManager
         task.namesDict = namesDict;
         task.async = async;
         task.isDependency = isDependency;
+
+        // 在下一帧开始LoadingTask之前，先加载依赖
         if (manifest != null)
         {
             var dependencies = manifest.GetDependencies(task.hash, out task.offset);

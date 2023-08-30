@@ -99,7 +99,7 @@ public class PatchingManager : MonoBehaviour, IManager
             });
             if (File.Exists(tmpLocalRcFilePath))
             {
-                // 从RC文件中拿到需要下载的资源列表
+                // 从RC文件中拿到需要下载的资源列表，比较MD5，如果不同则加入到下载集合中
                 var tmpConfJson = System.Text.ASCIIEncoding.Default.GetString(File.ReadAllBytes(tmpLocalRcFilePath));
                 var tmpConf = Newtonsoft.Json.JsonConvert.DeserializeObject<ManifestConfig>(tmpConfJson);
                 foreach (var item in tmpConf.items)

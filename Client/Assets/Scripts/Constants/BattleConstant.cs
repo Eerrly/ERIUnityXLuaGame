@@ -8,7 +8,7 @@ public class BattleConstant
     public static readonly int FrameInterval = 30;
 
     // 玩家Prefab
-    public static readonly string playerCharacterPath = "Prefabs/CompleteTank";
+    public static readonly string playerCharacterPath = "Prefabs/Cube";
     // 玩家生成位置
     public static readonly Vector3[] InitPlayerPos = { new Vector3(-3, 0, 30), new Vector3(13, 0, -5) };
     // 玩家生成旋转

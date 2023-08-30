@@ -156,6 +156,7 @@ public class BattleNetController
                 unsafe
                 {
                     var sendBuffer = _sendBuffer;
+                    // 将头结构体对象写入到字节数组中
                     fixed (byte* dest = sendBuffer)
                     {
                         *(Head*)dest = packet.head;

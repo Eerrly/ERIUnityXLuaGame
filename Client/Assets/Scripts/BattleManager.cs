@@ -122,7 +122,7 @@ public class BattleManager : MonoBehaviour
         _frameEngine.StartEngine(1 / (float)BattleConstant.FrameInterval);
         _battle.Initialize();
         _battleNetController.Initialize();
-        _battleNetController.Connect("192.168.31.219", 10086);
+        _battleNetController.Connect("192.168.1.4", 10086);
     }
 
     private void EngineUpdate()

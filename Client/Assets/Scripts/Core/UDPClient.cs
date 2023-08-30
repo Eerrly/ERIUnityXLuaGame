@@ -129,6 +129,13 @@ class UDPClient
         return 0;
     }
 
+    /// <summary>
+    /// 接受数据
+    /// </summary>
+    /// <param name="data">数据</param>
+    /// <param name="index">偏移</param>
+    /// <param name="length">接受的长度</param>
+    /// <returns></returns>
     public int Recv(byte[] data, int index, int length)
     {
         // 上次剩下的部分
@@ -199,6 +206,9 @@ class UDPClient
         return 0;
     }
 
+    /// <summary>
+    /// KCP需要Update
+    /// </summary>
     public void Update()
     {
         if (mSocket == null)

@@ -74,33 +74,6 @@ public class SupportLauncher : MonoBehaviour
         }
     }
 
-    private void DrawWireSemicircle(Vector3 origin, Vector3 direction, float radius, int angle, Vector3 axis)
-    {
-        Vector3 leftdir = Quaternion.AngleAxis(-angle / 2, axis) * direction;
-        Vector3 rightdir = Quaternion.AngleAxis(angle / 2, axis) * direction;
-
-        Vector3 currentP = origin + leftdir * radius;
-        Vector3 oldP;
-        if (angle != 360)
-        {
-            Gizmos.DrawLine(origin, currentP);
-        }
-        for (int i = 0; i < angle / 10; i++)
-        {
-            Vector3 dir = Quaternion.AngleAxis(10 * i, axis) * leftdir;
-            oldP = currentP;
-            currentP = origin + dir * radius;
-            Gizmos.DrawLine(oldP, currentP);
-        }
-        oldP = currentP;
-        currentP = origin + rightdir * radius;
-        Gizmos.DrawLine(oldP, currentP);
-        if (angle != 360)
-        {
-            Gizmos.DrawLine(currentP, origin);
-        }
-    }
-
     private void DrawAroundCellList(PlayerEntity playerEntity)
     {
         List<Cell> aroundCellList = SpacePartition.GetAroundCellList(playerEntity);

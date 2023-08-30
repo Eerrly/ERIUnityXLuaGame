@@ -7,10 +7,11 @@ using System.Linq;
 using ICSharpCode.SharpZipLib.Zip;
 using System;
 
+/// <summary>
+/// 资源工具
+/// </summary>
 public class ResUtil
 {
-    
-
     public static string GetAtlasPathBySpritePath(string spritePath)
     {
         var atlasName = FileUtil.CombinePaths("Sources", Path.GetDirectoryName(spritePath)).Replace("/", "_").ToLower();
@@ -34,6 +35,14 @@ public class ResUtil
         return names;
     }
 
+    /// <summary>
+    /// 检测资源循环依赖
+    /// </summary>
+    /// <param name="manifest">AB资源清单</param>
+    /// <param name="hash2Name">Hash转资源名字典</param>
+    /// <param name="name">AB包名</param>
+    /// <param name="tracker">AB包名的栈</param>
+    /// <exception cref="System.Exception"></exception>
     private static void CheckLoop(AssetBundleManifest manifest, Dictionary<string, string> hash2Name, string name, Stack<string> tracker)
     {
         foreach (var sub in tracker)
@@ -50,12 +59,14 @@ public class ResUtil
             }
         }
 
+        // AB包名入栈，如果这个AB包名的依赖关系中又包含此AB包名，则为循环依赖，抛出异常 （如果没有循环依赖，栈顶为依赖关系的最后一环）
         tracker.Push(name);
         var dependencies = new Queue<string>(manifest.GetAllDependencies(name));
         foreach (var dependency in dependencies)
         {
             var count = tracker.Count;
             CheckLoop(manifest, hash2Name, dependency, tracker);
+            // 如果走到这，说明不包含循环依赖，由依赖关系的最后一环向前依次出栈
             while (tracker.Count > count)
             {
                 tracker.Pop();
@@ -106,6 +117,7 @@ public class ResUtil
 
         var hasError = false;
         var luajit = FileUtil.CombinePaths(Application.dataPath, string.Format("Examples/Tools/LuaJit/luajit{0}.exe", tag));
+        // Lua虚拟机（里面封装了Lua解释器对象，用来执行Lua脚本）
         var L = XLua.LuaDLL.Lua.luaL_newstate();
         try
         {
@@ -121,6 +133,7 @@ public class ResUtil
                 if (!Directory.Exists(files[i]))
                 {
                     var bytes = File.ReadAllBytes(files[i]);
+                    // 如果前3个字节为 0xEF、0xBB、0xBF，说明该文件以UTF-8编码，且包含BOM（用于标识文件字节序的特殊字节序列）。为了去除BOM，则从第4个字节开始
                     if (bytes.Length > 3 && bytes[0] == 0xEF && bytes[1] == 0xBB && bytes[2] == 0xBF)
                     {
                         var temp = new byte[bytes.Length - 3];
@@ -249,7 +262,7 @@ public class ResUtil
         var bundleManifest = new ManifestConfig();
         var mainBundleItems = new List<ManifestItem>(bundleNames.Length);
 
-        // loop check
+        // 循环检测依赖
         for (var i = 0; i < bundleNames.Length; ++i)
         {
             var tracker = new Stack<string>();
@@ -266,6 +279,7 @@ public class ResUtil
         var abMainFilePath = FileUtil.CombinePaths(Setting.StreamingBundleRoot, "main.s");
         var abMainFile = new FileStream(abMainFilePath, FileMode.Create);
 
+        // 加密
         var head = new byte[] { 0xAA, 0xBB, 0x10, 0x12 };
         abMainFile.Write(head, 0, head.Length);
 
@@ -285,6 +299,7 @@ public class ResUtil
             }
         }
 
+        // 合包
         for (int i = 0; i < bundleNames.Length; i++)
         {
             var hash = bundleNames[i].Substring(0, bundleNames[i].Length - 2);

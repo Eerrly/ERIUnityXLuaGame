@@ -141,6 +141,9 @@ public class BattleManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 网络线程轮询
+    /// </summary>
     private void NetUpdate()
     {
         try
@@ -158,7 +161,7 @@ public class BattleManager : MonoBehaviour
                     }
                 }
                 _battleNetController.Update();
-                if(_battleNetController.RecvData(ref recvBuffer, 0, recvBuffer.Length) > 0)
+                if (_battleNetController.RecvData(ref recvBuffer, 0, recvBuffer.Length) > 0)
                 {
                     HandleRecvData(recvBuffer, 0, recvBuffer.Length);
                 }
@@ -171,6 +174,12 @@ public class BattleManager : MonoBehaviour
         System.Threading.Thread.Sleep(1);
     }
 
+    /// <summary>
+    /// 接受服务器返回的数据
+    /// </summary>
+    /// <param name="data"></param>
+    /// <param name="offset"></param>
+    /// <param name="length"></param>
     private void HandleRecvData(byte[] data, int offset, int length)
     {
         _receiveStream.Reset();
@@ -195,6 +204,9 @@ public class BattleManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 主线程轮询
+    /// </summary>
     private void Update()
     {
         if (_battleStarted)
@@ -204,6 +216,9 @@ public class BattleManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 渲染主线程轮询
+    /// </summary>
     private void RenderUpdate()
     {
         try

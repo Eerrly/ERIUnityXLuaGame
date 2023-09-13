@@ -2,24 +2,48 @@ using UnityEngine;
 
 public static class MathManager
 {
-    public static readonly float AngleMax = 360.0f;
-    public static readonly float HalfAngleMax = 180.0f;
+    /// <summary>
+    /// 圆的角度最大值 360
+    /// </summary>
+    public static readonly FixedNumber AngleMax = FixedNumber.MakeFixNum(360, 1);
+
+    /// <summary>
+    /// 半圆角度最大值 180
+    /// </summary>
+    public static readonly FixedNumber HalfAngleMax = AngleMax / 2;
+
+    /// <summary>
+    /// 表达移动向量角度计算的偏移值,PlayerEntity的InputComponent组件中的yaw值为FrameBuffer.Input中的yaw减去YawOffset
+    /// </summary>
     public const int YawOffset = 1;
+
+    /// <summary>
+    /// 默认摇杆
+    /// </summary>
     public const int YawStop = -YawOffset;
-    public static readonly float DivAngle = 45.0f;
-    public static readonly float HalfDivAngle = 22.5f;
 
-    public static float[] Vector3Zero => new float[] { 0.0f, 0.0f, 0.0f };
+    /// <summary>
+    /// 移动向量夹角度数
+    /// </summary>
+    public static readonly FixedNumber DivAngle = FixedNumber.MakeFixNum(450000, 10000);
 
-    public static float[] QuaternionIdentity => new float[] { 0.0f, 0.0f, 0.0f, 1.0f };
+    /// <summary>
+    /// 移动向量夹角度数的一半
+    /// </summary>
+    public static readonly FixedNumber HalfDivAngle = DivAngle / 2;
 
-    public static int Format8DirInput(Vector3 input)
+    /// <summary>
+    /// 通过输入
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns>
+    public static int Format8DirInput(FixedVector3 input)
     {
-        input.y = 0.0f;
-        if(input.sqrMagnitude > 0)
+        input.y = FixedNumber.Zero;
+        if(input.sqrMagnitudeLong > 0)
         {
-            Vector3 dir = input.normalized;
-            float angle = Vector3.SignedAngle(Vector3.forward, dir, Vector3.up);
+            FixedVector3 dir = input.Normalized;
+            FixedNumber angle = SignedAngle(FixedVector3.Forward, dir, FixedVector3.Up);
 
             angle = angle < 0 ? AngleMax + angle : angle;
             int div;
@@ -31,75 +55,83 @@ public static class MathManager
             {
                 var val = (angle - HalfDivAngle) / DivAngle;
                 val += 1;
-                div = (int)val;
+                div = val.ToInt();
             }
             return div + YawOffset;
         }
         return 0;
     }
 
-    public static Quaternion FromYaw(int yaw)
+    /// <summary>
+    /// 通过摇杆获取对应的旋转
+    /// </summary>
+    /// <param name="yaw">摇杆</param>
+    /// <returns>旋转四元数</returns>
+    public static FixedQuaternion FromYaw(int yaw)
     {
-        Quaternion r = Quaternion.Euler(0.0f, (yaw) * DivAngle, 0.0f);
+        FixedQuaternion r = FixedQuaternion.Euler(FixedNumber.Zero, (yaw) * DivAngle, FixedNumber.Zero);
         return r;
     }
 
-    private static Vector3[] _cacheYawToVector3 = new Vector3[24];
-    private static Vector3 _FromYawToVector3(int yaw)
+    /// <summary>
+    /// 缓存摇杆对应的单位方向向量
+    /// </summary>
+    private static FixedVector3[] _cacheYawToVector3 = new FixedVector3[8];
+    /// <summary>
+    /// 通过摇杆获取单位方向向量
+    /// </summary>
+    /// <param name="yaw">摇杆</param>
+    /// <returns>单位方向向量</returns>
+    private static FixedVector3 _FromYawToVector3(int yaw)
     {
         switch (yaw)
         {
-            case 0: return new Vector3(0.0f, 0.0f, 1.0f);
-            case 2: return new Vector3(1.0f, 0.0f, 0.0f);
-            case 4: return new Vector3(0.0f, 0.0f, -1.0f);
-            case 6: return new Vector3(-1.0f, 0.0f, 0.0f);
+            case 0: return new FixedVector3(FixedNumber.Zero, FixedNumber.Zero, FixedNumber.One);
+            case 2: return new FixedVector3(FixedNumber.One, FixedNumber.Zero, FixedNumber.Zero);
+            case 4: return new FixedVector3(FixedNumber.Zero, FixedNumber.Zero, -FixedNumber.One);
+            case 6: return new FixedVector3(-FixedNumber.One, FixedNumber.Zero, FixedNumber.Zero);
         }
-        Quaternion rot = FromYaw(yaw);
-        return rot * Vector3.forward;
+        FixedQuaternion rot = FromYaw(yaw);
+        return rot * FixedVector3.Forward;
     }
 
-    public static Vector3 FromYawToVector3(int yaw)
+    /// <summary>
+    /// 通过摇杆获取对应的单位方向向量
+    /// </summary>
+    /// <param name="yaw">摇杆</param>
+    /// <returns>单位方向向量</returns>
+    public static FixedVector3 FromYawToVector3(int yaw)
     {
         if (yaw < 0)
         {
-            return Vector3.zero;
+            return FixedVector3.Zero;
         }
         yaw = yaw % 8;
-        if (_cacheYawToVector3[yaw] == Vector3.zero)
+        if (_cacheYawToVector3[yaw] == FixedVector3.Zero)
         {
             _cacheYawToVector3[yaw] = _FromYawToVector3(yaw);
         }
         return _cacheYawToVector3[yaw];
     }
 
-    public static float GetYawAngle(int yaw)
+    /// <summary>
+    /// 获取两个向量的夹角，带正负
+    /// </summary>
+    /// <param name="lhs">向量</param>
+    /// <param name="rhs">向量</param>
+    /// <param name="axis">旋转轴</param>
+    /// <returns>夹角</returns>
+    public static FixedNumber SignedAngle(FixedVector3 lhs, FixedVector3 rhs, FixedVector3 axis)
     {
-        return yaw * DivAngle;
+        FixedNumber num = FixedVector3.AngleInt(lhs, rhs);
+        FixedVector3 rotateAxis = FixedVector3.Cross(lhs, rhs).Normalized;
+        int num2 = Sign(FixedVector3.Dot(axis, rotateAxis, true));
+        return (num * num2);
     }
 
-    public static Vector3 ToVector3(float[] pos)
+    public static int Sign(FixedNumber value)
     {
-        return new Vector3(pos[0], pos[1], pos[2]);
-    }
-
-    public static Quaternion ToQuaternion(float[] rot)
-    {
-        return new Quaternion(rot[0], rot[1], rot[2], rot[3]);
-    }
-
-    public static float[] ToFloat2(Vector2 vector)
-    {
-        return new float[2] { vector.x, vector.y };
-    }
-
-    public static float[] ToFloat3(Vector3 vector)
-    {
-        return new float[3] { vector.x, vector.y, vector.z };
-    }
-
-    public static float[] ToFloat4(Quaternion quaternion)
-    {
-        return new float[4] { quaternion.x, quaternion.y, quaternion.z, quaternion.w };
+        return value >= 0 ? 1 : -1;
     }
 
 }

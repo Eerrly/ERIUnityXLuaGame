@@ -1,11 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 
+/// <summary>
+/// 数据头
+/// </summary>
 public struct Head
 {
     public byte act;
+    public int length;
 }
 
+/// <summary>
+/// 数据体
+/// </summary>
 public struct Packet
 {
     public Head head;
@@ -36,7 +42,7 @@ public class BattleNetController
     }
 
     public void Initialize() {
-        _sendBuffer = new byte[6];
+        _sendBuffer = new byte[10];
     }
 
     /// <summary>
@@ -94,14 +100,15 @@ public class BattleNetController
             buffer.WriteInt(frame);
             buffer.WriteByte(input.ToByte());
             Head head = new Head()
-            { 
-                act = NetConstant.FrameAct 
+            {
+                act = NetConstant.FrameAct,
+                length = 10,
             };
             Packet packet = new Packet()
             {
                 head = head,
                 data = buffer,
-                length = 6,
+                length = 10,
             };
             SendData2Server(packet);
         }
@@ -125,13 +132,14 @@ public class BattleNetController
             buffer.WriteByte(input.ToByte());
             Head head = new Head()
             {
-                act = NetConstant.ReadyAct
+                act = NetConstant.ReadyAct,
+                length = 10,
             };
             Packet packet = new Packet()
             {
                 head = head,
                 data = buffer,
-                length = 6,
+                length = 10,
             };
             SendData2Server(packet);
         }
@@ -156,13 +164,13 @@ public class BattleNetController
                 unsafe
                 {
                     var sendBuffer = _sendBuffer;
-                    // 将头结构体对象写入到字节数组中
+                    // 将数据头写入到字节数组中
                     fixed (byte* dest = sendBuffer)
                     {
                         *(Head*)dest = packet.head;
                     }
                     var dataLen = packet.length;
-                    Array.Copy(packet.data.ToArray(), 0, sendBuffer, 1, 5);
+                    Array.Copy(packet.data.ToArray(), 0, sendBuffer, 5, 5);
                     packet.data.Dispose();
                     lock (_sendLock)
                     {
@@ -209,7 +217,7 @@ public class BattleNetController
     /// </summary>
     public void Update()
     {
-        if(client != null && client.IsConnected)
+        if(client != null)
         {
             client.Update();
         }

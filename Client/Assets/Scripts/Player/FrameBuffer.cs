@@ -1,6 +1,9 @@
 public class FrameBuffer
 {
 
+    /// <summary>
+    /// 输入
+    /// </summary>
     public struct Input
     {
         /// <summary>
@@ -35,6 +38,9 @@ public class FrameBuffer
             set { raw = (byte)((raw & ~0x0E) | ((0x7 & value) << 1)); }
         }
 
+        /// <summary>
+        /// 玩家ID
+        /// </summary>
         public byte pos
         {
             get { return (byte)(0x01 & raw); }
@@ -68,7 +74,9 @@ public class FrameBuffer
 
     }
 
-
+    /// <summary>
+    /// 帧数据
+    /// </summary>
     public struct Frame
     {
         public int frame;

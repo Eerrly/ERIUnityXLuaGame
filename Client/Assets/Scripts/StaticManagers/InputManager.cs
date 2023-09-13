@@ -1,10 +1,18 @@
 using UnityEngine;
 
+/// <summary>
+/// 输入管理器
+/// </summary>
 public static class InputManager
 {
-
+    /// <summary>
+    /// 开关
+    /// </summary>
     public static bool enabled = true;
 
+    /// <summary>
+    /// 默认按键状态
+    /// </summary>
     public static bool[] defaultKeies = new bool[] { false, false, false, false };
 
     public static float Vertical
@@ -27,6 +35,11 @@ public static class InputManager
         }
     }
 
+    /// <summary>
+    /// 获取对应键位的状态
+    /// </summary>
+    /// <param name="name">键位名称</param>
+    /// <returns>状态</returns>
     public static bool GetKey(string name)
     {
         if (!enabled)

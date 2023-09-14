@@ -122,7 +122,7 @@ public class BattleManager : MonoBehaviour
         _frameEngine.StartEngine(1 / (float)BattleConstant.FrameInterval);
         _battle.Initialize();
         _battleNetController.Initialize();
-        _battleNetController.Connect("127.0.0.1", 10086);
+        _battleNetController.Connect("192.168.16.158", 10086);
     }
 
     private void EngineUpdate()
@@ -191,8 +191,8 @@ public class BattleManager : MonoBehaviour
         while (_binaryReader.BaseStream.Position < _binaryReader.BaseStream.Length)
         {
             _act = _binaryReader.ReadByte();
-            _frame = _binaryReader.ReadInt32();
             _raw = _binaryReader.ReadByte();
+            _frame = _binaryReader.ReadInt32();
 
             _lastRecvPlayerInput.pos = (byte)(posMask & _raw);
             _lastRecvPlayerInput.yaw = (byte)((yawMask & _raw) >> 4);

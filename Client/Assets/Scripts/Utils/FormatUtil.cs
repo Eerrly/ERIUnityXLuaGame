@@ -19,7 +19,7 @@ public static class MemoryStreamEx
 /// </summary>
 public static class FormatUtil
 {
-    private static MemoryStream stream = new MemoryStream();
+    private static BinaryFormatter formatter = new BinaryFormatter();
 
     /// <summary>
     /// 将对象序列化为二进制数据数组
@@ -31,18 +31,15 @@ public static class FormatUtil
         byte[] data = null;
         try
         {
-            stream.Reset();
-            BinaryFormatter formatter = new BinaryFormatter();
-            formatter.Serialize(stream, obj);
-            data = stream.ToArray();
+            using (MemoryStream stream = new MemoryStream())
+            {
+                formatter.Serialize(stream, obj);
+                data = stream.ToArray();
+            }
         }
-        catch(System.Exception e)
+        catch (System.Exception e)
         {
             Logger.Log(LogLevel.Exception, e.Message);
-        }
-        finally
-        {
-            stream.Close();
         }
         return data;
     }
@@ -57,30 +54,16 @@ public static class FormatUtil
         object obj = null;
         try
         {
-            stream.Reset();
-            stream.Write(data, 0, data.Length);
-            stream.Position = 0;
-            BinaryFormatter formatter = new BinaryFormatter();
-            obj = formatter.Deserialize(stream);
+            using (MemoryStream stream = new MemoryStream(data))
+            {
+                obj = formatter.Deserialize(stream);
+            }
         }
-        catch(System.Exception e)
+        catch (System.Exception e)
         {
             Logger.Log(LogLevel.Exception, e.Message);
         }
-        finally
-        {
-            stream.Close();
-        }
         return obj;
-    }
-
-    public static void Release()
-    {
-        if(stream != null)
-        {
-            stream.Close();
-            stream = null;
-        }
     }
 
 }

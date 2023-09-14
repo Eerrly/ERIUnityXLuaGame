@@ -6,7 +6,6 @@
 public struct Head
 {
     public byte act;
-    public int length;
 }
 
 /// <summary>
@@ -16,7 +15,6 @@ public struct Packet
 {
     public Head head;
     public ByteBuffer data;
-    public int length;
 }
 
 /// <summary>
@@ -42,7 +40,7 @@ public class BattleNetController
     }
 
     public void Initialize() {
-        _sendBuffer = new byte[10];
+        _sendBuffer = new byte[6];
     }
 
     /// <summary>
@@ -97,18 +95,16 @@ public class BattleNetController
         {
             ByteBuffer buffer = ByteBuffer.Allocate(5, true);
             buffer.Clear();
-            buffer.WriteInt(frame);
             buffer.WriteByte(input.ToByte());
+            buffer.WriteInt(frame);
             Head head = new Head()
             {
                 act = NetConstant.FrameAct,
-                length = 10,
             };
             Packet packet = new Packet()
             {
                 head = head,
                 data = buffer,
-                length = 10,
             };
             SendData2Server(packet);
         }
@@ -128,18 +124,16 @@ public class BattleNetController
             FrameBuffer.Input input = new FrameBuffer.Input((byte)BattleConstant.SelfID, 0);
             ByteBuffer buffer = ByteBuffer.Allocate(5, true);
             buffer.Clear();
-            buffer.WriteInt(0);
             buffer.WriteByte(input.ToByte());
+            buffer.WriteInt(0);
             Head head = new Head()
             {
                 act = NetConstant.ReadyAct,
-                length = 10,
             };
             Packet packet = new Packet()
             {
                 head = head,
                 data = buffer,
-                length = 10,
             };
             SendData2Server(packet);
         }
@@ -161,21 +155,19 @@ public class BattleNetController
         {
             if (client != null && client.IsConnected)
             {
-                unsafe
+                lock (_sendLock)
                 {
                     var sendBuffer = _sendBuffer;
-                    // 将数据头写入到字节数组中
-                    fixed (byte* dest = sendBuffer)
+                    unsafe
                     {
-                        *(Head*)dest = packet.head;
+                        fixed(byte* buffer = sendBuffer)
+                        {
+                            *(Head*)buffer = packet.head;
+                        }
+                        Array.Copy(packet.data.ToArray(), 0, sendBuffer, 1, 5);
+                        packet.data.Dispose();
                     }
-                    var dataLen = packet.length;
-                    Array.Copy(packet.data.ToArray(), 0, sendBuffer, 5, 5);
-                    packet.data.Dispose();
-                    lock (_sendLock)
-                    {
-                        client.Send(sendBuffer, 0, dataLen);
-                    }
+                    client.Send(sendBuffer, 0, sendBuffer.Length);
                 }
             }
         }

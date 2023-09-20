@@ -1,223 +1,122 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 
-class UDPClient
+public class UDPClient
 {
-    private Socket mSocket = null;
-    private KCP mKCP = null;
+    private Socket socket;
+    private EndPoint endPoint;
+    private Queue<Packet> sendQueue;
+    private Queue<Packet> recvQueue;
+    private byte[] recvBuffer = new byte[1024];
+    private byte[] sendBuffer;
+    private short indexer;
+    private bool error;
 
-    private ByteBuffer mRecvBuffer = ByteBuffer.Allocate(1024 * 32);
-    private UInt32 mNextUpdateTime = 0;
+    public bool IsConnected => socket != null && socket.Connected;
 
-    public bool IsConnected { get { return mSocket != null && mSocket.Connected; } }
-    /// <summary>
-    /// 写入数据等待
-    /// </summary>
-    public bool WriteDelay { get; set; }
-    /// <summary>
-    /// 不等待
-    /// </summary>
-    public bool AckNoDelay { get; set; }
-
-    public IPEndPoint RemoteAddress { get; private set; }
-    public IPEndPoint LocalAddress { get; private set; }
-
-    private uint _conv = 0;
-
-    /// <summary>
-    /// 连接
-    /// </summary>
-    /// <param name="host">IP地址</param>
-    /// <param name="port">端口号</param>
-    public void Connect(string host, int port)
+    public void Initialize(int maxClientCount)
     {
-        IPHostEntry hostEntry = Dns.GetHostEntry(host);
-        if (hostEntry.AddressList.Length == 0)
-        {
-            throw new Exception("Unable to resolve host: " + host);
-        }
-        var endpoint = hostEntry.AddressList[0];
-        mSocket = new Socket(endpoint.AddressFamily, SocketType.Dgram, ProtocolType.Udp);
-        mSocket.Connect(endpoint, port);
-        RemoteAddress = (IPEndPoint)mSocket.RemoteEndPoint;
-        LocalAddress = (IPEndPoint)mSocket.LocalEndPoint;
-        mKCP = new KCP(_conv, rawSend);
-        // normal:  0, 40, 2, 1
-        // fast:    0, 30, 2, 1
-        // fast2:   1, 20, 2, 1
-        // fast3:   1, 10, 2, 1
-        mKCP.NoDelay(0, 30, 2, 1);
-        mKCP.SetStreamMode(true);
-        mRecvBuffer.Clear();
+        indexer = 0;
+        error = false;
+        sendQueue = new Queue<Packet>(maxClientCount);
+        recvQueue = new Queue<Packet>(maxClientCount);
     }
 
-    /// <summary>
-    /// 断开连接
-    /// </summary>
+    public void Connect(string ip, int port)
+    {
+        endPoint = new IPEndPoint(IPAddress.Parse(ip), port);
+        socket = new Socket(endPoint.AddressFamily, SocketType.Dgram, ProtocolType.Udp);
+        socket.Connect(endPoint);
+    }
+
     public void DisConnect()
     {
-        if (mSocket != null)
+        if(socket != null && socket.Connected)
         {
-            Close();
+            socket.Shutdown(SocketShutdown.Both);
+            socket.Close();
         }
     }
 
-    /// <summary>
-    /// 关闭
-    /// </summary>
-    public void Close()
+    public void Send(Packet packet)
     {
-        if (mSocket != null)
+        lock (sendQueue)
         {
-            mSocket.Shutdown(SocketShutdown.Both);
-            mSocket.Close();
-            mSocket = null;
-            mRecvBuffer.Clear();
+            sendQueue.Enqueue(packet);
         }
     }
 
-    /// <summary>
-    /// 发送原始数据
-    /// </summary>
-    /// <param name="data">数据</param>
-    /// <param name="length">长度</param>
-    private void rawSend(byte[] data, int length)
+    public Queue<Packet> Recv()
     {
-        if (mSocket != null)
-        {
-            mSocket.Send(data, length, SocketFlags.None);
-        }
+        return recvQueue;
     }
 
-    /// <summary>
-    /// 发送数据
-    /// </summary>
-    /// <param name="data">数据</param>
-    /// <param name="index">起始索引</param>
-    /// <param name="length">长度</param>
-    /// <returns></returns>
-    public int Send(byte[] data, int index, int length)
+    private void SendMethod()
     {
-        if (mSocket == null)
-            return -1;
-
-        var waitsnd = mKCP.WaitSnd;
-        if (waitsnd < mKCP.SndWnd && waitsnd < mKCP.RmtWnd)
+        while (sendQueue.Count > 0)
         {
-
-            var sendBytes = 0;
-            do
+            lock (sendQueue)
             {
-                var n = Math.Min((int)mKCP.Mss, length - sendBytes);
-                mKCP.Send(data, index + sendBytes, n);
-                sendBytes += n;
-            } while (sendBytes < length);
+                var packet = sendQueue.Dequeue();
+                sendBuffer = BufferPool.GetBuffer(Head.Length + packet.head.size);
+                unsafe
+                {
+                    if (packet.head.act == (int)ACT.DATA)
+                    {
+                        packet.head.index = indexer++;
+                    }
+                    fixed (byte* dest = sendBuffer)
+                    {
+                        *(Head*)dest = packet.head;
+                    }
+                }
+                Array.Copy(packet.data, 0, sendBuffer, Head.Length, packet.head.size);
+                socket.Send(sendBuffer, 0, sendBuffer.Length, SocketFlags.None);
 
-            waitsnd = mKCP.WaitSnd;
-            if (waitsnd >= mKCP.SndWnd || waitsnd >= mKCP.RmtWnd || !WriteDelay)
-            {
-                mKCP.Flush(false);
+                BufferPool.ReleaseBuff(sendBuffer);
             }
-
-            return length;
         }
-
-        return 0;
     }
 
-    /// <summary>
-    /// 接受数据
-    /// </summary>
-    /// <param name="data">数据</param>
-    /// <param name="index">偏移</param>
-    /// <param name="length">接受的长度</param>
-    /// <returns></returns>
-    public int Recv(byte[] data, int index, int length)
+    private void RecvMethod()
     {
-        // 上次剩下的部分
-        if (mRecvBuffer.ReadableBytes > 0)
+        if (socket.Available > 0 && socket.Receive(recvBuffer, 0, recvBuffer.Length, SocketFlags.None) > 0)
         {
-            var recvBytes = Math.Min(mRecvBuffer.ReadableBytes, length);
-            Buffer.BlockCopy(mRecvBuffer.RawBuffer, mRecvBuffer.ReaderIndex, data, index, recvBytes);
-            mRecvBuffer.ReaderIndex += recvBytes;
-            // 读完重置读写指针
-            if (mRecvBuffer.ReaderIndex == mRecvBuffer.WriterIndex)
+            lock (recvQueue)
             {
-                mRecvBuffer.Clear();
+                Packet packet = new Packet();
+                unsafe
+                {
+                    fixed (byte* dest = recvBuffer)
+                    {
+                        packet.head = *(Head*)dest;
+                    }
+                }
+                packet.data = BufferPool.GetBuffer(Head.EndPointLength + packet.head.size);
+                Array.Copy(recvBuffer, Head.Length, packet.data, 0, Head.EndPointLength + packet.head.size);
+
+                recvQueue.Enqueue(packet);
             }
-            return recvBytes;
         }
-
-        if (mSocket == null)
-            return -1;
-
-        if (!mSocket.Poll(0, SelectMode.SelectRead))
-        {
-            return 0;
-        }
-
-        var rn = 0;
-        try
-        {
-            rn = mSocket.Receive(mRecvBuffer.RawBuffer, mRecvBuffer.WriterIndex, mRecvBuffer.WritableBytes, SocketFlags.None);
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex);
-            rn = -1;
-        }
-
-        if (rn <= 0)
-        {
-            return rn;
-        }
-        mRecvBuffer.WriterIndex += rn;
-
-        var inputN = mKCP.Input(mRecvBuffer.RawBuffer, mRecvBuffer.ReaderIndex, mRecvBuffer.ReadableBytes, true, AckNoDelay);
-        if (inputN < 0)
-        {
-            mRecvBuffer.Clear();
-            return inputN;
-        }
-        mRecvBuffer.Clear();
-
-        // 读完所有完整的消息
-        for (; ; )
-        {
-            var size = mKCP.PeekSize();
-            if (size <= 0) break;
-
-            mRecvBuffer.EnsureWritableBytes(size);
-
-            var n = mKCP.Recv(mRecvBuffer.RawBuffer, mRecvBuffer.WriterIndex, size);
-            if (n > 0) mRecvBuffer.WriterIndex += n;
-        }
-
-        // 有数据待接收
-        if (mRecvBuffer.ReadableBytes > 0)
-        {
-            return Recv(data, index, length);
-        }
-
-        return 0;
     }
 
-    /// <summary>
-    /// KCP需要Update
-    /// </summary>
     public void Update()
     {
-        if (mSocket == null)
+        if (socket == null || !socket.Connected)
             return;
 
-        if (mKCP !=null && (0 == mNextUpdateTime || mKCP.CurrentMS >= mNextUpdateTime))
+        try
         {
-            mKCP.Update();
-            mNextUpdateTime = mKCP.Check();
+            SendMethod();
+            RecvMethod();
         }
+        catch(Exception e)
+        {
+            Logger.Log(LogLevel.Exception, e.Message);
+        }
+
     }
+
 }

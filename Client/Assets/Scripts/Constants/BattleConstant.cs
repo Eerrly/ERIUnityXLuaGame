@@ -7,6 +7,10 @@ public class BattleConstant
     // 帧间隔
     public static readonly int FrameInterval = 30;
 
+    public static readonly int MaxClientCount = 2;
+
+    public static readonly int HeartBeatFrame = 100;
+
     // 玩家Prefab
     public static readonly string playerCharacterPath = "Prefabs/Cube";
     // 玩家生成位置

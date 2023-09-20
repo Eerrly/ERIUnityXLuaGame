@@ -60,10 +60,10 @@ public class BattleManager : MonoBehaviour
     public int selfPlayerId { get; set; }
 
     private byte[] recvBuffer;
+    private Queue<Packet> _recvQueue;
     private MemoryStream _receiveStream = new MemoryStream(256);
     private BinaryReader _binaryReader;
 
-    private byte _act;
     private byte _raw;
     private int _frame;
     private const byte posMask = 0x01;
@@ -72,9 +72,11 @@ public class BattleManager : MonoBehaviour
 
     [System.NonSerialized] public volatile int renderFrame = -1;
     [System.NonSerialized] public volatile int logicFrame = -1;
+    private FrameBuffer.Input _input;
     private FrameBuffer.Input _lastSendPlayerInput;
     private FrameBuffer.Input _lastRecvPlayerInput = new FrameBuffer.Input(0);
     private int _realSentFrame = 0;
+    private int _heartBeatFrame = 0;
 
     private void Awake()
     {
@@ -111,8 +113,9 @@ public class BattleManager : MonoBehaviour
 
     public void StartBattle(int selfPlayerId)
     {
-        this._battleStarted = true;
+        this._battleStarted = false;
         this.selfPlayerId = selfPlayerId;
+        BufferPool.InitPool(32, 1024, 5, 5);
         _battle = new BattleController(_battleClientData);
         _battleNetController = new BattleNetController();
         _battleView.InitView(_battleClientData);
@@ -122,7 +125,7 @@ public class BattleManager : MonoBehaviour
         _frameEngine.StartEngine(1 / (float)BattleConstant.FrameInterval);
         _battle.Initialize();
         _battleNetController.Initialize();
-        _battleNetController.Connect("192.168.16.158", 10086);
+        _battleNetController.Connect(NetConstant.IP, NetConstant.Port);
     }
 
     private void EngineUpdate()
@@ -150,47 +153,57 @@ public class BattleManager : MonoBehaviour
         {
             if (_battleNetController.IsConnected)
             {
-                if (_battleStarted)
+                if (!_battleStarted)
                 {
-                    FrameBuffer.Input input = GetInput();
-                    if (_realSentFrame != _battle.battleEntity.frame && !input.Compare(_lastSendPlayerInput))
+                    _battleNetController.SendReadyMsg();
+                }
+                else
+                {
+                    _input = GetInput();
+                    // 输入
+                    if (_realSentFrame != _battle.battleEntity.frame && !_input.Compare(_lastSendPlayerInput))
                     {
-                        _lastSendPlayerInput = input;
+                        _lastSendPlayerInput = _input;
                         _realSentFrame = _battle.battleEntity.frame;
-                        _battleNetController.SendInputMsg(_battle.battleEntity.frame, input);
+                        _battleNetController.SendInputMsg(_battle.battleEntity.frame, _input);
+                    }
+                    // 心跳
+                    if (_battle.battleEntity.frame - _heartBeatFrame >= BattleConstant.HeartBeatFrame)
+                    {
+                        _heartBeatFrame = _battle.battleEntity.frame;
+                        _battleNetController.SendHeartBeatMsg();
                     }
                 }
                 _battleNetController.Update();
-                if (_battleNetController.RecvData(ref recvBuffer, 0, recvBuffer.Length) > 0)
+                _recvQueue = _battleNetController.RecvData();
+                while(_recvQueue.Count > 0)
                 {
-                    HandleRecvData(recvBuffer, 0, recvBuffer.Length);
+                    lock (_recvQueue)
+                    {
+                        HandleRecvData(_recvQueue.Dequeue());
+                    }
                 }
             }
         }
         catch (Exception e)
         {
             Logger.Log(LogLevel.Exception, e.Message);
+            _battleStarted = false;
         }
         System.Threading.Thread.Sleep(1);
     }
 
-    /// <summary>
-    /// 接受服务器返回的数据
-    /// </summary>
-    /// <param name="data"></param>
-    /// <param name="offset"></param>
-    /// <param name="length"></param>
-    private void HandleRecvData(byte[] data, int offset, int length)
+    private void HandleRecvData(Packet packet)
     {
+        if(packet.head.act == (byte)ACT.JOIN) _battleStarted = true;
+
         _receiveStream.Reset();
-        if (null != data)
-        {
-            _receiveStream.Write(data, offset, length);
-        }
+        _receiveStream.Write(packet.data, Head.EndPointLength, packet.head.size);
         _receiveStream.Seek(0, SeekOrigin.Begin);
+
+        BufferPool.ReleaseBuff(packet.data);
         while (_binaryReader.BaseStream.Position < _binaryReader.BaseStream.Length)
         {
-            _act = _binaryReader.ReadByte();
             _raw = _binaryReader.ReadByte();
             _frame = _binaryReader.ReadInt32();
 
@@ -198,7 +211,7 @@ public class BattleManager : MonoBehaviour
             _lastRecvPlayerInput.yaw = (byte)((yawMask & _raw) >> 4);
             _lastRecvPlayerInput.key = (byte)((keyMask & _raw) >> 1);
 #if UNITY_DEBUG
-            Logger.Log(LogLevel.Info, "RecvData act:" + _act + ", playerId:" + _lastRecvPlayerInput.pos + ", frame:" + _frame + ", raw:" + _raw);
+            Logger.Log(LogLevel.Info, $"【服务器返回数据】 行为: {Enum.GetName(typeof(ACT), packet.head.act)} 玩家ID:{_lastRecvPlayerInput.pos} 帧:{_frame} 操作:{_raw}");
 #endif
             _battle.UpdateInput(_lastRecvPlayerInput);
         }
@@ -234,10 +247,10 @@ public class BattleManager : MonoBehaviour
 
     private void OnDestroy()
     {
+        _battleNetController.DisConnect();
         _frameEngine.UnRegisterFrameUpdateListener();
         _frameEngine.UnRegisterNetUpdateListener();
         _frameEngine.StopEngine();
-        _battleNetController.DisConnect();
     }
 
 }

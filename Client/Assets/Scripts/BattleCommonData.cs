@@ -1,6 +1,4 @@
-﻿using System;
-
-[Serializable]
+﻿[System.Serializable]
 public class BattlePlayerCommonData
 {
     /// <summary>
@@ -9,7 +7,7 @@ public class BattlePlayerCommonData
     public int pos;
 }
 
-[Serializable]
+[System.Serializable]
 public class BattleCommonData
 {
     /// <summary>

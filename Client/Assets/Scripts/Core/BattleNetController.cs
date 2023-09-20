@@ -1,20 +1,37 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
 
 /// <summary>
-/// 数据头
+/// 行为
 /// </summary>
-public struct Head
+enum ACT
 {
-    public byte act;
+    HEARTBEAT,
+    DATA,
+    JOIN,
 }
 
 /// <summary>
-/// 数据体
+/// 头数据
+/// </summary>
+public struct Head
+{
+    public int size;
+    public byte act;
+    public short index;
+
+    public static readonly int Length = 8;
+    public static readonly int EndPointLength = 16;
+}
+
+/// <summary>
+/// 包体
 /// </summary>
 public struct Packet
 {
     public Head head;
-    public ByteBuffer data;
+    public byte[] data;
 }
 
 /// <summary>
@@ -23,9 +40,6 @@ public struct Packet
 public class BattleNetController
 {
     private UDPClient client;
-    private object _sendLock = new object();
-    private object _recvLock = new object();
-    private byte[] _sendBuffer;
 
     public bool IsConnected
     {
@@ -40,7 +54,7 @@ public class BattleNetController
     }
 
     public void Initialize() {
-        _sendBuffer = new byte[6];
+
     }
 
     /// <summary>
@@ -55,8 +69,7 @@ public class BattleNetController
             if (client == null)
             {
                 client = new UDPClient();
-                client.AckNoDelay = true;
-                client.WriteDelay = false;
+                client.Initialize(BattleConstant.MaxClientCount);
             }
             client.Connect(ip, port);
         }
@@ -73,10 +86,7 @@ public class BattleNetController
     {
         try
         {
-            if(client != null && client.IsConnected)
-            {
-                client.DisConnect();
-            }
+            client.DisConnect();
         }
         catch(System.Exception e)
         {
@@ -93,13 +103,19 @@ public class BattleNetController
     {
         try
         {
-            ByteBuffer buffer = ByteBuffer.Allocate(5, true);
-            buffer.Clear();
-            buffer.WriteByte(input.ToByte());
-            buffer.WriteInt(frame);
+            byte[] buffer = BufferPool.GetBuffer(5);
+            using (MemoryStream stream = new MemoryStream(buffer))
+            {
+                BinaryWriter writer = new BinaryWriter(stream);
+                writer.Write(input.ToByte());
+                writer.Write(frame);
+                writer.Dispose();
+            }
             Head head = new Head()
             {
-                act = NetConstant.FrameAct,
+                act = (byte)ACT.DATA,
+                size = 5,
+                index = 0,
             };
             Packet packet = new Packet()
             {
@@ -122,13 +138,20 @@ public class BattleNetController
         try
         {
             FrameBuffer.Input input = new FrameBuffer.Input((byte)BattleConstant.SelfID, 0);
-            ByteBuffer buffer = ByteBuffer.Allocate(5, true);
-            buffer.Clear();
-            buffer.WriteByte(input.ToByte());
-            buffer.WriteInt(0);
+
+            byte[] buffer = BufferPool.GetBuffer(5);
+            using (MemoryStream stream = new MemoryStream(buffer))
+            {
+                BinaryWriter writer = new BinaryWriter(stream);
+                writer.Write(input.ToByte());
+                writer.Write(0);
+                writer.Dispose();
+            }
             Head head = new Head()
             {
-                act = NetConstant.ReadyAct,
+                act = (byte)ACT.JOIN,
+                size = 5,
+                index = 0,
             };
             Packet packet = new Packet()
             {
@@ -143,33 +166,42 @@ public class BattleNetController
         }
     }
 
+    public void SendHeartBeatMsg()
+    {
+        try
+        {
+            byte[] buffer = BufferPool.GetBuffer(5);
+            using (MemoryStream stream = new MemoryStream(buffer))
+            {
+                BinaryWriter writer = new BinaryWriter(stream);
+                writer.Write((byte)0);
+                writer.Write(0);
+                writer.Dispose();
+            }
+            Head head = new Head()
+            {
+                act = (byte)ACT.HEARTBEAT,
+                size = 5,
+                index = 0,
+            };
+            Packet packet = new Packet()
+            {
+                head = head,
+                data = buffer,
+            };
+            SendData2Server(packet);
+        }
+        catch(System.Exception e)
+        {
+            Logger.Log(LogLevel.Exception, e.Message);
+        }
+    }
 
-    /// <summary>
-    /// 将数据发给服务器
-    /// </summary>
-    /// <param name="frame">帧</param>
-    /// <param name="input">操作</param>
     public void SendData2Server(Packet packet)
     {
         try
         {
-            if (client != null && client.IsConnected)
-            {
-                lock (_sendLock)
-                {
-                    var sendBuffer = _sendBuffer;
-                    unsafe
-                    {
-                        fixed(byte* buffer = sendBuffer)
-                        {
-                            *(Head*)buffer = packet.head;
-                        }
-                        Array.Copy(packet.data.ToArray(), 0, sendBuffer, 1, 5);
-                        packet.data.Dispose();
-                    }
-                    client.Send(sendBuffer, 0, sendBuffer.Length);
-                }
-            }
+            client.Send(packet);
         }
         catch(System.Exception e)
         {
@@ -177,42 +209,14 @@ public class BattleNetController
         }
     }
 
-    /// <summary>
-    /// 接受数据
-    /// </summary>
-    /// <param name="buffer">数据</param>
-    /// <param name="index">起始索引</param>
-    /// <param name="length">长度</param>
-    /// <returns></returns>
-    public int RecvData(ref byte[] buffer, int index, int length)
+    public Queue<Packet> RecvData()
     {
-        try
-        {
-            if (client != null && client.IsConnected)
-            {
-                lock (_recvLock)
-                {
-                    return client.Recv(buffer, index, length);
-                }
-            }
-            return 0;
-        }
-        catch(System.Exception e)
-        {
-            Logger.Log(LogLevel.Exception, e.Message);
-        }
-        return 0;
+        return client.Recv();
     }
 
-    /// <summary>
-    /// 轮询
-    /// </summary>
     public void Update()
     {
-        if(client != null)
-        {
-            client.Update();
-        }
+        client.Update();
     }
 
 }

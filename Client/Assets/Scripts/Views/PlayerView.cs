@@ -13,6 +13,10 @@ public class PlayerView : MonoBehaviour
         await CoLoadCharacter();
     }
 
+    /// <summary>
+    /// 加载角色
+    /// </summary>
+    /// <returns></returns>
     public async UniTask<GameObject> CoLoadCharacter()
     {
         GameObject character = await Resources.LoadAsync<GameObject>(BattleConstant.playerCharacterPath) as GameObject;
@@ -25,6 +29,11 @@ public class PlayerView : MonoBehaviour
         return go;
     }
 
+    /// <summary>
+    /// 渲染轮询
+    /// </summary>
+    /// <param name="battleEntity"></param>
+    /// <param name="deltaTime"></param>
     public void RenderUpdate(BattleEntity battleEntity, float deltaTime)
     {
         BaseEntity entity = battleEntity.FindEntity(entityId);
@@ -34,6 +43,11 @@ public class PlayerView : MonoBehaviour
 #endif
     }
 
+    /// <summary>
+    /// 位置轮询
+    /// </summary>
+    /// <param name="entity"></param>
+    /// <param name="deltaTime"></param>
     private void TransformUpdate(BaseEntity entity, float deltaTime)
     {
         if (!gameObject.activeSelf)

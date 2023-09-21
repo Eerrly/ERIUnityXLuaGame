@@ -1,5 +1,6 @@
-using UnityEngine;
-
+/// <summary>
+/// 物理对象
+/// </summary>
 public struct PhysisPlayer
 {
     public int id;
@@ -29,7 +30,10 @@ public struct PhysisPlayer
 [EntitySystem]
 public class PhysicsSystem
 {
-
+    /// <summary>
+    /// 轮询
+    /// </summary>
+    /// <param name="battleEntity"></param>
     public static void Update(BattleEntity battleEntity)
     {
         var entities = battleEntity.entities;
@@ -37,14 +41,10 @@ public class PhysicsSystem
         {
             var source = entities[i];
             source.runtimeProperty.closedPlayers.Clear();
-            if (source.state.curStateId == (int)EPlayerState.Dead || source.state.curStateId == (int)EEnemyState.Dead)
-            {
-                continue;
-            }
             for (int j = 0; j < entities.Count; j++)
             {
                 var target = entities[j];
-                if(source.ID == target.ID || target.state.curStateId == (int)EEnemyState.Dead || source.state.curStateId == (int)EPlayerState.Dead)
+                if(source.ID == target.ID)
                 {
                     continue;
                 }
@@ -69,6 +69,12 @@ public class PhysicsSystem
         }
     }
 
+    /// <summary>
+    /// 轮询碰撞检测
+    /// </summary>
+    /// <param name="source">玩家A</param>
+    /// <param name="target">玩家B</param>
+    /// <param name="battleEntity">战斗实体</param>
     private static void UpdateCollision(BaseEntity source, BaseEntity target, BattleEntity battleEntity)
     {
         var sMove = source.movement.position;
@@ -102,6 +108,12 @@ public class PhysicsSystem
         }
     }
 
+    /// <summary>
+    /// 合并碰撞之后的移动向量
+    /// </summary>
+    /// <param name="aDeltaMove">玩家A位移向量</param>
+    /// <param name="bDeltaMove">玩家B位移向量</param>
+    /// <returns></returns>
     private static FixedVector3 CombineForce(FixedVector3 aDeltaMove, FixedVector3 bDeltaMove)
     {
         var lenB = bDeltaMove.Magnitude;
@@ -118,7 +130,9 @@ public class PhysicsSystem
         return normalB * lenC + (bDeltaMove - cDeltaMove);
     }
 
+    
     /// <summary>
+    /// 检测碰撞方向
     /// -45  45
     ///    \/
     ///    /\

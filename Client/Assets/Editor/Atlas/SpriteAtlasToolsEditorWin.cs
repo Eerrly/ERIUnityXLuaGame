@@ -46,7 +46,7 @@ public class SpriteAtlasToolsEditorWin : OdinEditorWindow
 
     void LoadConfigFile()
     {
-        cfg = Util.LoadConfig<SpriteAtlasToolsConfig>(SpriteAtlasToolsUtility.ConfigName);
+        cfg = Util.LoadConfig<SpriteAtlasToolsConfig>(Constant.ATLAS_CONFIG_NAME);
         spriteAtlasSaveDirPath = cfg.spriteAtlasSaveDirPath;
         packingTextureWidthLimit = cfg.packingTextureWidthLimit;
         packingTextureHeightLimit = cfg.packingTextureHeightLimit;

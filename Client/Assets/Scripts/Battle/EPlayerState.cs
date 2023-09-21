@@ -10,11 +10,5 @@ public enum EPlayerState
 
     Move = 2,
 
-    AttackReady = 3,
-
-    Attack = 4,
-
-    Dead = 5,
-
     Count,
 }

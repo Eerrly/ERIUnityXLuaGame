@@ -1,6 +1,9 @@
 ﻿[PlayerState(EPlayerState.None)]
 public class PlayerBaseState : BaseState<PlayerEntity>
 {
+    /// <summary>
+    /// 状态ID
+    /// </summary>
     public EPlayerState StateId
     {
         get { return (EPlayerState)_stateId; }
@@ -20,7 +23,10 @@ public class PlayerBaseState : BaseState<PlayerEntity>
 
     public override void OnLateUpdate(PlayerEntity playerEntity, BattleEntity battleEntity) { }
 
-    public override void OnExit(PlayerEntity playerEntity, BattleEntity battleEntity) { }
+    public override void OnExit(PlayerEntity playerEntity, BattleEntity battleEntity) 
+    {
+        playerEntity.state.exitTime = battleEntity.time;
+    }
 
     public virtual void OnCollision(BaseEntity source, BaseEntity target, BattleEntity battleEntity) { }
 

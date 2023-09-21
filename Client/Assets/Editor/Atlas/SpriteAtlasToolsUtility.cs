@@ -15,8 +15,6 @@ public class SpriteAtlasToolsUtility
 
     public static event Action onBuildAll;
 
-    public static string ConfigName => Constant.ATLAS_CONFIG_NAME;
-
     public static string GenerateSpriteAtlasNameByPath(string path)
     {
         if (!Directory.Exists(path))

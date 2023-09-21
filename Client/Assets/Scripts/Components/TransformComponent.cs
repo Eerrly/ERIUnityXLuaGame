@@ -1,4 +1,7 @@
-﻿public class TransformComponent : BaseComponent
+﻿/// <summary>
+/// 位置组件
+/// </summary>
+public class TransformComponent : BaseComponent
 {
     [System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Auto, Pack = 4)]
     internal struct Common
@@ -17,18 +20,27 @@
 
     private Common common = new Common(0);
 
+    /// <summary>
+    /// Position
+    /// </summary>
     public FixedVector3 pos
     {
         get { return common.pos; }
         set { common.pos = value; }
     }
 
+    /// <summary>
+    /// Rotation
+    /// </summary>
     public FixedQuaternion rot
     {
         get { return common.rot; }
         set { common.rot = value; }
     }
 
+    /// <summary>
+    /// Forward
+    /// </summary>
     public FixedVector3 fwd
     {
         get { return common.fwd; }

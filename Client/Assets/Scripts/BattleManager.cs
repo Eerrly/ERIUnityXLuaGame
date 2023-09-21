@@ -9,7 +9,6 @@ using UnityEngine;
 public class BattleManager : MonoBehaviour
 {
     private volatile bool _paused = false;
-    private byte[] readies = new byte[] { 0, 0 };
 
     public static int mainThreadId;
     public static bool IsMainThread => System.Threading.Thread.CurrentThread.ManagedThreadId == mainThreadId;
@@ -100,17 +99,29 @@ public class BattleManager : MonoBehaviour
         _binaryReader = new BinaryReader(_receiveStream);
     }
 
+    /// <summary>
+    /// 获取输入
+    /// </summary>
+    /// <returns></returns>
     public FrameBuffer.Input GetInput()
     {
         FrameBuffer.Input input = _playerInput.GetPlayerInput(selfPlayerId);
         return input;
     }
 
+    /// <summary>
+    /// 设置战斗数据
+    /// </summary>
+    /// <param name="data"></param>
     public void SetBattleData(BattleCommonData data)
     {
         _battleClientData = data;
     }
 
+    /// <summary>
+    /// 开始战斗
+    /// </summary>
+    /// <param name="selfPlayerId"></param>
     public void StartBattle(int selfPlayerId)
     {
         this._battleStarted = false;
@@ -128,6 +139,9 @@ public class BattleManager : MonoBehaviour
         _battleNetController.Connect(NetConstant.IP, NetConstant.Port);
     }
 
+    /// <summary>
+    /// 逻辑线程轮询
+    /// </summary>
     private void EngineUpdate()
     {
         try
@@ -155,6 +169,7 @@ public class BattleManager : MonoBehaviour
             {
                 if (!_battleStarted)
                 {
+                    // 加入
                     _battleNetController.SendReadyMsg();
                 }
                 else
@@ -175,6 +190,8 @@ public class BattleManager : MonoBehaviour
                     }
                 }
                 _battleNetController.Update();
+
+                // 接受
                 _recvQueue = _battleNetController.RecvData();
                 while(_recvQueue.Count > 0)
                 {
@@ -193,9 +210,21 @@ public class BattleManager : MonoBehaviour
         System.Threading.Thread.Sleep(1);
     }
 
+    /// <summary>
+    /// 接受服务器数据回调
+    /// </summary>
+    /// <param name="packet">包体</param>
     private void HandleRecvData(Packet packet)
     {
-        if(packet.head.act == (byte)ACT.JOIN) _battleStarted = true;
+        if(packet.head.act == (byte)ACT.JOIN)
+        {
+            _battleStarted = true;
+#if UNITY_DEBUG
+            Logger.Log(LogLevel.Info, $"【服务器返回数据】 行为: {Enum.GetName(typeof(ACT), packet.head.act)} 序号: {packet.head.index} 玩家ID:{_lastRecvPlayerInput.pos}");
+#endif
+            BufferPool.ReleaseBuff(packet.data);
+            return;
+        }
 
         _receiveStream.Reset();
         _receiveStream.Write(packet.data, Head.EndPointLength, packet.head.size);
@@ -211,7 +240,7 @@ public class BattleManager : MonoBehaviour
             _lastRecvPlayerInput.yaw = (byte)((yawMask & _raw) >> 4);
             _lastRecvPlayerInput.key = (byte)((keyMask & _raw) >> 1);
 #if UNITY_DEBUG
-            Logger.Log(LogLevel.Info, $"【服务器返回数据】 行为: {Enum.GetName(typeof(ACT), packet.head.act)} 玩家ID:{_lastRecvPlayerInput.pos} 帧:{_frame} 操作:{_raw}");
+            Logger.Log(LogLevel.Info, $"【服务器返回数据】 行为: {Enum.GetName(typeof(ACT), packet.head.act)} 序号: {packet.head.index} 玩家ID:{_lastRecvPlayerInput.pos} 帧:{_frame} 操作:{_raw}");
 #endif
             _battle.UpdateInput(_lastRecvPlayerInput);
         }

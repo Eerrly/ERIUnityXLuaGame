@@ -41,6 +41,9 @@ public class BattleNetController
 {
     private UDPClient client;
 
+    /// <summary>
+    /// 是否连接
+    /// </summary>
     public bool IsConnected
     {
         get
@@ -131,7 +134,7 @@ public class BattleNetController
     }
 
     /// <summary>
-    /// 将准备数据发给服务器
+    /// 将加入数据发给服务器
     /// </summary>
     public void SendReadyMsg()
     {
@@ -166,6 +169,9 @@ public class BattleNetController
         }
     }
 
+    /// <summary>
+    /// 发送心跳数据给服务器
+    /// </summary>
     public void SendHeartBeatMsg()
     {
         try
@@ -197,6 +203,10 @@ public class BattleNetController
         }
     }
 
+    /// <summary>
+    /// 发送数据给服务器
+    /// </summary>
+    /// <param name="packet">包体</param>
     public void SendData2Server(Packet packet)
     {
         try
@@ -209,11 +219,18 @@ public class BattleNetController
         }
     }
 
+    /// <summary>
+    /// 接受数据
+    /// </summary>
+    /// <returns>包体队列</returns>
     public Queue<Packet> RecvData()
     {
         return client.Recv();
     }
 
+    /// <summary>
+    /// 线程轮询
+    /// </summary>
     public void Update()
     {
         client.Update();

@@ -57,9 +57,11 @@ public class BattleNetController
     }
 
     private short indexer = 0;
+    private FrameBuffer.Input defInput;
 
     public void Initialize() {
         indexer = 0;
+        defInput = new FrameBuffer.Input((byte)BattleConstant.SelfID, 0);
     }
 
     /// <summary>
@@ -142,13 +144,11 @@ public class BattleNetController
     {
         try
         {
-            FrameBuffer.Input input = new FrameBuffer.Input((byte)BattleConstant.SelfID, 0);
-
             byte[] buffer = BufferPool.GetBuffer(5);
             using (MemoryStream stream = new MemoryStream(buffer))
             {
                 BinaryWriter writer = new BinaryWriter(stream);
-                writer.Write(input.ToByte());
+                writer.Write(defInput.ToByte());
                 writer.Write(0);
                 writer.Dispose();
             }
@@ -182,7 +182,7 @@ public class BattleNetController
             using (MemoryStream stream = new MemoryStream(buffer))
             {
                 BinaryWriter writer = new BinaryWriter(stream);
-                writer.Write((byte)0);
+                writer.Write(defInput.ToByte());
                 writer.Write(0);
                 writer.Dispose();
             }

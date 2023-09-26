@@ -56,8 +56,10 @@ public class BattleNetController
         }
     }
 
-    public void Initialize() {
+    private short indexer = 0;
 
+    public void Initialize() {
+        indexer = 0;
     }
 
     /// <summary>
@@ -118,7 +120,7 @@ public class BattleNetController
             {
                 act = (byte)ACT.DATA,
                 size = 5,
-                index = 0,
+                index = indexer++,
             };
             Packet packet = new Packet()
             {

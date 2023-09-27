@@ -227,7 +227,7 @@ public class BattleManager : MonoBehaviour
         }
 
         _receiveStream.Reset();
-        _receiveStream.Write(packet.data, Head.EndPointLength, packet.head.size);
+        _receiveStream.Write(packet.data, 0, packet.head.size);
         _receiveStream.Seek(0, SeekOrigin.Begin);
 
         BufferPool.ReleaseBuff(packet.data);

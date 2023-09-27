@@ -133,8 +133,8 @@ public class UDPClient
                         packet.head = *(Head*)dest;
                     }
                 }
-                packet.data = BufferPool.GetBuffer(Head.EndPointLength + packet.head.size);
-                Array.Copy(recvBuffer, Head.Length, packet.data, 0, Head.EndPointLength + packet.head.size);
+                packet.data = BufferPool.GetBuffer(packet.head.size);
+                Array.Copy(recvBuffer, Head.Length, packet.data, 0, packet.head.size);
 
                 recvQueue.Enqueue(packet);
             }

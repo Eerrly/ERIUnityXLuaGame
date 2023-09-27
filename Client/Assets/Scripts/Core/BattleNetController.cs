@@ -22,7 +22,6 @@ public struct Head
     public short index;
 
     public static readonly int Length = 8;
-    public static readonly int EndPointLength = 16;
 }
 
 /// <summary>

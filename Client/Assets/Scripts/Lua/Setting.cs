@@ -13,11 +13,14 @@ public partial class Setting
     public static readonly string EditorPatchPath = "Patch";
 
     public static string StreamingRoot => Application.streamingAssetsPath;
-
+    /// <summary>
+    /// 运行时Lua路径
+    /// </summary>
     public static string RuntimeScriptBundleName
     {
         get
         {
+            // 当指针大小为4时，为32位否则为64位
             if(System.IntPtr.Size == 4)
             {
                 return EditorBundlePath + "/Lua/32";
@@ -108,6 +111,9 @@ public partial class Setting
     }
 
     private static string _platForm = null;
+    /// <summary>
+    /// 平台
+    /// </summary>
     public static string Platform
     {
         get
@@ -150,8 +156,19 @@ public partial class Setting
     /// </summary>
     public static string EditorLuaScriptRoot => FileUtil.CombinePaths(ClientRoot, EditorScriptRoot);
 
+    /// <summary>
+    /// 默认层级
+    /// </summary>
     public static readonly int LAYER_DEFAULT = 0;
+
+    /// <summary>
+    /// 显示层级
+    /// </summary>
     public static readonly int LAYER_UI = 5;
+
+    /// <summary>
+    /// 隐藏层级
+    /// </summary>
     public static readonly int LAYER_HIDE = 31;
 
 }

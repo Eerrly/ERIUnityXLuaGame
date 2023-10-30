@@ -65,16 +65,20 @@ public class PatchingManager : MonoBehaviour, IManager
         {
             if (!state)
             {
-                Logger.Log(LogLevel.Error, $"CoPatching CoHttpGet {remoteVerPath} Error!!! Msg : {text}");
+#if UNITY_DEBUG
+                Logger.Log(LogLevel.Error, $"热更网络获取 {remoteVerPath} 错误!!! 错误信息 : {text}");
+#endif
             }
             else
             {
-                Logger.Log(LogLevel.Info, $"CoPatching CoHttpGet Success!! Msg : {text}");
+#if UNITY_DEBUG
+                Logger.Log(LogLevel.Info, $"热更网络获取成功!! 获取结果 : {text}");
+#endif
                 remoteVersionText = text.Split(',')[0];
                 bSaveRc = bSaveRc || localVersionText != remoteVersionText;
             }
         });
-        if (bSaveRc || true)
+        if (bSaveRc)
         {
             if (File.Exists(rcBytesFilePath))
             {
@@ -94,7 +98,9 @@ public class PatchingManager : MonoBehaviour, IManager
             {
                 if (!state)
                 {
-                    Logger.Log(LogLevel.Error, $"CoPatching CoHttpDownload {remoteRcPath} Error!!! Msg : {text}");
+#if UNITY_DEBUG
+                    Logger.Log(LogLevel.Error, $"热更网络下载 {remoteRcPath} 错误!!! 错误信息 : {text}");
+#endif
                 }
             });
             if (File.Exists(tmpLocalRcFilePath))
@@ -133,14 +139,18 @@ public class PatchingManager : MonoBehaviour, IManager
                             true,
                             (progress) =>
                             {
-                                Logger.Log(LogLevel.Info, $"CoPatching CoHttpDownload {remoteFilePath} Progress : {progress}");
+#if UNITY_DEBUG
+                                Logger.Log(LogLevel.Info, $"热更网络下载 {remoteFilePath} 进度 : {progress}");
+#endif
                                 _callback?.Call(o, "donwload", progress);
                             },
                             (state, text) =>
                             {
                                 if (!state)
                                 {
-                                    Logger.Log(LogLevel.Error, $"CoPatching CoHttpDownload {remoteFilePath} Error!!! Msg : {text}");
+#if UNITY_DEBUG
+                                    Logger.Log(LogLevel.Error, $"热更网络下载 {remoteFilePath} 错误!!! 错误信息 : {text}");
+#endif
                                 }
                                 else
                                 {

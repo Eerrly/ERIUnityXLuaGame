@@ -233,13 +233,13 @@ public partial class ResLoader
                             }
                             catch
                             {
-                                error = string.Format("[ResManager] CRC or Load Error!{0}-{1}", packageLocation.path, item.packageItem.hash);
+                                error = string.Format("加载资源发生错误! 路径：{0} Hash值{1}", packageLocation.path, item.packageItem.hash);
                             }
                         }
                     }
                     catch
                     {
-                        error = string.Format("[ResManager] CRC or Load Error!{0}-{1}", task.path, task.hash);
+                        error = string.Format("加载资源发生错误! 路径：{0} Hash值{1}", task.path, task.hash);
                     }
 
                     if(assetBundleRequest != null)
@@ -276,19 +276,19 @@ public partial class ResLoader
                             }
                             catch
                             {
-                                error = string.Format("[ResourceManager] CRC or Load Error!{0}-{1}", packageLocation.path, item.packageItem.hash);
+                                error = string.Format("加载资源发生错误! 路径：{0} Hash值{1}", packageLocation.path, item.packageItem.hash);
                             }
                         }
                     }
                     catch
                     {
-                        error = string.Format("[ResManager] CRC or Load Error!{0}-{1}", task.path, task.hash);
+                        error = string.Format("加载资源发生错误! 路径：{0} Hash值{1}", task.path, task.hash);
                     }
                 }
             }
             if(bundleGroup.rawBundle == null && bundleGroup.packageBundle == null)
             {
-                task.file = new Resource(task.path, task.name, null, null, error != null ? error : string.Format("[ResourceManager] Load Error!{0}-{1}", task.path, task.hash));
+                task.file = new Resource(task.path, task.name, null, null, error != null ? error : string.Format("加载资源发生错误! 路径：{0} Hash值{1}", task.path, task.hash));
                 task.state = ELoadingState.Finished;
                 yield break;
             }

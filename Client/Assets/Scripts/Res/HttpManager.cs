@@ -67,7 +67,10 @@ public class HttpManager : MonoBehaviour, IManager
         }
         catch(System.Exception e)
         {
+            _httpGetText = e.Message;
+#if UNITY_DEBUG
             Logger.Log(LogLevel.Exception, e.Message);
+#endif
         }
         finally
         {
@@ -123,7 +126,10 @@ public class HttpManager : MonoBehaviour, IManager
         }
         catch (System.Exception e)
         {
+            _httpDownloadText = e.Message;
+#if UNITY_DEBUG
             Logger.Log(LogLevel.Exception, e.Message);
+#endif
         }
         finally
         {

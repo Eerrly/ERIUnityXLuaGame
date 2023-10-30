@@ -5,9 +5,11 @@ using Sirenix.Utilities;
 using Sirenix.OdinInspector;
 using System.Linq;
 
+/// <summary>
+/// 编辑器热更构建工具窗口
+/// </summary>
 public class PatchToolsEditorWin : OdinEditorWindow
 {
-
     public static PatchToolsEditorWin Open()
     {
         var win = GetWindow<PatchToolsEditorWin>("Patch Tools");

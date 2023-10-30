@@ -33,7 +33,7 @@ public class ResManager : MonoBehaviour, IManager
         uint result = 0;
         if (!string.IsNullOrEmpty(path))
         {
-            path = FileUtil.Normalized(path).ToLower().Replace("assets/sources/", "");
+            path = FileUtil.Normalized(path).ToLower().Replace(ResUtil.ASSETS_SOURCES_LOWER_PATH, "");
             if (!cacheFileMap.TryGetValue(path, out result))
             {
                 result = Util.HashPath(path);
@@ -306,6 +306,10 @@ public class ResManager : MonoBehaviour, IManager
         }
     }
 
+    /// <summary>
+    /// 卸载资源
+    /// </summary>
+    /// <param name="hash">AB的Hash值</param>
     public void Unload(uint hash)
     {
         if (!preInitialized)

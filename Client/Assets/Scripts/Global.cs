@@ -148,8 +148,9 @@ public class Global : Singleton<Global>
                 console.SetParent(transform);
             }
             console.gameObject.SetActive(true);
-
-            Logger.Log(LogLevel.Info, "create log at " + System.DateTime.Now.ToString());
+#if UNITY_DEBUG
+            Logger.Log(LogLevel.Info, "创建日志 - 时间：" + System.DateTime.Now.ToString());
+#endif
         }
         catch(System.Exception e)
         {

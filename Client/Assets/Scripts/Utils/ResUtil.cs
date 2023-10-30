@@ -12,6 +12,11 @@ using System;
 /// </summary>
 public class ResUtil
 {
+    /// <summary>
+    /// 可热更资源根目录（小写）
+    /// </summary>
+    public static readonly string ASSETS_SOURCES_LOWER_PATH = "assets/sources/";
+
     public static string GetAtlasPathBySpritePath(string spritePath)
     {
         var atlasName = FileUtil.CombinePaths("Sources", Path.GetDirectoryName(spritePath)).Replace("/", "_").ToLower();
@@ -55,7 +60,7 @@ public class ResUtil
                 {
                     sb.AppendLine(hash2Name[tracker.Pop()]);
                 }
-                throw new System.Exception("loop dependencies!\n" + sb.ToString());
+                throw new System.Exception("出现循环依赖！！\n" + sb.ToString());
             }
         }
 
@@ -86,7 +91,7 @@ public class ResUtil
             var files = Directory.GetFiles(Setting.EditorLuaScriptRoot, "*.lua", SearchOption.AllDirectories).ToList();
             if (!(ComplieFiles(files, "32", true) && ComplieFiles(files, "64", true)))
             {
-                Debug.LogError("build scripts has error !!");
+                Debug.LogError("构建Lua脚本发生错误！！");
             }
             AssetDatabase.Refresh();
         }
@@ -96,7 +101,7 @@ public class ResUtil
         }
         finally
         {
-            UnityEngine.Debug.Log("build all scripts cost time : " + (System.DateTime.Now - start).TotalMilliseconds + " ms");
+            UnityEngine.Debug.Log("构建全部Lua脚本耗时：" + (System.DateTime.Now - start).TotalMilliseconds + " ms");
         }
     }
 
@@ -152,7 +157,7 @@ public class ResUtil
                     if (Util.ExecuteBat(Path.GetDirectoryName(luajit), luajit, string.Format("{0} {1} {2}", "-b", files[i], targetFile)) == 1)
                     {
                         hasError = true;
-                        UnityEngine.Debug.LogError("luajit compile failed:" + files[i]);
+                        UnityEngine.Debug.LogError("LuaJit编译脚本发生错误！ 脚本：" + files[i]);
                     }
                 }
             }
@@ -203,7 +208,7 @@ public class ResUtil
             foreach (var item in items)
             {
                 var path = FileUtil.Normalized(item).ToLower();
-                var keyPath = path.Replace("assets/sources/", "");
+                var keyPath = path.Replace(ResUtil.ASSETS_SOURCES_LOWER_PATH, "");
                 if (keyPath.EndsWith(".meta"))
                 {
                     continue;
@@ -375,7 +380,7 @@ public class ResUtil
             foreach (var item in files)
             {
                 var path = FileUtil.Normalized(item).ToLower();
-                var keyPath = path.Replace("assets/sources/", "");
+                var keyPath = path.Replace(ResUtil.ASSETS_SOURCES_LOWER_PATH, "");
                 if (keyPath.EndsWith(".meta"))
                 {
                     continue;
@@ -408,7 +413,7 @@ public class ResUtil
                             continue;
                         }
 
-                        var patchPath = patchItem.Replace('\\', '/').ToLower().Replace("assets/sources/", "");
+                        var patchPath = patchItem.Replace('\\', '/').ToLower().Replace(ResUtil.ASSETS_SOURCES_LOWER_PATH, "");
                         if(patchPath.StartsWith("lua/32/", StringComparison.OrdinalIgnoreCase) || patchPath.StartsWith("lua/64/", StringComparison.OrdinalIgnoreCase))
                         {
                             patchPath = patchPath.Substring(7, patchPath.Length - 7);
@@ -453,11 +458,11 @@ public class ResUtil
             foreach (var file in files)
             {
                 var rawFile = file.Replace("\\", "/");
-                var keyPath = rawFile.ToLower().Replace("assets/sources/", "");
+                var keyPath = rawFile.ToLower().Replace(ResUtil.ASSETS_SOURCES_LOWER_PATH, "");
                 var deps = AssetDatabase.GetDependencies(rawFile, false);
                 foreach (var dep in deps)
                 {
-                    var depKeyPath = dep.ToLower().Replace("\\", "/").Replace("assets/sources/", "");
+                    var depKeyPath = dep.ToLower().Replace("\\", "/").Replace(ResUtil.ASSETS_SOURCES_LOWER_PATH, "");
                     List<string> list = null;
                     if (!depMap.TryGetValue(depKeyPath, out list))
                     {

@@ -9,7 +9,7 @@ end
 
 function viewA:refresh()
     print("refresh ID.Text:" .. tostring(self.ID.Text))
-    self.View:SetText(self.ID.Text, "Start Game")
+    self.View:SetText(self.ID.Text, "Start Game!!")
     self.View:SetImage(self.ID.Image1, "Textures/B", "item_01.png")
     self.View:SetImage(self.ID.Image2, "Textures/A", "gongchengshi.png")
     self.View:SetImage(self.ID.Image3, "Textures/A", "golden_finger.png")
@@ -19,7 +19,7 @@ function viewA:refresh()
 end
 
 function viewA:OnBtnGetClicked()
-    Util.Patching("http://192.168.16.158/pres", self, self.OnPatchingEvent)
+    Util.Patching("http://192.168.16.158:8080/pres", self, self.OnPatchingEvent)
 end
 
 function viewA:OnPatchingEvent(event, arg1, arg2)

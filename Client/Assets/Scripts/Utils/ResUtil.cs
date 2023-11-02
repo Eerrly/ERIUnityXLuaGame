@@ -504,6 +504,7 @@ public class ResUtil
         manifest = BuildPipeline.BuildAssetBundles(
             Setting.EditorBundleBuildCachePath,
             bundleList.ToArray(),
+            //使用lz4的格式压缩|不使用FileName来加载ab|不使用带后缀的文件名来加载ab
             BuildAssetBundleOptions.ChunkBasedCompression | BuildAssetBundleOptions.DisableLoadAssetByFileName | BuildAssetBundleOptions.DisableLoadAssetByFileNameWithExtension,
             EditorUserBuildSettings.activeBuildTarget);
 

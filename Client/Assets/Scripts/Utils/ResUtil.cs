@@ -180,6 +180,8 @@ public class ResUtil
     /// </summary>
     public static void Build()
     {
+        var start = System.DateTime.Now;
+
         var version = PatchUtil.GetGitVersion();
         var version_path = FileUtil.CombinePaths(Setting.EditorResourcePath, Setting.EditorConfigPath, Constant.VERSION_TXT_NAME);
         File.WriteAllText(version_path, version);
@@ -342,6 +344,7 @@ public class ResUtil
         Util.SaveConfig(bundleManifest, Constant.ASSETBUNDLES_CONFIG_NAME);
 
         AssetDatabase.Refresh();
+        UnityEngine.Debug.Log("构建整包资源总耗时：" + (System.DateTime.Now - start).TotalMilliseconds + " ms");
     }
 
     /// <summary>
@@ -350,6 +353,8 @@ public class ResUtil
     /// <param name="patchList">热更文件列表</param>
     public static void Patch(HashSet<string> patchList)
     {
+        var start = System.DateTime.Now;
+
         var patchMap = new Dictionary<string, string>();
         var bundleList = new List<AssetBundleBuild>();
         var configMap = new Dictionary<string, BuildToolsConfig.BuildToolsConfigItem>();
@@ -612,6 +617,7 @@ public class ResUtil
         }
 
         AssetDatabase.Refresh();
+        UnityEngine.Debug.Log("构建热更资源总耗时：" + (System.DateTime.Now - start).TotalMilliseconds + " ms");
     }
 
 #endif

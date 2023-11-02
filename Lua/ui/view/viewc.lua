@@ -30,7 +30,7 @@ function viewC:OnPatchingEvent(event, arg1, arg2)
         print("OnPatchingEvent ready !!!")
     elseif event == "setdownload" then
         print("OnPatchingEvent setdownload !!!" .. ", file count:" .. arg1 .. ", size:" .. arg2)
-        self.View:SetText("File Count:" .. tostring(arg1) .. ", Size:" .. tostring(arg2))
+        self.View:SetText(self.ID.Text_Info, "File Count:" .. tostring(arg1) .. ", Size:" .. tostring(arg2))
     elseif event == "candownload" then
         print("OnPatchingEvent candownload !!!")
         return 1

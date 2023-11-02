@@ -48,6 +48,15 @@ public class ToolbarEditorMenu
         NodeToolsEditorWin.Open();
     }
 
+    /// <summary>
+    /// 缓存路径工具
+    /// </summary>
+    [MenuItem("工具/Cache Tools", false, 1000)]
+    public static void CacheTools()
+    {
+        CacheToolsEditorWin.Open();
+    }
+
 }
 
 public class RightClickEditorMenu

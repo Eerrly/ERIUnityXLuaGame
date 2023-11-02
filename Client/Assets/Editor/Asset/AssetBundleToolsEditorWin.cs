@@ -48,35 +48,15 @@ public class AssetBundleToolsEditorWin : OdinEditorWindow
         [HorizontalGroup("Zero")]
         public string assetBundleFile;
 
-        [LabelText("字节偏移"), LabelWidth(50)]
-        [HideLabel]
-        [HorizontalGroup("One")]
-        public uint offset;
-
         [LabelText(",字节总长"), LabelWidth(50)]
         [HideLabel]
         [HorizontalGroup("One")]
         public int size;
 
-        [LabelText(",后缀"), LabelWidth(30)]
-        [HideLabel]
-        [HorizontalGroup("One")]
-        public string extension;
-
-        [LabelText(",是否以文件夹为单位"), LabelWidth(120)]
-        [HideLabel]
-        [HorizontalGroup("One")]
-        public bool directories;
-
         [LabelText("路径"), LabelWidth(50)]
         [HideLabel]
         [HorizontalGroup("Two")]
         public string packageResourcePath;
-
-        [LabelText(",Md5值"), LabelWidth(100)]
-        [HideLabel]
-        [HorizontalGroup("Two")]
-        public string md5;
 
         [LabelText("所有的依赖"), LabelWidth(50)]
         [HideLabel]
@@ -88,12 +68,8 @@ public class AssetBundleToolsEditorWin : OdinEditorWindow
             this.win = win;
 
             hash = item.hash;
-            offset = item.offset;
             size = item.size;
             packageResourcePath = item.packageResourcePath;
-            extension = item.extension;
-            directories = item.directories;
-            md5 = item.md5;
             dependencies = item.dependencies;
 
             assetBundleFile = FileUtil.CombinePaths(Setting.EditorBundleBuildCachePath, hash + ".s");

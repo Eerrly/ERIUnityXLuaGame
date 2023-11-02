@@ -14,17 +14,14 @@ function viewC:BindEvent()
 end
 
 function viewC:OnBtnConfirmClicked()
-    print("-------- viewC:OnBtnConfirmClicked --------")
     Util.Patching("http://192.168.16.158:8080/pres", self, self.OnPatchingEvent)
 end
 
 function viewC:OnBtnCancelClicked()
-    print("-------- viewC:OnBtnCancelClicked --------")
     CS.UnityEngine.Application.Quit()
 end
 
 function viewC:OnBtnCloseClicked()
-    print("-------- viewC:OnBtnCloseClicked --------")
     self:Close()
 end
 
@@ -33,6 +30,7 @@ function viewC:OnPatchingEvent(event, arg1, arg2)
         print("OnPatchingEvent ready !!!")
     elseif event == "setdownload" then
         print("OnPatchingEvent setdownload !!!" .. ", file count:" .. arg1 .. ", size:" .. arg2)
+        self.View:SetText("File Count:" .. tostring(arg1) .. ", Size:" .. tostring(arg2))
     elseif event == "candownload" then
         print("OnPatchingEvent candownload !!!")
         return 1

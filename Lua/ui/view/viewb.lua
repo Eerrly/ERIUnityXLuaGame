@@ -10,33 +10,28 @@ function viewB:onCreate()
 end
 
 function viewB:onRefresh()
-    print("-------- viewB:onRefresh --------")
     self.View:BindEvent(Const.EventID.ButtonClicked, self.ID.Button_Player1, self.OnBtnPlayer1Clicked)
     self.View:BindEvent(Const.EventID.ButtonClicked, self.ID.Button_Player2, self.OnBtnPlayer2Clicked)
     self.View:BindEvent(Const.EventID.ButtonClicked, self.ID.Button_Close, self.OnBtnCloseClicked)
 end
 
 function viewB:StartBattle()
-    print("-------- viewB:StartBattle --------")
     Util.LoadScene("Battle", function(state, progress)
         self:onloadedscene(state, progress)
     end)
 end
 
 function viewB:OnBtnPlayer1Clicked()
-    print("-------- viewB:OnBtnPlayer1Clicked --------")
     Util.SetSelfPlayerId(1)
     self:StartBattle()
 end
 
 function viewB:OnBtnPlayer2Clicked()
-    print("-------- viewB:OnBtnPlayer2Clicked --------")
     Util.SetSelfPlayerId(2)
     self:StartBattle()
 end
 
 function viewB:OnBtnCloseClicked()
-    print("-------- viewB:OnBtnCloseClicked --------")
     self:Close()
 end
 

@@ -69,15 +69,15 @@ public class Global : Singleton<Global>
         Util.GetOrAddComponent<StandaloneInputModule>(gameObject);
 
         _resManager = Util.GetOrAddComponent<ResManager>(gameObject);
-        _luaManager = Util.GetOrAddComponent<LuaManager>(gameObject);
-        _uiManager = Util.GetOrAddComponent<UIManager>(gameObject);
         _sceneManager = Util.GetOrAddComponent<SceneManager>(gameObject);
+        _uiManager = Util.GetOrAddComponent<UIManager>(gameObject);
+        _luaManager = Util.GetOrAddComponent<LuaManager>(gameObject);
         _httpManager = Util.GetOrAddComponent<HttpManager>(gameObject);
         _patchingManager = Util.GetOrAddComponent<PatchingManager>(gameObject);
         Managers.Add(_resManager);
-        Managers.Add(_luaManager);
-        Managers.Add(_uiManager);
         Managers.Add(_sceneManager);
+        Managers.Add(_uiManager);
+        Managers.Add(_luaManager);
         Managers.Add(_httpManager);
         Managers.Add(_patchingManager);
 
@@ -90,6 +90,14 @@ public class Global : Singleton<Global>
     public void Run()
     {
         StartCoroutine(nameof(CoStart));
+    }
+
+    /// <summary>
+    /// 关闭
+    /// </summary>
+    public void Shutdown()
+    {
+        OnRelease();
     }
 
     /// <summary>
@@ -173,8 +181,20 @@ public class Global : Singleton<Global>
     {
         for (int i = 0; i < Managers.Count; i++)
         {
-            Managers[i].OnRelease();
+            try
+            {
+                Managers[i].OnRelease();
+            }
+            catch(System.Exception e)
+            {
+                Debug.LogException(e);
+            }
         }
+    }
+
+    public void OnDestroy()
+    {
+        Shutdown();
     }
 
 }

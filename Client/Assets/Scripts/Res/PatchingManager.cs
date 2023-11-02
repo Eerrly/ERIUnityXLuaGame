@@ -22,12 +22,12 @@ public class PatchingManager : MonoBehaviour, IManager
     /// <summary>
     /// 本地V文件路径
     /// </summary>
-    public string vBytesFilePath;
+    private string vBytesFilePath;
 
     /// <summary>
     /// 本地RC文件路径
     /// </summary>
-    public string rcBytesFilePath;
+    private string rcBytesFilePath;
 
     private XLua.LuaFunction _callback;
 
@@ -64,6 +64,7 @@ public class PatchingManager : MonoBehaviour, IManager
         _callback = callback;
 
         downloadList = new List<ManifestItem>();
+        var patchingResult = false;
         var localMd5Map = new Dictionary<uint, string>();
         localVersionText = File.Exists(vBytesFilePath) ? File.ReadAllText(vBytesFilePath) : "";
         bSaveRc = string.IsNullOrEmpty(localVersionText);
@@ -175,9 +176,14 @@ public class PatchingManager : MonoBehaviour, IManager
 
                 // 替换新V文件
                 File.WriteAllText(vBytesFilePath, remoteVersionText);
+                patchingResult = true;
             }
         }
-        callback?.Call(o, "done");
+        if (patchingResult)
+        {
+            callback?.Call(o, "done");
+            Global.Instance.OnPatchingDone?.Invoke();
+        }
     }
 
     /// <summary>

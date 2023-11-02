@@ -342,49 +342,48 @@ public class ResManager : MonoBehaviour, IManager
 
     private void LateUpdate()
     {
-        if (!preInitialized)
+        if (preInitialized)
         {
-            return;
-        }
+            ReleaseUnloadResourceBundles();
 
-        ReleaseUnloadResourceBundles();
-
-        int loadingCount = 0;
-        for (int i = 0; i < loadingTasks.Count; i++)
-        {
-            var task = loadingTasks[i];
-            if (task.state == ELoadingState.Loading)
+            int loadingCount = 0;
+            for (int i = 0; i < loadingTasks.Count; i++)
             {
-                loadingCount++;
-            }
-            if (loadingCount > Constant.MaxLoadingTaskCount)
-            {
-                break;
-            }
-            if (task.state == ELoadingState.Ready)
-            {
-                task.state = ELoadingState.Loading;
+                var task = loadingTasks[i];
+                if (task.state == ELoadingState.Loading)
+                {
+                    loadingCount++;
+                }
+                if (loadingCount > Constant.MaxLoadingTaskCount)
+                {
+                    break;
+                }
+                if (task.state == ELoadingState.Ready)
+                {
+                    task.state = ELoadingState.Loading;
 #if UNITY_EDITOR
-                if (Setting.Config.useAssetBundle)
-                {
-                    StartCoroutine(ResLoader.CoLoadTask(task));
-                }
-                else
-                {
-                    StartCoroutine(ResLoader.CoEditorLoadTask(task));
-                }
+                    if (Setting.Config.useAssetBundle)
+                    {
+                        StartCoroutine(ResLoader.CoLoadTask(task));
+                    }
+                    else
+                    {
+                        StartCoroutine(ResLoader.CoEditorLoadTask(task));
+                    }
 #else
                     StartCoroutine(ResLoader.CoLoadTask(task));
 #endif
+                }
+                if (task.state == ELoadingState.Finished)
+                {
+                    task.state = ELoadingState.None;
+                    finishedList.Add(task);
+                }
             }
-            if (task.state == ELoadingState.Finished)
-            {
-                task.state = ELoadingState.None;
-                finishedList.Add(task);
-            }
-        }
 
-        CallBackFinishedResourceBundles();
+            CallBackFinishedResourceBundles();
+        }
+        CleanBundleUnloadList();
     }
 
     /// <summary>
@@ -431,10 +430,34 @@ public class ResManager : MonoBehaviour, IManager
         }
     }
 
-    public void OnRelease()
+    /// <summary>
+    /// 清理卸载的Bundle资源
+    /// </summary>
+    private void CleanBundleUnloadList()
     {
-        preInitialized = false;
-        manifest = null;
+        using (var e = unloadBundleMap.GetEnumerator())
+        {
+            while (e.MoveNext())
+            {
+                var group = e.Current.Value;
+                if (group.rawBundle != null)
+                {
+                    group.rawBundle.Unload(true);
+                }
+                if (group.packageBundle != null)
+                {
+                    group.packageBundle.Unload(true);
+                }
+            }
+        }
+        unloadBundleMap.Clear();
+    }
+
+    /// <summary>
+    /// 清理加载过的Bundle资源
+    /// </summary>
+    private void CleanBundleLoadedList()
+    {
         var e = loadedBundles.GetEnumerator();
         while (e.MoveNext())
         {
@@ -445,9 +468,18 @@ public class ResManager : MonoBehaviour, IManager
             }
         }
         loadedBundles.Clear();
+    }
+
+    public void OnRelease()
+    {
+        preInitialized = false;
+        manifest = null;
+        CleanBundleLoadedList();
+        CleanBundleUnloadList();
         loadingBundles.Clear();
         loadingTasks.Clear();
         finishedList.Clear();
+        StopAllCoroutines();
         ResLoader.requestList.Clear();
         ReleaseUnloadResourceBundles();
         IsInitialized = false;

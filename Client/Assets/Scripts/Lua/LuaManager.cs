@@ -15,14 +15,6 @@ public class LuaManager : MonoBehaviour, IManager
     /// </summary>
     public LuaEnv luaEnv => _luaEnv;
 
-    private Dictionary<string, object[]> _luaDic = new Dictionary<string, object[]>();
-
-    public object[] DoFile(string fileName) {
-        if (!_luaDic.ContainsKey(fileName))
-            _luaDic.Add(fileName, luaEnv.DoString(fileName));
-        return _luaDic[fileName];
-    }
-
     /// <summary>
     /// 将所有预制好的组件与Lua对象进行绑定
     /// </summary>
@@ -48,9 +40,9 @@ public class LuaManager : MonoBehaviour, IManager
     /// 释放
     /// </summary>
     public void OnRelease() {
+        _codes.Clear();
         if (_luaEnv != null)
             _luaEnv.Dispose();
-        _luaDic.Clear();
         IsInitialized = false;
     }
 
@@ -59,7 +51,7 @@ public class LuaManager : MonoBehaviour, IManager
     /// </summary>
     public void OnInitialize()
     {
-        _luaDic.Clear();
+        _codes.Clear();
         _luaEnv = new LuaEnv();
         _luaEnv.AddLoader(Loader);
         StartCoroutine(nameof(CoLoadScript));

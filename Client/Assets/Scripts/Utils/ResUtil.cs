@@ -620,6 +620,55 @@ public class ResUtil
         UnityEngine.Debug.Log("构建热更资源总耗时：" + (System.DateTime.Now - start).TotalMilliseconds + " ms");
     }
 
+    public struct DumpCacheNode
+    {
+        public string name;
+        public ResourceBundle bundle;
+    }
+
+    public static string Dump()
+    {
+        var builder = new System.Text.StringBuilder();
+
+        builder.AppendLine("[ResourceManager]");
+        builder.AppendLine("\tLoaded");
+
+        var list = new List<DumpCacheNode>();
+        var r = Global.Instance.ResManager;
+
+        using (var e = r.loadedBundles.GetEnumerator())
+        {
+            while (e.MoveNext())
+            {
+                string name = e.Current.Key.ToString();
+                using (var ee = r.cacheFileMap.GetEnumerator())
+                {
+                    while (ee.MoveNext())
+                    {
+                        if (ee.Current.Value == e.Current.Key)
+                        {
+                            name = name + "(" + ee.Current.Key + ")";
+                            break;
+                        }
+                    }
+                }
+                list.Add(new DumpCacheNode() { name = name, bundle = e.Current.Value });
+            }
+        }
+
+        list.Sort((a, b) => { return a.name.CompareTo(b.name); });
+
+        using (var e = list.GetEnumerator())
+        {
+            while (e.MoveNext())
+            {
+                builder.AppendLine(e.Current.name.ToString());
+            }
+        }
+
+        return builder.ToString();
+    }
+
 #endif
 
 }

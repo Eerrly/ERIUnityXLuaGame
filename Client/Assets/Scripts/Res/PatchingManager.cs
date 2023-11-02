@@ -4,6 +4,15 @@ using UnityEngine;
 using System.IO;
 
 /// <summary>
+/// 是否热更的状态
+/// </summary>
+enum CanDownloadState
+{
+    Confirm = 1,
+    Cancel,
+}
+
+/// <summary>
 /// 热更管理器
 /// </summary>
 public class PatchingManager : MonoBehaviour, IManager
@@ -189,12 +198,12 @@ public class PatchingManager : MonoBehaviour, IManager
         while (true)
         {
             var state = _callback?.Func<object, string, int>(o, "candownload");
-            if (state == 1)
+            if (state == (int)CanDownloadState.Confirm)
             {
                 canDownload = true;
                 break;
             }
-            else if (state == 2)
+            else if (state == (int)CanDownloadState.Cancel)
             {
                 canDownload = false;
                 break;

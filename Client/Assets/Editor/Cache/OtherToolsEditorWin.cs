@@ -9,14 +9,24 @@ using UnityEngine;
 /// <summary>
 /// 缓存路径工具
 /// </summary>
-public class CacheToolsEditorWin : OdinEditorWindow
+public class OtherToolsEditorWin : OdinEditorWindow
 {
-    public static CacheToolsEditorWin Open()
+    public static OtherToolsEditorWin Open()
     {
-        var win = GetWindow<CacheToolsEditorWin>("Cache Tools");
+        var win = GetWindow<OtherToolsEditorWin>("Other Tools");
         var rect = GUIHelper.GetEditorWindowRect().AlignCenter(860, 700);
         return win;
     }
+
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        processId = System.Diagnostics.Process.GetCurrentProcess().Id.ToString();
+    }
+
+    [InfoBox("调试时如果开启了多个Untiy编辑器，可以通过进程ID来判断要连接的编辑器是哪一个")]
+    [LabelText("进程ID")]
+    public string processId;
 
     [Button("清除本地缓存")]
     [HorizontalGroup("One")]

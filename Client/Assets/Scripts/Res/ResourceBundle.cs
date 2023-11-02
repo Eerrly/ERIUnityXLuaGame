@@ -108,7 +108,10 @@ public class ResourceBundle : ReferenceCountBase
                 // skip: .bytes
                 var name = names[i].Substring(0, names[i].Length - 6);
                 var bytes = PackageBundle.LoadAsset<TextAsset>(names[i]).bytes;
-                dict.Add(name, bytes);
+                if (!dict.ContainsKey(name))
+                {
+                    dict.Add(name, bytes);
+                }
             }
         }
     }

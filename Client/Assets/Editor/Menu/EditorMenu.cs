@@ -51,10 +51,10 @@ public class ToolbarEditorMenu
     /// <summary>
     /// 缓存路径工具
     /// </summary>
-    [MenuItem("工具/Cache Tools", false, 1000)]
+    [MenuItem("工具/Other Tools", false, 1000)]
     public static void CacheTools()
     {
-        CacheToolsEditorWin.Open();
+        OtherToolsEditorWin.Open();
     }
 
 }

@@ -48,6 +48,7 @@ public class Global : Singleton<Global>
     /// </summary>
     public List<IManager> Managers;
 
+    public UnityEvent OnPatchingDone;
     public UnityEvent OnGameStart;
     public UnityEvent OnSceneChanged;
 
@@ -61,6 +62,8 @@ public class Global : Singleton<Global>
 
         Managers = new List<IManager>(10);
         OnGameStart = new UnityEvent();
+        OnPatchingDone = new UnityEvent();
+        OnSceneChanged = new UnityEvent();
 
         Util.GetOrAddComponent<EventSystem>(gameObject);
         Util.GetOrAddComponent<StandaloneInputModule>(gameObject);
@@ -95,6 +98,10 @@ public class Global : Singleton<Global>
     /// <returns></returns>
     private IEnumerator CoStart()
     {
+        for (int i = 0; i < Managers.Count; i++)
+        {
+            Managers[i].IsInitialized = false;
+        }
         for (int i = 0; i < Managers.Count; i++)
         {
             Managers[i].OnInitialize();

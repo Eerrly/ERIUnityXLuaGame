@@ -27,19 +27,19 @@ end
 
 function viewC:OnPatchingEvent(event, arg1, arg2)
     if event == "ready" then
-        print("OnPatchingEvent ready !!!")
+        print("OnPatchingEvent ready.")
     elseif event == "setdownload" then
-        print("OnPatchingEvent setdownload !!!" .. ", file count:" .. arg1 .. ", size:" .. arg2)
+        print("viewC:OnPatchingEvent setdownload. -> file count:" .. arg1 .. ", all size:" .. arg2)
         self.View:SetText(self.ID.Text_Info, "File Count:" .. tostring(arg1) .. ", Size:" .. tostring(arg2))
     elseif event == "candownload" then
-        print("OnPatchingEvent candownload !!!")
+        print("viewC:OnPatchingEvent candownload.")
         return 1
     elseif event == "download" then
-        print("OnPatchingEvent download !!! arg1:" .. tostring(arg1))
+        print("viewC:OnPatchingEvent download. -> progress:" .. tostring(arg1))
     elseif event == "done" then
-        print("OnPatchingEvent done !!!")
+        print("viewC:OnPatchingEvent done.")
     elseif event == "error" then
-        print("OnPatchingEvent error !!!")
+        print("viewC:OnPatchingEvent error.")
     end
 end
 

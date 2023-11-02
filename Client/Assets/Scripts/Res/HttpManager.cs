@@ -41,6 +41,15 @@ public class HttpManager : MonoBehaviour, IManager
     /// </summary>
     public string HttpDownloadText => _httpDownloadText;
 
+    private string GetResponseText(UnityWebRequest response)
+    {
+        if (response.downloadHandler == null)
+            return string.Empty;
+        if (response.downloadHandler is DownloadHandlerBuffer)
+            return response.downloadHandler.text;
+        return $"无响应文本 : {response.downloadHandler.GetType().Name}";
+    }
+
     /// <summary>
     /// Htttp Get
     /// </summary>
@@ -62,7 +71,7 @@ public class HttpManager : MonoBehaviour, IManager
             else
             {
                 _httpGetState = true;
-                _httpGetText = request.downloadHandler.text;
+                _httpGetText = GetResponseText(request);
             }
         }
         catch(System.Exception e)
@@ -121,7 +130,7 @@ public class HttpManager : MonoBehaviour, IManager
             else
             {
                 _httpDownloadState = true;
-                _httpDownloadText = request.downloadHandler.text;
+                _httpDownloadText = GetResponseText(request);
             }
         }
         catch (System.Exception e)

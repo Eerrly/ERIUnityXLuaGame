@@ -53,14 +53,17 @@ public class PatchToolsEditorWin : OdinEditorWindow
             HashSet<string> fileList = new HashSet<string>();
             for (int i = 0; i < patchFiles.Length; i++)
             {
-                var path = patchFiles[i].Substring(22, patchFiles[i].Length - 22);
-                if (path.EndsWith(".meta") && System.IO.File.Exists(path.Replace(".meta", "")))
+                if (patchFiles[i].StartsWith("Lua/"))
                 {
-                    fileList.Add(path.Replace(".meta", ""));
+                    fileList.Add(patchFiles[i].Substring(4, patchFiles[i].Length - 4));
                 }
-                if (path.StartsWith("Lua"))
+                else
                 {
-                    fileList.Add(path.Substring(7, path.Length - 7));
+                    var path = patchFiles[i].Substring(22, patchFiles[i].Length - 22);
+                    if (path.EndsWith(".meta") && System.IO.File.Exists(path.Replace(".meta", "")))
+                    {
+                        fileList.Add(path.Replace(".meta", ""));
+                    }
                 }
             }
             patchFiles = fileList.ToArray();

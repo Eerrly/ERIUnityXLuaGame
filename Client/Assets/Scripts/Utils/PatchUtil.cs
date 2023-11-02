@@ -30,7 +30,7 @@ public class PatchUtil
         var arg = string.Format("{0} {1} {2}", startVersion, endVersion, output);
         if (Util.ExecuteBat(dir, calclist, arg) == 0)
         {
-            patchfiles = System.IO.File.ReadAllLines(output).Where(path => path.StartsWith("Client/Assets/Sources/")).ToArray();
+            patchfiles = System.IO.File.ReadAllLines(output).Where(path => path.StartsWith("Client/Assets/Sources/") || path.StartsWith("Lua/")).ToArray();
         }
 #endif
         return patchfiles;

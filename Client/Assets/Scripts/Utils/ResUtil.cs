@@ -416,10 +416,11 @@ public class ResUtil
                         var patchPath = patchItem.Replace('\\', '/').ToLower().Replace(ResUtil.ASSETS_SOURCES_LOWER_PATH, "");
                         if(patchPath.StartsWith("lua/32/", StringComparison.OrdinalIgnoreCase) || patchPath.StartsWith("lua/64/", StringComparison.OrdinalIgnoreCase))
                         {
-                            patchPath = patchPath.Substring(7, patchPath.Length - 7);
+                            patchPath = patchPath.Substring(7, patchPath.Length - 7).Replace(".bytes", ".lua");
                         }
                         if (patchList.Contains(patchPath))
                         {
+                            patchingNoteList.AppendLine(string.Format("patch[lua]:{0}", patchItem));
                             newList.Add(patchItem);
                         }
                     }
@@ -436,6 +437,7 @@ public class ResUtil
                         assetNames = refItems,
                         addressableNames = GetAddressableNames(path, refItems)
                     });
+                    patchMap.Add(keyPath, "");
                 }
                 else
                 {

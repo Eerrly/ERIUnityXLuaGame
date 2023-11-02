@@ -6,6 +6,9 @@ using System.IO;
 using UnityEditor;
 using UnityEngine;
 
+/// <summary>
+/// 缓存路径工具
+/// </summary>
 public class CacheToolsEditorWin : OdinEditorWindow
 {
     public static CacheToolsEditorWin Open()
@@ -16,6 +19,7 @@ public class CacheToolsEditorWin : OdinEditorWindow
     }
 
     [Button("清除本地缓存")]
+    [HorizontalGroup("One")]
     public void CleanPlayerPrefs()
     {
         PlayerPrefs.DeleteAll();
@@ -23,24 +27,28 @@ public class CacheToolsEditorWin : OdinEditorWindow
     }
 
     [Button("打开 [PersistentDataPath] 目录")]
+    [HorizontalGroup("Two")]
     public void OpenPersistentDataFolder()
     {
         Application.OpenURL(Application.persistentDataPath);
     }
 
     [Button("打开 [BundleCache] 目录")]
+    [HorizontalGroup("Two")]
     public static void OpenBundleCacheFolder()
     {
         Application.OpenURL("BundleCache");
     }
 
     [Button("打开 [Patch] 目录")]
+    [HorizontalGroup("Two")]
     public static void OpenPatchFolder()
     {
         Application.OpenURL("Patch");
     }
 
     [Button("删除 [persistentDataPath] 目录")]
+    [HorizontalGroup("Three")]
     public void CleanPersistentDataPath()
     {
         if (EditorUtility.DisplayDialog("提示", "确认删除 [persistentDataPath] 目录吗？", "确认", "取消"))

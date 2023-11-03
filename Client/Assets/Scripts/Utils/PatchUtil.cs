@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using System.Linq;
+﻿using System.Linq;
 
 /// <summary>
 /// 热更工具类
@@ -9,7 +6,13 @@ using System.Linq;
 public class PatchUtil
 {
     private static string[] patchfiles = null;
+    /// <summary>
+    /// 获取差异文件的批处理文件
+    /// </summary>
     private static readonly string calclist = FileUtil.CombinePaths(UnityEngine.Application.dataPath, "Editor/Tools/calclist.bat");
+    /// <summary>
+    /// 获取版本号的批处理文件
+    /// </summary>
     private static readonly string getversion = FileUtil.CombinePaths(UnityEngine.Application.dataPath, "Editor/Tools/getversion.bat");
 
     /// <summary>

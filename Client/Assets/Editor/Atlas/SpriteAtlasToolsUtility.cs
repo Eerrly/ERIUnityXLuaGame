@@ -32,7 +32,7 @@ public class SpriteAtlasToolsUtility
         {
             if(v.textureDirPath == textureDirPath)
             {
-                Debug.Log("AddSpriteAtlas Failed ：Texture Path is Exist!");
+                Debug.Log("添加图集失败 ：图片路径已存在!");
                 return;
             }
         }
@@ -50,7 +50,7 @@ public class SpriteAtlasToolsUtility
         for (int i = 0; i < cfg.itemList.Count; i++)
         {
             var item = cfg.itemList[i];
-            EditorUtility.DisplayProgressBar("Progress", "spriteatlas building ...", 0);
+            EditorUtility.DisplayProgressBar("进度", "图集构建中 ...", 0);
             BuildSpriteAtlas(cfg.spriteAtlasSaveDirPath, item, cfg.packingTextureWidthLimit, cfg.packingTextureHeightLimit);
         }
         EditorUtility.ClearProgressBar();
@@ -137,7 +137,7 @@ public class SpriteAtlasToolsUtility
         }
         catch(Exception ex)
         {
-            Debug.LogError("PackPreview Error:" + ex.Message);
+            Debug.LogError("纹理集预览失败 错误信息:" + ex.Message);
         }
     }
 

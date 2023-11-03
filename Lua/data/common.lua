@@ -1,3 +1,5 @@
+--- 拷贝
+---@param object 对象
 local function clone(object)
     local lookup_table = {}
     local function _copy(_object)
@@ -16,6 +18,9 @@ local function clone(object)
     return _copy(object)
 end
 
+--- 创建对象
+---@param name 类名
+---@param super 父类
 local function class(name, super)
     local super_type = type(super)
     local cls

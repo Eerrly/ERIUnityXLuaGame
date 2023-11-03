@@ -3,9 +3,6 @@ using System;
 using UnityEngine;
 using UnityEngine.Networking;
 
-/// <summary>
-/// 网络管理器
-/// </summary>
 public class HttpManager : MonoBehaviour, IManager
 {
     public bool IsInitialized { get; set; }

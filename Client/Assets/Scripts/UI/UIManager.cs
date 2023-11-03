@@ -20,6 +20,9 @@ public partial class UIManager : MonoBehaviour, IManager
     private LinkedList<UIWindow> _cacheWindows = new LinkedList<UIWindow>();
     private List<int> _creatingWindows = new List<int>();
 
+    /// <summary>
+    /// 初始化
+    /// </summary>
     public void OnInitialize()
     {
         StartCoroutine(nameof(CoInitialize));
@@ -245,7 +248,7 @@ public partial class UIManager : MonoBehaviour, IManager
             }
             else
             {
-                Debug.LogError("Clear Cache UI: NULL");
+                Debug.LogError("清理UI缓存失败: NULL");
             }
             iter = next;
         }

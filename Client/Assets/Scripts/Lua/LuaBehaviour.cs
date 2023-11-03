@@ -243,7 +243,7 @@ public partial class LuaBehaviour : MonoBehaviour
         }
         else
         {
-            Debug.Log("GetChild LuaBehaviour Not Found!");
+            Debug.Log($"获取子物体的LuaBehaviour错误! id:{id}");
             return null;
         }
     }

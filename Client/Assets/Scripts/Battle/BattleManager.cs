@@ -4,8 +4,18 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// 战斗管理器
+/// MemoryStream的扩展类
+/// 注意：类与方法都必须是静态，第一个参数必须传递"this System.IO.MemoryStream stream"
 /// </summary>
+public static class MemoryStreamEx
+{
+    public static void Reset(this System.IO.MemoryStream stream)
+    {
+        stream.Position = 0;
+        stream.SetLength(0);
+    }
+}
+
 public class BattleManager : MonoBehaviour
 {
     private volatile bool _paused = false;

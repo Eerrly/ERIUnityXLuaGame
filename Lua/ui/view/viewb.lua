@@ -10,6 +10,10 @@ function viewB:onCreate()
 end
 
 function viewB:onRefresh()
+    self.View:SetText(self.ID.Text_Desc, "Remember this.")
+end
+
+function viewB:BindEvent()
     self.View:BindEvent(Const.EventID.ButtonClicked, self.ID.Button_Player1, self.OnBtnPlayer1Clicked)
     self.View:BindEvent(Const.EventID.ButtonClicked, self.ID.Button_Player2, self.OnBtnPlayer2Clicked)
     self.View:BindEvent(Const.EventID.ButtonClicked, self.ID.Button_Close, self.OnBtnCloseClicked)

@@ -412,7 +412,7 @@ public class ResManager : MonoBehaviour, IManager
     }
 
     /// <summary>
-    /// 释放掉所有需要被卸载的资源
+    /// 卸载资源Bundle队列
     /// </summary>
     private void ReleaseUnloadResourceBundles()
     {
@@ -431,7 +431,7 @@ public class ResManager : MonoBehaviour, IManager
     }
 
     /// <summary>
-    /// 清理卸载的Bundle资源
+    /// 卸载Bundle卸载列表
     /// </summary>
     private void CleanBundleUnloadList()
     {

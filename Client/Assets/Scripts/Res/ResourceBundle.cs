@@ -70,6 +70,9 @@ public class ResourceBundle : ReferenceCountBase
         }
     }
 
+    /// <summary>
+    /// 释放AssetBundle并且卸载已经加载出来的物体(会修改依赖Bundle的引用计数)
+    /// </summary>
     public void RealUnload()
     {
         _manager.unloadBundleMap.Add(Hash, new BundleGroup() { packageBundle = PackageBundle, rawBundle = RawBundle, time = Time.realtimeSinceStartup });

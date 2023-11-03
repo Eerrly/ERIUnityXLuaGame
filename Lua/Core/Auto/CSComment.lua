@@ -19,6 +19,7 @@
 ---@field SetPosition fun(self:CS.LuaBehaviour,id:int32, x:single, y:single, z:single)
 ---@field SetRotation fun(self:CS.LuaBehaviour,id:int32, x:single, y:single, z:single)
 ---@field SetScale fun(self:CS.LuaBehaviour,id:int32, x:single, y:single, z:single)
+---@field SetSliderValue fun(self:CS.LuaBehaviour,id:int32, value:single)
 ---@field SetText fun(self:CS.LuaBehaviour,id:int32, text:string)
 
 ---@class CS.LuaUtil

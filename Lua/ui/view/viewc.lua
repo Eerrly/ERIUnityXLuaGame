@@ -2,7 +2,7 @@ local Const = require("ui/const")
 
 local viewC = class("viewc")
 
-function viewC:onCreate()
+function viewC:OnCreate()
     print("-------- viewC:onCreate --------")
     self:BindEvent()
 end
@@ -36,6 +36,7 @@ function viewC:OnPatchingEvent(event, arg1, arg2)
         return 1
     elseif event == "download" then
         print("viewC:OnPatchingEvent download. -> progress:" .. tostring(arg1))
+        self.View:SetSliderValue(self.ID.Slider, arg1)
     elseif event == "done" then
         print("viewC:OnPatchingEvent done.")
     elseif event == "error" then

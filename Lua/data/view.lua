@@ -103,8 +103,8 @@ local function _OnWindowCreate(window, instance, id, params)
         end
     end
 
-    if instance.onCreate then
-        instance:onCreate()
+    if instance.OnCreate then
+        instance:OnCreate()
     end
 end
 

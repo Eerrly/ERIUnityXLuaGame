@@ -24,6 +24,7 @@ public partial class LuaBehaviour : MonoBehaviour
     internal enum EventID
     {
         ButtonClicked = 0,
+        SliderValueChanged = 1,
     }
 
     /// <summary>
@@ -272,6 +273,17 @@ public partial class LuaBehaviour : MonoBehaviour
                     btn.onClick.RemoveAllListeners();
                     btn.onClick.AddListener(()=> {
                         InvokeLuaCallback(callBack);
+                    });
+                }
+                break;
+            case EventID.SliderValueChanged:
+                Slider slider = null;
+                if(TryGetControl(id, out slider))
+                {
+                    slider.onValueChanged.RemoveAllListeners();
+                    slider.onValueChanged.AddListener((value) =>
+                    {
+                        InvokeLuaCallback(callBack, value);
                     });
                 }
                 break;
@@ -567,6 +579,20 @@ public partial class LuaBehaviour : MonoBehaviour
         if (TryGetControl(id, out c))
         {
             c.fontSize = size;
+        }
+    }
+
+    /// <summary>
+    /// 设置进度条的值
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="value"></param>
+    public void SetSliderValue(int id, float value)
+    {
+        Slider c = null;
+        if(TryGetControl(id, out c))
+        {
+            c.value = value;
         }
     }
 

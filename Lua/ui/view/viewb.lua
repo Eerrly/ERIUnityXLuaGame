@@ -3,13 +3,14 @@ local viewbase = require("ui/view/viewbase")
 
 local viewB = class("viewb", viewbase)
 
-function viewB:onCreate()
-    self.super.onCreate(self)
+function viewB:OnCreate()
+    self.super.OnCreate(self)
     print("-------- viewB:onCreate --------")
-    self:onRefresh()
+    self:BindEvent()
+    self:RefreshView()
 end
 
-function viewB:onRefresh()
+function viewB:RefreshView()
     self.View:SetText(self.ID.Text_Desc, "I'm changed.")
 end
 

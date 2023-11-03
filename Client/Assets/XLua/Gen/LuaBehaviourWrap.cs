@@ -21,7 +21,7 @@ namespace XLua.CSObjectWrap
         {
 			ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
 			System.Type type = typeof(LuaBehaviour);
-			Utils.BeginObjectRegister(type, L, translator, 0, 25, 2, 0);
+			Utils.BeginObjectRegister(type, L, translator, 0, 26, 2, 0);
 			
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "Initialize", _m_Initialize);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "BindInstance", _m_BindInstance);
@@ -47,6 +47,7 @@ namespace XLua.CSObjectWrap
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "GetText", _m_GetText);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "SetText", _m_SetText);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "SetFontSize", _m_SetFontSize);
+			Utils.RegisterFunc(L, Utils.METHOD_IDX, "SetSliderValue", _m_SetSliderValue);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "SetImage", _m_SetImage);
 			
 			
@@ -833,6 +834,35 @@ namespace XLua.CSObjectWrap
                     int _size = LuaAPI.xlua_tointeger(L, 3);
                     
                     gen_to_be_invoked.SetFontSize( _id, _size );
+                    
+                    
+                    
+                    return 0;
+                }
+                
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_SetSliderValue(RealStatePtr L)
+        {
+		    try {
+            
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+            
+            
+                LuaBehaviour gen_to_be_invoked = (LuaBehaviour)translator.FastGetCSObj(L, 1);
+            
+            
+                
+                {
+                    int _id = LuaAPI.xlua_tointeger(L, 2);
+                    float _value = (float)LuaAPI.lua_tonumber(L, 3);
+                    
+                    gen_to_be_invoked.SetSliderValue( _id, _value );
                     
                     
                     

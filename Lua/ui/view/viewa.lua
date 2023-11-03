@@ -2,19 +2,22 @@ local Const = require("ui/const")
 
 local viewA = class("viewa")
 
-function viewA:onCreate()
+function viewA:OnCreate()
     print("-------- viewA:onCreate --------")
-    self:refresh()
+    self:BindEvent()
+    self:RefreshView()
 end
 
-function viewA:refresh()
+function viewA:BindEvent()
+    self.View:BindEvent(Const.EventID.ButtonClicked, self.ID.Button_Start, self.OnBtnStartClicked)
+    self.View:BindEvent(Const.EventID.ButtonClicked, self.ID.Button_Get, self.OnBtnGetClicked)
+end
+
+function viewA:RefreshView()
     self.View:SetText(self.ID.Text, "Start Game")
     self.View:SetImage(self.ID.Image1, "Textures/B", "item_01.png")
     self.View:SetImage(self.ID.Image2, "Textures/A", "gongchengshi.png")
     self.View:SetImage(self.ID.Image3, "Textures/A", "golden_finger.png")
-
-    self.View:BindEvent(Const.EventID.ButtonClicked, self.ID.Button_Start, self.OnBtnStartClicked)
-    self.View:BindEvent(Const.EventID.ButtonClicked, self.ID.Button_Get, self.OnBtnGetClicked)
 end
 
 function viewA:OnBtnGetClicked()

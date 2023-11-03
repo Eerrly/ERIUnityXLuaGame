@@ -21,17 +21,7 @@ require 'main/main'
     void OnPatchingDone()
     {
         Global.Instance.Shutdown();
-
-        // ############################# DEBUG #############################
-        AssetBundle[] cacheBundles = Resources.FindObjectsOfTypeAll<AssetBundle>();
-        for (int i = 0; i < cacheBundles.Length; i++)
-        {
-            Debug.Log($"cacheBundles > {cacheBundles[i].name}");
-        }
-        Debug.Log(ResUtil.Dump());
-
         Global.Instance.Run();
-        LuaStart();
     }
 
 }

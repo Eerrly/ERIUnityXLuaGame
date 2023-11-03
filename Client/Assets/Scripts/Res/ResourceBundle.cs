@@ -72,6 +72,7 @@ public class ResourceBundle : ReferenceCountBase
 
     public void RealUnload()
     {
+        _manager.unloadBundleMap.Add(Hash, new BundleGroup() { packageBundle = PackageBundle, rawBundle = RawBundle, time = Time.realtimeSinceStartup });
         RawBundle = null;
         PackageBundle = null;
         Manager.Unload(Hash);

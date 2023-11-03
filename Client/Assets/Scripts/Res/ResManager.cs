@@ -464,7 +464,7 @@ public class ResManager : MonoBehaviour, IManager
             var bundle = e.Current.Value;
             if (bundle != null)
             {
-                bundle.Release();
+                bundle.UnloadBundle();
             }
         }
         loadedBundles.Clear();
@@ -472,8 +472,9 @@ public class ResManager : MonoBehaviour, IManager
 
     public void OnRelease()
     {
-        preInitialized = false;
         manifest = null;
+        preInitialized = false;
+        IsInitialized = false;
         CleanBundleLoadedList();
         CleanBundleUnloadList();
         loadingBundles.Clear();
@@ -482,7 +483,6 @@ public class ResManager : MonoBehaviour, IManager
         StopAllCoroutines();
         ResLoader.requestList.Clear();
         ReleaseUnloadResourceBundles();
-        IsInitialized = false;
     }
 
     private void OnDestroy()

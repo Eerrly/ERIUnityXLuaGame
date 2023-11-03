@@ -485,9 +485,4 @@ public class ResManager : MonoBehaviour, IManager
         ReleaseUnloadResourceBundles();
     }
 
-    private void OnDestroy()
-    {
-        OnRelease();
-    }
-
 }

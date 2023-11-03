@@ -57,11 +57,6 @@ public class LuaManager : MonoBehaviour, IManager
         StartCoroutine(nameof(CoLoadScript));
     }
 
-    public void OnDestroy()
-    {
-        OnRelease();
-    }
-
     /// <summary>
     /// 自定义Lua脚本加载器
     /// </summary>

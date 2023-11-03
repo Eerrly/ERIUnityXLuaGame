@@ -26,7 +26,6 @@ function viewB:StartBattle()
 end
 
 function viewB:OnBtnPlayer1Clicked()
-    print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
     Util.SetSelfPlayerId(1)
     self:StartBattle()
 end

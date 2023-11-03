@@ -55,14 +55,16 @@ public class PatchToolsEditorWin : OdinEditorWindow
             {
                 if (patchFiles[i].StartsWith("Lua/"))
                 {
-                    fileList.Add(patchFiles[i].Substring(4, patchFiles[i].Length - 4));
+                    // Lua/
+                    fileList.Add(patchFiles[i].Substring(4, patchFiles[i].Length - 4).ToLower());
                 }
                 else
                 {
-                    var path = patchFiles[i].Substring(22, patchFiles[i].Length - 22);
-                    if (path.EndsWith(".meta") && System.IO.File.Exists(path.Replace(".meta", "")))
+                    var filePath = FileUtil.CombinePaths(UnityEngine.Application.dataPath, patchFiles[i].Replace("Client/Assets", ""));
+                    if (System.IO.File.Exists(filePath) || (filePath.EndsWith(".meta") && System.IO.File.Exists(filePath.Replace(".meta", ""))))
                     {
-                        fileList.Add(path.Replace(".meta", ""));
+                        // Client/Assets/Sources
+                        fileList.Add(patchFiles[i].Substring(22, patchFiles[i].Length - 22).Replace(".meta", "").ToLower());
                     }
                 }
             }

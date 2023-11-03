@@ -240,7 +240,7 @@ public class PatchingManager : MonoBehaviour, IManager
         IsInitialized = false;
         _callback = null;
         bSaveRc = false;
-        downloadList.Clear();
+        downloadList?.Clear();
         downloadList = null;
     }
 }

@@ -6,6 +6,7 @@
 [Cc]lient/BundleCache/
 [Cc]lient/Patch/
 [Cc]lient/Assets/StreamingAssets/Bundle/
+[Cc]lient/Assets/Sources/Lua/
 [Oo]utput/
 
 # Visual Studio cache directory

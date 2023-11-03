@@ -111,9 +111,7 @@ public partial class Setting
     }
 
     private static string _platForm = null;
-    /// <summary>
-    /// 平台
-    /// </summary>
+
     public static string Platform
     {
         get

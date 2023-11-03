@@ -425,7 +425,7 @@ public class ResUtil
                         }
                         if (patchList.Contains(patchPath))
                         {
-                            patchingNoteList.AppendLine(string.Format("patch[lua]:{0}", patchItem));
+                            patchingNoteList.AppendLine(string.Format("patch:{0}", patchItem));
                             newList.Add(patchItem);
                         }
                     }
@@ -497,7 +497,7 @@ public class ResUtil
                         if (configMap.TryGetValue(key, out item) && !patchMap.ContainsKey(parent))
                         {
                             patchMap.Add(parent, "");
-                            patchingNoteList.AppendLine("patch:" + parent);
+                            patchingNoteList.AppendLine(string.Format("patch:{0}", parent));
                         }
                     }
                 }

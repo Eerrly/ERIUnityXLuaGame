@@ -10,7 +10,7 @@ function viewB:onCreate()
 end
 
 function viewB:onRefresh()
-    self.View:SetText(self.ID.Text_Desc, "Remember this.")
+    self.View:SetText(self.ID.Text_Desc, "I'm changed.")
 end
 
 function viewB:BindEvent()

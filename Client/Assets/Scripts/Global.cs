@@ -179,13 +179,13 @@ public class Global : Singleton<Global>
     /// </summary>
     public override void OnRelease()
     {
-        for (int i = 0; i < Managers.Count; i++)
+        for (int i = Managers.Count - 1; i >= 0; i--)
         {
             try
             {
                 Managers[i].OnRelease();
             }
-            catch(System.Exception e)
+            catch (System.Exception e)
             {
                 Debug.LogException(e);
             }

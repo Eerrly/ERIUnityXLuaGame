@@ -6,25 +6,24 @@ using System.Reflection;
 public class BaseComponent
 {
     public override string ToString() {
-        PropertyInfo[] props = GetType().GetProperties();
-        StringBuilder sb = new StringBuilder();
-        foreach (PropertyInfo info in props)
+        var props = GetType().GetProperties();
+        var sb = new StringBuilder();
+        foreach (var info in props)
         {
-            object value = info.GetValue(this);
-            if (value != null)
+            var value = info.GetValue(this);
+            if (value == null) continue;
+            
+            if (value.GetType().IsArray)
             {
-                if (value.GetType().IsArray)
+                sb.AppendFormat("\t\t{0}:\n", info.Name);
+                foreach (var a in (IEnumerable)value)
                 {
-                    sb.AppendFormat("\t\t{0}:\n", info.Name);
-                    foreach (var a in (IEnumerable)value)
-                    {
-                        sb.AppendFormat("\t\t\t{0}\n", a);
-                    }
+                    sb.AppendFormat("\t\t\t{0}\n", a);
                 }
-                else
-                {
-                    sb.AppendFormat("\t\t{0}:{1}\n", info.Name, value.ToString());
-                }
+            }
+            else
+            {
+                sb.AppendFormat("\t\t{0}:{1}\n", info.Name, value.ToString());
             }
         }
         sb.Append("\n");

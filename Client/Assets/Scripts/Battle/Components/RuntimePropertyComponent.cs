@@ -23,18 +23,18 @@ public class RuntimePropertyComponent : BaseComponent
     /// </summary>
     public uint seed
     {
-        get { return common.seed; }
-        set { common.seed = value; }
+        get => common.seed;
+        set => common.seed = value;
     }
 
-    private List<PlayerBuff> _unactiveBuffs = new List<PlayerBuff>();
+    private List<PlayerBuff> _unActiveBuffs = new List<PlayerBuff>();
     /// <summary>
     /// 未激活的BUFF
     /// </summary>
-    public List<PlayerBuff> unactiveBuffs
+    public List<PlayerBuff> unActiveBuffs
     {
-        get { return _unactiveBuffs; }
-        set { _unactiveBuffs = value; }
+        get => _unActiveBuffs;
+        set => _unActiveBuffs = value;
     }
 
     private List<PlayerBuff> _activeBuffs = new List<PlayerBuff>();
@@ -43,8 +43,8 @@ public class RuntimePropertyComponent : BaseComponent
     /// </summary>
     public List<PlayerBuff> activeBuffs
     {
-        get { return _activeBuffs; }
-        set { _activeBuffs = value; }
+        get => _activeBuffs;
+        set => _activeBuffs = value;
     }
 
     private List<PlayerBuffExtra> _buffExtra = new List<PlayerBuffExtra>();
@@ -53,8 +53,8 @@ public class RuntimePropertyComponent : BaseComponent
     /// </summary>
     public List<PlayerBuffExtra> buffExtra
     {
-        get { return _buffExtra; }
-        set { _buffExtra = value; }
+        get => _buffExtra;
+        set => _buffExtra = value;
     }
 
     private List<PhysisPlayer> _closedPlayers = new List<PhysisPlayer>();
@@ -63,8 +63,8 @@ public class RuntimePropertyComponent : BaseComponent
     /// </summary>
     public List<PhysisPlayer> closedPlayers
     {
-        get { return _closedPlayers; }
-        set { _closedPlayers = value; }
+        get => _closedPlayers;
+        set => _closedPlayers = value;
     }
 
 }

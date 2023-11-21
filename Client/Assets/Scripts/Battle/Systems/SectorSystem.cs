@@ -16,12 +16,12 @@ public class SectorSystem
             for (int j = 0; j < cellEntities.Count; j++)
             {
                 var other = cellEntities[j];
-                var playerPos = entity.transform.pos;
-                var otherPos = other.transform.pos;
-                var distance = (entity.transform.pos - other.transform.pos).Magnitude;
+                var playerPos = entity.Transform.pos;
+                var otherPos = other.Transform.pos;
+                var distance = (entity.Transform.pos - other.Transform.pos).Magnitude;
                 if (distance <= PlayerPropertyConstant.CollisionRadius * PlayerPropertyConstant.CollisionRadius)
                 {
-                    var angle = FixedVector3.AngleInt(entity.transform.fwd, otherPos - playerPos);
+                    var angle = FixedVector3.AngleInt(entity.Transform.fwd, otherPos - playerPos);
                     if(angle <= BattleConstant.angle / 2)
                     {
                         entities.Add(other);

@@ -171,16 +171,16 @@ public class BattleManager : MonoBehaviour
                 {
                     _input = GetInput();
                     // 输入
-                    if (_realSentFrame != battle.battleEntity.frame && !_input.Compare(_lastSendPlayerInput))
+                    if (_realSentFrame != battle.battleEntity.Frame && !_input.Compare(_lastSendPlayerInput))
                     {
                         _lastSendPlayerInput = _input;
-                        _realSentFrame = battle.battleEntity.frame + 1;
-                        battleNetController.SendInputMsg(battle.battleEntity.frame, _input);
+                        _realSentFrame = battle.battleEntity.Frame + 1;
+                        battleNetController.SendInputMsg(battle.battleEntity.Frame, _input);
                     }
                     // 心跳
-                    if (battle.battleEntity.frame - _heartBeatFrame >= BattleConstant.HeartBeatFrame)
+                    if (battle.battleEntity.Frame - _heartBeatFrame >= BattleConstant.HeartBeatFrame)
                     {
-                        _heartBeatFrame = battle.battleEntity.frame;
+                        _heartBeatFrame = battle.battleEntity.Frame;
                         battleNetController.SendHeartBeatMsg();
                     }
                 }
@@ -214,7 +214,7 @@ public class BattleManager : MonoBehaviour
         if(packet.head.act == (byte)ACT.JOIN)
         {
             _battleStarted = true;
-            battle.battleEntity.frame = 0;
+            battle.battleEntity.Frame = 0;
         }
 
         _receiveStream.Reset();

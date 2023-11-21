@@ -1,28 +1,19 @@
-﻿public class BattleStateMachine : BaseStateMachine<BattleEntity>
+﻿using System;
+
+public class BattleStateMachine : BaseStateMachine<BattleEntity>
 {
 
     private static BattleStateMachine _instance;
 
-    public static BattleStateMachine Instance
-    {
-        get
-        {
-            if(_instance == null)
-            {
-                _instance = new BattleStateMachine();
-            }
-            return _instance;
-        }
-    }
+    public static BattleStateMachine Instance => _instance ?? (_instance = new BattleStateMachine());
 
     private BattleStateMachine()
             : base()
     {
         var types = GetType().Assembly.GetTypes();
         _stateDic = new BaseState<BattleEntity>[(int)EBattleState.Count];
-        for (int index = 0; index < types.Length; ++index)
+        foreach (var singleType in types)
         {
-            var singleType = types[index];
             if (singleType.IsDefined(typeof(BattleStateAttribute), false))
             {
                 var attribute = (BattleStateAttribute)(singleType.GetCustomAttributes(false)[0]);
@@ -59,32 +50,30 @@
 
     public override void Update(BattleEntity battleEntity, BattleEntity _)
     {
-        var curState = _stateDic[battleEntity.state.curStateId];
+        var curState = _stateDic[battleEntity.State.curStateId];
         curState.OnUpdate(battleEntity, null);
     }
 
     public void LateUpdate(BattleEntity battleEntity, BattleEntity _)
     {
-        var curState = _stateDic[battleEntity.state.curStateId];
+        var curState = _stateDic[battleEntity.State.curStateId];
         curState.OnLateUpdate(battleEntity, null);
     }
 
     public bool DoChangeState(BattleEntity battleEntity, BattleEntity _)
     {
-        var nextId = battleEntity.state.nextStateId;
-        var nextState = _stateDic[nextId] as BattleBaseState;
-        if (nextId != 0 && nextState != null && nextState.TryEnter(battleEntity, null))
+        var nextId = battleEntity.State.nextStateId;
+        if (nextId != 0 && _stateDic[nextId] is BattleBaseState nextState && nextState.TryEnter(battleEntity, null))
         {
-            var currId = battleEntity.state.curStateId;
-            var currState = _stateDic[currId] as BattleBaseState;
-            if (currId != 0 && currState != null && currState.TryExit(battleEntity, null))
+            var currId = battleEntity.State.curStateId;
+            if (currId != 0 && _stateDic[currId] is BattleBaseState currState && currState.TryExit(battleEntity, null))
             {
                 currState.OnExit(battleEntity, null);
             }
-            battleEntity.state.nextStateId = (int)EBattleState.None;
+            battleEntity.State.nextStateId = (int)EBattleState.None;
             nextState.Reset(battleEntity, null);
             nextState.OnEnter(battleEntity, null);
-            if (battleEntity.state.nextStateId != (int)EBattleState.None)
+            if (battleEntity.State.nextStateId != (int)EBattleState.None)
             {
                 return DoChangeState(battleEntity, null);
             }
@@ -92,7 +81,7 @@
         }
         else
         {
-            battleEntity.state.nextStateId = (int)EBattleState.None;
+            battleEntity.State.nextStateId = (int)EBattleState.None;
         }
         return false;
     }

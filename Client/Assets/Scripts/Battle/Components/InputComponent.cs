@@ -1,5 +1,5 @@
 /// <summary>
-/// 输入组件
+/// 杈撳叆缁勪欢
 /// </summary>
 public class InputComponent : BaseComponent
 {
@@ -21,30 +21,30 @@ public class InputComponent : BaseComponent
     private Common common = new Common(0);
 
     /// <summary>
-    /// 玩家ID
+    /// 鐜╁ID
     /// </summary>
     public int pos
     {
-        get { return common.pos; }
-        set { common.pos = value; }
+        get => common.pos;
+        set => common.pos = value;
     }
 
     /// <summary>
-    /// 玩家摇杆输入
+    /// 鎽囨潌
     /// </summary>
     public int yaw
     {
-        get { return common.yaw; }
-        set { common.yaw = value; }
+        get => common.yaw;
+        set => common.yaw = value;
     }
 
     /// <summary>
-    /// 玩家按键输入
+    /// 鎸夐敭
     /// </summary>
     public int key
     {
-        get { return common.key; }
-        set { common.key = value; }
+        get => common.key;
+        set => common.key = value;
     }
 
 }

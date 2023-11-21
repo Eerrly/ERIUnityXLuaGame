@@ -78,20 +78,20 @@ public class PlayerStateMachine : BaseStateMachine<PlayerEntity>
 
     public bool DoChangeState(PlayerEntity playerEntity, BattleEntity battleEntity)
     {
-        var nextId = playerEntity.state.nextStateId;
+        var nextId = playerEntity.State.nextStateId;
         var nextState = _stateDic[nextId] as PlayerBaseState;
         if(nextId != 0 && nextState != null && nextState.TryEnter(playerEntity, battleEntity))
         {
-            var currId = playerEntity.state.curStateId;
+            var currId = playerEntity.State.curStateId;
             var currState = _stateDic[currId] as PlayerBaseState;
             if(currId != 0 && currState != null && currState.TryExit(playerEntity, battleEntity))
             {
                 currState.OnExit(playerEntity, battleEntity);
             }
-            playerEntity.state.nextStateId = (int)EPlayerState.None;
+            playerEntity.State.nextStateId = (int)EPlayerState.None;
             nextState.Reset(playerEntity, battleEntity);
             nextState.OnEnter(playerEntity, battleEntity);
-            if(playerEntity.state.nextStateId != (int)EPlayerState.None)
+            if(playerEntity.State.nextStateId != (int)EPlayerState.None)
             {
                 return DoChangeState(playerEntity, battleEntity);
             }
@@ -99,7 +99,7 @@ public class PlayerStateMachine : BaseStateMachine<PlayerEntity>
         }
         else
         {
-            playerEntity.state.nextStateId = (int)EPlayerState.None;
+            playerEntity.State.nextStateId = (int)EPlayerState.None;
         }
         return false;
     }

@@ -12,22 +12,22 @@ public class PlayerEntity : BaseEntity
     {
         ID = data.pos;
 
-        input.pos = ID;
-        input.yaw = MathManager.YawStop;
-        input.key = 0;
+        Input.pos = ID;
+        Input.yaw = MathManager.YawStop;
+        Input.key = 0;
 
-        runtimeProperty.seed = BattleConstant.randomSeed;
+        RuntimeProperty.seed = BattleConstant.randomSeed;
 
-        property.pos = data.pos;
+        Property.pos = data.pos;
 
-        collision.collsionSize = PlayerPropertyConstant.CollisionRadius;
+        Collision.collisionSize = PlayerPropertyConstant.CollisionRadius;
 
-        state.curStateId = (int)EPlayerState.None;
-        state.nextStateId = (int)EPlayerState.Idle;
-        state.count = (int)EPlayerState.Count;
+        State.curStateId = (int)EPlayerState.None;
+        State.nextStateId = (int)EPlayerState.Idle;
+        State.count = (int)EPlayerState.Count;
 
-        movement.moveSpeed = PlayerPropertyConstant.MoveSpeed;
-        movement.turnSpeed = PlayerPropertyConstant.TurnSpeed;
+        Movement.moveSpeed = PlayerPropertyConstant.MoveSpeed;
+        Movement.turnSpeed = PlayerPropertyConstant.TurnSpeed;
 
         InitBuffs();
     }
@@ -35,9 +35,9 @@ public class PlayerEntity : BaseEntity
     /// <summary>
     /// 初始化Buff列表
     /// </summary>
-    void InitBuffs()
+    private void InitBuffs()
     {
-        runtimeProperty.activeBuffs.Add(new PlayerBuff(1));
+        RuntimeProperty.activeBuffs.Add(new PlayerBuff(1));
     }
 
     /// <summary>
@@ -47,7 +47,7 @@ public class PlayerEntity : BaseEntity
     /// <returns>半径</returns>
     public override FixedNumber GetCollisionRadius(BattleEntity battleEntity)
     {
-        return collision.collsionSize;
+        return Collision.collisionSize;
     }
 
 }

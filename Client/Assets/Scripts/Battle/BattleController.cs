@@ -26,7 +26,7 @@ public class BattleController : IBattleController
         {
             BaseEntity entity = new PlayerEntity();
             entity.Init(t);
-            battleEntity.entities.Add(entity);
+            battleEntity.Entities.Add(entity);
         }
     }
 
@@ -37,7 +37,7 @@ public class BattleController : IBattleController
     {
         FrameInputs = new Dictionary<int, FrameBuffer.Input>();
         frameBuffer = new FrameBuffer(2);
-        battleEntity.deltaTime = FrameEngine.frameInterval * battleEntity.timeScale;
+        battleEntity.DeltaTime = FrameEngine.frameInterval * battleEntity.TimeScale;
     }
 
     public override void LogicUpdate()
@@ -68,7 +68,7 @@ public class BattleController : IBattleController
 
     private void UpdatePlayerState(BattleEntity entity)
     {
-        var entities = entity.entities;
+        var entities = entity.Entities;
 
         BattleStateMachine.Instance.Update(entity, null);
         foreach (var t in entities)
@@ -96,9 +96,9 @@ public class BattleController : IBattleController
 
     private void RefreshBattleEntity(BattleEntity entity)
     {
-        entity.frame += 1;
-        entity.deltaTime = FrameEngine.frameInterval * entity.timeScale;
-        entity.time += entity.deltaTime;
+        entity.Frame += 1;
+        entity.DeltaTime = FrameEngine.frameInterval * entity.TimeScale;
+        entity.Time += entity.DeltaTime;
     }
 
     /// <summary>
@@ -107,14 +107,14 @@ public class BattleController : IBattleController
     private void UpdateInput() {
         var playerEntity = battleEntity.FindEntity(BattleManager.Instance.selfPlayerId);
         var inputFrame = FrameBuffer.Frame.defFrame;
-        if (frameBuffer.TryGetFrame(battleEntity.frame, ref inputFrame))
+        if (frameBuffer.TryGetFrame(battleEntity.Frame, ref inputFrame))
         {
-            playerEntity.input.yaw = inputFrame[playerEntity.ID].yaw - MathManager.YawOffset;
-            playerEntity.input.key = inputFrame[playerEntity.ID].key;
+            playerEntity.Input.yaw = inputFrame[playerEntity.ID].yaw - MathManager.YawOffset;
+            playerEntity.Input.key = inputFrame[playerEntity.ID].key;
         }
         else
         {
-            Logger.Log(LogLevel.Error, $"【从缓存帧数据里无法取到对应帧的帧数据】frame:{battleEntity.frame}");
+            Logger.Log(LogLevel.Error, $"【从缓存帧数据里无法取到对应帧的帧数据】frame:{battleEntity.Frame}");
         }
     }
 

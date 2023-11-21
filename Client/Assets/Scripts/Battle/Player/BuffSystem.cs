@@ -15,7 +15,7 @@ public class BuffSystem
     {
         _activeBuffContainer.Clear();
 
-        var unactiveBuffs = playerEntity.runtimeProperty.unactiveBuffs;
+        var unactiveBuffs = playerEntity.RuntimeProperty.unActiveBuffs;
         for (int index = 0; index < unactiveBuffs.Count; index++)
         {
             var buff = unactiveBuffs[index];
@@ -26,7 +26,7 @@ public class BuffSystem
             }
         }
 
-        var activeBuffs = playerEntity.runtimeProperty.activeBuffs;
+        var activeBuffs = playerEntity.RuntimeProperty.activeBuffs;
         using (var iterator = activeBuffs.GetEnumerator())
         {
             while (iterator.MoveNext())
@@ -47,7 +47,7 @@ public class BuffSystem
     {
         _unactiveBuffContainer.Clear();
 
-        var activeBuffs = playerEntity.runtimeProperty.activeBuffs;
+        var activeBuffs = playerEntity.RuntimeProperty.activeBuffs;
         for (int index = 0; index < activeBuffs.Count; index++)
         {
             var buff = activeBuffs[index];
@@ -58,7 +58,7 @@ public class BuffSystem
             }
         }
 
-        var unactiveBuffs = playerEntity.runtimeProperty.unactiveBuffs;
+        var unactiveBuffs = playerEntity.RuntimeProperty.unActiveBuffs;
         using (var iterator = unactiveBuffs.GetEnumerator())
         {
             while (iterator.MoveNext())

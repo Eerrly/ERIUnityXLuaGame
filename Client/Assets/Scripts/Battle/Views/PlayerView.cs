@@ -54,24 +54,24 @@ public class PlayerView : MonoBehaviour
             return;
 
         var currentPosition = transform.position;
-        var nextDetlaPosition = currentPosition + entity.movement.position.ToVector3();
+        var nextDetlaPosition = currentPosition + entity.Movement.position.ToVector3();
         if((currentPosition - nextDetlaPosition).sqrMagnitude >= 4)
         {
             currentPosition = Vector3.Lerp(currentPosition, nextDetlaPosition, deltaTime);
         }
         var currentRotation = transform.rotation;
-        var nextDetlaRotation = entity.movement.rotation.ToQuaternion();
+        var nextDetlaRotation = entity.Movement.rotation.ToQuaternion();
         if(currentRotation != nextDetlaRotation)
         {
-            currentRotation = Quaternion.RotateTowards(transform.rotation, nextDetlaRotation, entity.movement.turnSpeed * deltaTime);
+            currentRotation = Quaternion.RotateTowards(transform.rotation, nextDetlaRotation, entity.Movement.turnSpeed * deltaTime);
         }
 
         transform.position = currentPosition;
         transform.rotation = currentRotation;
 
-        entity.transform.pos = new FixedVector3(currentPosition);
-        entity.transform.rot = new FixedQuaternion(currentRotation);
-        entity.transform.fwd = new FixedVector3(currentRotation * Vector3.forward);
+        entity.Transform.pos = new FixedVector3(currentPosition);
+        entity.Transform.rot = new FixedQuaternion(currentRotation);
+        entity.Transform.fwd = new FixedVector3(currentRotation * Vector3.forward);
     }
 
 }

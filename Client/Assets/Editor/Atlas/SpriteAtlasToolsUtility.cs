@@ -11,9 +11,9 @@ using UnityEngine.U2D;
 public class SpriteAtlasToolsUtility
 {
 
-    public static event Action onAddSpriteAtlas;
+    public static event Action OnAddSpriteAtlas;
 
-    public static event Action onBuildAll;
+    public static event Action OnBuildAll;
 
     public static string GenerateSpriteAtlasNameByPath(string path)
     {
@@ -41,7 +41,7 @@ public class SpriteAtlasToolsUtility
         item.textureDirPath = textureDirPath;
         cfg.itemList.Add(item);
         Util.SaveConfig(cfg, Constant.ATLAS_CONFIG_NAME);
-        onAddSpriteAtlas?.Invoke();
+        OnAddSpriteAtlas?.Invoke();
     }
 
     public static void BuildAll()
@@ -54,7 +54,7 @@ public class SpriteAtlasToolsUtility
             BuildSpriteAtlas(cfg.spriteAtlasSaveDirPath, item, cfg.packingTextureWidthLimit, cfg.packingTextureHeightLimit);
         }
         EditorUtility.ClearProgressBar();
-        onBuildAll?.Invoke();
+        OnBuildAll?.Invoke();
     }
 
     public static void BuildSpriteAtlas(string spriteAtlasDirPath, SpriteAtlasToolsConfig.SpriteAtlasToolsConfigItem item, int limitWidth, int limitHeight)

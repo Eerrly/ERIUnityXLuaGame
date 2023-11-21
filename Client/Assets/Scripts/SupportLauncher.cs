@@ -18,13 +18,13 @@ public class SupportLauncher : MonoBehaviour
         PlayerEntity playerEntity = (PlayerEntity)battleEntity.FindEntity(BattleConstant.SelfID);
         GUI.color = Color.green;
         GUI.Label(new Rect(20, index++ * nGuiLabelHeight, nGuiLabelWidth, nGuiLabelHeight),
-            string.Format("[player]\tid:{0} logicFrame:{1} time:{2:N3}", playerEntity.ID, BattleManager.Instance.LogicFrame, battleEntity.time));
+            string.Format("[player]\tid:{0} logicFrame:{1} time:{2:N3}", playerEntity.ID, BattleManager.Instance.LogicFrame, battleEntity.Time));
         GUI.Label(new Rect(20, index++ * nGuiLabelHeight, nGuiLabelWidth, nGuiLabelHeight),
-            string.Format("[input]\tpos:{0}, yaw:{1}, key:{2}", playerEntity.input.pos, playerEntity.input.yaw, playerEntity.input.key));
+            string.Format("[input]\tpos:{0}, yaw:{1}, key:{2}", playerEntity.Input.pos, playerEntity.Input.yaw, playerEntity.Input.key));
         GUI.Label(new Rect(20, index++ * nGuiLabelHeight, nGuiLabelWidth, nGuiLabelHeight),
             string.Format("[state]\t{0}", Enum.GetName(typeof(EPlayerState), playerEntity.curStateId)));
         GUI.Label(new Rect(20, index++ * nGuiLabelHeight, nGuiLabelWidth, nGuiLabelHeight),
-            string.Format("[move]\tposition:{0}, rotation:{1}", playerEntity.movement.position.ToString(), playerEntity.movement.rotation.ToString()));
+            string.Format("[move]\tposition:{0}, rotation:{1}", playerEntity.Movement.position.ToString(), playerEntity.Movement.rotation.ToString()));
 
         List<Cell> aroundCellList = SpacePartition.GetAroundCellList(playerEntity);
         string strCellInfo = "[cell]\t";
@@ -85,9 +85,9 @@ public class SupportLauncher : MonoBehaviour
             for (int j = 0; j < aroundCellList[i].entities.Count; j++)
             {
                 var entity = aroundCellList[i].entities[j];
-                if ((int)entity.curStateId != entity.state.count - 1)
+                if ((int)entity.curStateId != entity.State.count - 1)
                 {
-                    Gizmos.DrawLine(playerEntity.transform.pos.ToVector3(), entity.transform.pos.ToVector3());
+                    Gizmos.DrawLine(playerEntity.Transform.pos.ToVector3(), entity.Transform.pos.ToVector3());
                 }
             }
         }

@@ -27,7 +27,7 @@ public class EntityStateSystem
     {
         if (stateId > minStateId && stateId < maxStateId)
         {
-            entity.state.nextStateId = stateId;
+            entity.State.nextStateId = stateId;
         }
     }
 

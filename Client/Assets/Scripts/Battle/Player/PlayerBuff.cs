@@ -100,7 +100,7 @@ public class PlayerBuff
         ClearFlag(EBuffStateFlag.IsDisable);
         AddFlag(EBuffStateFlag.IsEnable);
         int foundIndex = -1;
-        var buffExtra = playerEntity.runtimeProperty.buffExtra;
+        var buffExtra = playerEntity.RuntimeProperty.buffExtra;
         for (int i = 0; i < buffExtra.Count; i++)
         {
             if(buffExtra[i].type == BuffConstant.attackBuffType)
@@ -129,7 +129,7 @@ public class PlayerBuff
         ClearFlag(EBuffStateFlag.IsEnable);
         AddFlag(EBuffStateFlag.IsDisable);
         int foundIndex = -1;
-        var buffExtra = playerEntity.runtimeProperty.buffExtra;
+        var buffExtra = playerEntity.RuntimeProperty.buffExtra;
         for (int i = 0; i < buffExtra.Count; i++)
         {
             if (buffExtra[i].type == BuffConstant.attackBuffType)

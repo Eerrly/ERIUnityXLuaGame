@@ -2,7 +2,7 @@
 
 public class AssetBundleToolsConfig
 {
-    public List<AssetBundleToolsConfigItem> items = new List<AssetBundleToolsConfigItem>();
+    public readonly List<AssetBundleToolsConfigItem> Items = new List<AssetBundleToolsConfigItem>();
 
     [System.Serializable]
     public class AssetBundleToolsConfigItem

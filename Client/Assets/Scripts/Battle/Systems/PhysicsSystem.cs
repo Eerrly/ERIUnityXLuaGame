@@ -1,5 +1,5 @@
 /// <summary>
-/// ÎïÀí¶ÔÏó
+/// ç‰©ç†å¯¹è±¡
 /// </summary>
 public struct PhysisPlayer
 {
@@ -31,16 +31,16 @@ public struct PhysisPlayer
 public class PhysicsSystem
 {
     /// <summary>
-    /// ÂÖÑ¯
+    /// è½®è¯¢
     /// </summary>
     /// <param name="battleEntity"></param>
     public static void Update(BattleEntity battleEntity)
     {
-        var entities = battleEntity.entities;
+        var entities = battleEntity.Entities;
         for (int i = 0; i < entities.Count; i++)
         {
             var source = entities[i];
-            source.runtimeProperty.closedPlayers.Clear();
+            source.RuntimeProperty.closedPlayers.Clear();
             for (int j = 0; j < entities.Count; j++)
             {
                 var target = entities[j];
@@ -49,10 +49,10 @@ public class PhysicsSystem
                     continue;
                 }
                 var radius = source.GetCollisionRadius(battleEntity) + target.GetCollisionRadius(battleEntity);
-                var sqrMagnitudeXZ = (target.transform.pos - source.transform.pos).sqrMagnitudeLongXZ;
+                var sqrMagnitudeXZ = (target.Transform.pos - source.Transform.pos).sqrMagnitudeLongXZ;
                 if (sqrMagnitudeXZ <= radius * radius)
                 {
-                    source.runtimeProperty.closedPlayers.Add(new PhysisPlayer() { id = target.ID });
+                    source.RuntimeProperty.closedPlayers.Add(new PhysisPlayer() { id = target.ID });
                 }
             }
         }
@@ -60,7 +60,7 @@ public class PhysicsSystem
         for (int i = 0; i < entities.Count; i++)
         {
             var source = entities[i];
-            var closedPlayers = source.runtimeProperty.closedPlayers;
+            var closedPlayers = source.RuntimeProperty.closedPlayers;
             for (int j = 0; j < closedPlayers.Count; j++)
             {
                 var target = battleEntity.FindEntity(closedPlayers[j].id);
@@ -70,18 +70,18 @@ public class PhysicsSystem
     }
 
     /// <summary>
-    /// ÂÖÑ¯Åö×²¼ì²â
+    /// è½®è¯¢ç¢°æ’æ£€æµ‹
     /// </summary>
-    /// <param name="source">Íæ¼ÒA</param>
-    /// <param name="target">Íæ¼ÒB</param>
-    /// <param name="battleEntity">Õ½¶·ÊµÌå</param>
+    /// <param name="source">ç©å®¶A</param>
+    /// <param name="target">ç©å®¶B</param>
+    /// <param name="battleEntity">æˆ˜æ–—å®ä½“</param>
     private static void UpdateCollision(BaseEntity source, BaseEntity target, BattleEntity battleEntity)
     {
-        var sMove = source.movement.position;
-        var tMove = target.movement.position;
+        var sMove = source.Movement.position;
+        var tMove = target.Movement.position;
 
-        var vecS2T = (source.transform.pos - target.transform.pos).YZero();
-        var vecT2S = (target.transform.pos - source.transform.pos).YZero();
+        var vecS2T = (source.Transform.pos - target.Transform.pos).YZero();
+        var vecT2S = (target.Transform.pos - source.Transform.pos).YZero();
 
         if (FixedVector3.Dot(ref vecS2T, ref tMove) > FixedNumber.Zero)
         {
@@ -95,9 +95,9 @@ public class PhysicsSystem
                 sMove -= FixedVector3.Project(sMove, vecS2T);
             }
         }
-        source.movement.position = sMove;
+        source.Movement.position = sMove;
 
-        var state = PlayerStateMachine.Instance.GetState(source.state.curStateId) as PlayerBaseState;
+        var state = PlayerStateMachine.Instance.GetState(source.State.curStateId) as PlayerBaseState;
         if (state != null)
         {
             if (FixedVector3.Dot(vecT2S, sMove) > FixedNumber.Zero)
@@ -109,10 +109,10 @@ public class PhysicsSystem
     }
 
     /// <summary>
-    /// ºÏ²¢Åö×²Ö®ºóµÄÒÆ¶¯ÏòÁ¿
+    /// åˆå¹¶ç¢°æ’ä¹‹åçš„ç§»åŠ¨å‘é‡
     /// </summary>
-    /// <param name="aDeltaMove">Íæ¼ÒAÎ»ÒÆÏòÁ¿</param>
-    /// <param name="bDeltaMove">Íæ¼ÒBÎ»ÒÆÏòÁ¿</param>
+    /// <param name="aDeltaMove">ç©å®¶Aä½ç§»å‘é‡</param>
+    /// <param name="bDeltaMove">ç©å®¶Bä½ç§»å‘é‡</param>
     /// <returns></returns>
     private static FixedVector3 CombineForce(FixedVector3 aDeltaMove, FixedVector3 bDeltaMove)
     {
@@ -132,7 +132,7 @@ public class PhysicsSystem
 
     
     /// <summary>
-    /// ¼ì²âÅö×²·½Ïò
+    /// æ£€æµ‹ç¢°æ’æ–¹å‘
     /// -45  45
     ///    \/
     ///    /\
@@ -140,24 +140,24 @@ public class PhysicsSystem
     /// </summary>
     public static void CheckCollisionDir(BaseEntity source, BaseEntity target)
     {
-        source.collision.collisionDir = 0;
-        var direction = target.transform.pos - source.transform.pos;
-        var angle = FixedVector3.AngleIntSingle(source.transform.fwd, direction.YZero().Normalized);
+        source.Collision.collisionDir = 0;
+        var direction = target.Transform.pos - source.Transform.pos;
+        var angle = FixedVector3.AngleIntSingle(source.Transform.fwd, direction.YZero().Normalized);
         if(-45 < angle && angle < 45)
         {
-            source.collision.collisionDir = (int)ECollisionDir.Forward;
+            source.Collision.collisionDir = (int)ECollisionDir.Forward;
         }
         else if(-135 < angle && angle < -45)
         {
-            source.collision.collisionDir = (int)ECollisionDir.Left;
+            source.Collision.collisionDir = (int)ECollisionDir.Left;
         }
         else if(135 > angle && angle > 45)
         {
-            source.collision.collisionDir = (int)ECollisionDir.Right;
+            source.Collision.collisionDir = (int)ECollisionDir.Right;
         }
         else if(135 < angle || angle < -135)
         {
-            source.collision.collisionDir = (int)ECollisionDir.Back;
+            source.Collision.collisionDir = (int)ECollisionDir.Back;
         }
     }
 

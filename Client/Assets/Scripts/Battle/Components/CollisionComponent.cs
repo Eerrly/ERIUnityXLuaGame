@@ -6,12 +6,12 @@ public class CollisionComponent : BaseComponent
     [System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Auto, Pack = 4)]
     internal struct Common
     {
-        public FixedNumber collsionSize;
+        public FixedNumber collisionSize;
         public System.Int32 collisionDir;
 
         public Common(int no)
         {
-            collsionSize = default(FixedNumber);
+            collisionSize = default(FixedNumber);
             collisionDir = default(System.Int32);
         }
     }
@@ -21,10 +21,10 @@ public class CollisionComponent : BaseComponent
     /// <summary>
     /// 碰撞半径
     /// </summary>
-    public FixedNumber collsionSize
+    public FixedNumber collisionSize
     {
-        get { return common.collsionSize; }
-        set { common.collsionSize = value; }
+        get => common.collisionSize;
+        set => common.collisionSize = value;
     }
 
     /// <summary>
@@ -32,8 +32,8 @@ public class CollisionComponent : BaseComponent
     /// </summary>
     public System.Int32 collisionDir
     {
-        get { return common.collisionDir; }
-        set { common.collisionDir = value; }
+        get => common.collisionDir;
+        set => common.collisionDir = value;
     }
 
 }

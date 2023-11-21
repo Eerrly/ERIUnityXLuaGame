@@ -29,14 +29,14 @@ public class SpriteAtlasToolsEditorWin : OdinEditorWindow
     protected override void OnEnable()
     {
         base.OnEnable();
-        SpriteAtlasToolsUtility.onAddSpriteAtlas += OnUtilityAddSpriteAtlas;
+        SpriteAtlasToolsUtility.OnAddSpriteAtlas += OnUtilityAddSpriteAtlas;
         LoadConfigFile();
     }
 
     protected override void OnDestroy()
     {
         base.OnDestroy();
-        SpriteAtlasToolsUtility.onAddSpriteAtlas -= OnUtilityAddSpriteAtlas;
+        SpriteAtlasToolsUtility.OnAddSpriteAtlas -= OnUtilityAddSpriteAtlas;
     }
 
     void OnUtilityAddSpriteAtlas()

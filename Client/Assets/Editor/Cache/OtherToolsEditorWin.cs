@@ -81,10 +81,10 @@ public class OtherToolsEditorWin : OdinEditorWindow
     {
         if (EditorUtility.DisplayDialog("提示", "确认删除 [CacheBundleRoot] 目录下的全部文件吗？", "确认", "取消"))
         {
-            string[] filePaths = Directory.GetFiles(Setting.CacheBundleRoot);
-            for (int i = 0; i < filePaths.Length; i++)
+            var filePaths = Directory.GetFiles(Setting.CacheBundleRoot);
+            foreach (var t in filePaths)
             {
-                FileUtil.DeleteFile(filePaths[i]);
+                FileUtil.DeleteFile(t);
             }
         }
     }

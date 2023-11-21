@@ -10,9 +10,9 @@ public class BattleBaseState : BaseState<BattleEntity>
 
     public override void Reset(BattleEntity battleEntity, BattleEntity _)
     {
-        battleEntity.state.curStateId = (int)StateId;
-        battleEntity.state.nextStateId = 0;
-        battleEntity.state.enterTime = battleEntity.time;
+        battleEntity.State.curStateId = (int)StateId;
+        battleEntity.State.nextStateId = 0;
+        battleEntity.State.enterTime = battleEntity.Time;
     }
 
     public override void OnEnter(BattleEntity battleEntity, BattleEntity _) { }

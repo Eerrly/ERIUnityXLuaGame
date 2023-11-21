@@ -28,8 +28,8 @@ public class MoveComponent : BaseComponent
     /// </summary>
     public FixedVector3 position
     {
-        get { return common.position; }
-        set { common.position = value; }
+        get => common.position;
+        set => common.position = value;
     }
 
     /// <summary>
@@ -37,8 +37,8 @@ public class MoveComponent : BaseComponent
     /// </summary>
     public FixedQuaternion rotation
     {
-        get { return common.rotation; }
-        set { common.rotation = value; }
+        get => common.rotation;
+        set => common.rotation = value;
     }
 
     /// <summary>
@@ -46,8 +46,8 @@ public class MoveComponent : BaseComponent
     /// </summary>
     public FixedNumber moveSpeed
     {
-        get { return common.moveSpeed; }
-        set { common.moveSpeed = value; }
+        get => common.moveSpeed;
+        set => common.moveSpeed = value;
     }
 
     /// <summary>
@@ -55,8 +55,8 @@ public class MoveComponent : BaseComponent
     /// </summary>
     public float turnSpeed
     {
-        get { return common.turnSpeed; }
-        set { common.turnSpeed = value; }
+        get => common.turnSpeed;
+        set => common.turnSpeed = value;
     }
 
 }

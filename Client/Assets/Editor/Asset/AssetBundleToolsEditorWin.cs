@@ -14,7 +14,7 @@ public class AssetBundleToolsEditorWin : OdinEditorWindow
         return win;
     }
 
-    private AssetBundleToolsConfig cfg;
+    private AssetBundleToolsConfig _config;
 
     protected override void OnEnable()
     {
@@ -24,19 +24,19 @@ public class AssetBundleToolsEditorWin : OdinEditorWindow
 
     private void LoadConfigFile()
     {
-        cfg = Util.LoadConfig<AssetBundleToolsConfig>(Constant.ASSETBUNDLES_CONFIG_NAME);
+        _config = Util.LoadConfig<AssetBundleToolsConfig>(Constant.ASSETBUNDLES_CONFIG_NAME);
         itemList.Clear();
-        foreach (var item in cfg.items)
+        foreach (var item in _config.Items)
         {
-            itemList.Add(new AssetBundleToolsItemEidtor(this, item));
+            itemList.Add(new AssetBundleToolsItemEditor(this, item));
         }
     }
 
     [HideLabel]
     [LabelText("资源数据")]
-    public List<AssetBundleToolsItemEidtor> itemList = new List<AssetBundleToolsItemEidtor>();
+    private List<AssetBundleToolsItemEditor> itemList = new List<AssetBundleToolsItemEditor>();
 
-    public struct AssetBundleToolsItemEidtor
+    public struct AssetBundleToolsItemEditor
     {
         AssetBundleToolsEditorWin win;
 
@@ -61,9 +61,9 @@ public class AssetBundleToolsEditorWin : OdinEditorWindow
         [LabelText("所有的依赖"), LabelWidth(50)]
         [HideLabel]
         [HorizontalGroup("Four")]
-        public List<AssetBundleToolsItemEidtor> assetBundleToolsItemEidtors;
+        public List<AssetBundleToolsItemEditor> assetBundleToolsItemEditors;
 
-        public AssetBundleToolsItemEidtor(AssetBundleToolsEditorWin win, AssetBundleToolsConfig.AssetBundleToolsConfigItem item)
+        public AssetBundleToolsItemEditor(AssetBundleToolsEditorWin win, AssetBundleToolsConfig.AssetBundleToolsConfigItem item)
         {
             this.win = win;
 
@@ -73,21 +73,21 @@ public class AssetBundleToolsEditorWin : OdinEditorWindow
             dependencies = item.dependencies;
 
             assetBundleFile = FileUtil.CombinePaths(Setting.EditorBundleBuildCachePath, hash + ".s");
-            assetBundleToolsItemEidtors = new List<AssetBundleToolsItemEidtor>();
+            assetBundleToolsItemEditors = new List<AssetBundleToolsItemEditor>();
             
-            FindDependencies(ref assetBundleToolsItemEidtors);
+            FindDependencies(ref assetBundleToolsItemEditors);
         }
 
-        private List<AssetBundleToolsItemEidtor> FindDependencies(ref List<AssetBundleToolsItemEidtor> assetBundleToolsItemEidtors)
+        private List<AssetBundleToolsItemEditor> FindDependencies(ref List<AssetBundleToolsItemEditor> assetBundleToolsItemEditors)
         {
-            foreach (var v in win.cfg.items)
+            foreach (var v in win._config.Items)
             {
                 if (dependencies.Contains(v.hash))
                 {
-                    assetBundleToolsItemEidtors.Add(new AssetBundleToolsItemEidtor(win, v));
+                    assetBundleToolsItemEditors.Add(new AssetBundleToolsItemEditor(win, v));
                 }
             }
-            return assetBundleToolsItemEidtors;
+            return assetBundleToolsItemEditors;
         }
 
     }

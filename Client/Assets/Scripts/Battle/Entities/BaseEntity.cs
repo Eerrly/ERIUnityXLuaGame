@@ -2,63 +2,55 @@
 {
     public int ID;
 
-    public Cell cell;
+    public Cell Cell;
 
     #region Components
     /// <summary>
     /// 输入组件
     /// </summary>
-    public InputComponent input = new InputComponent();
+    public readonly InputComponent Input = new InputComponent();
     /// <summary>
     /// 位置组件
     /// </summary>
-    public TransformComponent transform = new TransformComponent();
+    public readonly TransformComponent Transform = new TransformComponent();
     /// <summary>
     /// 移动组件
     /// </summary>
-    public MoveComponent movement = new MoveComponent();
+    public readonly MoveComponent Movement = new MoveComponent();
     /// <summary>
     /// 状态组件
     /// </summary>
-    public StateComponent state = new StateComponent();
+    public readonly StateComponent State = new StateComponent();
     /// <summary>
     /// 运行时属性组件
     /// </summary>
-    public RuntimePropertyComponent runtimeProperty = new RuntimePropertyComponent();
+    public readonly RuntimePropertyComponent RuntimeProperty = new RuntimePropertyComponent();
     /// <summary>
     /// 属性组件
     /// </summary>
-    public PropertyComponent property = new PropertyComponent();
+    public readonly PropertyComponent Property = new PropertyComponent();
     /// <summary>
     /// 碰撞组件
     /// </summary>
-    public CollisionComponent collision = new CollisionComponent();
+    public readonly CollisionComponent Collision = new CollisionComponent();
     #endregion
 
     #region Attributes
     /// <summary>
     /// 当前状态ID
     /// </summary>
-    public EPlayerState curStateId
-    {
-        get { return (EPlayerState)state.curStateId; }
-    }
+    public EPlayerState curStateId => (EPlayerState)State.curStateId;
 
     /// <summary>
     /// 下一个状态ID
     /// </summary>
-    public EPlayerState nextStateId
-    {
-        get { return (EPlayerState)state.nextStateId; }
-    }
+    public EPlayerState nextStateId => (EPlayerState)State.nextStateId;
 
     /// <summary>
     /// 上一个状态ID
     /// </summary>
-    public EPlayerState preStateId
-    {
-        get { return (EPlayerState)state.preStateId; }
-    }
+    public EPlayerState preStateId => (EPlayerState)State.preStateId;
+
     #endregion
 
     /// <summary>

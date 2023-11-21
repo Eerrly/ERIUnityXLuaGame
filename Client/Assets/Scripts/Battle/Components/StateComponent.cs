@@ -31,8 +31,8 @@ public class StateComponent : BaseComponent
     /// </summary>
     public int curStateId
     {
-        get { return common.curStateId; }
-        set { common.curStateId = value; }
+        get => common.curStateId;
+        set => common.curStateId = value;
     }
 
     /// <summary>
@@ -40,8 +40,8 @@ public class StateComponent : BaseComponent
     /// </summary>
     public int nextStateId
     {
-        get { return common.nextStateId; }
-        set { common.nextStateId = value; }
+        get => common.nextStateId;
+        set => common.nextStateId = value;
     }
 
     /// <summary>
@@ -49,8 +49,8 @@ public class StateComponent : BaseComponent
     /// </summary>
     public int preStateId
     {
-        get { return common.prevStateId; }
-        set { common.prevStateId = value; }
+        get => common.prevStateId;
+        set => common.prevStateId = value;
     }
 
     /// <summary>
@@ -58,8 +58,8 @@ public class StateComponent : BaseComponent
     /// </summary>
     public float enterTime
     {
-        get { return common.enterTime; }
-        set { common.enterTime = value; }
+        get => common.enterTime;
+        set => common.enterTime = value;
     }
 
     /// <summary>
@@ -67,8 +67,8 @@ public class StateComponent : BaseComponent
     /// </summary>
     public float exitTime
     {
-        get { return common.exitTime; }
-        set { common.exitTime = value; }
+        get => common.exitTime;
+        set => common.exitTime = value;
     }
 
     /// <summary>
@@ -76,8 +76,8 @@ public class StateComponent : BaseComponent
     /// </summary>
     public int count
     {
-        get { return common.count; }
-        set { common.count = value; }
+        get => common.count;
+        set => common.count = value;
     }
 
 }

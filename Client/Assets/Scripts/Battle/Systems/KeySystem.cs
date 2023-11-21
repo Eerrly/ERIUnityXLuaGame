@@ -3,13 +3,13 @@ public class KeySystem
 {
     public static void Clear(BattleEntity battleEntity)
     {
-        var players = battleEntity.entities;
+        var players = battleEntity.Entities;
         for (int i = 0; i < players.Count; i++)
         {
             var player = (PlayerEntity)players[i];
-            player.input.pos = player.ID;
-            player.input.yaw = MathManager.YawStop;
-            player.input.key = 0;
+            player.Input.pos = player.ID;
+            player.Input.yaw = MathManager.YawStop;
+            player.Input.key = 0;
         }
     }
 
@@ -20,7 +20,7 @@ public class KeySystem
 
     public static int GetLogicKeyDown(PlayerEntity playerEntity)
     {
-        var input = playerEntity.input;
+        var input = playerEntity.Input;
         int key = (int)ELogicInputKey.None;
         while (key < (int)ELogicInputKey.KeyCount)
         {
@@ -35,19 +35,19 @@ public class KeySystem
 
     public static bool CheckKeyCodeJDown(PlayerEntity playerEntity)
     {
-        var result = (playerEntity.input.key & 0x1) > 0;
+        var result = (playerEntity.Input.key & 0x1) > 0;
         return result;
     }
 
     public static bool CheckKeyCodeKDown(PlayerEntity playerEntity)
     {
-        var result = (playerEntity.input.key & 0x2) > 0;
+        var result = (playerEntity.Input.key & 0x2) > 0;
         return result;
     }
 
     public static bool CheckKeyCodeLDown(PlayerEntity playerEntity)
     {
-        var result = (playerEntity.input.key & 0x4) > 0;
+        var result = (playerEntity.Input.key & 0x4) > 0;
         return result;
     }
 

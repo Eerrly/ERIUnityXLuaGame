@@ -34,39 +34,39 @@ public class FixedMath
         {
             if (y < 0)
             {
-                //µÚÈıÏóÏŞ
+                //ç¬¬ä¸‰è±¡é™
                 x = -x;
                 y = -y;
                 num = 1;
             }
             else
             {
-                //µÚ¶şÏóÏŞ
+                //ç¬¬äºŒè±¡é™
                 x = -x;
                 num = -1;
             }
-            //-PI ³ËÒÔ10000
+            //-PI ä¹˜ä»¥10000
             num2 = -31416;
         }
         else
         {
             if (y < 0)
             {
-                //µÚËÄÏóÏŞ
+                //ç¬¬å››è±¡é™
                 y = -y;
                 num = -1;
             }
             else
             {
-                //µÚÒ»ÏóÏŞ
+                //ç¬¬ä¸€è±¡é™
                 num = 1;
             }
             num2 = 0;
         }
         int dIM = FixedAtan2Table.DIM;   //2^7 = 128
         long num3 = (long)(dIM - 1);  //127
-                                      //ÏÂ±ßÕâ¶ÎµÄÒâË¼ÊÇ£¬°Ñxy¹éÒ»»¯ºóÓ³Éäµ½0-127±ÕÇø¼äÉÏ£¬È»ºóÈ¥²é±í
-                                      //y×öĞĞ£¬x×öÁĞÈ¥²éÑ¯ÉèÖÃºÃµÄ¶şÎ¬±í
+                                      //ä¸‹è¾¹è¿™æ®µçš„æ„æ€æ˜¯ï¼ŒæŠŠxyå½’ä¸€åŒ–åæ˜ å°„åˆ°0-127é—­åŒºé—´ä¸Šï¼Œç„¶åå»æŸ¥è¡¨
+                                      //yåšè¡Œï¼Œxåšåˆ—å»æŸ¥è¯¢è®¾ç½®å¥½çš„äºŒç»´è¡¨
         long b = (long)((x >= y) ? x : y);
         int num4 = (int)FixedMath.Divide((long)x * num3, b);
         int num5 = (int)FixedMath.Divide((long)y * num3, b);
@@ -76,17 +76,17 @@ public class FixedMath
 
     public static FixedNumber Acos(FixedNumber cosVal)
     {
-        //¼ÆËãacos¾Í±È½Ï¼òµ¥ÁË£¬ÒòÎªcosµÄÈ¡Öµ¾ÍÊÇ-1~1£¬²»´æÔÚÎŞÇîµÄÎÊÌâ
-        //Èç¹û°Ñcos±È×÷x/length,µ±lengthµÈÓÚ1µÄÊ±ºò£¬x¾ÍÊÇcosÖµ£¬ËùÒÔÖ»ĞèÒª°Ñ-1~1Æ½¾ù·Ö³ÉIntAcosTable.COUNT·İ
-        //È»ºó×öÒ»¸ö-1~1Óë0~IntAcosTable.COUNTµÄÓ³Éä¼´¿É£¬¸Ãº¯ÊıµÄ¹¦ÄÜ¾ÍÊÇ×öÕâ¸öÓ³Éä 
-        //ÓÉÓÚcosº¯ÊıÓë½Ç¶È²»ÊÇÏßĞÔµÄ£¬¼´Á½ÕßµÄ±ä»¯ÂÊ²»Ò»Ñù£¬ËùÒÔ¶àÉÙÓĞµãÖµ·ÖÅä²»¾ùÔÈµÄÎÊÌâ£¬²»¹ı·Ö³É1024·İ£¬Ó°Ïì²»´ó
+        //è®¡ç®—acoså°±æ¯”è¾ƒç®€å•äº†ï¼Œå› ä¸ºcosçš„å–å€¼å°±æ˜¯-1~1ï¼Œä¸å­˜åœ¨æ— ç©·çš„é—®é¢˜
+        //å¦‚æœæŠŠcosæ¯”ä½œx/length,å½“lengthç­‰äº1çš„æ—¶å€™ï¼Œxå°±æ˜¯coså€¼ï¼Œæ‰€ä»¥åªéœ€è¦æŠŠ-1~1å¹³å‡åˆ†æˆIntAcosTable.COUNTä»½
+        //ç„¶ååšä¸€ä¸ª-1~1ä¸0~IntAcosTable.COUNTçš„æ˜ å°„å³å¯ï¼Œè¯¥å‡½æ•°çš„åŠŸèƒ½å°±æ˜¯åšè¿™ä¸ªæ˜ å°„ 
+        //ç”±äºcoså‡½æ•°ä¸è§’åº¦ä¸æ˜¯çº¿æ€§çš„ï¼Œå³ä¸¤è€…çš„å˜åŒ–ç‡ä¸ä¸€æ ·ï¼Œæ‰€ä»¥å¤šå°‘æœ‰ç‚¹å€¼åˆ†é…ä¸å‡åŒ€çš„é—®é¢˜ï¼Œä¸è¿‡åˆ†æˆ1024ä»½ï¼Œå½±å“ä¸å¤§
         int num = (cosVal * FixedAcosTable.HALF_COUNT).ToInt() + FixedAcosTable.HALF_COUNT;
         num = FixedMath.Clamp(num, 0, FixedAcosTable.COUNT);
         return FixedNumber.MakeFixNum(FixedAcosTable.table[num], 10000);
     }
 
     /// <summary>
-    /// ·µ»ØµÄÊÇ-pi/2 µ½ pi/2µÄ»¡¶ÈÖµ
+    /// è¿”å›çš„æ˜¯-pi/2 åˆ° pi/2çš„å¼§åº¦å€¼
     /// </summary>
     /// <param name="nom"></param>
     /// <param name="den"></param>
@@ -100,14 +100,14 @@ public class FixedMath
 
     public static FixedNumber Sin(FixedNumber sinVal)
     {
-        //Ë÷ÒıÖµÇóµÄÔ­Àí¼û¶ÔÓ¦º¯ÊıÄÚ×¢ÊÍ 
+        //ç´¢å¼•å€¼æ±‚çš„åŸç†è§å¯¹åº”å‡½æ•°å†…æ³¨é‡Š 
         int index = FixedSinCosTable.getIndex(sinVal.numerator, FixedNumber.FRACTION_RANGE);
         return FixedNumber.MakeFixNum(FixedSinCosTable.sin_table[index], 10000);
     }
 
     public static FixedNumber Cos(FixedNumber cosVal)
     {
-        //Ë÷ÒıÖµÇóµÄÔ­Àí¼û¶ÔÓ¦º¯ÊıÄÚ×¢ÊÍ 
+        //ç´¢å¼•å€¼æ±‚çš„åŸç†è§å¯¹åº”å‡½æ•°å†…æ³¨é‡Š 
         int index = FixedSinCosTable.getIndex(cosVal.numerator, FixedNumber.FRACTION_RANGE);
         return FixedNumber.MakeFixNum(FixedSinCosTable.cos_table[index], 10000);
     }
@@ -179,7 +179,7 @@ public class FixedMath
 
     public static uint Sqrt32(uint a)
     {
-        //¾­µäµÄÖğÎ»È·ÈÏ·¨
+        //ç»å…¸çš„é€ä½ç¡®è®¤æ³•
         uint num = 0u;
         uint num2 = 0u;
         for (int i = 0; i < 16; i++)
@@ -200,7 +200,7 @@ public class FixedMath
 
     public static ulong Sqrt64(ulong a)
     {
-        //¾­µäµÄÖğÎ»È·ÈÏ·¨
+        //ç»å…¸çš„é€ä½ç¡®è®¤æ³•
         ulong num = 0uL;
         ulong num2 = 0uL;
         for (int i = 0; i < 32; i++)
@@ -445,11 +445,11 @@ public class FixedMath
     }
 
     /// <summary>
-    /// ÇóµãÍ¶Éäµ½Ö±ÏßÉÏµÄµã
+    /// æ±‚ç‚¹æŠ•å°„åˆ°ç›´çº¿ä¸Šçš„ç‚¹
     /// </summary>
-    /// <param name="fromPos">Æğµã</param>
-    /// <param name="toPos">ÖÕµã</param>
-    /// <param name="dir">Í¶ÉäÏòÁ¿</param>
+    /// <param name="fromPos">èµ·ç‚¹</param>
+    /// <param name="toPos">ç»ˆç‚¹</param>
+    /// <param name="dir">æŠ•å°„å‘é‡</param>
     /// <returns></returns>
     public static FixedVector3 ProjectPointOnLine(FixedVector3 fromPos, FixedVector3 toPos, FixedVector3 dir)
     {
@@ -460,12 +460,12 @@ public class FixedMath
     }
 
     /// <summary>
-    /// Í¶ÉäµãÔÚÏß¶ÎÉÏµÄ·½Î»
+    /// æŠ•å°„ç‚¹åœ¨çº¿æ®µä¸Šçš„æ–¹ä½
     /// </summary>
-    /// <param name="fromPos">Æğµã</param>
-    /// <param name="toPos">ÖÕµã</param>
-    /// <param name="point">¼ì²âµã</param>
-    /// <returns>0ÖÕµãÍâ;1Æğµãºó;2ÖĞ¼ä</returns>
+    /// <param name="fromPos">èµ·ç‚¹</param>
+    /// <param name="toPos">ç»ˆç‚¹</param>
+    /// <param name="point">æ£€æµ‹ç‚¹</param>
+    /// <returns>0ç»ˆç‚¹å¤–;1èµ·ç‚¹å;2ä¸­é—´</returns>
     public static int PointOnWhichSideOfLineSegment(FixedVector3 fromPos, FixedVector3 toPos, FixedVector3 point)
     {
         FixedVector3 rhs = toPos - fromPos;
@@ -495,7 +495,7 @@ public class FixedMath
     #region Transform
     public static FixedVector3 Transform(ref FixedVector3 point, ref FixedVector3 axis_x, ref FixedVector3 axis_y, ref FixedVector3 axis_z, ref FixedVector3 trans)
     {
-        //¾ÍÊÇÒ»¸ö3*3¾ØÕó±ä»»Ò»¸ö·½ÏòµÄ¼ÆËã¹«Ê½ 
+        //å°±æ˜¯ä¸€ä¸ª3*3çŸ©é˜µå˜æ¢ä¸€ä¸ªæ–¹å‘çš„è®¡ç®—å…¬å¼ 
         return new FixedVector3(axis_x.x * point.x + axis_y.x * point.y + axis_z.x * point.z + trans.x,
             axis_x.y * point.x + axis_y.y * point.y + axis_z.y * point.z + trans.y,
             axis_x.z * point.x + axis_y.z * point.y + axis_z.z * point.z + trans.z);
@@ -596,7 +596,7 @@ public class FixedMath
         return false;
     }
 
-    //ÉäÏß¼ì²â·¨£¬Ò»Ìõ¾­¹ıµãpÆ½ĞĞÓÚxÖáµÄÉäÏßÓëÃ¿ÌõÏß¶Î½»µã¸öÊı£¬Å¼ÊıÎªÔÚÍâ²à£¬ÆæÊıÔÚÄÚ²â
+    //å°„çº¿æ£€æµ‹æ³•ï¼Œä¸€æ¡ç»è¿‡ç‚¹på¹³è¡Œäºxè½´çš„å°„çº¿ä¸æ¯æ¡çº¿æ®µäº¤ç‚¹ä¸ªæ•°ï¼Œå¶æ•°ä¸ºåœ¨å¤–ä¾§ï¼Œå¥‡æ•°åœ¨å†…æµ‹
     public static bool PointInPolygon(ref FixedVector2 pnt, FixedVector2[] plg)
     {
         if (plg == null || plg.Length < 3)
@@ -681,7 +681,7 @@ public class FixedMath
         return new FixedNumber((long)((ulong)value.numerator & 0xFFFFFFFFFFFF0000));
     }
     /// <summary>
-    /// 2µÄvalue´Î·½
+    /// 2çš„valueæ¬¡æ–¹
     /// </summary>
     /// <param name="value"></param>
     /// <returns></returns>

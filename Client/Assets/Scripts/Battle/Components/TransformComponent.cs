@@ -25,8 +25,8 @@ public class TransformComponent : BaseComponent
     /// </summary>
     public FixedVector3 pos
     {
-        get { return common.pos; }
-        set { common.pos = value; }
+        get => common.pos;
+        set => common.pos = value;
     }
 
     /// <summary>
@@ -34,8 +34,8 @@ public class TransformComponent : BaseComponent
     /// </summary>
     public FixedQuaternion rot
     {
-        get { return common.rot; }
-        set { common.rot = value; }
+        get => common.rot;
+        set => common.rot = value;
     }
 
     /// <summary>
@@ -43,8 +43,8 @@ public class TransformComponent : BaseComponent
     /// </summary>
     public FixedVector3 fwd
     {
-        get { return common.fwd; }
-        set { common.fwd = value; }
+        get => common.fwd;
+        set => common.fwd = value;
     }
 
 }

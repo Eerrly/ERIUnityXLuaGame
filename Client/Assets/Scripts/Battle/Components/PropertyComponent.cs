@@ -21,8 +21,8 @@ public class PropertyComponent : BaseComponent
     /// </summary>
     public int pos
     {
-        get { return common.pos; }
-        set { common.pos = value; }
+        get => common.pos;
+        set => common.pos = value;
     }
 
 }

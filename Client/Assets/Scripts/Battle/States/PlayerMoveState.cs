@@ -3,8 +3,8 @@ public class PlayerMoveState : PlayerBaseState
 {
     public override void OnEnter(PlayerEntity playerEntity, BattleEntity battleEntity)
     {
-        playerEntity.movement.moveSpeed = PlayerPropertyConstant.MoveSpeed;
-        playerEntity.movement.turnSpeed = PlayerPropertyConstant.TurnSpeed;
+        playerEntity.Movement.moveSpeed = PlayerPropertyConstant.MoveSpeed;
+        playerEntity.Movement.turnSpeed = PlayerPropertyConstant.TurnSpeed;
     }
 
     public override void OnUpdate(PlayerEntity playerEntity, BattleEntity battleEntity)
@@ -15,14 +15,14 @@ public class PlayerMoveState : PlayerBaseState
 
     public override void OnLateUpdate(PlayerEntity playerEntity, BattleEntity battleEntity)
     {
-        if (KeySystem.IsYawTypeStop(playerEntity.input.yaw))
+        if (KeySystem.IsYawTypeStop(playerEntity.Input.yaw))
         {
             EntityStateSystem.ChangeEntityState(playerEntity, EPlayerState.Idle);
         }
         if (KeySystem.CheckKeyCodeJDown(playerEntity))
         {
 #if UNITY_DEBUG
-            Logger.Log(LogLevel.Info, $"Íæ¼ÒID:{playerEntity.ID} Íæ¼Ò×´Ì¬£º{System.Enum.GetName(typeof(EPlayerState), StateId)} ´¥·¢°´¼ü J");
+            Logger.Log(LogLevel.Info, $"ç©å®¶ID:{playerEntity.ID} ç©å®¶çŠ¶æ€ï¼š{System.Enum.GetName(typeof(EPlayerState), StateId)} è§¦å‘æŒ‰é”® J");
 #endif
         }
     }
@@ -30,7 +30,7 @@ public class PlayerMoveState : PlayerBaseState
     public override void OnCollision(BaseEntity source, BaseEntity target, BattleEntity battleEntity)
     {
 #if UNITY_DEBUG
-        Logger.Log(LogLevel.Info, $"·¢ÉúÅö×² Íæ¼Ò×´Ì¬£º{System.Enum.GetName(typeof(EPlayerState), StateId)} S:{source.ID} T:{target.ID}");
+        Logger.Log(LogLevel.Info, $"å‘ç”Ÿç¢°æ’ ç©å®¶çŠ¶æ€ï¼š{System.Enum.GetName(typeof(EPlayerState), StateId)} S:{source.ID} T:{target.ID}");
 #endif
     }
 
@@ -38,15 +38,15 @@ public class PlayerMoveState : PlayerBaseState
     {
         PhysicsSystem.CheckCollisionDir(source, target);
 #if UNITY_DEBUG
-        Logger.Log(LogLevel.Info, $"·¢ÉúÅö×² Íæ¼Ò×´Ì¬£º{System.Enum.GetName(typeof(EPlayerState), StateId)} Åö×²·½Ïò:{System.Enum.GetName(typeof(ECollisionDir), source.collision.collisionDir)} S:{source.ID} T:{target.ID}");
+        Logger.Log(LogLevel.Info, $"å‘ç”Ÿç¢°æ’ ç©å®¶çŠ¶æ€ï¼š{System.Enum.GetName(typeof(EPlayerState), StateId)} ç¢°æ’æ–¹å‘:{System.Enum.GetName(typeof(ECollisionDir), source.Collision.collisionDir)} S:{source.ID} T:{target.ID}");
 #endif
     }
 
     public override void OnExit(PlayerEntity playerEntity, BattleEntity battleEntity)
     {
-        playerEntity.movement.position = FixedVector3.Zero;
-        playerEntity.movement.rotation = FixedQuaternion.Identity;
-        playerEntity.movement.moveSpeed = FixedNumber.Zero;
-        playerEntity.movement.turnSpeed = 0f;
+        playerEntity.Movement.position = FixedVector3.Zero;
+        playerEntity.Movement.rotation = FixedQuaternion.Identity;
+        playerEntity.Movement.moveSpeed = FixedNumber.Zero;
+        playerEntity.Movement.turnSpeed = 0f;
     }
 }

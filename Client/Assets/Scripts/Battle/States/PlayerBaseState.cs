@@ -12,9 +12,9 @@ public class PlayerBaseState : BaseState<PlayerEntity>
 
     public override void Reset(PlayerEntity playerEntity, BattleEntity battleEntity)
     {
-        playerEntity.state.curStateId = (int)StateId;
-        playerEntity.state.nextStateId = 0;
-        playerEntity.state.enterTime = battleEntity.time;
+        playerEntity.State.curStateId = (int)StateId;
+        playerEntity.State.nextStateId = 0;
+        playerEntity.State.enterTime = battleEntity.Time;
     }
 
     public override void OnEnter(PlayerEntity playerEntity, BattleEntity battleEntity) {  }
@@ -25,7 +25,7 @@ public class PlayerBaseState : BaseState<PlayerEntity>
 
     public override void OnExit(PlayerEntity playerEntity, BattleEntity battleEntity) 
     {
-        playerEntity.state.exitTime = battleEntity.time;
+        playerEntity.State.exitTime = battleEntity.Time;
     }
 
     public virtual void OnCollision(BaseEntity source, BaseEntity target, BattleEntity battleEntity) { }

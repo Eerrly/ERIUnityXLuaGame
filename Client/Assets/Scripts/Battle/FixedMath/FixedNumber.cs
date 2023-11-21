@@ -18,36 +18,16 @@ public partial struct FixedNumber
     public static readonly FixedNumber Half = One / 2;
     public static readonly FixedNumber ApproximatelyError = FixedNumber.MakeFixNum(1, 100);
     public static readonly FixedNumber PredictApproximatelyError = FixedNumber.MakeFixNum(30, 100);
-    public static readonly FixedNumber HalfRound = FixedNumber.MakeFixNum(180, 1); // 180¶È
+    public static readonly FixedNumber HalfRound = FixedNumber.MakeFixNum(180, 1); // 180åº¦
     public static readonly FixedNumber OneTenth = MakeFixNum(1, 10);
 
     public const long RAW_ONE = 1L << FRACTIONAL_BITS;
 
 
     public long _raw;
-    public long numerator
-    {
-        get
-        {
-            return _raw;
-        }
-    }
+    public long numerator => _raw;
 
-    public bool IsInteger
-    {
-        get
-        {
-            return (_raw & FRACTION_MASK) == 0;
-        }
-    }
-
-    //public float single
-    //{
-    //    get
-    //    {
-    //        return ToFloat();
-    //    }
-    //}
+    public bool IsInteger => (_raw & FRACTION_MASK) == 0;
 
     public FixedNumber(long val)
     {

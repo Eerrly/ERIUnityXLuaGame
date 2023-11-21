@@ -44,45 +44,15 @@ public struct FixedVector3
         }
     }
 
-    public FixedVector2 xz
-    {
-        get
-        {
-            return new FixedVector2(this.x, this.z);
-        }
-    }
+    public FixedVector2 xz => new FixedVector2(this.x, this.z);
 
-    public FixedNumber Magnitude
-    {
-        get
-        {
-            return FixedMath.Sqrt(x * x + y * y + z * z);
-        }
-    }
+    public FixedNumber Magnitude => FixedMath.Sqrt(x * x + y * y + z * z);
 
-    public FixedNumber magnitude2D
-    {
-        get
-        {
-            return FixedMath.Sqrt(x * x + z * z);
-        }
-    }
+    public FixedNumber magnitude2D => FixedMath.Sqrt(x * x + z * z);
 
-    public FixedNumber unsafeSqrMagnitude
-    {
-        get
-        {
-            return this.x * this.x + this.y * this.y + this.z * this.z;
-        }
-    }
+    public FixedNumber unsafeSqrMagnitude => this.x * this.x + this.y * this.y + this.z * this.z;
 
-    public FixedVector3 abs
-    {
-        get
-        {
-            return new FixedVector3(FixedMath.Abs(this.x), FixedMath.Abs(this.y), FixedMath.Abs(this.z));
-        }
-    }
+    public FixedVector3 abs => new FixedVector3(FixedMath.Abs(this.x), FixedMath.Abs(this.y), FixedMath.Abs(this.z));
 
 
     public FixedVector3 Normalized
@@ -139,38 +109,38 @@ public struct FixedVector3
     }
 
     /// <summary>
-    /// ·µ»ØµÄÊÇ»¡¶È
+    /// ä¸¤ä¸ªå‘é‡çš„è§’åº¦ï¼Œè¿”å›çš„æ˜¯å¼§åº¦
     /// </summary>
     /// <param name="lhs"></param>
     /// <param name="rhs"></param>
     /// <returns></returns>
     public static FixedNumber AngleIntRad(FixedVector3 lhs, FixedVector3 rhs)
     {
-        // ÏÈÇó³öÁ½¸öÏòÁ¿¸÷¸öÎ»ÊıµÄÆ½·½ºÍÈ»ºóÏà³Ë£¬ÒâÒå¾ÍÊÇËã³öÀ´Ğ±±ßµÄÆ½·½Öµ
+        // å…ˆæ±‚å‡ºä¸¤ä¸ªå‘é‡å„ä¸ªä½æ•°çš„å¹³æ–¹å’Œç„¶åç›¸ä¹˜ï¼Œæ„ä¹‰å°±æ˜¯ç®—å‡ºæ¥æ–œè¾¹çš„å¹³æ–¹å€¼
         FixedNumber den = lhs.sqrMagnitudeLong * rhs.sqrMagnitudeLong;
         if (den == 0)
         {
             return FixedNumber.Zero;
         }
-        // µÃµ½ÁÙ±ßµÄÍ¶Ó°
+        // å¾—åˆ°ä¸´è¾¹çš„æŠ•å½±
         var dot = FixedVector3.Dot(ref lhs, ref rhs);
-        // ÁÚ±ßµÄÆ½·½±ÈĞ±±ßµÄÆ½·½
+        // é‚»è¾¹çš„å¹³æ–¹æ¯”æ–œè¾¹çš„å¹³æ–¹
         FixedNumber val = FixedMath.Sqrt((dot * dot) / den);
-        // ·´ÓàÏÒ£¨ÁÙ±ß±ÈĞ±±ßµÄÖµÇó³ö»¡¶ÈÖµ£©Çó³ö»¡¶ÈÖµ
+        // åä½™å¼¦ï¼ˆä¸´è¾¹æ¯”æ–œè¾¹çš„å€¼æ±‚å‡ºå¼§åº¦å€¼ï¼‰æ±‚å‡ºå¼§åº¦å€¼
         return FixedMath.Acos(dot < 0 ? -val : val);
     }
 
     /// <summary>
-    /// ·µ»ØµÄ½Ç¶È
+    /// ï¿½ï¿½ï¿½ØµÄ½Ç¶ï¿½
     /// </summary>
     /// <param name="lhs"></param>
     /// <param name="rhs"></param>
     /// <returns></returns>
     public static FixedNumber AngleInt(FixedVector3 lhs, FixedVector3 rhs)
     {
-        FixedNumber radValue = AngleIntRad(lhs, rhs);    // ×Ô¼ºÇ°·½ÓÚÀº¿ğµÄ»¡¶È
-        FixedNumber tmpValue = radValue * FixedMath.Rad2Deg;    // Í¨¹ı»¡¶ÈËã³ö½Ç¶È
-        return FixedMath.Abs(ClampAngleTo180(tmpValue));    // ½«½Ç¶ÈÏŞÖÆÔÚ180ÒÔÄÚ²¢ÇÒÇó³ö¾ø¶ÔÖµ
+        FixedNumber radValue = AngleIntRad(lhs, rhs);    // ï¿½Ô¼ï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä»ï¿½ï¿½ï¿½
+        FixedNumber tmpValue = radValue * FixedMath.Rad2Deg;    // Í¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç¶ï¿½
+        return FixedMath.Abs(ClampAngleTo180(tmpValue));    // ï¿½ï¿½ï¿½Ç¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½180ï¿½ï¿½ï¿½Ú²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öµ
     }
 
     public static FixedNumber AngleIntSingle(FixedVector3 lhs, FixedVector3 rhs)
@@ -182,7 +152,7 @@ public struct FixedVector3
     }
 
     /// <summary>
-    /// Ô¼Êøµ½Õı¸º180Ö®¼ä
+    /// çº¦æŸåˆ°æ­£è´Ÿ180ä¹‹é—´
     /// </summary>
     /// <returns></returns>
     public static FixedNumber ClampAngleTo180(FixedNumber a)
@@ -204,19 +174,27 @@ public struct FixedVector3
         return a;
     }
 
-    //public static IntFactor DotWithInfactor(ref IVector3 lhs, ref IVector3 rhs)
-    //{
-    //    return new IntFactor(((long)lhs.x * rhs.x + (long)lhs.y * rhs.y + (long)lhs.z * rhs.z) / GlobalDefine.BaseCalFactor, GlobalDefine.BaseCalFactor);
-    //}
-
+    /// <summary>
+    /// ç‚¹ä¹˜
+    /// </summary>
+    /// <param name="lhs">å‘é‡L</param>
+    /// <param name="rhs">å‘é‡R</param>
+    /// <returns>ç‚¹ä¹˜ç»“æœ</returns>
     public static FixedNumber Dot(ref FixedVector3 lhs, ref FixedVector3 rhs)
     {
         return lhs.x * rhs.x + lhs.y * rhs.y + lhs.z * rhs.z;
     }
 
-    public static FixedNumber Dot(FixedVector3 lhs, FixedVector3 rhs, bool normalLizeInput = false)
+    /// <summary>
+    /// ç‚¹ä¹˜
+    /// </summary>
+    /// <param name="lhs">å‘é‡L</param>
+    /// <param name="rhs">å‘é‡R</param>
+    /// <param name="isNormalize">æ˜¯å¦ä½¿ç”¨å½’ä¸€åŒ–å‘é‡</param>
+    /// <returns></returns>
+    public static FixedNumber Dot(FixedVector3 lhs, FixedVector3 rhs, bool isNormalize = false)
     {
-        if (normalLizeInput)
+        if (isNormalize)
         {
             lhs.Normalize();
             rhs.Normalize();
@@ -224,26 +202,12 @@ public struct FixedVector3
         return lhs.x * rhs.x + lhs.y * rhs.y + lhs.z * rhs.z;
     }
 
-    //public static IntFactor DotLong(IVector3 lhs, IVector3 rhs)
-    //{
-    //    return (long)lhs.x * (long)rhs.x + (long)lhs.y * (long)rhs.y + (long)lhs.z * (long)rhs.z;
-    //}
-
-    //public static long DotLong(ref IVector3 lhs, ref IVector3 rhs)
-    //{
-    //    return (long)lhs.x * (long)rhs.x + (long)lhs.y * (long)rhs.y + (long)lhs.z * (long)rhs.z;
-    //}
-
-    //public static long DotXZLong(ref IVector3 lhs, ref IVector3 rhs)
-    //{
-    //    return (long)lhs.x * (long)rhs.x + (long)lhs.z * (long)rhs.z;
-    //}
-
-    //public static long DotXZLong(IVector3 lhs, IVector3 rhs)
-    //{
-    //    return (long)lhs.x * (long)rhs.x + (long)lhs.z * (long)rhs.z;
-    //}
-
+    /// <summary>
+    /// å‰ä¹˜
+    /// </summary>
+    /// <param name="lhs">å‘é‡L</param>
+    /// <param name="rhs">å‘é‡R</param>
+    /// <returns>å‰ä¹˜ç»“æœ</returns>
     public static FixedVector3 Cross(ref FixedVector3 lhs, ref FixedVector3 rhs)
     {
         return new FixedVector3(lhs.y * rhs.z - lhs.z * rhs.y,
@@ -251,6 +215,12 @@ public struct FixedVector3
             lhs.x * rhs.y - lhs.y * rhs.x);
     }
 
+    /// <summary>
+    /// å‰ä¹˜
+    /// </summary>
+    /// <param name="lhs">å‘é‡L</param>
+    /// <param name="rhs">å‘é‡R</param>
+    /// <returns>å‰ä¹˜ç»“æœ</returns>
     public static FixedVector3 Cross(FixedVector3 lhs, FixedVector3 rhs)
     {
         return new FixedVector3(lhs.y * rhs.z - lhs.z * rhs.y,
@@ -258,11 +228,9 @@ public struct FixedVector3
             lhs.x * rhs.y - lhs.y * rhs.x);
     }
 
-    public FixedVector3 Normal2D()
-    {
-        return new FixedVector3(this.z, this.y, -this.x);
-    }
-
+    /// <summary>
+    /// å½’ä¸€åŒ–å‘é‡
+    /// </summary>
     public void Normalize()
     {
         if (x == 0 && y == 0 && z == 0)
@@ -275,35 +243,42 @@ public struct FixedVector3
         this.z /= length;
     }
 
-
-
     public override string ToString()
     {
-        return string.Format("({0}, {1}, {2})", x.ToString(), y.ToString(), z.ToString());
+        return $"({x.ToString()}, {y.ToString()}, {z.ToString()})";
     }
 
-    //public override bool Equals(object o)
-    //{
-    //    if (o == null)
-    //    {
-    //        return false;
-    //    }
-    //    IVector3 vInt = (IVector3)o;
-    //    return this.x == vInt.x && this.y == vInt.y && this.z == vInt.z;
-    //}
-
-
+    /// <summary>
+    /// çº¿æ€§æ’å€¼
+    /// </summary>
+    /// <param name="a">ç‚¹A</param>
+    /// <param name="b">ç‚¹B</param>
+    /// <param name="f">æ’å€¼</param>
+    /// <returns>æ’å€¼ä¹‹åçš„å‘é‡</returns>
     public static FixedVector3 Lerp(FixedVector3 a, FixedVector3 b, FixedNumber f)
     {
         return new FixedVector3((b.x - a.x) * f + a.x, (b.y - a.y) * f + a.y, (b.z - a.z) * f + a.z);
     }
 
+    /// <summary>
+    /// çº¦æŸå‹çº¿æ€§æ’å€¼
+    /// </summary>
+    /// <param name="a">ç‚¹A</param>
+    /// <param name="b">ç‚¹B</param>
+    /// <param name="f">æ’å€¼ï¼ˆçº¦æŸåœ¨0-1ï¼‰</param>
+    /// <returns>æ’å€¼ä¹‹åçš„å‘é‡</returns>
     public static FixedVector3 ClampLerp(FixedVector3 a, FixedVector3 b, FixedNumber f)
     {
         f = FixedMath.Clamp(f, FixedNumber.Zero, FixedNumber.One);
         return Lerp(a, b, f);
     }
 
+    /// <summary>
+    /// å°†ä¸€ä¸ªå‘é‡æŠ•å½±åˆ°å¦ä¸€ä¸ªå‘é‡ä¸Š
+    /// </summary>
+    /// <param name="vector"></param>
+    /// <param name="normal"></param>
+    /// <returns></returns>
     public static FixedVector3 Project(FixedVector3 vector, FixedVector3 normal)
     {
         var sqrMag = Dot(normal, normal);
@@ -424,21 +399,9 @@ public struct FixedVector3
     #region safe
 
 
-    public FixedNumber sqrMagnitudeLong
-    {
-        get
-        {
-            return x * x + y * y + z * z;
-        }
-    }
+    public FixedNumber sqrMagnitudeLong => x * x + y * y + z * z;
 
-    public FixedNumber sqrMagnitudeLongXZ
-    {
-        get
-        {
-            return x * x + z * z;
-        }
-    }
+    public FixedNumber sqrMagnitudeLongXZ => x * x + z * z;
 
     public static FixedVector3 operator *(FixedVector3 v, FixedNumber f)
     {
@@ -458,9 +421,8 @@ public struct FixedVector3
 
     public override bool Equals(object obj)
     {
-        if (obj.GetType() == typeof(FixedVector3))
+        if (obj is FixedVector3 r2)
         {
-            FixedVector3 r2 = (FixedVector3)obj;
             return x == r2.x && y == r2.y && z == r2.z;
         }
         return false;
@@ -477,12 +439,11 @@ public struct FixedVector3
         }
     }
 
-#if !Server
     public UnityEngine.Vector3 ToVector3()
     {
         return new UnityEngine.Vector3(x.ToFloat(), y.ToFloat(), z.ToFloat());
     }
-#endif
+    
 }
 
 

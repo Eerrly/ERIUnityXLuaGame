@@ -3,7 +3,7 @@
 
     protected BaseState<T>[] _stateDic;
 
-    public BaseStateMachine() { }
+    protected BaseStateMachine() { }
 
     public virtual BaseState<T> GetState(int stateId)
     {

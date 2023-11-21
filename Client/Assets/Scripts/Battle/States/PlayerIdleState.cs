@@ -7,7 +7,7 @@ public class PlayerIdleState : PlayerBaseState
 
     public override void OnLateUpdate(PlayerEntity playerEntity, BattleEntity battleEntity)
     {
-        if (!KeySystem.IsYawTypeStop(playerEntity.input.yaw))
+        if (!KeySystem.IsYawTypeStop(playerEntity.Input.yaw))
         {
             EntityStateSystem.ChangeEntityState(playerEntity, EPlayerState.Move);
         }
@@ -30,7 +30,7 @@ public class PlayerIdleState : PlayerBaseState
     {
         PhysicsSystem.CheckCollisionDir(source, target);
 #if UNITY_DEBUG
-        Logger.Log(LogLevel.Info, $"发生碰撞 玩家状态：{System.Enum.GetName(typeof(EPlayerState), StateId)} 碰撞方向:{System.Enum.GetName(typeof(ECollisionDir), source.collision.collisionDir)} S:{source.ID} T:{target.ID}");
+        Logger.Log(LogLevel.Info, $"发生碰撞 玩家状态：{System.Enum.GetName(typeof(EPlayerState), StateId)} 碰撞方向:{System.Enum.GetName(typeof(ECollisionDir), source.Collision.collisionDir)} S:{source.ID} T:{target.ID}");
 #endif
     }
 

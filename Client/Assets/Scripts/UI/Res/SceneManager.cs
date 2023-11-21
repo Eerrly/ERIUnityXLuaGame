@@ -44,31 +44,29 @@ public class SceneManager : MonoBehaviour, IManager
     /// <summary>
     /// 加载场景
     /// </summary>
-    /// <param name="name">场景名</param>
+    /// <param name="sceneName">场景名</param>
     /// <param name="progress">进度回调</param>
-    public void LoadScene(string name, System.Action<LoadingState, float> progress)
+    public void LoadScene(string sceneName, System.Action<LoadingState, float> progress)
     {
         StopAllCoroutines();
-        StartCoroutine(CoLoadScene(name, progress));
+        StartCoroutine(CoLoadScene(sceneName, progress));
     }
 
     /// <summary>
     /// 加载场景
     /// </summary>
-    /// <param name="name">场景名</param>
+    /// <param name="sceneName">场景名</param>
     /// <param name="progress">进度回调</param>
     /// <returns></returns>
-    IEnumerator CoLoadScene(string name, System.Action<LoadingState, float> progress)
+    private IEnumerator CoLoadScene(string sceneName, System.Action<LoadingState, float> progress)
     {
         if(progress != null)
         {
             progress(LoadingState.Ready, 0);
             yield return null;
         }
-        if(SceneLoading!= null)
-        {
-            SceneLoading(LoadingState.Ready, 0);
-        }
+
+        SceneLoading?.Invoke(LoadingState.Ready, 0);
         if(_lastLoadRes != null)
         {
             _lastLoadRes.Release();
@@ -77,23 +75,18 @@ public class SceneManager : MonoBehaviour, IManager
         UnityEngine.SceneManagement.SceneManager.LoadScene("Loading");
         Resources.UnloadUnusedAssets();
         yield return null;
-        yield return StartCoroutine(CoRealLoadScene(name, progress, false));
+        yield return StartCoroutine(CoRealLoadScene(sceneName, progress, false));
         yield return null;
 
         Global.Instance.UIManager.ClearCache();
-        if (Global.Instance.OnSceneChanged != null)
+        if (Global.Instance.onSceneChanged != null)
         {
-            Global.Instance.OnSceneChanged.Invoke();
+            Global.Instance.onSceneChanged.Invoke();
         }
         Global.Instance.UIManager.UICamera.cullingMask = 1 << Setting.LAYER_UI;
-        if (progress != null)
-        {
-            progress(LoadingState.Finished, 1);
-        }
-        if (SceneLoading != null)
-        {
-            SceneLoading(LoadingState.Finished, 1);
-        }
+        progress?.Invoke(LoadingState.Finished, 1);
+
+        SceneLoading?.Invoke(LoadingState.Finished, 1);
         if(Camera.main && Camera.main != Global.Instance.UIManager.NoneCamera)
         {
             _lastMainCamera = Camera.main;
@@ -102,29 +95,24 @@ public class SceneManager : MonoBehaviour, IManager
         {
             _lastMainCamera = null;
         }
-        if (progress != null)
-        {
-            progress(LoadingState.LoadDone, 1);
-        }
-        if (SceneLoading != null)
-        {
-            SceneLoading(LoadingState.LoadDone, 1);
-        }
+
+        progress?.Invoke(LoadingState.LoadDone, 1);
+        SceneLoading?.Invoke(LoadingState.LoadDone, 1);
     }
 
     /// <summary>
     /// 异步加载场景
     /// </summary>
-    /// <param name="name">场景名</param>
+    /// <param name="sceneName">场景名</param>
     /// <param name="progress">回调</param>
-    /// <param name="isAddive">是否不移除旧场景</param>
+    /// <param name="isAdditive">是否不移除旧场景</param>
     /// <returns></returns>
-    IEnumerator CoRealLoadScene(string name, System.Action<LoadingState, float> progress, bool isAddive)
+    private IEnumerator CoRealLoadScene(string sceneName, System.Action<LoadingState, float> progress, bool isAdditive)
     {
         if (Setting.Config.useAssetBundle)
         {
             Resource tmpRes = null;
-            Global.Instance.ResManager.LoadAsync(string.Format("Scenes/{0}.unity", name), (res) =>
+            Global.Instance.ResManager.LoadAsync($"Scenes/{sceneName}.unity", (res) =>
             {
                 tmpRes = res;
                 tmpRes.Retain();
@@ -134,30 +122,23 @@ public class SceneManager : MonoBehaviour, IManager
                 yield return null;
             }
             AsyncOperation request = null;
-            if (isAddive)
+            if (isAdditive)
             {
                 _addiveLoadRes = tmpRes;
-                UnityEngine.SceneManagement.SceneManager.LoadScene(name, UnityEngine.SceneManagement.LoadSceneMode.Additive);
+                UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName, UnityEngine.SceneManagement.LoadSceneMode.Additive);
             }
             else
             {
                 _lastLoadRes = tmpRes;
-                request = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(name);
+                request = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneName);
             }
-            if(request != null)
+
+            if (request == null) yield break;
+            while (!request.isDone)
             {
-                while (!request.isDone)
-                {
-                    if(progress != null)
-                    {
-                        progress(LoadingState.Loading, request.progress / 0.9f);
-                    }
-                    if (SceneLoading != null)
-                    {
-                        SceneLoading(LoadingState.Loading, request.progress / 0.9f);
-                    }
-                    yield return null;
-                }
+                progress?.Invoke(LoadingState.Loading, request.progress / 0.9f);
+                SceneLoading?.Invoke(LoadingState.Loading, request.progress / 0.9f);
+                yield return null;
             }
         }
         else
@@ -165,31 +146,25 @@ public class SceneManager : MonoBehaviour, IManager
 #if UNITY_EDITOR
             AsyncOperation request = null;
 
-            if (isAddive)
+            if (isAdditive)
             {
                 var parameters = new LoadSceneParameters() { loadSceneMode = LoadSceneMode.Additive, localPhysicsMode = LocalPhysicsMode.None };
-                EditorSceneManager.LoadSceneInPlayMode(FileUtil.CombinePaths(Setting.EditorBundlePath, string.Format("Scenes/{0}.unity", name)), parameters);
+                EditorSceneManager.LoadSceneInPlayMode(FileUtil.CombinePaths(Setting.EditorBundlePath,
+                    $"Scenes/{sceneName}.unity"), parameters);
             }
             else
             {
                 var parameters = new LoadSceneParameters() { loadSceneMode = LoadSceneMode.Single, localPhysicsMode = LocalPhysicsMode.None };
-                request = EditorSceneManager.LoadSceneAsyncInPlayMode(FileUtil.CombinePaths(Setting.EditorBundlePath, string.Format("Scenes/{0}.unity", name)), parameters);
+                request = EditorSceneManager.LoadSceneAsyncInPlayMode(FileUtil.CombinePaths(Setting.EditorBundlePath,
+                    $"Scenes/{sceneName}.unity"), parameters);
             }
 
-            if (request != null)
+            if (request == null) yield break;
+            while (!request.isDone)
             {
-                while (!request.isDone)
-                {
-                    if (progress != null)
-                    {
-                        progress(LoadingState.Loading, request.progress / 0.9f);
-                    }
-                    if (SceneLoading != null)
-                    {
-                        SceneLoading(LoadingState.Loading, request.progress / 0.9f);
-                    }
-                    yield return null;
-                }
+                progress?.Invoke(LoadingState.Loading, request.progress / 0.9f);
+                SceneLoading?.Invoke(LoadingState.Loading, request.progress / 0.9f);
+                yield return null;
             }
 #endif
         }

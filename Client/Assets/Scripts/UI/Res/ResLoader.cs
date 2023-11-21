@@ -1,12 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
 public partial class ResLoader : IEnumerator, System.IDisposable
 {
     private Resource _resource;
-    private bool disposed = false;
+    private bool _disposed = false;
 
     public ResLoader(string path, string name, bool isAsync)
     {
@@ -33,7 +34,7 @@ public partial class ResLoader : IEnumerator, System.IDisposable
 
     private void Dispose(bool disposing)
     {
-        if (disposed)
+        if (_disposed)
         {
             return;
         }
@@ -42,7 +43,7 @@ public partial class ResLoader : IEnumerator, System.IDisposable
             _resource.Release();
             _resource = null;
         }
-        disposed = true;
+        _disposed = true;
     }
 
     private void OnLoaded(Resource resource)
@@ -67,15 +68,13 @@ public partial class ResLoader : IEnumerator, System.IDisposable
             _resource.Release();
             _resource = null;
         }
-        disposed = false;
+        _disposed = false;
     }
 
 }
 
 public partial class ResLoader
 {
-    public static List<AssetBundleCreateRequest> requestList = new List<AssetBundleCreateRequest>();
-
 #if UNITY_EDITOR
     /// <summary>
     /// 编辑器模式下加载资源核心方法
@@ -102,15 +101,7 @@ public partial class ResLoader
         else if (System.IO.Directory.Exists(path) && string.IsNullOrEmpty(task.name))
         {
             var files = System.IO.Directory.GetFiles(path, "*.*", System.IO.SearchOption.AllDirectories);
-            var loadedFiles = new List<Object>();
-            for (var i = 0; i < files.Length; ++i)
-            {
-                if (!files[i].EndsWith(".meta"))
-                {
-                    loadedFiles.Add(AssetDatabase.LoadMainAssetAtPath(files[i]));
-                }
-            }
-            task.file = new Resource(task.path, loadedFiles.ToArray(), null, null);
+            task.file = new Resource(task.path, (from t in files where !t.EndsWith(".meta") select AssetDatabase.LoadMainAssetAtPath(t)).ToArray(), null, null);
         }
         else
         {
@@ -125,23 +116,22 @@ public partial class ResLoader
                 else
                 {
                     var assets = AssetDatabase.LoadAllAssetsAtPath(path);
-                    for (int i = 0; i < assets.Length; i++)
+                    foreach (var t in assets)
                     {
-                        if (assets[i].name == task.name)
+                        if (t.name == task.name)
                         {
-                            task.file = new Resource(task.path, task.name, assets[i], null, null);
+                            task.file = new Resource(task.path, task.name, t, null, null);
                         }
                     }
-                    if (assets == null || assets.Length == 0)
+                    if (assets.Length == 0)
                     {
                         var files = System.IO.Directory.GetFiles(path, "*.*", System.IO.SearchOption.TopDirectoryOnly);
                         foreach (var f in files)
                         {
-                            if (!f.EndsWith(".meta") && f.Contains(task.name))
-                            {
-                                var asset = AssetDatabase.LoadMainAssetAtPath(FileUtil.CombinePaths(path, task.name + System.IO.Path.GetExtension(f)));
-                                task.file = new Resource(task.path, task.name, asset, null, null);
-                            }
+                            if (f.EndsWith(".meta") || !f.Contains(task.name)) continue;
+                            
+                            var asset = AssetDatabase.LoadMainAssetAtPath(FileUtil.CombinePaths(path, task.name + System.IO.Path.GetExtension(f)));
+                            task.file = new Resource(task.path, task.name, asset, null, null);
                         }
                     }
                 }
@@ -165,12 +155,11 @@ public partial class ResLoader
     /// <returns></returns>
     public static IEnumerator CoLoadTask(LoadingTask task)
     {
-        var loadingBundles = Global.Instance.ResManager.loadingBundles;
-        var loadedBundles = Global.Instance.ResManager.loadedBundles;
-        var unloadBundleMap = Global.Instance.ResManager.unloadBundleMap;
-        var manifest = Global.Instance.ResManager.manifest;
+        var loadingBundles = Global.Instance.ResManager.LoadingBundles;
+        var loadedBundles = Global.Instance.ResManager.LoadedBundles;
+        var unloadBundleMap = Global.Instance.ResManager.UnloadBundleMap;
+        var manifest = Global.Instance.ResManager.Manifest;
 
-        ResourceBundle bundle = null;
         // 正在加载的就等加载完
         if (loadingBundles.Contains(task.hash)) {
             while (true)
@@ -183,31 +172,24 @@ public partial class ResLoader
             }
         }
         // 没有加载过的
-        if(!loadedBundles.TryGetValue(task.hash, out bundle)){
+        if(!loadedBundles.TryGetValue(task.hash, out var bundle)){
             loadingBundles.Add(task.hash);
 
             // 依赖资源是否加载完了都
             var dependencies = manifest.GetDependencies(task.hash);
             while (true)
             {
-                var loadedCount = 0;
-                for (int i = 0; i < dependencies.Length; i++)
-                {
-                    if (loadedBundles.ContainsKey(dependencies[i]))
-                    {
-                        loadedCount++;
-                    }
-                }
+                var loadedCount = dependencies.Count(t => loadedBundles.ContainsKey(t));
                 if(loadedCount == dependencies.Length)
                 {
                     break;
                 }
                 yield return null;
             }
-            BundleGroup bundleGroup;
+
             string error = null;
             var location = Global.Instance.ResManager.ToLocation(task.hash);
-            if(unloadBundleMap.TryGetValue(task.hash, out bundleGroup))
+            if(unloadBundleMap.TryGetValue(task.hash, out var bundleGroup))
             {
                 unloadBundleMap.Remove(task.hash);
             }
@@ -221,7 +203,6 @@ public partial class ResLoader
                     try
                     {
                         assetBundleRequest = AssetBundle.LoadFromFileAsync(location.path, 0, task.offset);
-                        requestList.Add(assetBundleRequest);
                         var item = manifest.GetItem(task.hash);
                         if(item != null && item.packageItem != null)
                         {
@@ -229,17 +210,16 @@ public partial class ResLoader
                             try
                             {
                                 packageAssetBundleRequest = AssetBundle.LoadFromFileAsync(packageLocation.path, 0, item.packageItem.offset);
-                                requestList.Add(packageAssetBundleRequest);
                             }
                             catch
                             {
-                                error = string.Format("加载资源发生错误! 路径：{0} Hash值{1}", packageLocation.path, item.packageItem.hash);
+                                error = $"加载资源发生错误! 路径：{packageLocation.path} Hash值{item.packageItem.hash}";
                             }
                         }
                     }
                     catch
                     {
-                        error = string.Format("加载资源发生错误! 路径：{0} Hash值{1}", task.path, task.hash);
+                        error = $"加载资源发生错误! 路径：{task.path} Hash值{task.hash}";
                     }
 
                     if(assetBundleRequest != null)
@@ -248,16 +228,14 @@ public partial class ResLoader
                         {
                             yield return null;
                         }
-                        bundleGroup.rawBundle = assetBundleRequest.assetBundle;
-                        requestList.Remove(assetBundleRequest);
+                        bundleGroup.RawBundle = assetBundleRequest.assetBundle;
                         if(packageAssetBundleRequest != null)
                         {
                             while (!packageAssetBundleRequest.isDone)
                             {
                                 yield return null;
                             }
-                            bundleGroup.packageBundle = packageAssetBundleRequest.assetBundle;
-                            requestList.Remove(packageAssetBundleRequest);
+                            bundleGroup.PackageBundle = packageAssetBundleRequest.assetBundle;
                         }
                     }
                 }
@@ -265,34 +243,34 @@ public partial class ResLoader
                 {
                     try
                     {
-                        bundleGroup.rawBundle = AssetBundle.LoadFromFile(location.path, 0, task.offset);
+                        bundleGroup.RawBundle = AssetBundle.LoadFromFile(location.path, 0, task.offset);
                         var item = manifest.GetItem(task.hash);
-                        if(item != null && item.packageItem != null)
+                        if(item?.packageItem != null)
                         {
                             var packageLocation = Global.Instance.ResManager.ToLocation(item.packageItem);
                             try
                             {
-                                bundleGroup.packageBundle = AssetBundle.LoadFromFile(packageLocation.path, 0, item.packageItem.offset);
+                                bundleGroup.PackageBundle = AssetBundle.LoadFromFile(packageLocation.path, 0, item.packageItem.offset);
                             }
                             catch
                             {
-                                error = string.Format("加载资源发生错误! 路径：{0} Hash值{1}", packageLocation.path, item.packageItem.hash);
+                                error = $"加载资源发生错误! 路径：{packageLocation.path} Hash值{item.packageItem.hash}";
                             }
                         }
                     }
                     catch
                     {
-                        error = string.Format("加载资源发生错误! 路径：{0} Hash值{1}", task.path, task.hash);
+                        error = $"加载资源发生错误! 路径：{task.path} Hash值{task.hash}";
                     }
                 }
             }
-            if(bundleGroup.rawBundle == null && bundleGroup.packageBundle == null)
+            if(bundleGroup.RawBundle == null && bundleGroup.PackageBundle == null)
             {
-                task.file = new Resource(task.path, task.name, null, null, error != null ? error : string.Format("加载资源发生错误! 路径：{0} Hash值{1}", task.path, task.hash));
+                task.file = new Resource(task.path, task.name, null, null, error ?? $"加载资源发生错误! 路径：{task.path} Hash值{task.hash}");
                 task.state = ELoadingState.Finished;
                 yield break;
             }
-            bundle = new ResourceBundle(task.hash, bundleGroup.rawBundle, bundleGroup.packageBundle, Global.Instance.ResManager);
+            bundle = new ResourceBundle(task.hash, bundleGroup.RawBundle, bundleGroup.PackageBundle, Global.Instance.ResManager);
             loadedBundles.Add(task.hash, bundle);
             loadingBundles.Remove(task.hash);
         }
@@ -307,7 +285,7 @@ public partial class ResLoader
             }
         }
 
-        for (int i = 0; i < task.dependencyRefCount; i++)
+        for (var i = 0; i < task.dependencyRefCount; i++)
         {
             bundle.Release();
         }
@@ -319,7 +297,7 @@ public partial class ResLoader
         }
 
         string name = null;
-        bool stream = bundle.isStreamedSceneAssetBundle;
+        var stream = bundle.isStreamedSceneAssetBundle;
         if (!stream)
         {
             if (!string.IsNullOrEmpty(task.name))
@@ -346,7 +324,7 @@ public partial class ResLoader
                 }
                 else
                 {
-                    AssetBundleRequest request = bundle.LoadAssetAsync(name);
+                    var request = bundle.LoadAssetAsync(name);
                     while (!request.isDone)
                     {
                         yield return null;
@@ -373,7 +351,7 @@ public partial class ResLoader
                         }
                         else
                         {
-                            AssetBundleRequest request = bundle.LoadAssetAsync(kv.Key + task.extension);
+                            var request = bundle.LoadAssetAsync(kv.Key + task.extension);
                             while (!request.isDone)
                             {
                                 yield return null;
@@ -385,8 +363,7 @@ public partial class ResLoader
                 }
                 else
                 {
-                    AssetBundleRequest request = null;
-                    var loadAllRequest = bundle.LoadAllAssetsAsync(null, out request);
+                    var loadAllRequest = bundle.LoadAllAssetsAsync(null, out var request);
                     yield return loadAllRequest;
                     if(request != null && !request.isDone)
                     {

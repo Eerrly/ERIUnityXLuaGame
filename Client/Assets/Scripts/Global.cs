@@ -1,56 +1,55 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using UnityEngine.Serialization;
 
+/// <summary>
+/// 全局管理器总类
+/// </summary>
 public class Global : Singleton<Global>
 {
-
-    private ResManager _resManager;
     /// <summary>
     /// 资源管理器
     /// </summary>
-    public ResManager ResManager => _resManager;
+    public ResManager ResManager { get; private set; }
 
-    private LuaManager _luaManager;
     /// <summary>
     /// Lua管理器
     /// </summary>
-    public LuaManager LuaManager => _luaManager;
+    public LuaManager LuaManager { get; private set; }
 
-    private UIManager _uiManager;
     /// <summary>
     /// UI管理器
     /// </summary>
-    public UIManager UIManager => _uiManager;
+    public UIManager UIManager { get; private set; }
 
-    private SceneManager _sceneManager;
     /// <summary>
     /// 场景管理器
     /// </summary>
-    public SceneManager SceneManager => _sceneManager;
+    public SceneManager SceneManager { get; private set; }
 
-    private HttpManager _httpManager;
     /// <summary>
     /// Http管理器
     /// </summary>
-    public HttpManager HttpManager => _httpManager;
+    public HttpManager HttpManager { get; private set; }
 
-    private PatchingManager _patchingManager;
     /// <summary>
     /// 热更管理器
     /// </summary>
-    public PatchingManager PatchingManager => _patchingManager;
+    public PatchingManager PatchingManager { get; private set; }
 
     /// <summary>
     /// 管理器列表
     /// </summary>
-    public List<IManager> Managers;
+    private List<IManager> _managers;
 
-    public UnityEvent OnPatchingDone;
-    public UnityEvent OnGameStart;
-    public UnityEvent OnSceneChanged;
+    [FormerlySerializedAs("OnPatchingDone")] public UnityEvent onPatchingDone;
+    [FormerlySerializedAs("OnGameStart")] public UnityEvent onGameStart;
+    [FormerlySerializedAs("OnSceneChanged")] public UnityEvent onSceneChanged;
 
     /// <summary>
     /// 初始化
@@ -60,26 +59,26 @@ public class Global : Singleton<Global>
         Application.runInBackground = true;
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
 
-        Managers = new List<IManager>(10);
-        OnGameStart = new UnityEvent();
-        OnPatchingDone = new UnityEvent();
-        OnSceneChanged = new UnityEvent();
+        _managers = new List<IManager>(10);
+        onGameStart = new UnityEvent();
+        onPatchingDone = new UnityEvent();
+        onSceneChanged = new UnityEvent();
 
         Util.GetOrAddComponent<EventSystem>(gameObject);
         Util.GetOrAddComponent<StandaloneInputModule>(gameObject);
 
-        _resManager = Util.GetOrAddComponent<ResManager>(gameObject);
-        _sceneManager = Util.GetOrAddComponent<SceneManager>(gameObject);
-        _uiManager = Util.GetOrAddComponent<UIManager>(gameObject);
-        _luaManager = Util.GetOrAddComponent<LuaManager>(gameObject);
-        _httpManager = Util.GetOrAddComponent<HttpManager>(gameObject);
-        _patchingManager = Util.GetOrAddComponent<PatchingManager>(gameObject);
-        Managers.Add(_resManager);
-        Managers.Add(_sceneManager);
-        Managers.Add(_uiManager);
-        Managers.Add(_luaManager);
-        Managers.Add(_httpManager);
-        Managers.Add(_patchingManager);
+        ResManager = Util.GetOrAddComponent<ResManager>(gameObject);
+        SceneManager = Util.GetOrAddComponent<SceneManager>(gameObject);
+        UIManager = Util.GetOrAddComponent<UIManager>(gameObject);
+        LuaManager = Util.GetOrAddComponent<LuaManager>(gameObject);
+        HttpManager = Util.GetOrAddComponent<HttpManager>(gameObject);
+        PatchingManager = Util.GetOrAddComponent<PatchingManager>(gameObject);
+        _managers.Add(ResManager);
+        _managers.Add(SceneManager);
+        _managers.Add(UIManager);
+        _managers.Add(LuaManager);
+        _managers.Add(HttpManager);
+        _managers.Add(PatchingManager);
 
         InitializeDebugLogSystem();
     }
@@ -106,38 +105,35 @@ public class Global : Singleton<Global>
     /// <returns></returns>
     private IEnumerator CoStart()
     {
-        for (int i = 0; i < Managers.Count; i++)
+        foreach (var t in _managers)
         {
-            Managers[i].IsInitialized = false;
+            t.IsInitialized = false;
         }
-        for (int i = 0; i < Managers.Count; i++)
+        foreach (var t in _managers)
         {
-            Managers[i].OnInitialize();
+            t.OnInitialize();
         }
         while (true)
         {
-            var _IsAllInitialized = true;
-            for (int i = 0; i < Managers.Count; i++)
+            var isAllInitialized = true;
+            foreach (var t in _managers.Where(t => !t.IsInitialized))
             {
-                if (!Managers[i].IsInitialized)
-                {
-                    _IsAllInitialized = false;
-                }
+                isAllInitialized = false;
             }
-            if (_IsAllInitialized)
+            if (isAllInitialized)
             {
                 break;
             }
             yield return null;
         }
 
-        OnGameStart.Invoke();
+        onGameStart.Invoke();
     }
 
     /// <summary>
     /// 初始化日志系统
     /// </summary>
-    public void InitializeDebugLogSystem()
+    private void InitializeDebugLogSystem()
     {
         try
         {
@@ -164,7 +160,7 @@ public class Global : Singleton<Global>
             }
             console.gameObject.SetActive(true);
 #if UNITY_DEBUG
-            Logger.Log(LogLevel.Info, "创建日志 - 时间：" + System.DateTime.Now.ToString());
+            Logger.Log(LogLevel.Info, "创建日志 - 时间：" + System.DateTime.Now.ToString(CultureInfo.InvariantCulture));
 #endif
         }
         catch(System.Exception e)
@@ -179,11 +175,11 @@ public class Global : Singleton<Global>
     /// </summary>
     public override void OnRelease()
     {
-        for (int i = Managers.Count - 1; i >= 0; i--)
+        for (int i = _managers.Count - 1; i >= 0; i--)
         {
             try
             {
-                Managers[i].OnRelease();
+                _managers[i].OnRelease();
             }
             catch (System.Exception e)
             {

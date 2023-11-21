@@ -6,8 +6,8 @@ public class Main : MonoBehaviour
 
     void Start()
     {
-        Global.Instance.OnGameStart.AddListener(LuaStart);
-        Global.Instance.OnPatchingDone.AddListener(OnPatchingDone);
+        Global.Instance.onGameStart.AddListener(LuaStart);
+        Global.Instance.onPatchingDone.AddListener(OnPatchingDone);
         Global.Instance.Run();
     }
 

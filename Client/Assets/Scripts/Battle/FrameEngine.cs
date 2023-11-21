@@ -40,7 +40,7 @@ public class FrameEngine
     public void StartEngine(float frameInterval)
     {
         SetFrameInterval(frameInterval);
-        BattleManager.mainThreadId = Thread.CurrentThread.ManagedThreadId;
+        BattleManager.MainThreadId = Thread.CurrentThread.ManagedThreadId;
         _logicThread = new Thread(new ThreadStart(LogicThreadUpdate));
         _logicThread.IsBackground = true;
         _logicThread.Start();

@@ -15,7 +15,7 @@ public class ResUtil
     /// <summary>
     /// 可热更资源根目录（小写）
     /// </summary>
-    public static readonly string ASSETS_SOURCES_LOWER_PATH = "assets/sources/";
+    public const string AssetsSourcesLowerPath = "assets/sources/";
 
     public static string GetAtlasPathBySpritePath(string spritePath)
     {
@@ -48,20 +48,17 @@ public class ResUtil
     /// <param name="name">AB包名</param>
     /// <param name="tracker">AB包名的栈</param>
     /// <exception cref="System.Exception"></exception>
-    private static void CheckLoop(AssetBundleManifest manifest, Dictionary<string, string> hash2Name, string name, Stack<string> tracker)
+    private static void CheckLoop(AssetBundleManifest manifest, IReadOnlyDictionary<string, string> hash2Name, string name, Stack<string> tracker)
     {
-        foreach (var sub in tracker)
+        if (tracker.Any(sub => name == sub))
         {
-            if (name == sub)
+            var sb = new System.Text.StringBuilder();
+            tracker.Push(name);
+            while (tracker.Count > 0)
             {
-                var sb = new System.Text.StringBuilder();
-                tracker.Push(name);
-                while (tracker.Count > 0)
-                {
-                    sb.AppendLine(hash2Name[tracker.Pop()]);
-                }
-                throw new System.Exception("出现循环依赖！！\n" + sb.ToString());
+                sb.AppendLine(hash2Name[tracker.Pop()]);
             }
+            throw new System.Exception("出现循环依赖！！\n" + sb.ToString());
         }
 
         // AB包名入栈，如果这个AB包名的依赖关系中又包含此AB包名，则为循环依赖，抛出异常 （如果没有循环依赖，栈顶为依赖关系的最后一环）
@@ -83,13 +80,13 @@ public class ResUtil
     /// <summary>
     /// 构建Lua脚本资源
     /// </summary>
-    public static void BuildLuaScripts()
+    private static void BuildLuaScripts()
     {
         var start = System.DateTime.Now;
         try
         {
             var files = Directory.GetFiles(Setting.EditorLuaScriptRoot, "*.lua", SearchOption.AllDirectories).ToList();
-            if (!(ComplieFiles(files, "32", true) && ComplieFiles(files, "64", true)))
+            if (!(CompilingLuaScripts(files, "32", true) && CompilingLuaScripts(files, "64", true)))
             {
                 Debug.LogError("构建Lua脚本发生错误！！");
             }
@@ -112,7 +109,7 @@ public class ResUtil
     /// <param name="tag">系统架构</param>
     /// <param name="checkError">是否检测Lua错误</param>
     /// <returns></returns>
-    private static bool ComplieFiles(List<string> files, string tag, bool checkError)
+    private static bool CompilingLuaScripts(IReadOnlyList<string> files, string tag, bool checkError)
     {
         var luaTargetDirectory = FileUtil.CombinePaths(Application.dataPath.Replace("/Assets", ""), Setting.EditorScriptBundleName, tag);
         if (!Directory.Exists(luaTargetDirectory))
@@ -126,41 +123,40 @@ public class ResUtil
         var L = XLua.LuaDLL.Lua.luaL_newstate();
         try
         {
-            for (int i = 0; i < files.Count; i++)
+            foreach (var t in files)
             {
-                var targetFile = FileUtil.CombinePaths(luaTargetDirectory, files[i].Replace(".lua", ".bytes").Replace(Setting.EditorLuaScriptRoot, ""));
-                var index = targetFile.LastIndexOf("/");
+                var targetFile = FileUtil.CombinePaths(luaTargetDirectory, t.Replace(".lua", ".bytes").Replace(Setting.EditorLuaScriptRoot, ""));
+                var index = targetFile.LastIndexOf("/", StringComparison.Ordinal);
                 var targetFileDir = targetFile.Substring(0, index);
                 if (!Directory.Exists(targetFileDir))
                 {
                     FileUtil.CreateDirectory(targetFileDir);
                 }
-                if (!Directory.Exists(files[i]))
+                if (Directory.Exists(t)) continue;
+                
+                var bytes = File.ReadAllBytes(t);
+                // 如果前3个字节为 0xEF、0xBB、0xBF，说明该文件以UTF-8编码，且包含BOM（用于标识文件字节序的特殊字节序列）。为了去除BOM，则从第4个字节开始
+                if (bytes.Length > 3 && bytes[0] == 0xEF && bytes[1] == 0xBB && bytes[2] == 0xBF)
                 {
-                    var bytes = File.ReadAllBytes(files[i]);
-                    // 如果前3个字节为 0xEF、0xBB、0xBF，说明该文件以UTF-8编码，且包含BOM（用于标识文件字节序的特殊字节序列）。为了去除BOM，则从第4个字节开始
-                    if (bytes.Length > 3 && bytes[0] == 0xEF && bytes[1] == 0xBB && bytes[2] == 0xBF)
-                    {
-                        var temp = new byte[bytes.Length - 3];
-                        Array.Copy(bytes, 3, temp, 0, bytes.Length - 3);
-                        bytes = temp;
-                    }
-                    if (checkError)
-                    {
-                        if (XLua.LuaDLL.Lua.xluaL_loadbuffer(L, bytes, bytes.Length, files[i]) != 0)
-                        {
-                            hasError = true;
-                            var error = XLua.LuaDLL.Lua.lua_tostring(L, -1);
-                            UnityEngine.Debug.LogError(error);
-                        }
-                    }
-                    if (Util.ExecuteBat(Path.GetDirectoryName(luajit), luajit, string.Format("{0} {1} {2}", "-b", files[i], targetFile)) == 1)
-                    {
-                        hasError = true;
-                        UnityEngine.Debug.LogError("LuaJit编译脚本发生错误！ 脚本：" + files[i]);
-                    }
+                    var temp = new byte[bytes.Length - 3];
+                    Array.Copy(bytes, 3, temp, 0, bytes.Length - 3);
+                    bytes = temp;
+                }
+                // 加载Lua脚本 看是否有错误
+                if (checkError && XLua.LuaDLL.Lua.xluaL_loadbuffer(L, bytes, bytes.Length, t) != 0)
+                {
+                    hasError = true;
+                    var error = XLua.LuaDLL.Lua.lua_tostring(L, -1);
+                    UnityEngine.Debug.LogError(error);
+                }
+                // 编译Lua脚本
+                if (Util.ExecuteBat(Path.GetDirectoryName(luajit), luajit, $"-b {t} {targetFile}") == 1)
+                {
+                    hasError = true;
+                    UnityEngine.Debug.LogError("LuaJit编译脚本发生错误！ 脚本：" + t);
                 }
             }
+
             AssetDatabase.ImportAsset(luaTargetDirectory, ImportAssetOptions.Default);
         }
         catch(System.Exception e)
@@ -183,9 +179,9 @@ public class ResUtil
         var start = System.DateTime.Now;
 
         var version = PatchUtil.GetGitVersion();
-        var version_path = FileUtil.CombinePaths(Setting.EditorResourcePath, Setting.EditorConfigPath, Constant.VERSION_TXT_NAME);
-        File.WriteAllText(version_path, version);
-        AssetDatabase.ImportAsset(version_path, ImportAssetOptions.ForceUpdate);
+        var versionPath = FileUtil.CombinePaths(Setting.EditorResourcePath, Setting.EditorConfigPath, Constant.VERSION_TXT_NAME);
+        File.WriteAllText(versionPath, version);
+        AssetDatabase.ImportAsset(versionPath, ImportAssetOptions.ForceUpdate);
 
         var cfg = Util.LoadConfig<BuildToolsConfig>(Constant.CLIENT_CONFIG_NAME);
         var bundleList = new List<AssetBundleBuild>();
@@ -210,7 +206,7 @@ public class ResUtil
             foreach (var item in items)
             {
                 var path = FileUtil.Normalized(item).ToLower();
-                var keyPath = path.Replace(ResUtil.ASSETS_SOURCES_LOWER_PATH, "");
+                var keyPath = path.Replace(ResUtil.AssetsSourcesLowerPath, "");
                 if (keyPath.EndsWith(".meta"))
                 {
                     continue;
@@ -270,10 +266,10 @@ public class ResUtil
         var mainBundleItems = new List<ManifestItem>(bundleNames.Length);
 
         // 循环检测依赖
-        for (var i = 0; i < bundleNames.Length; ++i)
+        foreach (var t in bundleNames)
         {
             var tracker = new Stack<string>();
-            CheckLoop(manifest, hash2Name, bundleNames[i], tracker);
+            CheckLoop(manifest, hash2Name, t, tracker);
         }
 
         if (Directory.Exists(Setting.StreamingBundleRoot))
@@ -290,38 +286,37 @@ public class ResUtil
         var head = new byte[] { 0xAA, 0xBB, 0x10, 0x12 };
         abMainFile.Write(head, 0, head.Length);
 
-        uint offset = (uint)head.Length;
-        for (int i = 0; i < bundleNames.Length; i++)
+        var offset = (uint)head.Length;
+        foreach (var t in bundleNames)
         {
-            if (mainBundleList.Contains(bundleNames[i]))
+            if (!mainBundleList.Contains(t)) continue;
+            
+            var dependencies = manifest.GetAllDependencies(t);
+            foreach (var t1 in dependencies)
             {
-                var dependencies = manifest.GetAllDependencies(bundleNames[i]);
-                for (int j = 0; j < dependencies.Length; j++)
+                if (!mainBundleList.Contains(t1))
                 {
-                    if (!mainBundleList.Contains(dependencies[j]))
-                    {
-                        mainBundleList.Add(dependencies[j]);
-                    }
+                    mainBundleList.Add(t1);
                 }
             }
         }
 
         // 合包
-        for (int i = 0; i < bundleNames.Length; i++)
+        foreach (var t in bundleNames)
         {
-            var hash = bundleNames[i].Substring(0, bundleNames[i].Length - 2);
-            var bytes = File.ReadAllBytes(FileUtil.CombinePaths(Setting.EditorBundleBuildCachePath, bundleNames[i]));
-            if (mainBundleList.Contains(bundleNames[i]))
+            var hash = t.Substring(0, t.Length - 2);
+            var bytes = File.ReadAllBytes(FileUtil.CombinePaths(Setting.EditorBundleBuildCachePath, t));
+            if (mainBundleList.Contains(t))
             {
                 abMainFile.Write(bytes, 0, bytes.Length);
             }
-            var strDependencies = manifest.GetAllDependencies(bundleNames[i]);
+            var strDependencies = manifest.GetAllDependencies(t);
             var uintDependencies = new uint[strDependencies.Length];
-            for (int j = 0; j < strDependencies.Length; j++)
+            for (var i = 0; i < strDependencies.Length; i++)
             {
-                uintDependencies[j] = uint.Parse(strDependencies[j].Replace(".s", ""));
+                uintDependencies[i] = uint.Parse(strDependencies[i].Replace(".s", ""));
             }
-            if (mainBundleList.Contains(bundleNames[i]))
+            if (mainBundleList.Contains(t))
             {
                 mainBundleItems.Add(new ManifestItem()
                 {
@@ -329,9 +324,9 @@ public class ResUtil
                     dependencies = uintDependencies,
                     offset = offset,
                     size = bytes.Length,
-                    directories = configItemMap[bundleNames[i]].directories,
-                    extension = configItemMap[bundleNames[i]].extension,
-                    packageResourcePath = hash2Path.ContainsKey(bundleNames[i]) ? hash2Path[bundleNames[i]] : string.Empty,
+                    directories = configItemMap[t].directories,
+                    extension = configItemMap[t].extension,
+                    packageResourcePath = hash2Path.TryGetValue(t, out var value) ? value : string.Empty,
                     md5 = Util.MD5(bytes),
                 });
             }
@@ -385,7 +380,7 @@ public class ResUtil
             foreach (var item in files)
             {
                 var path = FileUtil.Normalized(item).ToLower();
-                var keyPath = path.Replace(ResUtil.ASSETS_SOURCES_LOWER_PATH, "");
+                var keyPath = path.Replace(ResUtil.AssetsSourcesLowerPath, "");
                 if (keyPath.EndsWith(".meta"))
                 {
                     continue;
@@ -418,14 +413,14 @@ public class ResUtil
                             continue;
                         }
 
-                        var patchPath = patchItem.Replace('\\', '/').ToLower().Replace(ResUtil.ASSETS_SOURCES_LOWER_PATH, "");
+                        var patchPath = patchItem.Replace('\\', '/').ToLower().Replace(ResUtil.AssetsSourcesLowerPath, "");
                         if(patchPath.StartsWith("lua/32/", StringComparison.OrdinalIgnoreCase) || patchPath.StartsWith("lua/64/", StringComparison.OrdinalIgnoreCase))
                         {
                             patchPath = patchPath.Substring(7, patchPath.Length - 7).Replace(".bytes", ".lua");
                         }
                         if (patchList.Contains(patchPath))
                         {
-                            patchingNoteList.AppendLine(string.Format("patch:{0}", patchItem));
+                            patchingNoteList.AppendLine($"patch:{patchItem}");
                             newList.Add(patchItem);
                         }
                     }
@@ -465,11 +460,11 @@ public class ResUtil
             foreach (var file in files)
             {
                 var rawFile = file.Replace("\\", "/");
-                var keyPath = rawFile.ToLower().Replace(ResUtil.ASSETS_SOURCES_LOWER_PATH, "");
+                var keyPath = rawFile.ToLower().Replace(ResUtil.AssetsSourcesLowerPath, "");
                 var deps = AssetDatabase.GetDependencies(rawFile, false);
                 foreach (var dep in deps)
                 {
-                    var depKeyPath = dep.ToLower().Replace("\\", "/").Replace(ResUtil.ASSETS_SOURCES_LOWER_PATH, "");
+                    var depKeyPath = dep.ToLower().Replace("\\", "/").Replace(ResUtil.AssetsSourcesLowerPath, "");
                     List<string> list = null;
                     if (!depMap.TryGetValue(depKeyPath, out list))
                     {
@@ -487,18 +482,15 @@ public class ResUtil
             while (checkQueue.Count > 0)
             {
                 var patch = checkQueue.Dequeue();
-                if (depMap.ContainsKey(patch))
+                if (!depMap.TryGetValue(patch, value: out var list)) continue;
+                
+                foreach (var parent in list)
                 {
-                    var list = depMap[patch];
-                    foreach (var parent in list)
+                    var key = Util.HashPath(parent) + ".s";
+                    if (configMap.TryGetValue(key, out _) && !patchMap.ContainsKey(parent))
                     {
-                        var key = Util.HashPath(parent) + ".s";
-                        BuildToolsConfig.BuildToolsConfigItem item = null;
-                        if (configMap.TryGetValue(key, out item) && !patchMap.ContainsKey(parent))
-                        {
-                            patchMap.Add(parent, "");
-                            patchingNoteList.AppendLine(string.Format("patch:{0}", parent));
-                        }
+                        patchMap.Add(parent, "");
+                        patchingNoteList.AppendLine($"patch:{parent}");
                     }
                 }
             }
@@ -525,35 +517,34 @@ public class ResUtil
 
         for (var i = 0; i < bundleNames.Length; ++i)
         {
-            var isPatchAB = bundleNames[i].EndsWith(".p");
-            bundleNames[i] = isPatchAB ? bundleNames[i].Replace(".p", "") : bundleNames[i];
+            var isPatchAb = bundleNames[i].EndsWith(".p");
+            bundleNames[i] = isPatchAb ? bundleNames[i].Replace(".p", "") : bundleNames[i];
             var hash = bundleNames[i].Substring(0, bundleNames[i].Length - 2);
-            var filnalName = hash + ".s";
-            if (patchMap.ContainsKey(hash2Path[filnalName]))
+            var finalName = hash + ".s";
+            if (!patchMap.ContainsKey(hash2Path[finalName])) continue;
+            
+            var destFile = FileUtil.CombinePaths(versionPatchFilePath, bundleNames[i]);
+            var sourceBytes = File.ReadAllBytes(FileUtil.CombinePaths(Setting.EditorBundleBuildCachePath, isPatchAb ? bundleNames[i] + ".p" : bundleNames[i]));
+            if (File.Exists(destFile)) File.Delete(destFile);
+            File.WriteAllBytes(destFile, sourceBytes);
+
+            var nameDependencies = manifest.GetAllDependencies(bundleNames[i]);
+            var dependencies = new uint[nameDependencies.Length];
+            for (var j = 0; j < nameDependencies.Length; ++j)
             {
-                var destFile = FileUtil.CombinePaths(versionPatchFilePath, bundleNames[i]);
-                var sourceBytes = File.ReadAllBytes(FileUtil.CombinePaths(Setting.EditorBundleBuildCachePath, isPatchAB ? bundleNames[i] + ".p" : bundleNames[i]));
-                if (File.Exists(destFile)) File.Delete(destFile);
-                File.WriteAllBytes(destFile, sourceBytes);
-
-                var nameDependencies = manifest.GetAllDependencies(bundleNames[i]);
-                var dependencies = new uint[nameDependencies.Length];
-                for (var j = 0; j < nameDependencies.Length; ++j)
-                {
-                    dependencies[j] = uint.Parse(nameDependencies[j].Replace(".s", "").Replace(".p", ""));
-                }
-
-                var name = hash + ".s";
-                items.Add(new ManifestItem() {
-                    hash = uint.Parse(hash),
-                    dependencies = dependencies,
-                    offset = 0,
-                    size = sourceBytes.Length,
-                    directories = configMap[bundleNames[i]].directories,
-                    extension = configMap[bundleNames[i]].extension,
-                    md5 = Util.MD5(sourceBytes),
-                });
+                dependencies[j] = uint.Parse(nameDependencies[j].Replace(".s", "").Replace(".p", ""));
             }
+
+            var name = hash + ".s";
+            items.Add(new ManifestItem() {
+                hash = uint.Parse(hash),
+                dependencies = dependencies,
+                offset = 0,
+                size = sourceBytes.Length,
+                directories = configMap[bundleNames[i]].directories,
+                extension = configMap[bundleNames[i]].extension,
+                md5 = Util.MD5(sourceBytes),
+            });
         }
 
         bundleManifestFile.items = items.ToArray();
@@ -569,31 +560,34 @@ public class ResUtil
         File.WriteAllText(FileUtil.CombinePaths(patchFilePath, "v.bytes"), resourceVersion.ToString() + "," + Util.MD5(File.ReadAllBytes(manifestFilePath)));
 
         var compressed = new MemoryStream();
-        ZipOutputStream compressor = new ZipOutputStream(compressed);
+        var compressor = new ZipOutputStream(compressed);
         var fileMap = Directory.GetFiles(patchFilePath, "*.*", SearchOption.AllDirectories);
         foreach (var file in fileMap)
         {
-            var _filename = file.Substring(patchFilePath.Length, file.Length - patchFilePath.Length);
-            var _entry = new ZipEntry(_filename);
-            _entry.DateTime = new DateTime();
-            _entry.DosTime = 0;
-            compressor.PutNextEntry(_entry);
+            var filename = file.Substring(patchFilePath.Length, file.Length - patchFilePath.Length);
+            var entry = new ZipEntry(filename)
+            {
+                DateTime = new DateTime(),
+                DosTime = 0
+            };
+            compressor.PutNextEntry(entry);
             if (Directory.Exists(file))
             {
                 continue;
             }
-            var _bytes = File.ReadAllBytes(file);
-            var offset = 0;
-            compressor.Write(_bytes, offset, _bytes.Length - offset);
+            var bytes = File.ReadAllBytes(file);
+            compressor.Write(bytes, 0, bytes.Length);
         }
         if (patchingNoteList.Length > 0)
         {
-            var filename = "NOTE_" + resourceVersion + ".txt";
-            var entry = new ZipEntry(filename);
-            entry.DateTime = new DateTime();
-            entry.DosTime = 0;
+            var filename = $"NOTE_{resourceVersion}.txt";
+            var entry = new ZipEntry(filename)
+            {
+                DateTime = new DateTime(),
+                DosTime = 0
+            };
             compressor.PutNextEntry(entry);
-            var bytes = System.Text.UTF8Encoding.Default.GetBytes(patchingNoteList.ToString());
+            var bytes = System.Text.Encoding.Default.GetBytes(patchingNoteList.ToString());
             compressor.Write(bytes, 0, bytes.Length);
         }
         
@@ -606,10 +600,10 @@ public class ResUtil
         }
         var fileBytes = new byte[compressed.Length];
         Array.Copy(compressed.GetBuffer(), fileBytes, fileBytes.Length);
-        var fileName = string.Format("{0}/{1}-{2}-{3}.zip",
+        var fileName = string.Format("{0}/{1}-{2:yyyy.MM.dd_HH.mm.s}-{3}.zip",
             Setting.EditorPatchPath,
-            resourceVersion,
-            DateTime.Now.ToString("yyyy.MM.dd_HH.mm.s"),
+            resourceVersion, 
+            DateTime.Now,
             Util.MD5(fileBytes));
         using(var fs = new FileStream(fileName, FileMode.Create, FileAccess.Write))
         {
@@ -620,10 +614,10 @@ public class ResUtil
         UnityEngine.Debug.Log("构建热更资源总耗时：" + (System.DateTime.Now - start).TotalMilliseconds + " ms");
     }
 
-    public struct DumpCacheNode
+    private struct DumpCacheNode
     {
-        public string name;
-        public ResourceBundle bundle;
+        public string Name;
+        public ResourceBundle Bundle;
     }
 
     public static string Dump()
@@ -636,33 +630,32 @@ public class ResUtil
         var list = new List<DumpCacheNode>();
         var r = Global.Instance.ResManager;
 
-        using (var e = r.loadedBundles.GetEnumerator())
+        using (var e = r.LoadedBundles.GetEnumerator())
         {
             while (e.MoveNext())
             {
-                string name = e.Current.Key.ToString();
-                using (var ee = r.cacheFileMap.GetEnumerator())
+                var name = e.Current.Key.ToString();
+                using (var ee = r.CacheFileMap.GetEnumerator())
                 {
                     while (ee.MoveNext())
                     {
-                        if (ee.Current.Value == e.Current.Key)
-                        {
-                            name = name + "(" + ee.Current.Key + ")";
-                            break;
-                        }
+                        if (ee.Current.Value != e.Current.Key) continue;
+                        
+                        name = name + "(" + ee.Current.Key + ")";
+                        break;
                     }
                 }
-                list.Add(new DumpCacheNode() { name = name, bundle = e.Current.Value });
+                list.Add(new DumpCacheNode() { Name = name, Bundle = e.Current.Value });
             }
         }
 
-        list.Sort((a, b) => { return a.name.CompareTo(b.name); });
+        list.Sort((a, b) => string.Compare(a.Name, b.Name, StringComparison.Ordinal));
 
         using (var e = list.GetEnumerator())
         {
             while (e.MoveNext())
             {
-                builder.AppendLine(e.Current.name.ToString());
+                builder.AppendLine(e.Current.Name.ToString());
             }
         }
 

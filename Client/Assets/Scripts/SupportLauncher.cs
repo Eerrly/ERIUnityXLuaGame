@@ -18,7 +18,7 @@ public class SupportLauncher : MonoBehaviour
         PlayerEntity playerEntity = (PlayerEntity)battleEntity.FindEntity(BattleConstant.SelfID);
         GUI.color = Color.green;
         GUI.Label(new Rect(20, index++ * nGuiLabelHeight, nGuiLabelWidth, nGuiLabelHeight),
-            string.Format("[player]\tid:{0} logicFrame:{1} time:{2:N3}", playerEntity.ID, BattleManager.Instance.logicFrame, battleEntity.time));
+            string.Format("[player]\tid:{0} logicFrame:{1} time:{2:N3}", playerEntity.ID, BattleManager.Instance.LogicFrame, battleEntity.time));
         GUI.Label(new Rect(20, index++ * nGuiLabelHeight, nGuiLabelWidth, nGuiLabelHeight),
             string.Format("[input]\tpos:{0}, yaw:{1}, key:{2}", playerEntity.input.pos, playerEntity.input.yaw, playerEntity.input.key));
         GUI.Label(new Rect(20, index++ * nGuiLabelHeight, nGuiLabelWidth, nGuiLabelHeight),

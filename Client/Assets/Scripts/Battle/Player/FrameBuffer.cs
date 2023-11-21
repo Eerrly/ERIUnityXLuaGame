@@ -2,7 +2,7 @@ public class FrameBuffer
 {
 
     /// <summary>
-    /// ÊäÈë
+    /// è¾“å…¥
     /// </summary>
     public struct Input
     {
@@ -14,19 +14,19 @@ public class FrameBuffer
         /// key  :   3 bit   :   (read & 0x0E) >> 1
         /// pos  :   1 bit   :   (read & 0x01)
         /// </summary>
-        public byte raw;
+        private byte raw;
 
         /// <summary>
         /// 8  1  2
         ///  \ | /
-        /// 7¡ª¡ª0¡ª¡ª3
+        /// 7â€”â€”0â€”â€”3
         ///  / | \
         /// 6  5  4
         /// </summary>
         public byte yaw
         {
-            get { return (byte)((0xF0 & raw) >> 4); }
-            set { raw = (byte)((raw & ~0xF0) | ((0xF & value) << 4)); }
+            get => (byte)((0xF0 & raw) >> 4);
+            set => raw = (byte)((raw & ~0xF0) | ((0xF & value) << 4));
         }
 
         /// <summary>
@@ -34,17 +34,17 @@ public class FrameBuffer
         /// </summary>
         public byte key
         {
-            get { return (byte)((0x0E & raw) >> 1); }
-            set { raw = (byte)((raw & ~0x0E) | ((0x7 & value) << 1)); }
+            get => (byte)((0x0E & raw) >> 1);
+            set => raw = (byte)((raw & ~0x0E) | ((0x7 & value) << 1));
         }
 
         /// <summary>
-        /// Íæ¼ÒID
+        /// ç©å®¶ID
         /// </summary>
         public byte pos
         {
-            get { return (byte)(0x01 & raw); }
-            set { raw = (byte)((raw & ~0x01) | value); }
+            get => (byte)(0x01 & raw);
+            set => raw = (byte)((raw & ~0x01) | value);
         }
 
         public Input(byte value)
@@ -59,7 +59,7 @@ public class FrameBuffer
 
         public override string ToString()
         {
-            return string.Format("pos:{0}, raw:{1}, yaw:{2}, btn:{3}", pos, raw, yaw, key);
+            return $"pos:{pos}, raw:{raw}, yaw:{yaw}, btn:{key}";
         }
 
         public byte ToByte()
@@ -75,7 +75,7 @@ public class FrameBuffer
     }
 
     /// <summary>
-    /// Ö¡Êı¾İ
+    /// å¸§æ•°æ®
     /// </summary>
     public struct Frame
     {
@@ -208,10 +208,9 @@ public class FrameBuffer
     {
         unsafe
         {
-            var currentFrame = 0;
             fixed (byte* dest = &buffer[(frame % capacity) * frameSize])
             {
-                currentFrame = *(int*)dest;
+                var currentFrame = *(int*)dest;
                 if(frame != currentFrame)
                 {
                     return false;
@@ -226,18 +225,17 @@ public class FrameBuffer
         unsafe
         {
             result.playerCount = playerCount;
-            var currentFrame = 0;
             fixed(byte* dest = &buffer[(frame % capacity) * frameSize])
             {
                 if(frame != 0 && _lastGetFrame.frame + 1 != frame)
                 {
-                    Logger.Log(LogLevel.Error, $"È¡Ö¡Êı¾İ±ØĞëÖğÖ¡ ÉÏÒ»Ö¡:{_lastGetFrame.frame} ÒªÈ¡µÄÖ¡:{frame}");
+                    Logger.Log(LogLevel.Error, $"å–å¸§æ•°æ®å¿…é¡»é€å¸§ ä¸Šä¸€å¸§:{_lastGetFrame.frame} è¦å–çš„å¸§:{frame}");
                     return false;
                 }
-                currentFrame = *(int*)dest;
+                var currentFrame = *(int*)dest;
                 if(frame != currentFrame)
                 {
-                    Logger.Log(LogLevel.Error, $"ÕÒ²»µ½ÒªÈ¡µÄÖ¡:{frame}");
+                    Logger.Log(LogLevel.Error, $"æ‰¾ä¸åˆ°è¦å–çš„å¸§:{frame}");
                     return false;
                 }
                 result.frame = currentFrame;
@@ -271,14 +269,13 @@ public class FrameBuffer
             {
                 return true;
             }
-            var currentFrame = 0;
+
             fixed(byte* dest = &buffer[(frame % capacity) * frameSize])
             {
-                currentFrame = *(int*)dest;
                 diff = frame - _lastSetFrameIndex;
                 if(diff > 1)
                 {
-                    Logger.Log(LogLevel.Error, $"´æÖ¡Êı¾İ±ØĞëÖğÖ¡ ÉÏÒ»Ö¡:{_lastSetFrameIndex} Òª´æµÄÖ¡:{frame}");
+                    Logger.Log(LogLevel.Error, $"å­˜å¸§æ•°æ®å¿…é¡»é€å¸§ ä¸Šä¸€å¸§:{_lastSetFrameIndex} è¦å­˜çš„å¸§:{frame}");
                     return false;
                 }
                 if(playerCount > 0)

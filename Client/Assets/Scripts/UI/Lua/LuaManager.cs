@@ -8,25 +8,25 @@ public class LuaManager : MonoBehaviour, IManager
 {
     public bool IsInitialized { get; set; }
 
-    private Dictionary<string, byte[]> _codes = new Dictionary<string, byte[]>();
-    private LuaEnv _luaEnv;
+    private readonly Dictionary<string, byte[]> _codes = new Dictionary<string, byte[]>();
+
     /// <summary>
     /// Lua与C#的桥接对象
     /// </summary>
-    public LuaEnv luaEnv => _luaEnv;
+    public LuaEnv luaEnv { get; private set; }
 
     /// <summary>
     /// 将所有预制好的组件与Lua对象进行绑定
     /// </summary>
     /// <param name="view">Lua执行器</param>
-    /// <param name="name2id">Name-Id的字典</param>
+    /// <param name="name2ID">Name-Id的字典</param>
     /// <param name="instance">Lua对象</param>
-    public void BindInstance(LuaBehaviour view, Dictionary<string, int> name2id, object instance)
+    public void BindInstance(LuaBehaviour view, Dictionary<string, int> name2ID, object instance)
     {
-        LuaTable self = (LuaTable)instance;
+        var self = (LuaTable)instance;
         self.Set<string, LuaBehaviour>("View", view);
         var id = luaEnv.NewTable();
-        using(var e = name2id.GetEnumerator())
+        using(var e = name2ID.GetEnumerator())
         {
             while (e.MoveNext())
             {
@@ -41,8 +41,7 @@ public class LuaManager : MonoBehaviour, IManager
     /// </summary>
     public void OnRelease() {
         _codes.Clear();
-        if (_luaEnv != null)
-            _luaEnv.Dispose();
+        luaEnv?.Dispose();
         IsInitialized = false;
     }
 
@@ -52,8 +51,8 @@ public class LuaManager : MonoBehaviour, IManager
     public void OnInitialize()
     {
         _codes.Clear();
-        _luaEnv = new LuaEnv();
-        _luaEnv.AddLoader(Loader);
+        luaEnv = new LuaEnv();
+        luaEnv.AddLoader(Loader);
         StartCoroutine(nameof(CoLoadScript));
     }
 
@@ -62,49 +61,25 @@ public class LuaManager : MonoBehaviour, IManager
     /// </summary>
     /// <param name="path">Lua脚本路径</param>
     /// <returns>字节流</returns>
-    public byte[] Loader(ref string path)
+    private byte[] Loader(ref string path)
     {
         var key = path.ToLower().Replace(".", "/");
         if (Setting.Config.useAssetBundle)
         {
-            byte[] code;
-            if(_codes.TryGetValue(key, out code))
+            if(_codes.TryGetValue(key, out var code))
             {
                 return code;
             }
             return null;
         }
-        else
-        {
-            // 在不使用AB包加载资源时，直接加载对应的Lua文件
-            if (Directory.Exists(Setting.EditorLuaScriptRoot))
-            {
-                var filePath = Setting.EditorLuaScriptRoot + "/" + key.Replace(".", "/") + ".lua";
-                if (File.Exists(filePath))
-                {
-                    for (int i = 0; i < 3; i++)
-                    {
-                        byte[] result = null;
-                        var ok = true;
-                        try
-                        {
-                            result = File.ReadAllBytes(filePath);
-                            break;
-                        }
-                        catch
-                        {
-                            ok = false;
-                        }
-                        if (ok)
-                        {
-                            return result;
-                        }
-                    }
-                    return File.ReadAllBytes(filePath);
-                }
-            }
-            return null;
-        }
+
+        // 在不使用AB包加载资源时，直接加载对应的Lua文件
+        if (!Directory.Exists(Setting.EditorLuaScriptRoot)) return null;
+            
+        var filePath = Setting.EditorLuaScriptRoot + "/" + key.Replace(".", "/") + ".lua";
+        if (!File.Exists(filePath)) return null;
+            
+        return File.ReadAllBytes(filePath);
     }
 
     /// <summary>
@@ -120,7 +95,7 @@ public class LuaManager : MonoBehaviour, IManager
             var resource = (Resource)loader.Current;
             try
             {
-                resource.LoadScript(_codes);
+                resource?.LoadScript(_codes);
             }
             catch (System.Exception e)
             {
@@ -129,12 +104,12 @@ public class LuaManager : MonoBehaviour, IManager
             loader.Dispose();
             loader = null;
 
-            _luaEnv.DoString("require('preinit')");
+            luaEnv.DoString("require('preinit')");
             IsInitialized = true;
         }
         else
         {
-            _luaEnv.DoString("require('preinit')");
+            luaEnv.DoString("require('preinit')");
             IsInitialized = true;
         }
     }

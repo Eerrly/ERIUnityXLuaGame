@@ -10,15 +10,13 @@ public partial class UIManager : MonoBehaviour, IManager
 
     private static int _dynamicID = 1;
 
-    private Camera _camera;
-    public Camera UICamera => _camera;
+    public Camera UICamera { get; private set; }
 
-    private Camera _noneCamera;
-    public Camera NoneCamera => _noneCamera;
+    public Camera NoneCamera { get; private set; }
 
-    private Dictionary<int, UIWindow> _windows = new Dictionary<int, UIWindow>();
-    private LinkedList<UIWindow> _cacheWindows = new LinkedList<UIWindow>();
-    private List<int> _creatingWindows = new List<int>();
+    private readonly Dictionary<int, UIWindow> _windows = new Dictionary<int, UIWindow>();
+    private readonly LinkedList<UIWindow> _cacheWindows = new LinkedList<UIWindow>();
+    private readonly List<int> _creatingWindows = new List<int>();
 
     /// <summary>
     /// 初始化
@@ -37,30 +35,30 @@ public partial class UIManager : MonoBehaviour, IManager
         var go = new GameObject("UI");
         go.transform.SetParent(Global.Instance.transform, true);
 
-        _camera = go.AddComponent<Camera>();
-        _camera.backgroundColor = new Color(0, 0, 0, 0);
-        _camera.clearFlags = CameraClearFlags.Depth;
-        _camera.cullingMask = 1 << Setting.LAYER_UI;
-        _camera.orthographic = true;
-        _camera.transform.position = new Vector2(Screen.width / 2, Screen.height / 2);
-        _camera.nearClipPlane = -200000;
-        _camera.farClipPlane = 200000;
-        _camera.depth = 1;
-        _camera.allowHDR = false;
-        _camera.allowMSAA = false;
+        UICamera = go.AddComponent<Camera>();
+        UICamera.backgroundColor = new Color(0, 0, 0, 0);
+        UICamera.clearFlags = CameraClearFlags.Depth;
+        UICamera.cullingMask = 1 << Setting.LAYER_UI;
+        UICamera.orthographic = true;
+        UICamera.transform.position = new Vector2(Screen.width / 2f, Screen.height / 2f);
+        UICamera.nearClipPlane = -200000;
+        UICamera.farClipPlane = 200000;
+        UICamera.depth = 1;
+        UICamera.allowHDR = false;
+        UICamera.allowMSAA = false;
 
-        if (_noneCamera == null)
+        if (NoneCamera == null)
         {
-            var noneCamraGo = new GameObject("NoneCamera");
-            noneCamraGo.transform.parent = go.transform;
-            _noneCamera = noneCamraGo.AddComponent<Camera>();
-            _noneCamera.clearFlags = CameraClearFlags.SolidColor;
-            _noneCamera.backgroundColor = Color.black;
-            _noneCamera.depth = -50;
-            _noneCamera.cullingMask = 0;
-            _noneCamera.allowHDR = false;
-            _noneCamera.allowMSAA = false;
-            _noneCamera.useOcclusionCulling = false;
+            var noneCameraGo = new GameObject("NoneCamera");
+            noneCameraGo.transform.parent = go.transform;
+            NoneCamera = noneCameraGo.AddComponent<Camera>();
+            NoneCamera.clearFlags = CameraClearFlags.SolidColor;
+            NoneCamera.backgroundColor = Color.black;
+            NoneCamera.depth = -50;
+            NoneCamera.cullingMask = 0;
+            NoneCamera.allowHDR = false;
+            NoneCamera.allowMSAA = false;
+            NoneCamera.useOcclusionCulling = false;
         }
 
         yield return null;
@@ -111,18 +109,19 @@ public partial class UIManager : MonoBehaviour, IManager
                 if (_creatingWindows.Contains(id))
                 {
                     prefab = Instantiate(winRes.Asset) as GameObject;
-                    prefab.name = string.IsNullOrEmpty(winRes.Name) ? Path.GetFileNameWithoutExtension(winRes.Path) : winRes.Name;
+                    if(prefab != null) prefab.name = string.IsNullOrEmpty(winRes.Name) ? Path.GetFileNameWithoutExtension(winRes.Path) : winRes.Name;
                 }
             }
             if (_creatingWindows.Remove(id))
             {
-                GameObject winObj = InstantiateWindowObject(prefab);
+                var winObj = InstantiateWindowObject(prefab);
                 winObj.SetActive(true);
 
                 win = Util.GetOrAddComponent<UIWindow>(winObj);
-                win.transform.localPosition = Vector3.zero;
-                win.transform.localScale = Vector3.one;
-                win.transform.localRotation = Quaternion.identity;
+                var transform1 = win.transform;
+                transform1.localPosition = Vector3.zero;
+                transform1.localScale = Vector3.one;
+                transform1.localRotation = Quaternion.identity;
                 _windows.Add(id, win);
                 LuaUtil.DontDestroyOnLoad(win);
 
@@ -131,12 +130,10 @@ public partial class UIManager : MonoBehaviour, IManager
                 {
                     _windows.TryGetValue(parentId, out parent);
                 }
-                win.Create(parent, id, prefab.name, path, layer, obj);
+
+                if (prefab != null) win.Create(parent, id, prefab.name, path, layer, obj);
                 win.OnShow();
-                if (callback != null)
-                {
-                    callback(id);
-                }
+                callback?.Invoke(id);
             }
         }
         else
@@ -150,10 +147,7 @@ public partial class UIManager : MonoBehaviour, IManager
             }
             win.Create(parent, id, win.name, win.path, layer, obj);
             win.OnShow();
-            if (callback != null)
-            {
-                callback(id);
-            }
+            callback?.Invoke(id);
         }
     }
 
@@ -183,33 +177,32 @@ public partial class UIManager : MonoBehaviour, IManager
     {
         if (!_creatingWindows.Remove(id) && _windows.ContainsKey(id))
         {
-            UIWindow window = null;
-            if(_windows.TryGetValue(id, out window))
+            if (!_windows.TryGetValue(id, out var window)) return;
+            
+            _windows.Remove(id);
+            window.OnHide(() => 
             {
-                _windows.Remove(id);
-                window.OnHide(() => 
+                window.Destory();
+                using(var e = _windows.GetEnumerator())
                 {
-                    window.Destory();
-                    using(var e = _windows.GetEnumerator())
-                    {
-                        while (e.MoveNext()) { 
-                            if(e.Current.Value.parent == window)
-                            {
-                                e.Current.Value.parent = null;
-                            }
+                    while (e.MoveNext()) { 
+                        if(e.Current.Value.parent == window)
+                        {
+                            e.Current.Value.parent = null;
                         }
                     }
-                    if (isDestroy)
-                    {
-                        window.gameObject.SetActive(false);
-                        GameObject.DestroyImmediate(window.gameObject);
-                    }
-                    else
-                    {
-                        CacheWindow(window);
-                    }
-                });
-            }
+                }
+                if (isDestroy)
+                {
+                    GameObject o;
+                    (o = window.gameObject).SetActive(false);
+                    GameObject.DestroyImmediate(o);
+                }
+                else
+                {
+                    CacheWindow(window);
+                }
+            });
         }
     }
 
@@ -243,8 +236,9 @@ public partial class UIManager : MonoBehaviour, IManager
             _cacheWindows.Remove(iter);
             if (iter.Value != null)
             {
-                iter.Value.gameObject.SetActive(false);
-                GameObject.DestroyImmediate(iter.Value.gameObject);
+                GameObject o;
+                (o = iter.Value.gameObject).SetActive(false);
+                GameObject.DestroyImmediate(o);
             }
             else
             {
@@ -259,7 +253,7 @@ public partial class UIManager : MonoBehaviour, IManager
     /// </summary>
     /// <param name="prefab">窗口对象</param>
     /// <returns></returns>
-    public GameObject InstantiateWindowObject(GameObject prefab)
+    private GameObject InstantiateWindowObject(GameObject prefab)
     {
         var canvas = Util.GetOrAddComponent<Canvas>(prefab);
         canvas.renderMode = RenderMode.ScreenSpaceCamera;
@@ -270,9 +264,9 @@ public partial class UIManager : MonoBehaviour, IManager
 
     public void OnRelease()
     {
-        if(_camera != null)
+        if(UICamera != null)
         {
-            _camera.enabled = false;
+            UICamera.enabled = false;
         }
         IsInitialized = false;
         var list = new List<int>();
@@ -283,9 +277,9 @@ public partial class UIManager : MonoBehaviour, IManager
                 list.Add(e.Current.Key);
             }
         }
-        for (var i = 0; i < list.Count; ++i)
+        foreach (var t in list)
         {
-            DestroyWindow(list[i], true);
+            DestroyWindow(t, true);
         }
         _windows.Clear();
         _creatingWindows.Clear();
@@ -302,7 +296,7 @@ public partial class UIManager
     /// <param name="isAsync">是否异步</param>
     /// <param name="callback">回调</param>
     /// <returns></returns>
-    public IEnumerator LoadPrefab(string path, bool isAsync, Action<Resource> callback)
+    private IEnumerator LoadPrefab(string path, bool isAsync, Action<Resource> callback)
     {
         var loader = new ResLoader(FileUtil.CombinePaths("UI", path + ".prefab"), null, isAsync);
         yield return loader;

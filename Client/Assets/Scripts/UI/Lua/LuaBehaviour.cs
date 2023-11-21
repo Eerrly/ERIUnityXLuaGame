@@ -14,8 +14,8 @@ public partial class LuaBehaviour : MonoBehaviour
     /// </summary>
     internal struct Event
     {
-        public int eventId;
-        public int id;
+        public int EventId;
+        public int ID;
     }
 
     /// <summary>
@@ -30,80 +30,53 @@ public partial class LuaBehaviour : MonoBehaviour
     /// <summary>
     /// 节点组件ID索引对应组件
     /// </summary>
-    private UIBehaviour[] id2ui;
+    private UIBehaviour[] _id2UI;
 
     /// <summary>
     /// 节点名对应组件ID
     /// </summary>
-    private Dictionary<string, int> name2id;
+    private Dictionary<string, int> _name2ID;
     private Dictionary<int, Coroutine> _cacheCoroutines = null;
     private List<Resource> _loadedCache = null;
-    private object instance;
-    private LuaBehaviour root;
-    private List<LuaBehaviour> children;
-    private List<Event> events;
-    private int index;
+    private object _instance;
+    private LuaBehaviour _root;
+    private List<LuaBehaviour> _children;
+    private List<Event> _events;
+    private int _index;
 
     /// <summary>
     /// 当前Lua执行器运行时所使用到的协程列表
     /// </summary>
-    public Dictionary<int, Coroutine> CacheCoroutines
-    {
-        get
-        {
-            if (_cacheCoroutines == null)
-            {
-                _cacheCoroutines = new Dictionary<int, Coroutine>();
-            }
-            return _cacheCoroutines;
-        }
-    }
+    public Dictionary<int, Coroutine> CacheCoroutines => _cacheCoroutines ?? (_cacheCoroutines = new Dictionary<int, Coroutine>());
 
     /// <summary>
     /// 当前Lua执行器运行时所加载资源的缓存列表
     /// </summary>
-    public List<Resource> LoadedCache
-    {
-        get
-        {
-            if (_loadedCache == null)
-            {
-                _loadedCache = new List<Resource>();
-            }
-            return _loadedCache;
-        }
-    }
+    public List<Resource> LoadedCache => _loadedCache ?? (_loadedCache = new List<Resource>());
 
     private void Awake()
     {
-        name2id = new Dictionary<string, int>();
-        children = new List<LuaBehaviour>();
-        events = new List<Event>();
+        _name2ID = new Dictionary<string, int>();
+        _children = new List<LuaBehaviour>();
+        _events = new List<Event>();
 
         var uis = new List<Transform>();
         transform.GetComponentsInChildren<Transform>(true, uis);
-        id2ui = new UIBehaviour[uis.Count + 1];
+        _id2UI = new UIBehaviour[uis.Count + 1];
         var id = 1;
-        for (int i = 0; i < uis.Count; i++)
+        foreach (var t in uis)
         {
-            var name = uis[i].name;
-            if(!string.IsNullOrEmpty(name) && name[0] == '@')
-            {
-                name = name.Substring(1, name.Length - 1);
-                if (name2id.ContainsKey(name))
-                {
-                    continue;
-                }
-                var ui = uis[i].GetComponent<UIBehaviour>();
-                if(ui == null)
-                {
-                    ui = uis[i].gameObject.AddComponent<LuaBehaviourNode>();
-                }
-                // 子节点名对应组件ID
-                name2id.Add(name, id);
-                // 子节点组件ID索引组件
-                id2ui[id++] = ui;
-            }
+            var tName = t.name;
+            if (string.IsNullOrEmpty(tName) || tName[0] != '@') continue;
+            
+            tName = tName.Substring(1, tName.Length - 1);
+            if (_name2ID.ContainsKey(tName))
+                continue;
+            var ui = t.GetComponent<UIBehaviour>() ?? t.gameObject.AddComponent<LuaBehaviourNode>();
+            // 子节点名对应组件ID
+            _name2ID.Add(tName, id);
+            // 子节点组件ID索引组件
+            _id2UI[id++] = ui;
         }
     }
 
@@ -116,16 +89,16 @@ public partial class LuaBehaviour : MonoBehaviour
     [NoComment]
     public void Initialize(object instance, LuaBehaviour root = null, int index = 0)
     {
-        this.instance = instance;
-        this.root = root;
-        this.index = index;
-        if(this.root != null)
+        this._instance = instance;
+        this._root = root;
+        this._index = index;
+        if(this._root != null)
         {
-            this.root.children.Add(this);
+            this._root._children.Add(this);
         }
-        if(this.instance != null)
+        if(this._instance != null)
         {
-            BindInstance(this.instance);
+            BindInstance(this._instance);
         }
     }
 
@@ -136,15 +109,15 @@ public partial class LuaBehaviour : MonoBehaviour
     [NoComment]
     public void BindInstance(object instance)
     {
-        this.instance = instance;
-        Global.Instance.LuaManager.BindInstance(this, name2id, this.instance);
+        this._instance = instance;
+        Global.Instance.LuaManager.BindInstance(this, _name2ID, this._instance);
     }
 
     [NoComment]
-    public int NameToID(string name)
+    public int NameToID(string tName)
     {
         int id = -1;
-        name2id.TryGetValue(name, out id);
+        _name2ID.TryGetValue(tName, out id);
         return id;
     }
 
@@ -157,30 +130,24 @@ public partial class LuaBehaviour : MonoBehaviour
     /// <param name="addIfNotExist">如果没有是否添加一个</param>
     /// <returns></returns>
     [NoComment]
-    public bool TryGetControl<T>(int id, out T view, bool addIfNotExist = false) where T : MonoBehaviour
+    private bool TryGetControl<T>(int id, out T view, bool addIfNotExist = false) where T : MonoBehaviour
     {
         view = null;
         UIBehaviour behaviour = null;
-        if(id2ui == null || id >= id2ui.Length || id < 0 || id2ui[id] == null)
+        if(_id2UI == null || id >= _id2UI.Length || id < 0 || _id2UI[id] == null)
         {
             return false;
         }
-        behaviour = id2ui[id];
+        behaviour = _id2UI[id];
         view = behaviour as T;
-        if(view == null)
-        {
-            view = behaviour.GetComponent<T>();
-            if(view == null)
-            {
-                if (addIfNotExist)
-                {
-                    view = behaviour.gameObject.AddComponent<T>();
-                    return true;
-                }
-                return false;
-            }
-            return true;
-        }
+        if (view != null) return true;
+        
+        view = behaviour.GetComponent<T>();
+        if (view != null) return true;
+
+        if (!addIfNotExist) return false;
+        
+        view = behaviour.gameObject.AddComponent<T>();
         return true;
     }
 
@@ -197,20 +164,20 @@ public partial class LuaBehaviour : MonoBehaviour
         {
             return null;
         }
-        if (root)
+        if (_root)
         {
-            if(root.instance != null)
+            if(_root._instance != null)
             {
-                var _args = MixArgs(args, root.instance, index, instance);
-                return callBack.Call(_args);
+                var mixArgs = MixArgs(args, _root._instance, _index, _instance);
+                return callBack.Call(mixArgs);
             }
         }
         else
         {
-            if(instance != null)
+            if(_instance != null)
             {
-                var _args = MixArgs(args, instance);
-                return callBack.Call(_args);
+                var mixArgs = MixArgs(args, _instance);
+                return callBack.Call(mixArgs);
             }
         }
         return default(object[]);
@@ -225,21 +192,27 @@ public partial class LuaBehaviour : MonoBehaviour
     [NoComment]
     public object[] MixArgs(object[] args, params object[] insert)
     {
-        object[] result = new object[args.Length + insert.Length];
+        var result = new object[args.Length + insert.Length];
         Array.Copy(insert, result, insert.Length);
         Array.Copy(args, 0, result, insert.Length, args.Length);
         return result;
     }
 
+    /// <summary>
+    /// 获取子节点
+    /// </summary>
+    /// <param name="id">组件ID</param>
+    /// <param name="root">父节点</param>
+    /// <returns></returns>
     public object GetChild(int id, LuaBehaviour root = null)
     {
         LuaBehaviour child = null;
         if(TryGetControl(id, out child))
         {
-            if(child.instance == null) {
+            if(child._instance == null) {
                 child.Initialize(Global.Instance.LuaManager.luaEnv.NewTable(), root);
             }
-            return child.instance;
+            return child._instance;
         }
         else
         {
@@ -256,19 +229,18 @@ public partial class LuaBehaviour : MonoBehaviour
     /// <param name="callBack">触发函数</param>
     public void BindEvent(int eventId, int id, LuaFunction callBack)
     {
-        for (int i = events.Count - 1; i >= 0; i--)
+        for (var i = _events.Count - 1; i >= 0; i--)
         {
-            if(events[i].eventId == eventId && events[i].id == id)
+            if(_events[i].EventId == eventId && _events[i].ID == id)
             {
-                events.RemoveAt(i);
+                _events.RemoveAt(i);
             }
         }
-        events.Add(new Event() { eventId = eventId, id = id });
+        _events.Add(new Event() { EventId = eventId, ID = id });
         switch ((EventID)eventId)
         {
             case EventID.ButtonClicked:
-                Button btn = null;
-                if(TryGetControl(id, out btn))
+                if(TryGetControl(id, out Button btn))
                 {
                     btn.onClick.RemoveAllListeners();
                     btn.onClick.AddListener(()=> {
@@ -277,8 +249,7 @@ public partial class LuaBehaviour : MonoBehaviour
                 }
                 break;
             case EventID.SliderValueChanged:
-                Slider slider = null;
-                if(TryGetControl(id, out slider))
+                if(TryGetControl(id, out Slider slider))
                 {
                     slider.onValueChanged.RemoveAllListeners();
                     slider.onValueChanged.AddListener((value) =>
@@ -296,32 +267,31 @@ public partial class LuaBehaviour : MonoBehaviour
     [NoComment]
     public void Release()
     {
-        for (int i = 0; i < LoadedCache.Count; i++)
+        foreach (var t in LoadedCache)
         {
-            LoadedCache[i].Release();
+            t.Release();
         }
         LoadedCache.Clear();
-        if (id2ui != null)
+        if (_id2UI != null)
         {
-            for (int i = 0; i < id2ui.Length; i++)
+            foreach (var t in _id2UI)
             {
-                if(id2ui[i] != null)
+                if (t == null) continue;
+                
+                var mono = t.GetComponents<MonoBehaviour>();
+                foreach (var t1 in mono)
                 {
-                    var monos = id2ui[i].GetComponents<MonoBehaviour>();
-                    for (int j = 0; j < monos.Length; j++)
-                    {
-                        monos[j].StopAllCoroutines();
-                    }
+                    t1.StopAllCoroutines();
                 }
             }
         }
         CacheCoroutines.Clear();
-        LuaTable table = (LuaTable)instance;
+        var table = (LuaTable)_instance;
         if(Global.Instance != null && Global.Instance.LuaManager.luaEnv != null && table != null)
         {
             table.Dispose();
         }
-        instance = null;
+        _instance = null;
         if (this)
         {
             StopAllCoroutines();
@@ -339,12 +309,7 @@ public partial class LuaBehaviour : MonoBehaviour
     /// <returns></returns>
     public bool IsActive(int id)
     {
-        UIBehaviour c = null;
-        if (TryGetControl(id, out c))
-        {
-            return c.gameObject.activeSelf;
-        }
-        return false;
+        return TryGetControl(id, out UIBehaviour c) && c.gameObject.activeSelf;
     }
 
     /// <summary>
@@ -354,15 +319,13 @@ public partial class LuaBehaviour : MonoBehaviour
     /// <param name="alpha">Alpha</param>
     public void SetCanvasGroupAlpha(int id, float alpha)
     {
-        MonoBehaviour c = null;
-        if (TryGetControl(id, out c))
+        if (!TryGetControl(id, out MonoBehaviour c)) return;
+        
+        var group = c.GetComponent<CanvasGroup>();
+        if (group)
         {
-            CanvasGroup group = c.GetComponent<CanvasGroup>();
-            if (group)
-            {
-                group.alpha = alpha;
-                group.blocksRaycasts = alpha > 0;
-            }
+            group.alpha = alpha;
+            group.blocksRaycasts = alpha > 0;
         }
     }
 
@@ -373,13 +336,11 @@ public partial class LuaBehaviour : MonoBehaviour
     /// <param name="active">是否激活</param>
     public void SetActive(int id, bool active)
     {
-        UIBehaviour c = null;
-        if (TryGetControl(id, out c))
+        if (!TryGetControl(id, out UIBehaviour c)) return;
+        
+        if (c.gameObject.activeSelf != active)
         {
-            if (c.gameObject.activeSelf != active)
-            {
-                c.gameObject.SetActive(active);
-            }
+            c.gameObject.SetActive(active);
         }
     }
 
@@ -391,9 +352,7 @@ public partial class LuaBehaviour : MonoBehaviour
     /// <param name="worldPositionStays">保持与以前相同的世界空间位置、旋转和缩放</param>
     public void SetParent(int id1, int id2, bool worldPositionStays)
     {
-        UIBehaviour c1 = null;
-        UIBehaviour c2 = null;
-        if (TryGetControl(id1, out c1) && TryGetControl(id2, out c2))
+        if (TryGetControl(id1, out UIBehaviour c1) && TryGetControl(id2, out UIBehaviour c2))
         {
             c1.transform.SetParent(c2.transform, worldPositionStays);
         }
@@ -406,25 +365,19 @@ public partial class LuaBehaviour : MonoBehaviour
     /// <returns></returns>
     public bool IsEnable(int id)
     {
-        UIBehaviour c = null;
-        if (TryGetControl(id, out c))
-        {
-            return c.enabled;
-        }
-        return false;
+        return TryGetControl(id, out UIBehaviour c) && c.enabled;
     }
 
     /// <summary>
     /// 设置UI组件开关
     /// </summary>
     /// <param name="id">组件ID</param>
-    /// <param name="enabled">开关</param>
-    public void SetEnable(int id, bool enabled)
+    /// <param name="enable">开关</param>
+    public void SetEnable(int id, bool enable)
     {
-        UIBehaviour c = null;
-        if (TryGetControl(id, out c))
+        if (TryGetControl(id, out UIBehaviour c))
         {
-            c.enabled = enabled;
+            c.enabled = enable;
         }
     }
 
@@ -437,8 +390,7 @@ public partial class LuaBehaviour : MonoBehaviour
     /// <param name="z">Z</param>
     public void SetPosition(int id, float x, float y, float z)
     {
-        MonoBehaviour c = null;
-        if (TryGetControl(id, out c))
+        if (TryGetControl(id, out MonoBehaviour c))
         {
             c.transform.localPosition = new Vector3(x, y, z);
         }
@@ -453,8 +405,7 @@ public partial class LuaBehaviour : MonoBehaviour
     /// <param name="z">Z</param>
     public void SetRotation(int id, float x, float y, float z)
     {
-        MonoBehaviour c = null;
-        if (TryGetControl(id, out c))
+        if (TryGetControl(id, out MonoBehaviour c))
         {
             c.transform.localRotation = Quaternion.Euler(new Vector3(x, y, z));
         }
@@ -469,8 +420,7 @@ public partial class LuaBehaviour : MonoBehaviour
     /// <param name="z">Z</param>
     public void SetScale(int id, float x, float y, float z)
     {
-        MonoBehaviour c = null;
-        if (TryGetControl(id, out c))
+        if (TryGetControl(id, out MonoBehaviour c))
         {
             c.transform.localScale = new Vector3(x, y, z);
         }
@@ -485,14 +435,12 @@ public partial class LuaBehaviour : MonoBehaviour
     /// <param name="z">Z</param>
     public void SetAnchoredPosition(int id, float x, float y, float z)
     {
-        MonoBehaviour c = null;
-        if (TryGetControl(id, out c))
+        if (!TryGetControl(id, out MonoBehaviour c)) return;
+        
+        var rectTransform = c.gameObject.GetComponent<RectTransform>();
+        if (rectTransform != null)
         {
-            RectTransform rectTransform = c.gameObject.GetComponent<RectTransform>();
-            if (rectTransform != null)
-            {
-                rectTransform.anchoredPosition = new Vector3(x, y, z);
-            }
+            rectTransform.anchoredPosition = new Vector3(x, y, z);
         }
     }
 
@@ -503,8 +451,7 @@ public partial class LuaBehaviour : MonoBehaviour
     /// <param name="interactable">是否激活</param>
     public void SetInteractable(int id, bool interactable)
     {
-        Selectable s = null;
-        if (TryGetControl(id, out s))
+        if (TryGetControl(id, out Selectable s))
         {
             s.interactable = interactable;
         }
@@ -517,8 +464,7 @@ public partial class LuaBehaviour : MonoBehaviour
     /// <returns>是否为激活状态</returns>
     public bool IsInteractable(int id)
     {
-        Selectable s = null;
-        if (TryGetControl(id, out s))
+        if (TryGetControl(id, out Selectable s))
         {
             return s.interactable;
         }
@@ -529,13 +475,12 @@ public partial class LuaBehaviour : MonoBehaviour
     /// 设置按钮组件开关
     /// </summary>
     /// <param name="id">组件ID</param>
-    /// <param name="enabled">开关</param>
-    public void SetButtonEnable(int id, bool enabled)
+    /// <param name="enable">开关</param>
+    public void SetButtonEnable(int id, bool enable)
     {
-        Button c = null;
-        if (TryGetControl(id, out c))
+        if (TryGetControl(id, out Button c))
         {
-            c.interactable = enabled;
+            c.interactable = enable;
         }
     }
 
@@ -546,8 +491,7 @@ public partial class LuaBehaviour : MonoBehaviour
     /// <returns>文本</returns>
     public string GetText(int id)
     {
-        Text c = null;
-        if (TryGetControl(id, out c))
+        if (TryGetControl(id, out Text c))
         {
             return c.text;
         }
@@ -561,8 +505,7 @@ public partial class LuaBehaviour : MonoBehaviour
     /// <param name="text">文本</param>
     public void SetText(int id, string text)
     {
-        Text c = null;
-        if (TryGetControl(id, out c))
+        if (TryGetControl(id, out Text c))
         {
             c.text = text;
         }
@@ -575,8 +518,7 @@ public partial class LuaBehaviour : MonoBehaviour
     /// <param name="size">字体大小</param>
     public void SetFontSize(int id, int size)
     {
-        Text c = null;
-        if (TryGetControl(id, out c))
+        if (TryGetControl(id, out Text c))
         {
             c.fontSize = size;
         }
@@ -589,8 +531,7 @@ public partial class LuaBehaviour : MonoBehaviour
     /// <param name="value"></param>
     public void SetSliderValue(int id, float value)
     {
-        Slider c = null;
-        if(TryGetControl(id, out c))
+        if(TryGetControl(id, out Slider c))
         {
             c.value = value;
         }
@@ -606,22 +547,19 @@ public partial class LuaBehaviour : MonoBehaviour
     /// <param name="sizeRatio">尺寸缩放比例</param>
     public void SetImage(int id, string dir, string spriteName, bool resetSize = false, float sizeRatio = 1)
     {
-        Image c = null;
-        if (TryGetControl(id, out c))
+        if (!TryGetControl(id, out Image c)) return;
+        
+        if (CacheCoroutines.TryGetValue(id, out var co))
         {
-            Coroutine co = null;
-            if (CacheCoroutines.TryGetValue(id, out co))
+            if (co != null)
             {
-                if (co != null)
-                {
-                    StopCoroutine(co);
-                }
-                CacheCoroutines.Remove(id);
+                StopCoroutine(co);
             }
-
-            co = StartCoroutine(CoSetImage(id, c, dir, spriteName, resetSize, sizeRatio));
-            CacheCoroutines.Add(id, co);
+            CacheCoroutines.Remove(id);
         }
+
+        co = StartCoroutine(CoSetImage(id, c, dir, spriteName, resetSize, sizeRatio));
+        CacheCoroutines.Add(id, co);
     }
 
     /// <summary>
@@ -640,9 +578,9 @@ public partial class LuaBehaviour : MonoBehaviour
         {
             c.SetNativeSize();
         }
-        if (sizeRatio != 1)
+        if (Math.Abs(sizeRatio - 1) > 0.0001f)
         {
-            Vector2 size = c.rectTransform.sizeDelta;
+            var size = c.rectTransform.sizeDelta;
             c.rectTransform.sizeDelta = size * sizeRatio;
         }
     }
@@ -662,12 +600,15 @@ public partial class LuaBehaviour : MonoBehaviour
         var loader = new ResLoader(dir, spriteName, false);
         yield return loader;
         var resource = (Resource)loader.Current;
+        if (resource == null) yield break;
+        
         var sprite = resource.GetSprite();
         resource.Retain();
         loader.Dispose();
         loader = null;
         CacheCoroutines.Remove(id);
         SetImage(c, sprite, resource, resetSize, sizeRatio);
+
         yield break;
     }
 

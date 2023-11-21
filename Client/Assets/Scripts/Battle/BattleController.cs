@@ -1,57 +1,61 @@
 ﻿using System.IO;
 using System.Collections.Generic;
+using System.Threading;
 
 /// <summary>
 /// 战斗管理器
 /// </summary>
 public class BattleController : IBattleController
 {
-    public Dictionary<int, FrameBuffer.Input> frameInputs;
+    public Dictionary<int, FrameBuffer.Input> FrameInputs;
     public BattleEntity battleEntity { get; set; }
+    public FrameBuffer frameBuffer { get; private set; }
 
     private long _enterMilliseconds = 0;
     private long _lastMilliseconds = 0;
 
+    /// <summary>
+    /// 构造函数
+    /// </summary>
+    /// <param name="data">玩家数据</param>
     public BattleController(BattleCommonData data)
     {
         battleEntity = new BattleEntity();
         battleEntity.Init();
-        for (int i = 0; i < data.players.Length; i++)
+        foreach (var t in data.players)
         {
             BaseEntity entity = new PlayerEntity();
-            entity.Init(data.players[i]);
+            entity.Init(t);
             battleEntity.entities.Add(entity);
         }
     }
 
+    /// <summary>
+    /// 初始化
+    /// </summary>
     public override void Initialize()
     {
-        frameInputs = new Dictionary<int, FrameBuffer.Input>();
+        FrameInputs = new Dictionary<int, FrameBuffer.Input>();
+        frameBuffer = new FrameBuffer(2);
         battleEntity.deltaTime = FrameEngine.frameInterval * battleEntity.timeScale;
     }
 
     public override void LogicUpdate()
     {
-        if(_enterMilliseconds == 0)
-        {
-            _enterMilliseconds = BattleManager.Instance.Time;
-        }
-        long startMillSecondes = BattleManager.Instance.Time - _enterMilliseconds;
+        if(_enterMilliseconds == 0) _enterMilliseconds = BattleManager.Instance.Time;
 
-        while(startMillSecondes - _lastMilliseconds >= BattleConstant.FrameInterval)
+        var startMillSeconds = BattleManager.Instance.Time - _enterMilliseconds;
+        while(startMillSeconds - _lastMilliseconds >= BattleConstant.FrameInterval)
         {
             _lastMilliseconds += BattleConstant.FrameInterval;
-
             try
             {
                 if (!Paused)
                 {
-                    BattleManager.Instance.logicFrame += 1;
-
+                    Interlocked.Increment(ref BattleManager.Instance.LogicFrame);
+                    UpdateInput();
                     RefreshBattleEntity(battleEntity);
-
                     UpdatePlayerState(battleEntity);
-
                 }
             }
             catch (System.Exception e)
@@ -62,52 +66,63 @@ public class BattleController : IBattleController
         
     }
 
-    public void UpdatePlayerState(BattleEntity battleEntity)
+    private void UpdatePlayerState(BattleEntity entity)
     {
-        var entities = battleEntity.entities;
+        var entities = entity.entities;
 
-        BattleStateMachine.Instance.Update(battleEntity, null);
-        for (int i = 0; i < entities.Count; i++)
+        BattleStateMachine.Instance.Update(entity, null);
+        foreach (var t in entities)
         {
-            var playerEntity = (PlayerEntity)entities[i];
-            PlayerStateMachine.Instance.Update(playerEntity, battleEntity);
+            var playerEntity = (PlayerEntity)t;
+            PlayerStateMachine.Instance.Update(playerEntity, entity);
         }
 
-        BattleStateMachine.Instance.LateUpdate(battleEntity, null);
-        for (int i = 0; i < entities.Count; i++)
+        BattleStateMachine.Instance.LateUpdate(entity, null);
+        foreach (var t in entities)
         {
-            var playerEntity = (PlayerEntity)entities[i];
-            PlayerStateMachine.Instance.LateUpdate(playerEntity, battleEntity);
+            var playerEntity = (PlayerEntity)t;
+            PlayerStateMachine.Instance.LateUpdate(playerEntity, entity);
         }
 
-        PhysicsSystem.Update(battleEntity);
+        PhysicsSystem.Update(entity);
 
-        BattleStateMachine.Instance.DoChangeState(battleEntity, null);
-        for (int i = 0; i < entities.Count; i++)
+        BattleStateMachine.Instance.DoChangeState(entity, null);
+        foreach (var t in entities)
         {
-            var playerEntity = (PlayerEntity)entities[i];
-            PlayerStateMachine.Instance.DoChangeState(playerEntity, battleEntity);
+            var playerEntity = (PlayerEntity)t;
+            PlayerStateMachine.Instance.DoChangeState(playerEntity, entity);
         }
     }
 
-    public void RefreshBattleEntity(BattleEntity battleEntity)
+    private void RefreshBattleEntity(BattleEntity entity)
     {
-        battleEntity.frame += 1;
-        battleEntity.deltaTime = FrameEngine.frameInterval * battleEntity.timeScale;
-        battleEntity.time += battleEntity.deltaTime;
+        entity.frame += 1;
+        entity.deltaTime = FrameEngine.frameInterval * entity.timeScale;
+        entity.time += entity.deltaTime;
     }
 
-    public void UpdateInput(FrameBuffer.Input input) {
-        var playerEntity = battleEntity.FindEntity(input.pos);
-        playerEntity.input.yaw = input.yaw - MathManager.YawOffset;
-        playerEntity.input.key = input.key;
+    /// <summary>
+    /// 更新玩家操作
+    /// </summary>
+    private void UpdateInput() {
+        var playerEntity = battleEntity.FindEntity(BattleManager.Instance.selfPlayerId);
+        var inputFrame = FrameBuffer.Frame.defFrame;
+        if (frameBuffer.TryGetFrame(battleEntity.frame, ref inputFrame))
+        {
+            playerEntity.input.yaw = inputFrame[playerEntity.ID].yaw - MathManager.YawOffset;
+            playerEntity.input.key = inputFrame[playerEntity.ID].key;
+        }
+        else
+        {
+            Logger.Log(LogLevel.Error, $"【从缓存帧数据里无法取到对应帧的帧数据】frame:{battleEntity.frame}");
+        }
     }
 
     public override void RenderUpdate()
     {
         try
         {
-            BattleManager.Instance.renderFrame += 1;
+            Interlocked.Increment(ref BattleManager.Instance.RenderFrame);
             BattleManager.Instance.battleView.RenderUpdate(battleEntity);
         }
         catch (System.Exception e)

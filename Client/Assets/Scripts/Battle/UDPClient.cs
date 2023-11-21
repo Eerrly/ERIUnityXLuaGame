@@ -99,10 +99,6 @@ public class UDPClient
                 sendBuffer = BufferPool.GetBuffer(Head.Length + packet.head.size);
                 unsafe
                 {
-                    if (packet.head.act == (int)ACT.DATA)
-                    {
-                        packet.head.index = indexer++;
-                    }
                     fixed (byte* dest = sendBuffer)
                     {
                         *(Head*)dest = packet.head;

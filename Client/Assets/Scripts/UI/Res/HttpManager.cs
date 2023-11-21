@@ -10,33 +10,27 @@ public class HttpManager : MonoBehaviour, IManager
     /// <summary>
     /// 超时控制器
     /// </summary>
-    private TimeoutController timeoutController;
+    private TimeoutController _timeoutController;
 
-    private bool _httpGetState;
     /// <summary>
     /// HttpGet 状态
     /// </summary>
-    public bool HttpGetState => _httpGetState;
+    private bool HttpGetState { get; set; }
 
-    private string _httpGetText;
     /// <summary>
     /// HttpGet 接受到的数据
     /// </summary>
-    public string HttpGetText => _httpGetText;
-
-    private bool _httpDownloadState;
+    private string HttpGetText { get; set; }
 
     /// <summary>
     /// HttpDownload 状态
     /// </summary>
-    public bool HttpDownloadState => _httpDownloadState;
-
-    private string _httpDownloadText;
+    private bool HttpDownloadState { get; set; }
 
     /// <summary>
     /// HttpDownload 接受到的数据
     /// </summary>
-    public string HttpDownloadText => _httpDownloadText;
+    private string HttpDownloadText { get; set; }
 
     private string GetResponseText(UnityWebRequest response)
     {
@@ -59,21 +53,21 @@ public class HttpManager : MonoBehaviour, IManager
         try
         {
             request = UnityWebRequest.Get(url);
-            await request.SendWebRequest().WithCancellation(timeoutController.Timeout(TimeSpan.FromSeconds(timeout)));
+            await request.SendWebRequest().WithCancellation(_timeoutController.Timeout(TimeSpan.FromSeconds(timeout)));
             if(request.isNetworkError || request.isHttpError)
             {
-                _httpGetState = false;
-                _httpGetText = request.error;
+                HttpGetState = false;
+                HttpGetText = request.error;
             }
             else
             {
-                _httpGetState = true;
-                _httpGetText = GetResponseText(request);
+                HttpGetState = true;
+                HttpGetText = GetResponseText(request);
             }
         }
         catch(System.Exception e)
         {
-            _httpGetText = e.Message;
+            HttpGetText = e.Message;
 #if UNITY_DEBUG
             Logger.Log(LogLevel.Exception, e.Message);
 #endif
@@ -85,7 +79,7 @@ public class HttpManager : MonoBehaviour, IManager
                 request.Dispose();
                 request = null;
             }
-            timeoutController.Reset();
+            _timeoutController.Reset();
         }
     }
 
@@ -108,9 +102,9 @@ public class HttpManager : MonoBehaviour, IManager
     /// <param name="url">链接</param>
     /// <param name="path">路径</param>
     /// <param name="append">断点续传</param>
-    /// <param name="_progress">进度回调</param>
+    /// <param name="progress">进度回调</param>
     /// <returns></returns>
-    private async UniTask UniHttpDownload(string url, string path, bool append, System.Action<float> _progress = null)
+    private async UniTask UniHttpDownload(string url, string path, bool append, System.Action<float> progress = null)
     {
         DownloadHandlerFile downloadHandler = null;
         UnityWebRequest request = null;
@@ -118,21 +112,21 @@ public class HttpManager : MonoBehaviour, IManager
         {
             downloadHandler = new DownloadHandlerFile(path, append);
             request = new UnityWebRequest(url, UnityWebRequest.kHttpVerbGET, downloadHandler, null);
-            await request.SendWebRequest().ToUniTask(Progress.Create<float>(_progress));
+            await request.SendWebRequest().ToUniTask(Progress.Create<float>(progress));
             if (request.isNetworkError || request.isHttpError)
             {
-                _httpDownloadState = false;
-                _httpDownloadText = request.error;
+                HttpDownloadState = false;
+                HttpDownloadText = request.error;
             }
             else
             {
-                _httpDownloadState = true;
-                _httpDownloadText = GetResponseText(request);
+                HttpDownloadState = true;
+                HttpDownloadText = GetResponseText(request);
             }
         }
         catch (System.Exception e)
         {
-            _httpDownloadText = e.Message;
+            HttpDownloadText = e.Message;
 #if UNITY_DEBUG
             Logger.Log(LogLevel.Exception, e.Message);
 #endif
@@ -172,16 +166,16 @@ public class HttpManager : MonoBehaviour, IManager
     /// </summary>
     public void OnInitialize()
     {
-        _httpGetState = false;
-        _httpDownloadState = false;
-        timeoutController = new TimeoutController();
+        HttpGetState = false;
+        HttpDownloadState = false;
+        _timeoutController = new TimeoutController();
         IsInitialized = true;
     }
 
     public void OnRelease()
     {
-        timeoutController?.Reset();
-        timeoutController = null;
+        _timeoutController?.Reset();
+        _timeoutController = null;
         IsInitialized = false;
     }
 }

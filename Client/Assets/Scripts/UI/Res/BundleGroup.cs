@@ -2,7 +2,7 @@
 
 public struct BundleGroup
 {
-    public AssetBundle rawBundle;
-    public AssetBundle packageBundle;
-    public float time;
+    public AssetBundle RawBundle;
+    public AssetBundle PackageBundle;
+    public float Time;
 }

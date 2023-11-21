@@ -17,11 +17,10 @@ enum ACT
 /// </summary>
 public struct Head
 {
-    public int size;
     public byte act;
-    public short index;
+    public int size;
 
-    public static readonly int Length = 8;
+    public static readonly int Length = 5;
 }
 
 /// <summary>
@@ -121,7 +120,6 @@ public class BattleNetController
             {
                 act = (byte)ACT.DATA,
                 size = 5,
-                index = indexer++,
             };
             Packet packet = new Packet()
             {
@@ -155,7 +153,6 @@ public class BattleNetController
             {
                 act = (byte)ACT.JOIN,
                 size = 5,
-                index = 0,
             };
             Packet packet = new Packet()
             {
@@ -189,7 +186,6 @@ public class BattleNetController
             {
                 act = (byte)ACT.HEARTBEAT,
                 size = 5,
-                index = 0,
             };
             Packet packet = new Packet()
             {

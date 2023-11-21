@@ -15,11 +15,10 @@ public static class TimeSystem
     [EntitySystem.Release]
     public static void Release()
     {
-        if(_watch != null)
-        {
-            _watch.Stop();
-            _watch = null;
-        }
+        if (_watch == null) return;
+        
+        _watch.Stop();
+        _watch = null;
     }
 
     public static long GetElapsedMilliseconds()

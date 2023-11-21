@@ -13,10 +13,10 @@ public class PlayerEntity : BaseEntity
         ID = data.pos;
 
         Input.pos = ID;
-        Input.yaw = MathManager.YawStop;
+        Input.yaw = FixedMath.YawStop;
         Input.key = 0;
 
-        RuntimeProperty.seed = BattleConstant.randomSeed;
+        RuntimeProperty.seed = BattleConstant.RandomSeed;
 
         Property.pos = data.pos;
 

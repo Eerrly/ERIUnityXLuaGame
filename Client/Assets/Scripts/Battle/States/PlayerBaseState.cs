@@ -6,8 +6,8 @@ public class PlayerBaseState : BaseState<PlayerEntity>
     /// </summary>
     public EPlayerState StateId
     {
-        get { return (EPlayerState)_stateId; }
-        set { _stateId = (int)value; }
+        get => (EPlayerState)_stateId;
+        set => _stateId = (int)value;
     }
 
     public override void Reset(PlayerEntity playerEntity, BattleEntity battleEntity)

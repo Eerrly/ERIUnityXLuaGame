@@ -7,25 +7,23 @@ public class SectorSystem
 
     public static List<BaseEntity> GetWithinRangeOfTheAttack(BaseEntity entity)
     {
-        List<Cell> aroundCellList = SpacePartition.GetAroundCellList(entity);
-        List<BaseEntity> entities = new List<BaseEntity>();
+        var aroundCellList = SpacePartition.GetAroundCellList(entity);
+        var entities = new List<BaseEntity>();
 
-        for (int i = 0; i < aroundCellList.Count; i++)
+        foreach (var cellEntities in aroundCellList.Select(t => t.entities))
         {
-            var cellEntities = aroundCellList[i].entities;
-            for (int j = 0; j < cellEntities.Count; j++)
+            foreach (var other in cellEntities)
             {
-                var other = cellEntities[j];
                 var playerPos = entity.Transform.pos;
                 var otherPos = other.Transform.pos;
                 var distance = (entity.Transform.pos - other.Transform.pos).Magnitude;
-                if (distance <= PlayerPropertyConstant.CollisionRadius * PlayerPropertyConstant.CollisionRadius)
+                if (distance > PlayerPropertyConstant.CollisionRadius * PlayerPropertyConstant.CollisionRadius)
+                    continue;
+                
+                var angle = FixedVector3.AngleInt(entity.Transform.fwd, otherPos - playerPos);
+                if(angle <= BattleConstant.Angle / 2)
                 {
-                    var angle = FixedVector3.AngleInt(entity.Transform.fwd, otherPos - playerPos);
-                    if(angle <= BattleConstant.angle / 2)
-                    {
-                        entities.Add(other);
-                    }
+                    entities.Add(other);
                 }
             }
         }
@@ -35,19 +33,18 @@ public class SectorSystem
 
     public static int[] GetAroundEntities(BaseEntity entity, int maxCount, bool isActive = false)
     {
-        List<Cell> aroundCellList = SpacePartition.GetAroundCellList(entity);
-        List<BaseEntity> entities = new List<BaseEntity>();
+        var aroundCellList = SpacePartition.GetAroundCellList(entity);
+        var entities = new List<BaseEntity>();
 
-        for (int i = 0; i < aroundCellList.Count; i++)
+        foreach (var cellEntities in aroundCellList.Select(t => t.entities))
         {
-            var cellEntities = aroundCellList[i].entities;
-            for (int j = 0; j < cellEntities.Count; j++)
+            foreach (var t in cellEntities)
             {
-                entities.Add(cellEntities[j]);
+                entities.Add(t);
             }
         }
 
-        var results = entities.GetRange(0, Mathf.Min(entities.Count, maxCount)).Select((e) => { return e.ID; }).ToArray();
+        var results = entities.GetRange(0, Mathf.Min(entities.Count, maxCount)).Select((e) => e.ID).ToArray();
         return results;
     }
 

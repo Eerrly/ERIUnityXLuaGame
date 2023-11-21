@@ -37,7 +37,7 @@ public class BattleController : IBattleController
     {
         FrameInputs = new Dictionary<int, FrameBuffer.Input>();
         frameBuffer = new FrameBuffer(2);
-        battleEntity.DeltaTime = FrameEngine.frameInterval * battleEntity.TimeScale;
+        battleEntity.DeltaTime = FrameEngine.FrameInterval * battleEntity.TimeScale;
     }
 
     public override void LogicUpdate()
@@ -97,7 +97,7 @@ public class BattleController : IBattleController
     private void RefreshBattleEntity(BattleEntity entity)
     {
         entity.Frame += 1;
-        entity.DeltaTime = FrameEngine.frameInterval * entity.TimeScale;
+        entity.DeltaTime = FrameEngine.FrameInterval * entity.TimeScale;
         entity.Time += entity.DeltaTime;
     }
 
@@ -109,7 +109,7 @@ public class BattleController : IBattleController
         var inputFrame = FrameBuffer.Frame.defFrame;
         if (frameBuffer.TryGetFrame(battleEntity.Frame, ref inputFrame))
         {
-            playerEntity.Input.yaw = inputFrame[playerEntity.ID].yaw - MathManager.YawOffset;
+            playerEntity.Input.yaw = inputFrame[playerEntity.ID].yaw - FixedMath.YawOffset;
             playerEntity.Input.key = inputFrame[playerEntity.ID].key;
         }
         else

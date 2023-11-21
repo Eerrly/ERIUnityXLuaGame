@@ -1,66 +1,56 @@
 ﻿
+using System;
+
 public class PlayerStateMachine : BaseStateMachine<PlayerEntity>
 {
     private static PlayerStateMachine _instance;
 
-    public static PlayerStateMachine Instance
-    {
-        get
-        {
-            if(_instance == null)
-            {
-                _instance = new PlayerStateMachine();
-            }
-            return _instance;
-        }
-    }
+    public static PlayerStateMachine Instance => _instance ?? (_instance = new PlayerStateMachine());
 
     private PlayerStateMachine() : base()
     {
         var types = GetType().Assembly.GetExportedTypes();
         _stateDic = new BaseState<PlayerEntity>[(int)EPlayerState.Count];
-        for (var i = 0; i < types.Length; ++i)
+        foreach (var t in types)
         {
-            if (types[i].IsDefined(typeof(PlayerStateAttribute), false))
+            if (!t.IsDefined(typeof(PlayerStateAttribute), false)) continue;
+            
+            var state = System.Activator.CreateInstance(t) as PlayerBaseState;
+            var attributes = t.GetCustomAttributes(false);
+            foreach (var t1 in attributes)
             {
-                var state = System.Activator.CreateInstance(types[i]) as PlayerBaseState;
-                var attributes = types[i].GetCustomAttributes(false);
-                for (var j = 0; j < attributes.Length; ++j)
+                if (t1 is PlayerStateAttribute)
                 {
-                    if (attributes[j] is PlayerStateAttribute)
-                    {
-                        var attr = (attributes[j] as PlayerStateAttribute);
-                        state.StateId = attr._state;
-                    }
+                    var attr = (t1 as PlayerStateAttribute);
+                    state.StateId = attr._state;
                 }
-
-                var stateId = (int)state.StateId;
-
-#if UNITY_EDITOR
-                if (null != _stateDic[stateId])
-                {
-                    UnityEngine.Debug.LogErrorFormat("The {0} state has a instance, please check. now {1} other {2}", state.StateId, types[i], _stateDic[stateId].GetType());
-                }
-                else
-#endif
-                {
-                    _stateDic[stateId] = state;
-                }
-#if UNITY_EDITOR
-                var fileds = types[i].GetFields();
-                if (fileds.Length > 0)
-                {
-                    UnityEngine.Debug.LogErrorFormat("State:{0} has filed!", types[i]);
-                }
-
-                var properties = types[i].GetProperties();
-                if (properties.Length > 4)
-                {
-                    UnityEngine.Debug.LogErrorFormat("State:{0} has property!", types[i]);
-                }
-#endif
-
             }
+
+            var stateId = (int)state.StateId;
+
+#if UNITY_EDITOR
+            if (null != _stateDic[stateId])
+            {
+                UnityEngine.Debug.LogErrorFormat("The {0} state has a instance, please check. now {1} other {2}", state.StateId, t, _stateDic[stateId].GetType());
+            }
+            else
+#endif
+            {
+                _stateDic[stateId] = state;
+            }
+#if UNITY_EDITOR
+            var fields = t.GetFields();
+            if (fields.Length > 0)
+            {
+                UnityEngine.Debug.LogErrorFormat("State:{0} has filed!", t);
+            }
+
+            var properties = t.GetProperties();
+            if (properties.Length > 4)
+            {
+                UnityEngine.Debug.LogErrorFormat("State:{0} has property!", t);
+            }
+#endif
         }
     }
 
@@ -79,12 +69,10 @@ public class PlayerStateMachine : BaseStateMachine<PlayerEntity>
     public bool DoChangeState(PlayerEntity playerEntity, BattleEntity battleEntity)
     {
         var nextId = playerEntity.State.nextStateId;
-        var nextState = _stateDic[nextId] as PlayerBaseState;
-        if(nextId != 0 && nextState != null && nextState.TryEnter(playerEntity, battleEntity))
+        if(nextId != 0 && _stateDic[nextId] is PlayerBaseState nextState && nextState.TryEnter(playerEntity, battleEntity))
         {
             var currId = playerEntity.State.curStateId;
-            var currState = _stateDic[currId] as PlayerBaseState;
-            if(currId != 0 && currState != null && currState.TryExit(playerEntity, battleEntity))
+            if(currId != 0 && _stateDic[currId] is PlayerBaseState currState && currState.TryExit(playerEntity, battleEntity))
             {
                 currState.OnExit(playerEntity, battleEntity);
             }

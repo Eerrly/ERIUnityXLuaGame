@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// ÊäÈë°´¼ü
+/// è¾“å…¥æŒ‰é”®
 /// </summary>
 public class InputKeyCode
 {
@@ -11,7 +11,7 @@ public class InputKeyCode
     public bool _enable = true;
 
     /// <summary>
-    /// »ñÈ¡µ±Ç°×´Ì¬
+    /// è·å–å½“å‰çŠ¶æ€
     /// </summary>
     public bool State
     {
@@ -22,9 +22,9 @@ public class InputKeyCode
     }
 
     /// <summary>
-    /// ÉèÖÃ¿ª¹Ø
+    /// è®¾ç½®å¼€å…³
     /// </summary>
-    /// <param name="enable">¿ª¹Ø</param>
+    /// <param name="enable">å¼€å…³</param>
     public void SetEnable(bool enable)
     {
         if (!enable)
@@ -37,7 +37,7 @@ public class InputKeyCode
 }
 
 /// <summary>
-/// Íæ¼ÒµÄÊäÈë
+/// ç©å®¶çš„è¾“å…¥
 /// </summary>
 public class PlayerInput : MonoBehaviour
 {
@@ -49,7 +49,7 @@ public class PlayerInput : MonoBehaviour
     public List<InputKeyCode> keys = new List<InputKeyCode>();
 
     /// <summary>
-    /// Ìí¼Ó°´¼ü
+    /// æ·»åŠ æŒ‰é”®
     /// </summary>
     /// <param name="key"></param>
     public void AddKey(InputKeyCode key)
@@ -58,9 +58,9 @@ public class PlayerInput : MonoBehaviour
     }
 
     /// <summary>
-    /// Í¨¹ıÍæ¼ÒID»ñÈ¡µ±Ç°µÄÊäÈë
+    /// é€šè¿‡ç©å®¶IDè·å–å½“å‰çš„è¾“å…¥
     /// </summary>
-    /// <param name="playerId">Íæ¼ÒID</param>
+    /// <param name="playerId">ç©å®¶ID</param>
     /// <returns></returns>
     public FrameBuffer.Input GetPlayerInput(int playerId)
     {
@@ -73,7 +73,7 @@ public class PlayerInput : MonoBehaviour
 
     void Update()
     {
-        // °´¼ü
+        // æŒ‰é”®
         byte _tmpKeyState = 0;
         for (var i = 0; i < keys.Count; ++i)
         {
@@ -85,7 +85,7 @@ public class PlayerInput : MonoBehaviour
         }
         _keyState = _tmpKeyState;
 
-        // Ò¡¸Ë
+        // æ‘‡æ†
         Vector3 moveInput = (InputManager.Vertical * Vector3.forward) + (InputManager.Horizontal * Vector3.right);
         if(_lastMoveInput != Vector3.zero && moveInput == Vector3.zero)
             _moveInput = _lastMoveInput;

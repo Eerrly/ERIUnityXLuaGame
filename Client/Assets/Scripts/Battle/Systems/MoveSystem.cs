@@ -5,22 +5,22 @@ public static class MoveSystem
 
     public static void UpdatePosition(BaseEntity entity)
     {
-        FixedVector3 _position = FixedVector3.Zero;
+        var position = FixedVector3.Zero;
         if(!KeySystem.IsYawTypeStop(entity.Input.yaw))
         {
             var vector = FixedMath.FromYawToVector3(entity.Input.yaw);
-            _position = (vector * entity.Movement.moveSpeed).YZero();
+            position = (vector * entity.Movement.moveSpeed).YZero();
         }
-        entity.Movement.position = _position;
+        entity.Movement.position = position;
     }
 
-    public static void UpdateRotaion(BaseEntity entity)
+    public static void UpdateRotation(BaseEntity entity)
     {
-        FixedQuaternion _rotation = FixedQuaternion.Identity;
+        var rotation = FixedQuaternion.Identity;
         if(!KeySystem.IsYawTypeStop(entity.Input.yaw))
         {
-            _rotation = FixedMath.FromYaw(entity.Input.yaw);
+            rotation = FixedMath.FromYaw(entity.Input.yaw);
         }
-        entity.Movement.rotation = _rotation;
+        entity.Movement.rotation = rotation;
     }
 }

@@ -103,7 +103,7 @@ public class PlayerBuff
         var buffExtra = playerEntity.RuntimeProperty.buffExtra;
         for (int i = 0; i < buffExtra.Count; i++)
         {
-            if(buffExtra[i].type == BuffConstant.attackBuffType)
+            if(buffExtra[i].type == BuffConstant.AttackBuffType)
             {
                 foundIndex = i;
                 break;
@@ -111,12 +111,12 @@ public class PlayerBuff
         }
         if(foundIndex == -1)
         {
-            buffExtra.Add(new PlayerBuffExtra() { type = BuffConstant.attackBuffType, value = BuffConstant.attackBuffValue });
+            buffExtra.Add(new PlayerBuffExtra() { type = BuffConstant.AttackBuffType, value = BuffConstant.AttackBuffValue });
         }
         else
         {
             var data = buffExtra[foundIndex];
-            data.value += BuffConstant.attackBuffValue;
+            data.value += BuffConstant.AttackBuffValue;
             buffExtra[foundIndex] = data;
         }
 #if UNITY_EDITOR && UNITY_DEBUG
@@ -132,7 +132,7 @@ public class PlayerBuff
         var buffExtra = playerEntity.RuntimeProperty.buffExtra;
         for (int i = 0; i < buffExtra.Count; i++)
         {
-            if (buffExtra[i].type == BuffConstant.attackBuffType)
+            if (buffExtra[i].type == BuffConstant.AttackBuffType)
             {
                 foundIndex = i;
                 break;

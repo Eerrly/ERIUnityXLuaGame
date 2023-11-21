@@ -3,27 +3,15 @@ using System.Threading;
 
 public class FrameEngine
 {
+    /// <summary>
+    /// 暂停
+    /// </summary>
+    public static bool Pause { get; private set; } = false;
 
-    private bool _pause = false;
-    public bool Pause
-    {
-        get { return _pause; }
-        set { _pause = value; }
-    }
-
-    private float _timeScale = 0.0f;
-    public float TimeScale
-    {
-        get { return _timeScale; }
-        set { _timeScale = value; }
-    }
-
-    private static float _frameInterval;
-    public static float frameInterval
-    {
-        get { return _frameInterval; }
-        private set { _frameInterval = value; }
-    }
+    /// <summary>
+    /// 一帧多少MS
+    /// </summary>
+    public static float FrameInterval { get; private set; }
 
     private Action _frameUpdateListeners = null;
     private Action _netUpdateListeners = null;
@@ -34,18 +22,22 @@ public class FrameEngine
 
     public static void SetFrameInterval(float frameInterval)
     {
-        _frameInterval = frameInterval;
+        FrameInterval = frameInterval;
     }
 
     public void StartEngine(float frameInterval)
     {
         SetFrameInterval(frameInterval);
         BattleManager.MainThreadId = Thread.CurrentThread.ManagedThreadId;
-        _logicThread = new Thread(new ThreadStart(LogicThreadUpdate));
-        _logicThread.IsBackground = true;
+        _logicThread = new Thread(new ThreadStart(LogicThreadUpdate))
+        {
+            IsBackground = true
+        };
         _logicThread.Start();
-        _netThread = new Thread(new ThreadStart(NetThreadUpdate));
-        _netThread.IsBackground = true;
+        _netThread = new Thread(new ThreadStart(NetThreadUpdate))
+        {
+            IsBackground = true
+        };
         _netThread.Start();
     }
 

@@ -5,7 +5,7 @@
 /// </summary>
 public class BattleLauncher : MonoBehaviour
 {
-    private BattleCommonData battleCommonData;
+    private BattleCommonData _battleCommonData;
 
     private void Awake()
     {
@@ -17,8 +17,8 @@ public class BattleLauncher : MonoBehaviour
     /// </summary>
     void InitBattleCommonData()
     {
-        battleCommonData = new BattleCommonData();
-        battleCommonData.players = new BattlePlayerCommonData[] {
+        _battleCommonData = new BattleCommonData();
+        _battleCommonData.players = new BattlePlayerCommonData[] {
             new BattlePlayerCommonData() { pos = 0 },
             new BattlePlayerCommonData() { pos = 1 }
         };
@@ -30,7 +30,7 @@ public class BattleLauncher : MonoBehaviour
     void Start()
     {
         BattleManager.Instance.Initialize();
-        BattleManager.Instance.SetBattleData(battleCommonData);
+        BattleManager.Instance.SetBattleData(_battleCommonData);
         BattleManager.Instance.StartBattle(BattleConstant.SelfID);
     }
 

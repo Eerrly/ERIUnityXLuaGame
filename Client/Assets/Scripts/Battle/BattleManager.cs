@@ -87,7 +87,7 @@ public class BattleManager : MonoBehaviour
     /// </summary>
     public void Initialize()
     {
-        foreach (var t in BattleConstant.buttonNames)
+        foreach (var t in BattleConstant.ButtonNames)
         {
             playerInput.AddKey(new InputKeyCode() { _name = t });
         }

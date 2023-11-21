@@ -1,8 +1,8 @@
 public class InputConstant
 {
-    public static readonly string Vertical = "Vertical";
+    public const string Vertical = "Vertical";
 
-    public static readonly string Horizontal = "Horizontal";
+    public const string Horizontal = "Horizontal";
 
     public const string KeyCodeSpace = "tab";
 

@@ -3,73 +3,73 @@ using UnityEngine;
 public class BattleConstant
 {
     /// <summary>
-    /// ×Ô¼ºµÄID
+    /// è‡ªå·±ID
     /// </summary>
     public static int SelfID = 0;
 
     /// <summary>
-    /// Ö¡¼ä¸ô(ºÁÃë)
+    /// ä¸€å¸§33ms
     /// </summary>
-    public static readonly int FrameInterval = 33;
+    public const int FrameInterval = 33;
 
     /// <summary>
-    /// ×î´ó¿Í»§¶ËÊıÁ¿
+    /// æœ€å¤§å®¢æˆ·ç«¯æ•°é‡
     /// </summary>
-    public static readonly int MaxClientCount = 2;
+    public const int MaxClientCount = 2;
 
     /// <summary>
-    /// ĞÄÌø¼ä¸ô(Ö¡)
+    /// å¿ƒè·³é—´éš”å¸§æ•°
     /// </summary>
-    public static readonly int HeartBeatFrame = 100;
+    public const int HeartBeatFrame = 100;
 
     /// <summary>
-    /// Íæ¼ÒPrefab
+    /// ç©å®¶Prefab
     /// </summary>
-    public static readonly string playerCharacterPath = "Prefabs/Cube";
+    public const string PlayerCharacterPath = "Prefabs/Cube";
 
     /// <summary>
-    /// Íæ¼ÒÉú³ÉÎ»ÖÃ
+    /// åˆå§‹åŒ–ç©å®¶ä½ç½®
     /// </summary>
     public static readonly Vector3[] InitPlayerPos = { new Vector3(-3, 0, 30), new Vector3(13, 0, -5) };
 
     /// <summary>
-    /// Íæ¼ÒÉú³ÉĞı×ª
+    /// åˆå§‹åŒ–ç©å®¶æ—‹è½¬
     /// </summary>
     public static readonly Quaternion[] InitPlayerRot = { new Quaternion(0, -180, 0, 0), new Quaternion(0, 0, 0, 0) };
 
     /// <summary>
-    /// Íæ¼ÒÉú³ÉÑÕÉ«
+    /// åˆå§‹åŒ–ç©å®¶é¢œè‰²
     /// </summary>
     public static readonly Color[] InitPlayerColor = { new Color((float)42/255, (float)100 /255, (float)178 /255), new Color((float)229/255, (float)46 /255, (float)40 /255) };
 
     /// <summary>
-    /// ¼üÎ»
+    /// é”®ä½åç§°
     /// </summary>
-    public static readonly string[] buttonNames = new string[] { "j", "k", "l" };
+    public static readonly string[] ButtonNames = new string[] { "j", "k", "l" };
 
     /// <summary>
-    /// Ëæ»úÖÖ×Ó
+    /// éšæœºç§å­
     /// </summary>
-    public static readonly uint randomSeed = 114514;
+    public const uint RandomSeed = 114514;
 
     /// <summary>
-    /// ¸ñ×ÓµÄ¿í
+    /// æ ¼å­å®½
     /// </summary>
-    public static readonly float spaceX = 100f;
+    public const float SpaceX = 100f;
 
     /// <summary>
-    /// ¸ñ×ÓµÄ³¤
+    /// æ ¼å­é•¿
     /// </summary>
-    public static readonly float spaceZ = 100f;
+    public const float SpaceZ = 100f;
 
     /// <summary>
-    /// ÃæÏò½Ç¶È
+    /// è§’åº¦
     /// </summary>
-    public static readonly FixedNumber angle = FixedNumber.MakeFixNum(90 * FixedMath.DataConrvertScale, FixedMath.DataConrvertScale);
+    public static readonly FixedNumber Angle = FixedNumber.MakeFixNum(90 * FixedMath.DataConrvertScale, FixedMath.DataConrvertScale);
 
     /// <summary>
-    /// ¸ñ×Ó³ß´ç
+    /// æ ¼å­é•¿å®½
     /// </summary>
-    public static readonly Vector3 cellSize = new Vector3(10f, 0, 10f);
+    public static readonly Vector3 CellSize = new Vector3(10f, 0, 10f);
 
 }

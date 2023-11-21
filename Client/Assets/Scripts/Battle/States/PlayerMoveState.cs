@@ -10,7 +10,7 @@ public class PlayerMoveState : PlayerBaseState
     public override void OnUpdate(PlayerEntity playerEntity, BattleEntity battleEntity)
     {
         MoveSystem.UpdatePosition(playerEntity);
-        MoveSystem.UpdateRotaion(playerEntity);
+        MoveSystem.UpdateRotation(playerEntity);
     }
 
     public override void OnLateUpdate(PlayerEntity playerEntity, BattleEntity battleEntity)

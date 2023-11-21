@@ -1,27 +1,37 @@
+using System.Linq;
+
 [EntitySystem]
 public class KeySystem
 {
+    /// <summary>
+    /// 清理输入
+    /// </summary>
+    /// <param name="battleEntity"></param>
     public static void Clear(BattleEntity battleEntity)
     {
         var players = battleEntity.Entities;
-        for (int i = 0; i < players.Count; i++)
+        foreach (var player in players.Cast<PlayerEntity>())
         {
-            var player = (PlayerEntity)players[i];
             player.Input.pos = player.ID;
-            player.Input.yaw = MathManager.YawStop;
+            player.Input.yaw = FixedMath.YawStop;
             player.Input.key = 0;
         }
     }
 
+    /// <summary>
+    /// 是否没有摇杆
+    /// </summary>
+    /// <param name="yaw">摇杆</param>
+    /// <returns></returns>
     public static bool IsYawTypeStop(int yaw)
     {
-        return yaw == MathManager.YawStop;
+        return yaw == FixedMath.YawStop;
     }
 
     public static int GetLogicKeyDown(PlayerEntity playerEntity)
     {
         var input = playerEntity.Input;
-        int key = (int)ELogicInputKey.None;
+        var key = (int)ELogicInputKey.None;
         while (key < (int)ELogicInputKey.KeyCount)
         {
             if((input.key & key) > 0)

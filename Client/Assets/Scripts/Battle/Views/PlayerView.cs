@@ -4,12 +4,14 @@ using UnityEngine;
 
 public class PlayerView : MonoBehaviour
 {
-    private int _entityId;
-    public int entityId => _entityId;
+    /// <summary>
+    /// 玩家实体ID
+    /// </summary>
+    public int entityId { get; private set; }
 
     public async void Init(BattlePlayerCommonData data)
     {
-        _entityId = data.pos;
+        entityId = data.pos;
         await CoLoadCharacter();
     }
 
@@ -17,15 +19,17 @@ public class PlayerView : MonoBehaviour
     /// 加载角色
     /// </summary>
     /// <returns></returns>
-    public async UniTask<GameObject> CoLoadCharacter()
+    private async UniTask<GameObject> CoLoadCharacter()
     {
-        GameObject character = await Resources.LoadAsync<GameObject>(BattleConstant.playerCharacterPath) as GameObject;
-        GameObject go = Instantiate(character, Vector3.zero, Quaternion.identity);
+        var character = await Resources.LoadAsync<GameObject>(BattleConstant.PlayerCharacterPath) as GameObject;
+        var go = Instantiate(character, Vector3.zero, Quaternion.identity);
         go.transform.SetParent(transform, false);
 
         var renderers = go.transform.GetComponentsInChildren<MeshRenderer>();
-        for (int j = 0; j < renderers.Length; j++)
-            renderers[j].material.color = BattleConstant.InitPlayerColor[_entityId];
+        foreach (var t in renderers)
+        {
+            t.material.color = BattleConstant.InitPlayerColor[entityId];
+        }
         return go;
     }
 
@@ -36,7 +40,7 @@ public class PlayerView : MonoBehaviour
     /// <param name="deltaTime"></param>
     public void RenderUpdate(BattleEntity battleEntity, float deltaTime)
     {
-        BaseEntity entity = battleEntity.FindEntity(entityId);
+        var entity = battleEntity.FindEntity(entityId);
         TransformUpdate(entity, deltaTime);
 #if UNITY_DEBUG
         SpacePartition.UpdateEntityCell(entity);
@@ -54,20 +58,21 @@ public class PlayerView : MonoBehaviour
             return;
 
         var currentPosition = transform.position;
-        var nextDetlaPosition = currentPosition + entity.Movement.position.ToVector3();
-        if((currentPosition - nextDetlaPosition).sqrMagnitude >= 4)
+        var nextDeltaPosition = currentPosition + entity.Movement.position.ToVector3();
+        if((currentPosition - nextDeltaPosition).sqrMagnitude >= 4)
         {
-            currentPosition = Vector3.Lerp(currentPosition, nextDetlaPosition, deltaTime);
+            currentPosition = Vector3.Lerp(currentPosition, nextDeltaPosition, deltaTime);
         }
         var currentRotation = transform.rotation;
-        var nextDetlaRotation = entity.Movement.rotation.ToQuaternion();
-        if(currentRotation != nextDetlaRotation)
+        var nextDeltaRotation = entity.Movement.rotation.ToQuaternion();
+        if(currentRotation != nextDeltaRotation)
         {
-            currentRotation = Quaternion.RotateTowards(transform.rotation, nextDetlaRotation, entity.Movement.turnSpeed * deltaTime);
+            currentRotation = Quaternion.RotateTowards(transform.rotation, nextDeltaRotation, entity.Movement.turnSpeed * deltaTime);
         }
 
-        transform.position = currentPosition;
-        transform.rotation = currentRotation;
+        var transform1 = transform;
+        transform1.position = currentPosition;
+        transform1.rotation = currentRotation;
 
         entity.Transform.pos = new FixedVector3(currentPosition);
         entity.Transform.rot = new FixedQuaternion(currentRotation);

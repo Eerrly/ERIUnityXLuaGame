@@ -3,30 +3,28 @@
 /// </summary>
 public struct PhysisPlayer
 {
-    public int id;
+    public int ID;
 
     public override bool Equals(object obj)
     {
-        PhysisPlayer b = (PhysisPlayer)obj;
-        return id == b.id;
-    }
-
-    public override int GetHashCode()
-    {
-        return base.GetHashCode();
+        if (obj == null) return false;
+        return ID == ((PhysisPlayer)obj).ID;
     }
 
     public static bool operator ==(PhysisPlayer a, PhysisPlayer b)
     {
-        return a.id == b.id;
+        return a.ID == b.ID;
     }
 
     public static bool operator !=(PhysisPlayer a, PhysisPlayer b)
     {
-        return a.id != b.id;
+        return a.ID != b.ID;
     }
 }
 
+/// <summary>
+/// 物理系统
+/// </summary>
 [EntitySystem]
 public class PhysicsSystem
 {
@@ -37,13 +35,11 @@ public class PhysicsSystem
     public static void Update(BattleEntity battleEntity)
     {
         var entities = battleEntity.Entities;
-        for (int i = 0; i < entities.Count; i++)
+        foreach (var source in entities)
         {
-            var source = entities[i];
             source.RuntimeProperty.closedPlayers.Clear();
-            for (int j = 0; j < entities.Count; j++)
+            foreach (var target in entities)
             {
-                var target = entities[j];
                 if(source.ID == target.ID)
                 {
                     continue;
@@ -52,18 +48,17 @@ public class PhysicsSystem
                 var sqrMagnitudeXZ = (target.Transform.pos - source.Transform.pos).sqrMagnitudeLongXZ;
                 if (sqrMagnitudeXZ <= radius * radius)
                 {
-                    source.RuntimeProperty.closedPlayers.Add(new PhysisPlayer() { id = target.ID });
+                    source.RuntimeProperty.closedPlayers.Add(new PhysisPlayer() { ID = target.ID });
                 }
             }
         }
 
-        for (int i = 0; i < entities.Count; i++)
+        foreach (var source in entities)
         {
-            var source = entities[i];
             var closedPlayers = source.RuntimeProperty.closedPlayers;
             for (int j = 0; j < closedPlayers.Count; j++)
             {
-                var target = battleEntity.FindEntity(closedPlayers[j].id);
+                var target = battleEntity.FindEntity(closedPlayers[j].ID);
                 UpdateCollision(source, target, battleEntity);
             }
         }
@@ -97,8 +92,7 @@ public class PhysicsSystem
         }
         source.Movement.position = sMove;
 
-        var state = PlayerStateMachine.Instance.GetState(source.State.curStateId) as PlayerBaseState;
-        if (state != null)
+        if (PlayerStateMachine.Instance.GetState(source.State.curStateId) is PlayerBaseState state)
         {
             if (FixedVector3.Dot(vecT2S, sMove) > FixedNumber.Zero)
             {

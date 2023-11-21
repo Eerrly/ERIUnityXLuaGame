@@ -1,28 +1,30 @@
 ﻿
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class BattleView : MonoBehaviour
 {
-    private List<PlayerView> _playerViews = new List<PlayerView>();
+    private readonly List<PlayerView> _playerViews = new List<PlayerView>();
 
     public void InitView(BattleCommonData data)
     {
-        var spaceX = transform.localScale.x * BattleConstant.spaceX;
-        var spaceZ = transform.localScale.z * BattleConstant.spaceZ;
-        SpacePartition.Init(spaceX, spaceZ, BattleConstant.cellSize);
+        var localScale = transform.localScale;
+        var spaceX = localScale.x * BattleConstant.SpaceX;
+        var spaceZ = localScale.z * BattleConstant.SpaceZ;
+        SpacePartition.Init(spaceX, spaceZ, BattleConstant.CellSize);
         InitEntityView(data);
     }
 
     private void InitEntityView(BattleCommonData data)
     {
-        for (int i = 0; i < data.players.Length; i++)
+        for (var i = 0; i < data.players.Length; i++)
         {
-            var player = new GameObject(string.Format("Player:{0}", data.players[i].pos));
+            var player = new GameObject($"Player:{data.players[i].pos}");
             player.transform.position = BattleConstant.InitPlayerPos[i];
             player.transform.rotation = BattleConstant.InitPlayerRot[i];
 
-            PlayerView playerView = player.AddComponent<PlayerView>();
+            var playerView = player.AddComponent<PlayerView>();
             playerView.Init(data.players[i]);
             _playerViews.Add(playerView);
         }
@@ -31,30 +33,22 @@ public class BattleView : MonoBehaviour
 
     public PlayerView FindPlayerView(int playerId)
     {
-        for (int i = 0; i < _playerViews.Count; ++i)
-        {
-            if (_playerViews[i].entityId == playerId)
-                return _playerViews[i];
-        }
-        return null;
+        return _playerViews.FirstOrDefault(t => t.entityId == playerId);
     }
 
     public void RenderUpdate(BattleEntity battleEntity)
     {
-        for (int i = 0; i < _playerViews.Count; i++)
+        foreach (var t in _playerViews)
         {
-            _playerViews[i].RenderUpdate(battleEntity, Time.deltaTime);
+            t.RenderUpdate(battleEntity, Time.deltaTime);
         }
     }
 
     private void OnDestroy()
     {
-        foreach (var item in _playerViews)
+        foreach (var item in _playerViews.Where(item => item))
         {
-            if (item)
-            {
-                Destroy(item.gameObject);
-            }
+            Destroy(item.gameObject);
         }
     }
 

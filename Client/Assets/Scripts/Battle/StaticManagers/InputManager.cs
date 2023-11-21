@@ -1,17 +1,17 @@
 using UnityEngine;
 
 /// <summary>
-/// ÊäÈë¹ÜÀíÆ÷
+/// è¾“å…¥ç®¡ç†å™¨
 /// </summary>
 public static class InputManager
 {
     /// <summary>
-    /// ¿ª¹Ø
+    /// å¼€å…³
     /// </summary>
     public static bool enabled = true;
 
     /// <summary>
-    /// Ä¬ÈÏ°´¼ü×´Ì¬
+    /// é»˜è®¤æŒ‰é”®çŠ¶æ€
     /// </summary>
     public static bool[] defaultKeies = new bool[] { false, false, false, false };
 
@@ -36,9 +36,9 @@ public static class InputManager
     }
 
     /// <summary>
-    /// »ñÈ¡¶ÔÓ¦¼üÎ»µÄ×´Ì¬
+    /// è·å–æŒ‰é”®
     /// </summary>
-    /// <param name="name">¼üÎ»Ãû³Æ</param>
+    /// <param name="name">é”®ä½åç§°</param>
     /// <returns>×´Ì¬</returns>
     public static bool GetKey(string name)
     {

@@ -27,14 +27,14 @@ public class RuntimePropertyComponent : BaseComponent
         set => common.seed = value;
     }
 
-    private List<PlayerBuff> _unActiveBuffs = new List<PlayerBuff>();
+    private List<PlayerBuff> _inactiveBuffs = new List<PlayerBuff>();
     /// <summary>
     /// 未激活的BUFF
     /// </summary>
-    public List<PlayerBuff> unActiveBuffs
+    public List<PlayerBuff> inactiveBuffs
     {
-        get => _unActiveBuffs;
-        set => _unActiveBuffs = value;
+        get => _inactiveBuffs;
+        set => _inactiveBuffs = value;
     }
 
     private List<PlayerBuff> _activeBuffs = new List<PlayerBuff>();

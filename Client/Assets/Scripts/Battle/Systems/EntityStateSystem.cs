@@ -10,7 +10,7 @@ public class EntityStateSystem
     public static void Initialize()
     {
         minStateId = (int)EPlayerState.None;
-        maxStateId = Math.Max((int)EPlayerState.Count, (int)EEnemyState.Count);
+        maxStateId = (int)EPlayerState.Count;
     }
 
     public static void ChangeEntityState(BaseEntity entity, EPlayerState state)
@@ -18,12 +18,7 @@ public class EntityStateSystem
         ChangeEntityState(entity, (int)state);
     }
 
-    public static void ChangeEntityState(BaseEntity entity, EEnemyState state)
-    {
-        ChangeEntityState(entity, (int)state);
-    }
-
-    public static void ChangeEntityState(BaseEntity entity, int stateId)
+    private static void ChangeEntityState(BaseEntity entity, int stateId)
     {
         if (stateId > minStateId && stateId < maxStateId)
         {

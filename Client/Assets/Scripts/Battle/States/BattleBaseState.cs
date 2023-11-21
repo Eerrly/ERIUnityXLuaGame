@@ -4,8 +4,8 @@ public class BattleBaseState : BaseState<BattleEntity>
 
     public EBattleState StateId
     {
-        get { return (EBattleState)_stateId; }
-        set { _stateId = (int)value; }
+        get => (EBattleState)_stateId;
+        set => _stateId = (int)value;
     }
 
     public override void Reset(BattleEntity battleEntity, BattleEntity _)

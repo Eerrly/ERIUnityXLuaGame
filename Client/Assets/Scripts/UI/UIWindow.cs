@@ -102,13 +102,16 @@ public class UIWindow : MonoBehaviour
     /// <param name="callback">回调</param>
     public void OnHide(System.Action callback = null)
     {
-        Raycaster.enabled = false;
         IsShow = false;
-        Util.SetGameObjectLayer(gameObject, Setting.LAYER_HIDE, true);
+        if (gameObject == null)
+        {
+            Raycaster.enabled = false;
+            Util.SetGameObjectLayer(gameObject, Setting.LAYER_HIDE, true);
+        }
         callback?.Invoke();
     }
 
-    public void Destroy()
+    public void OnDestroy()
     {
         IsShow = false;
         if (behaviour == null) return;

@@ -182,7 +182,7 @@ public partial class UIManager : MonoBehaviour, IManager
             _windows.Remove(id);
             window.OnHide(() => 
             {
-                window.Destroy();
+                window.OnDestroy();
                 using(var e = _windows.GetEnumerator())
                 {
                     while (e.MoveNext()) { 

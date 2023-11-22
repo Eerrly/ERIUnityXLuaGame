@@ -287,7 +287,7 @@ public partial class LuaBehaviour : MonoBehaviour
         }
         CacheCoroutines.Clear();
         var table = (LuaTable)_instance;
-        if(Global.Instance != null && Global.Instance.LuaManager.luaEnv != null && table != null)
+        if(Global.Instance.LuaManager.luaEnv != null && Global.Instance.LuaManager.luaEnv.rawL != IntPtr.Zero && table != null)
         {
             table.Dispose();
         }

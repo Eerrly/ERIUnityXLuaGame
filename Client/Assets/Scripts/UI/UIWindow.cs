@@ -90,8 +90,8 @@ public class UIWindow : MonoBehaviour
     /// <param name="callback">回调</param>
     public void OnShow(System.Action callback = null)
     {
-        Raycaster.enabled = true;
         IsShow = true;
+        Raycaster.enabled = true;
         Util.SetGameObjectLayer(gameObject, Setting.LAYER_UI, true);
         callback?.Invoke();
     }
@@ -103,11 +103,8 @@ public class UIWindow : MonoBehaviour
     public void OnHide(System.Action callback = null)
     {
         IsShow = false;
-        if (gameObject == null)
-        {
-            Raycaster.enabled = false;
-            Util.SetGameObjectLayer(gameObject, Setting.LAYER_HIDE, true);
-        }
+        Raycaster.enabled = false;
+        Util.SetGameObjectLayer(gameObject, Setting.LAYER_HIDE, true);
         callback?.Invoke();
     }
 

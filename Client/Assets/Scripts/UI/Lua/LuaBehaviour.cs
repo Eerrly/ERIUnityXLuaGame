@@ -206,8 +206,7 @@ public partial class LuaBehaviour : MonoBehaviour
     /// <returns></returns>
     public object GetChild(int id, LuaBehaviour root = null)
     {
-        LuaBehaviour child = null;
-        if(TryGetControl(id, out child))
+        if(TryGetControl(id, out LuaBehaviour child))
         {
             if(child._instance == null) {
                 child.Initialize(Global.Instance.LuaManager.luaEnv.NewTable(), root);
@@ -611,5 +610,5 @@ public partial class LuaBehaviour : MonoBehaviour
 
         yield break;
     }
-
+    
 }

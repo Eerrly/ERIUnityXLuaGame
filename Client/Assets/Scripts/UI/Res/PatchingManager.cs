@@ -120,8 +120,7 @@ public class PatchingManager : MonoBehaviour, IManager
                 var tmpConf = Newtonsoft.Json.JsonConvert.DeserializeObject<ManifestConfig>(tmpConfJson);
                 foreach (var item in tmpConf.items)
                 {
-                    var tmpMd5 = "";
-                    if (!localMd5Map.TryGetValue(item.hash, out tmpMd5) || tmpMd5 != item.md5)
+                    if (!localMd5Map.TryGetValue(item.hash, out var tmpMd5) || tmpMd5 != item.md5)
                     {
                         FileUtil.DeleteFile(FileUtil.CombinePaths(Setting.CacheBundleRoot, item.hash + ".s"));
                         _downloadList.Add(item);

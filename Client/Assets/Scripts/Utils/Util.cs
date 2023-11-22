@@ -7,14 +7,15 @@ using System.Collections.Generic;
 using System.Runtime.ConstrainedExecution;
 using System.Diagnostics.Eventing.Reader;
 using System.Linq;
+using System.Reflection;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 
 public class Util
 {
-    private static Encoding UTF8 = new System.Text.UTF8Encoding(false);
-    private static List<Transform> _setGameObjectLayerList = new List<Transform>();
+    private static readonly Encoding UTF8 = new System.Text.UTF8Encoding(false);
+    private static readonly List<Transform> SetGameObjectLayerList = new List<Transform>();
 
     /// <summary>
     /// 获取或者添加组件
@@ -25,13 +26,12 @@ public class Util
     public static T GetOrAddComponent<T>(GameObject go) where T : Component
     {
         T t = null;
-        if(null != go)
+        if (null == go) return null;
+        
+        t = go.GetComponent<T>();
+        if(t == null)
         {
-            t = go.GetComponent<T>();
-            if(t == null)
-            {
-                t = go.AddComponent<T>();
-            }
+            t = go.AddComponent<T>();
         }
         return t;
     }
@@ -44,21 +44,20 @@ public class Util
     /// <param name="includeChildren">是否包括他的全部子物体</param>
     public static void SetGameObjectLayer(GameObject go, int layer, bool includeChildren)
     {
-        if(null != go && go.layer != layer)
+        if (null == go || go.layer == layer) return;
+        
+        if (includeChildren)
         {
-            if (includeChildren)
+            SetGameObjectLayerList.Clear();
+            go.GetComponentsInChildren<Transform>(true, SetGameObjectLayerList);
+            foreach (var igo in SetGameObjectLayerList)
             {
-                _setGameObjectLayerList.Clear();
-                go.GetComponentsInChildren<Transform>(true, _setGameObjectLayerList);
-                foreach (var igo in _setGameObjectLayerList)
-                {
-                    igo.gameObject.layer = layer;
-                }
+                igo.gameObject.layer = layer;
             }
-            else
-            {
-                go.layer = layer;
-            }
+        }
+        else
+        {
+            go.layer = layer;
         }
     }
 
@@ -67,26 +66,24 @@ public class Util
     /// </summary>
     /// <param name="obj">对象</param>
     /// <param name="classType">类类型</param>
-    /// <param name="parengInherit">是否类继承</param>
+    /// <param name="inherit">是否类继承</param>
     /// <param name="methodType">方法类型</param>
     /// <param name="methodInherit">是否方法继承</param>
-    public static void InvokeAttributeCall(object obj, Type classType, bool parengInherit, Type methodType, bool methodInherit)
+    public static void InvokeAttributeCall(object obj, Type classType, bool inherit, Type methodType, bool methodInherit)
     {
-        if (null != obj)
+        if (null == obj) return;
+        
+        var types = obj.GetType().Assembly.GetExportedTypes();
+        foreach (var t in types)
         {
-            var types = obj.GetType().Assembly.GetExportedTypes();
-            for (var i = 0; i < types.Length; ++i)
+            if (!t.IsDefined(classType, inherit)) continue;
+            
+            var methods = t.GetMethods(System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Public);
+            foreach (var t1 in methods)
             {
-                if (types[i].IsDefined(classType, parengInherit))
+                if (t1.IsDefined(methodType, methodInherit))
                 {
-                    var methods = types[i].GetMethods(System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Public);
-                    for (var j = 0; j < methods.Length; ++j)
-                    {
-                        if (methods[j].IsDefined(methodType, methodInherit))
-                        {
-                            methods[j].Invoke(null, null);
-                        }
-                    }
+                    t1.Invoke(null, null);
                 }
             }
         }
@@ -118,9 +115,9 @@ public class Util
         {
             var result = md5.ComputeHash(bytes);
             var builder = new System.Text.StringBuilder();
-            for (int i = 0; i < result.Length; i++)
+            foreach (var t in result)
             {
-                builder.Append(result[i].ToString("x2"));
+                builder.Append(t.ToString("x2"));
             }
             return builder.ToString();
         }
@@ -137,9 +134,9 @@ public class Util
         {
             var result = md5.ComputeHash(fs);
             var builder = new System.Text.StringBuilder();
-            for (int i = 0; i < result.Length; i++)
+            foreach (var t in result)
             {
-                builder.Append(result[i].ToString("x2"));
+                builder.Append(t.ToString("x2"));
             }
             return builder.ToString();
         }
@@ -152,7 +149,7 @@ public class Util
     /// <param name="fileName">需要保存的配置表文件名</param>
     public static void SaveConfig(object data, string fileName)
     {
-        string json = Regex.Unescape(Newtonsoft.Json.JsonConvert.SerializeObject(data));
+        var json = Regex.Unescape(Newtonsoft.Json.JsonConvert.SerializeObject(data));
         File.WriteAllText(FileUtil.CombinePaths(Setting.EditorResourcePath, Setting.EditorConfigPath, fileName), json, UTF8);
     }
 
@@ -164,23 +161,19 @@ public class Util
     /// <returns></returns>
     public static T LoadConfig<T>(string fileName)
     {
-        string path = FileUtil.CombinePaths(Setting.EditorConfigPath, fileName);
-        string configPath = path.Substring(0, path.LastIndexOf("."));
+        var path = FileUtil.CombinePaths(Setting.EditorConfigPath, fileName);
+        var configPath = path.Substring(0, path.LastIndexOf(".", StringComparison.Ordinal));
         try
         {
-            string json = UTF8.GetString(Resources.Load<TextAsset>(configPath).bytes);
-            T t = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(json);
+            var json = UTF8.GetString(Resources.Load<TextAsset>(configPath).bytes);
+            var t = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(json);
             return t;
         }
         catch(Exception e)
         {
             UnityEngine.Debug.LogError($"LoadConfig {path} Error !! Msg : {e.Message}");
         }
-        var obj = default(T);
-        if(null == obj)
-        {
-            obj = System.Activator.CreateInstance<T>();
-        }
+        var obj = System.Activator.CreateInstance<T>();
         return obj;
     }
 
@@ -193,13 +186,11 @@ public class Util
     {
 #if UNITY_EDITOR
         var obj = AssetDatabase.LoadAssetAtPath<UnityEngine.Object>(path);
-        if (obj != null)
-        {
-            Selection.objects = new UnityEngine.Object[] { obj };
-            return true;
-        }
+        if (obj == null) return false;
+        
+        Selection.objects = new UnityEngine.Object[] { obj };
+        return true;
 #endif
-        return false;
     }
 
     /// <summary>
@@ -207,7 +198,7 @@ public class Util
     /// </summary>
     /// <param name="input"></param>
     /// <returns></returns>
-    unsafe public static uint HashPath(string input)
+    public static unsafe uint HashPath(string input)
     {
         uint h = 2166136261;
         fixed (char* key = input)
@@ -291,8 +282,10 @@ public class Util
     /// <summary>
     /// 查找所有的资源
     /// </summary>
-    /// <param name="searchType">搜索的资源类型</param>
     /// <param name="searchInFolders">指定搜索的文件夹</param>
+    /// <param name="searchOption"></param>
+    /// <param name="filter"></param>
+    /// <param name="directories"></param>
     /// <returns></returns>
     public static string[] FindAssets(string searchInFolders, SearchOption searchOption, string filter, bool directories)
     {
@@ -307,17 +300,8 @@ public class Util
             items = Directory.GetFiles(searchInFolders, filter, searchOption);
         }
 
-        List<string> result = new List<string>();
-        for (int i = 0; i < items.Length; i++)
-        {
-            if (!items[i].EndsWith(".meta"))
-            {
-                result.Add(items[i]);
-            }
-        }
-
         // 返回结果
-        return result.ToArray();
+        return items.Where(t => !t.EndsWith(".meta")).ToArray();
     }
 
 #endif

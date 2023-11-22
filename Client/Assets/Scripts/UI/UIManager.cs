@@ -87,7 +87,7 @@ public partial class UIManager : MonoBehaviour, IManager
         while(iter != null)
         {
             var current = iter.Value;
-            if(current.path == path)
+            if(current.Path == path)
             {
                 win = current;
                 _cacheWindows.Remove(iter);
@@ -145,7 +145,7 @@ public partial class UIManager : MonoBehaviour, IManager
             {
                 _windows.TryGetValue(parentId, out parent);
             }
-            win.Create(parent, id, win.name, win.path, layer, obj);
+            win.Create(parent, id, win.Name, win.Path, layer, obj);
             win.OnShow();
             callback?.Invoke(id);
         }
@@ -182,13 +182,13 @@ public partial class UIManager : MonoBehaviour, IManager
             _windows.Remove(id);
             window.OnHide(() => 
             {
-                window.Destory();
+                window.Destroy();
                 using(var e = _windows.GetEnumerator())
                 {
                     while (e.MoveNext()) { 
-                        if(e.Current.Value.parent == window)
+                        if(e.Current.Value.Parent == window)
                         {
-                            e.Current.Value.parent = null;
+                            e.Current.Value.Parent = null;
                         }
                     }
                 }

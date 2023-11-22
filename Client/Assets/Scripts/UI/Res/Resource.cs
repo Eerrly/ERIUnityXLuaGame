@@ -51,11 +51,10 @@ public class Resource : ReferenceCountBase
     /// </summary>
     public override void OnReferenceBecameInvalid()
     {
-        if(_bundle != null)
-        {
-            _bundle.Release();
-            _bundle = null;
-        }
+        if (_bundle == null) return;
+        
+        _bundle.Release();
+        _bundle = null;
     }
 
     /// <summary>
@@ -64,7 +63,7 @@ public class Resource : ReferenceCountBase
     /// <returns></returns>
     public GameObject GetGameObject()
     {
-        GameObject go = Asset as GameObject;
+        var go = Asset as GameObject;
         return go;
     }
 
@@ -75,14 +74,13 @@ public class Resource : ReferenceCountBase
     /// <returns></returns>
     public GameObject GetGameObject(string name)
     {
-        if(Assets != null)
+        if (Assets == null) return null;
+        
+        foreach (var t in Assets)
         {
-            for (int i = 0; i < Assets.Length; i++)
+            if(t.name == name && t is GameObject o)
             {
-                if(Assets[i].name == name && Assets[i] is GameObject)
-                {
-                    return Assets[i] as GameObject;
-                }
+                return o;
             }
         }
         return null;
@@ -94,8 +92,8 @@ public class Resource : ReferenceCountBase
     /// <returns></returns>
     public GameObject GetGameObjectInstance()
     {
-        GameObject go = Asset as GameObject;
-        GameObject instance = GameObject.Instantiate<GameObject>(go);
+        var go = Asset as GameObject;
+        var instance = Object.Instantiate<GameObject>(go);
         instance.name = Asset.name;
         return instance;
     }
@@ -107,18 +105,14 @@ public class Resource : ReferenceCountBase
     /// <returns></returns>
     public GameObject GetGameObjectInstance(string name)
     {
-        if (Assets != null)
+        if (Assets == null) return null;
+        foreach (var t in Assets)
         {
-            for (int i = 0; i < Assets.Length; i++)
-            {
-                if (Assets[i].name == name && Assets[i] is GameObject)
-                {
-                    GameObject go = Assets[i] as GameObject;
-                    GameObject instance = GameObject.Instantiate<GameObject>(go);
-                    instance.name = Assets[i].name;
-                    return instance;
-                }
-            }
+            if (t.name != name || !(t is GameObject o)) continue;
+            
+            var instance = Object.Instantiate<GameObject>(o);
+            instance.name = o.name;
+            return instance;
         }
         return null;
     }
@@ -133,32 +127,34 @@ public class Resource : ReferenceCountBase
         Sprite sprite = null;
         if (name != null && Assets != null)
         {
-            for (int i = 0; i < Assets.Length; i++)
+            foreach (var t in Assets)
             {
-                if (Assets[i].name == name)
+                if (t.name != name) continue;
+                
+                sprite = t as Sprite;
+                if(sprite == null && t != null)
                 {
-                    sprite = Assets[i] as Sprite;
-                    if(sprite == null && Assets[i] != null)
-                    {
-                        var tex = Assets[i] as Texture2D;
+                    var tex = t as Texture2D;
+                    if (tex != null)
                         sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero);
-                    }
-                    if (sprite != null)
-                    {
-                        break;
-                    }
+                }
+                if (sprite != null)
+                {
+                    break;
                 }
             }
         }
+
+        if (sprite != null || Asset == null) return sprite;
+        
+        sprite = Asset as Sprite;
         if (sprite == null && Asset != null)
         {
-            sprite = Asset as Sprite;
-            if (sprite == null && Asset != null)
-            {
-                var tex = Asset as Texture2D;
+            var tex = Asset as Texture2D;
+            if (tex != null) 
                 sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero);
-            }
         }
+        
         return sprite;
     }
 

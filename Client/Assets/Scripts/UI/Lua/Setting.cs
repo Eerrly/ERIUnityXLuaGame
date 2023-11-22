@@ -3,14 +3,15 @@ using UnityEngine;
 
 public partial class Setting
 {
-    public static readonly string EditorResourcePath = "Assets/Resources";
-    public static readonly string EditorBundlePath = "Assets/Sources";
-    public static readonly string EditorScriptRoot = "../Lua";
+    public const string EditorResourcePath = "Assets/Resources";
+    public const string EditorBundlePath = "Assets/Sources";
+    public const string EditorScriptRoot = "../Lua";
+    public const string EditorSpriteAtlasPath = EditorBundlePath + "/SpriteAtlas";
+    public const string EditorScriptBundleName = EditorBundlePath + "/Lua";
+    public const string EditorConfigPath = "Configs";
+    public const string EditorPatchPath = "Patch";
+    
     public static readonly string EditorBundleBuildCachePath = "BundleCache/" + Platform;
-    public static readonly string EditorSpriteAtlasPath = EditorBundlePath + "/SpriteAtlas";
-    public static readonly string EditorScriptBundleName = EditorBundlePath + "/Lua";
-    public static readonly string EditorConfigPath = "Configs";
-    public static readonly string EditorPatchPath = "Patch";
 
     public static string StreamingRoot => Application.streamingAssetsPath;
     /// <summary>
@@ -157,17 +158,17 @@ public partial class Setting
     /// <summary>
     /// 默认层级
     /// </summary>
-    public static readonly int LAYER_DEFAULT = 0;
+    public const int LAYER_DEFAULT = 0;
 
     /// <summary>
     /// 显示层级
     /// </summary>
-    public static readonly int LAYER_UI = 5;
+    public const int LAYER_UI = 5;
 
     /// <summary>
     /// 隐藏层级
     /// </summary>
-    public static readonly int LAYER_HIDE = 31;
+    public const int LAYER_HIDE = 31;
 
 }
 

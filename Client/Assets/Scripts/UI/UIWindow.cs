@@ -5,57 +5,57 @@ using UnityEngine.UI;
 
 public class UIWindow : MonoBehaviour
 {
-    [System.NonSerialized] public Canvas canvas;
-    [System.NonSerialized] public int id;
-    [System.NonSerialized] public string path;
-    [System.NonSerialized] new public string name;
-    [System.NonSerialized] public int layer;
-    [System.NonSerialized] public UIWindow parent;
-    [System.NonSerialized] public Transform root;
-    [System.NonSerialized] public bool isShow;
-    [System.NonSerialized] public GraphicRaycaster raycaster;
+    [System.NonSerialized] public Canvas Canvas;
+    [System.NonSerialized] public int ID;
+    [System.NonSerialized] public string Path;
+    [System.NonSerialized] public string Name;
+    [System.NonSerialized] public int Layer;
+    [System.NonSerialized] public UIWindow Parent;
+    [System.NonSerialized] public Transform Root;
+    [System.NonSerialized] public bool IsShow;
+    [System.NonSerialized] public GraphicRaycaster Raycaster;
 
     public LuaBehaviour behaviour;
 
-    public int realLayer => canvas.sortingOrder;
+    public int realLayer => Canvas.sortingOrder;
 
     /// <summary>
     /// 创建UI窗口
     /// </summary>
     /// <param name="parent">父窗口</param>
     /// <param name="id">窗口ID</param>
-    /// <param name="name"></param>
+    /// <param name="wName"></param>
     /// <param name="path"></param>
     /// <param name="layer"></param>
     /// <param name="obj"></param>
-    public void Create(UIWindow parent, int id, string name, string path, int layer, object obj)
+    public void Create(UIWindow parent, int id, string wName, string path, int layer, object obj)
     {
-        if(root == null)
+        if(Root == null)
         {
-            root = transform.Find("Root");
-            if(root == null)
+            Root = transform.Find("Root");
+            if(Root == null)
             {
-                root = transform.Find("@Root");
+                Root = transform.Find("@Root");
             }
             SetRoot();
         }
-        this.parent = parent;
-        this.id = id;
-        this.name = name;
-        this.path = path;
-        canvas = GetComponent<Canvas>();
-        if(canvas == null)
+        this.Parent = parent;
+        this.ID = id;
+        this.Name = wName;
+        this.Path = path;
+        Canvas = GetComponent<Canvas>();
+        if(Canvas == null)
         {
-            canvas = gameObject.AddComponent<Canvas>();
+            Canvas = gameObject.AddComponent<Canvas>();
         }
-        canvas.pixelPerfect = false;
-        raycaster = GetComponent<GraphicRaycaster>();
-        this.layer = layer;
-        canvas.sortingOrder = layer * 10;
-        canvas.planeDistance = 8000 - canvas.sortingOrder;
-        if(canvas.planeDistance <= 0)
+        Canvas.pixelPerfect = false;
+        Raycaster = GetComponent<GraphicRaycaster>();
+        this.Layer = layer;
+        Canvas.sortingOrder = layer * 10;
+        Canvas.planeDistance = 8000 - Canvas.sortingOrder;
+        if(Canvas.planeDistance <= 0)
         {
-            canvas.planeDistance = 0;
+            Canvas.planeDistance = 0;
         }
         behaviour = GetComponent<LuaBehaviour>();
         if(behaviour == null)
@@ -74,14 +74,13 @@ public class UIWindow : MonoBehaviour
     /// </summary>
     private void SetRoot()
     {
-        if (root != null)
+        if (Root == null) return;
+        
+        var rt = Root.GetComponent<RectTransform>();
+        if(rt != null)
         {
-            var rt = root.GetComponent<RectTransform>();
-            if(rt != null)
-            {
-                rt.anchorMax = Vector2.one;
-                rt.anchorMin = Vector2.zero;
-            }
+            rt.anchorMax = Vector2.one;
+            rt.anchorMin = Vector2.zero;
         }
     }
 
@@ -91,13 +90,10 @@ public class UIWindow : MonoBehaviour
     /// <param name="callback">回调</param>
     public void OnShow(System.Action callback = null)
     {
-        raycaster.enabled = true;
-        isShow = true;
+        Raycaster.enabled = true;
+        IsShow = true;
         Util.SetGameObjectLayer(gameObject, Setting.LAYER_UI, true);
-        if(callback != null)
-        {
-            callback();
-        }
+        callback?.Invoke();
     }
 
     /// <summary>
@@ -106,23 +102,19 @@ public class UIWindow : MonoBehaviour
     /// <param name="callback">回调</param>
     public void OnHide(System.Action callback = null)
     {
-        raycaster.enabled = false;
-        isShow = false;
+        Raycaster.enabled = false;
+        IsShow = false;
         Util.SetGameObjectLayer(gameObject, Setting.LAYER_HIDE, true);
-        if(callback != null)
-        {
-            callback();
-        }
+        callback?.Invoke();
     }
 
-    public void Destory()
+    public void Destroy()
     {
-        isShow = false;
-        if (behaviour != null)
-        {
-            behaviour.Release();
-            behaviour = null;
-        }
+        IsShow = false;
+        if (behaviour == null) return;
+        
+        behaviour.Release();
+        behaviour = null;
     }
 
 }

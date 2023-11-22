@@ -1,25 +1,23 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class ResourceBundle : ReferenceCountBase
 {
-
-    private ResManager _manager;
-
     /// <summary>
     /// 资源管理器
     /// </summary>
-    public ResManager Manager => _manager;
+    private ResManager Manager { get; set; }
 
     public uint Hash { get; private set; }
 
-    public AssetBundle RawBundle { get; set; }
-    
-    public AssetBundle PackageBundle { get; set; }
+    private AssetBundle RawBundle { get; set; }
+
+    private AssetBundle PackageBundle { get; set; }
 
     public bool CacheUnload = false;
 
-    public Object SharedAsset;
+    private Object _sharedAsset;
 
     /// <summary>
     /// 是否为流式加载的场景资源
@@ -30,7 +28,7 @@ public class ResourceBundle : ReferenceCountBase
 
     public ResourceBundle(uint hash, AssetBundle bundle, AssetBundle packageBundle, ResManager manager)
     {
-        _manager = manager;
+        Manager = manager;
         Hash = hash;
         RawBundle = bundle;
         PackageBundle = packageBundle;
@@ -50,8 +48,8 @@ public class ResourceBundle : ReferenceCountBase
     public void UnloadCache()
     {
         CacheUnload = true;
-        RawBundle?.Unload(false);
-        PackageBundle?.Unload(false);
+        if (RawBundle != null) RawBundle.Unload(false);
+        if (PackageBundle != null) PackageBundle.Unload(false);
     }
 
     /// <summary>
@@ -59,14 +57,14 @@ public class ResourceBundle : ReferenceCountBase
     /// </summary>
     public void UnloadBundle()
     {
-        RawBundle?.Unload(true);
-        PackageBundle?.Unload(true);
+        if (RawBundle != null) RawBundle.Unload(true);
+        if (PackageBundle != null) PackageBundle.Unload(true);
         RawBundle = null;
         PackageBundle = null;
-        if(SharedAsset != null)
+        if(_sharedAsset != null)
         {
-            Object.DestroyImmediate(SharedAsset);
-            SharedAsset = null;
+            Object.DestroyImmediate(_sharedAsset);
+            _sharedAsset = null;
         }
     }
 
@@ -75,15 +73,15 @@ public class ResourceBundle : ReferenceCountBase
     /// </summary>
     public void RealUnload()
     {
-        _manager.UnloadBundleMap.Add(Hash, new BundleGroup() { PackageBundle = PackageBundle, RawBundle = RawBundle, Time = Time.realtimeSinceStartup });
+        Manager.UnloadBundleMap.Add(Hash, new BundleGroup() { PackageBundle = PackageBundle, RawBundle = RawBundle, Time = Time.realtimeSinceStartup });
         RawBundle = null;
         PackageBundle = null;
         Manager.Unload(Hash);
-        _manager = null;
-        if (SharedAsset != null)
+        Manager = null;
+        if (_sharedAsset != null)
         {
-            Object.DestroyImmediate(SharedAsset);
-            SharedAsset = null;
+            Object.DestroyImmediate(_sharedAsset);
+            _sharedAsset = null;
         }
     }
 
@@ -96,22 +94,22 @@ public class ResourceBundle : ReferenceCountBase
         if(RawBundle != null)
         {
             var names = RawBundle.GetAllAssetNames();
-            for (int i = 0; i < names.Length; i++)
+            foreach (var t in names)
             {
                 // skip: .bytes
-                var name = names[i].Substring(0, names[i].Length - 6);
-                var bytes = RawBundle.LoadAsset<TextAsset>(names[i]).bytes;
+                var name = t.Substring(0, t.Length - 6);
+                var bytes = RawBundle.LoadAsset<TextAsset>(t).bytes;
                 dict.Add(name, bytes);
             }
         }
         if (PackageBundle != null)
         {
             var names = PackageBundle.GetAllAssetNames();
-            for (int i = 0; i < names.Length; i++)
+            foreach (var t in names)
             {
                 // skip: .bytes
-                var name = names[i].Substring(0, names[i].Length - 6);
-                var bytes = PackageBundle.LoadAsset<TextAsset>(names[i]).bytes;
+                var name = t.Substring(0, t.Length - 6);
+                var bytes = PackageBundle.LoadAsset<TextAsset>(t).bytes;
                 if (!dict.ContainsKey(name))
                 {
                     dict.Add(name, bytes);
@@ -185,13 +183,13 @@ public class ResourceBundle : ReferenceCountBase
     }
 
     private static List<Object> _tempList = new List<Object>();
-    public Object[] LoadAllAssetsFromRequest(AssetBundleRequest requst, AssetBundleRequest packageRequest)
+    public Object[] LoadAllAssetsFromRequest(AssetBundleRequest request, AssetBundleRequest packageRequest)
     {
         _tempList.Clear();
         Object[] rawAssets = null;
-        if (requst != null)
+        if (request != null)
         {
-            rawAssets = requst.allAssets;
+            rawAssets = request.allAssets;
             foreach (var rawAsset in rawAssets)
             {
                 _tempList.Add(rawAsset);
@@ -205,14 +203,7 @@ public class ResourceBundle : ReferenceCountBase
                 var find = false;
                 if (rawAssets != null)
                 {
-                    foreach (var rawAsset in rawAssets)
-                    {
-                        if ((rawAsset.GetType() == asset.GetType() && rawAsset.name == asset.name))
-                        {
-                            find = true;
-                            break;
-                        }
-                    }
+                    find = rawAssets.Any(rawAsset => (rawAsset.GetType() == asset.GetType() && rawAsset.name == asset.name));
                 }
                 if (!find)
                 {
@@ -225,6 +216,10 @@ public class ResourceBundle : ReferenceCountBase
         return results;
     }
 
+    /// <summary>
+    /// 加载所有资源
+    /// </summary>
+    /// <returns></returns>
     public Object[] LoadAllAssets()
     {
         _tempList.Clear();
@@ -245,14 +240,7 @@ public class ResourceBundle : ReferenceCountBase
                 var find = false;
                 if (rawAssets != null)
                 {
-                    foreach (var rawAsset in rawAssets)
-                    {
-                        if ((rawAsset.GetType() == asset.GetType() && rawAsset.name == asset.name))
-                        {
-                            find = true;
-                            break;
-                        }
-                    }
+                    find = rawAssets.Any(rawAsset => (rawAsset.GetType() == asset.GetType() && rawAsset.name == asset.name));
                 }
                 if (!find)
                 {

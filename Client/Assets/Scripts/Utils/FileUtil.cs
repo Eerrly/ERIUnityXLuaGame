@@ -98,11 +98,11 @@ public class FileUtil
     {
         if (false == File.Exists(source))
         {
-            throw new Exception(string.Format("文件不存在:[{0}]", source));
+            throw new Exception($"文件不存在:[{source}]");
         }
 
         var targetDir = Directory.GetParent(target);
-        if (false == targetDir.Exists)
+        if (targetDir != null && false == targetDir.Exists)
         {
             targetDir.Create();
         }

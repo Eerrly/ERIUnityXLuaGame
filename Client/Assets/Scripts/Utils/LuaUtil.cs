@@ -9,14 +9,14 @@ public class LuaUtil
     /// <summary>
     /// 加载删除列表
     /// </summary>
-    private static List<UnityEngine.Object> dontDestroyOnLoadObjs = new List<UnityEngine.Object>();
+    private static List<UnityEngine.Object> _dontDestroyOnLoadObjs = new List<UnityEngine.Object>();
 
     /// <summary>
     /// 清除不加载删除列表
     /// </summary>
     public static void ClearDontDestroyObjs()
     {
-        dontDestroyOnLoadObjs.Clear();
+        _dontDestroyOnLoadObjs.Clear();
     }
 
     /// <summary>
@@ -26,8 +26,8 @@ public class LuaUtil
     /// <param name="isDontDestroy"></param>
     public static void DontDestroyOnLoad(UnityEngine.Object obj, bool isDontDestroy = true)
     {
-        if (isDontDestroy) GameObject.DontDestroyOnLoad(obj);
-        if (obj != null) dontDestroyOnLoadObjs.Add(obj);
+        if (isDontDestroy) Object.DontDestroyOnLoad(obj);
+        if (obj != null) _dontDestroyOnLoadObjs.Add(obj);
     }
 
     /// <summary>
@@ -53,7 +53,7 @@ public class LuaUtil
     {
         return Global.Instance.UIManager.CreateWindow(parentId, path, layer, args, (id) => 
         {
-            callback.Call(id);
+            callback?.Call(id);
         });
     }
 
@@ -84,7 +84,7 @@ public class LuaUtil
     {
         Global.Instance.SceneManager.LoadScene(scene, (state, progress) =>
         {
-            callback.Call((int)state, progress);
+            callback?.Call((int)state, progress);
         });
     }
 

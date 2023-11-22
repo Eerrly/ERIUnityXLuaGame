@@ -5,15 +5,15 @@
 /// </summary>
 public class PatchUtil
 {
-    private static string[] patchfiles = null;
+    private static string[] _patchFiles = null;
     /// <summary>
     /// 获取差异文件的批处理文件
     /// </summary>
-    private static readonly string calclist = FileUtil.CombinePaths(UnityEngine.Application.dataPath, "Editor/Tools/calclist.bat");
+    private static readonly string CalcList = FileUtil.CombinePaths(UnityEngine.Application.dataPath, "Editor/Tools/calclist.bat");
     /// <summary>
     /// 获取版本号的批处理文件
     /// </summary>
-    private static readonly string getversion = FileUtil.CombinePaths(UnityEngine.Application.dataPath, "Editor/Tools/getversion.bat");
+    private static readonly string GetVersion = FileUtil.CombinePaths(UnityEngine.Application.dataPath, "Editor/Tools/getversion.bat");
 
     /// <summary>
     /// 获取需要热更的文件数组
@@ -23,20 +23,20 @@ public class PatchUtil
     /// <returns>热更的文件数组</returns>
     public static string[] GetPatchFiles(string startVersion, string endVersion)
     {
-        if (patchfiles != null)
+        if (_patchFiles != null)
         {
-            System.Array.Clear(patchfiles, 0, patchfiles.Length);
+            System.Array.Clear(_patchFiles, 0, _patchFiles.Length);
         }
 #if UNITY_EDITOR
         var dir = FileUtil.CombinePaths(UnityEngine.Application.dataPath, "Sources");
         var output = FileUtil.CombinePaths(UnityEngine.Application.dataPath, "Editor/Tools/diff.txt");
-        var arg = string.Format("{0} {1} {2}", startVersion, endVersion, output);
-        if (Util.ExecuteBat(dir, calclist, arg) == 0)
+        var arg = $"{startVersion} {endVersion} {output}";
+        if (Util.ExecuteBat(dir, CalcList, arg) == 0)
         {
-            patchfiles = System.IO.File.ReadAllLines(output).Where(path => path.StartsWith("Client/Assets/Sources/") || path.StartsWith("Lua/")).ToArray();
+            _patchFiles = System.IO.File.ReadAllLines(output).Where(path => path.StartsWith("Client/Assets/Sources/") || path.StartsWith("Lua/")).ToArray();
         }
 #endif
-        return patchfiles;
+        return _patchFiles;
     }
 
     /// <summary>
@@ -48,8 +48,8 @@ public class PatchUtil
 #if UNITY_EDITOR
         var dir = FileUtil.CombinePaths(UnityEngine.Application.dataPath, "Sources");
         var output = FileUtil.CombinePaths(UnityEngine.Application.dataPath.Replace("/Assets", ""), UnityEditor.FileUtil.GetUniqueTempPathInProject());
-        var arg = string.Format("{0}", output);
-        if (Util.ExecuteBat(dir, getversion, arg) == 0)
+        var arg = $"{output}";
+        if (Util.ExecuteBat(dir, GetVersion, arg) == 0)
         {
             return System.IO.File.ReadLines(output).First();
         }

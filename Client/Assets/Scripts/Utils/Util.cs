@@ -305,5 +305,17 @@ public class Util
     }
 
 #endif
+    
+    public static string DebugBytes(byte[] data, uint len)
+    {
+        var sb = new System.Text.StringBuilder();
+        sb.Append("[");
+        for (int i = 0; i < len; i++)
+        {
+            sb.AppendFormat("{0} ", (int)data[i]);
+        }
+        sb.Append("]");
+        return sb.ToString();
+    }
 
 }

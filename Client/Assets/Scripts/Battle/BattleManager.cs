@@ -2,6 +2,7 @@
 using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
+using KCPNet;
 
 /// <summary>
 /// MemoryStream的扩展类
@@ -46,6 +47,7 @@ public class BattleManager : MonoBehaviour
     private readonly FrameEngine _frameEngine = new FrameEngine();
 
     private BattleCommonData _battleClientData;
+    public BattleCommonData BattleClientData => _battleClientData;
 
     private bool _battleStarted = false;
 
@@ -132,7 +134,7 @@ public class BattleManager : MonoBehaviour
         _frameEngine.StartEngine(1 / (float)BattleConstant.FrameInterval);
         battle.Initialize();
         battleNetController.Initialize();
-        battleNetController.Connect(NetConstant.IP, NetConstant.Port);
+        battleNetController.DoConnect(NetConstant.IP, NetConstant.Port);
     }
 
     /// <summary>
@@ -143,7 +145,8 @@ public class BattleManager : MonoBehaviour
         try
         {
             if (!_battleStarted) return;
-            
+
+            battleNetController.TryRecivePackages();
             battle.LogicUpdate();
             battle.SwitchProceedingStatus(_paused);
         }
@@ -165,7 +168,7 @@ public class BattleManager : MonoBehaviour
                 if (!_battleStarted)
                 {
                     // 加入
-                    battleNetController.SendReadyMsg();
+                    battleNetController.SendReadyMsg(battle.battleEntity.Frame, (byte)selfPlayerId);
                 }
                 else
                 {
@@ -181,20 +184,10 @@ public class BattleManager : MonoBehaviour
                     if (battle.battleEntity.Frame - _heartBeatFrame >= BattleConstant.HeartBeatFrame)
                     {
                         _heartBeatFrame = battle.battleEntity.Frame;
-                        battleNetController.SendHeartBeatMsg();
+                        battleNetController.SendPingMsg();
                     }
                 }
-                battleNetController.Update();
-
-                // 接受
-                _recvQueue = battleNetController.RecvData();
-                while(_recvQueue.Count > 0)
-                {
-                    lock (_recvQueue)
-                    {
-                        HandleRecvData(_recvQueue.Dequeue());
-                    }
-                }
+                battleNetController.TryUpdate();
             }
         }
         catch (Exception e)
@@ -203,44 +196,6 @@ public class BattleManager : MonoBehaviour
             _battleStarted = false;
         }
         System.Threading.Thread.Sleep(1);
-    }
-
-    /// <summary>
-    /// 接受服务器数据回调
-    /// </summary>
-    /// <param name="packet">包体</param>
-    private void HandleRecvData(Packet packet)
-    {
-        if(packet.head.act == (byte)ACT.JOIN)
-        {
-            _battleStarted = true;
-            battle.battleEntity.Frame = 0;
-        }
-
-        _receiveStream.Reset();
-        _receiveStream.Write(packet.data, 0, packet.head.size);
-        _receiveStream.Seek(0, SeekOrigin.Begin);
-
-        BufferPool.ReleaseBuff(packet.data);
-        while (_binaryReader.BaseStream.Position < _binaryReader.BaseStream.Length)
-        {
-            var inputFrame = FrameBuffer.Frame.defFrame;
-            inputFrame.frame = _binaryReader.ReadInt32();
-            inputFrame.playerCount = _binaryReader.ReadInt32();
-            for (var i = 0; i < inputFrame.playerCount; i++)
-            {
-                var input = new FrameBuffer.Input(_binaryReader.ReadByte());
-                inputFrame[input.pos] = input;
-            }
-
-            var diff = 0;
-            while (!battle.frameBuffer.SyncFrame(inputFrame.frame, ref inputFrame, ref diff))
-            {
-                battleNetController.DisConnect();
-                break;
-            }
-            Logger.Log(LogLevel.Info, $"【客户端同步帧数据】frame:{inputFrame.frame}");
-        }
     }
 
     /// <summary>
@@ -272,7 +227,7 @@ public class BattleManager : MonoBehaviour
 
     private void OnDestroy()
     {
-        battleNetController.DisConnect();
+        battleNetController.DoDisconnect();
         _frameEngine.UnRegisterFrameUpdateListener();
         _frameEngine.UnRegisterNetUpdateListener();
         _frameEngine.StopEngine();

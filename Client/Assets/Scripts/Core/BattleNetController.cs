@@ -13,7 +13,8 @@ public class RecvData
     public int length;
 
     public int cmd;
-
+    
+    public long recvTime;
 }
 
 /// <summary>
@@ -22,6 +23,8 @@ public class RecvData
 public class BattleNetController
 {
     private KcpClient _socketClient;
+    private int _ping = 0;
+    private int _minPing = 0;
     
     private MemoryStream _sendStream;
     private MemoryStream _receiveStream;
@@ -152,6 +155,10 @@ public class BattleNetController
         }
         else if (recv.cmd == NetConstant.pvpPingType)
         {
+            _ping = (int)(recv.recvTime - _binaryReader.ReadInt64());
+            if (_minPing == 0) _minPing = _ping;
+            _minPing = Math.Min(_ping, _minPing);
+            Logger.Log(LogLevel.Info, $"接受到服务器返回的Ping数据 [ping]->{_ping}");
         }
     }
 
@@ -166,6 +173,7 @@ public class BattleNetController
             _recvData.cmd = (t.Head.cmd << 8) + t.Head.act;
             _recvData.data = t.Data;
             _recvData.length = t.Length;
+            _recvData.recvTime = t.RecvTime;
             try
             {
                 RecvCallback(_recvData);

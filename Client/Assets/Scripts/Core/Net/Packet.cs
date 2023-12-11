@@ -19,5 +19,10 @@ namespace KCPNet
         /// 数据长度
         /// </summary>
         public int Length;
+        
+        /// <summary>
+        /// 接受服务器数据的时间
+        /// </summary>
+        public long RecvTime;
     }
 }

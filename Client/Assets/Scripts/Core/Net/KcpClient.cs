@@ -265,6 +265,8 @@ namespace KCPNet
             packet.Data = BufferPool.GetBuffer((int)packet.Head.length);
             packet.Length = (int)packet.Head.length;
             Array.Copy(data, Head.Length, packet.Data, 0, (int)packet.Head.length);
+
+            packet.RecvTime = Time;
             
             _recvQueue.Push(packet);
         }

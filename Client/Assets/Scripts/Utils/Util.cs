@@ -191,6 +191,7 @@ public class Util
         Selection.objects = new UnityEngine.Object[] { obj };
         return true;
 #endif
+        return false;
     }
 
     /// <summary>

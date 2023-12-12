@@ -284,7 +284,7 @@ public class FrameBuffer
                 }
                 if(playerCount > 1)
                 {
-                    *(Input*)(dest + 4/*(frame)*/ + 1 * inputSize) = input.i0;
+                    *(Input*)(dest + 4/*(frame)*/ + 1 * inputSize) = input.i1;
                 }
                 *(int*)dest = frame;
                 _lastSetFrameIndex = frame;

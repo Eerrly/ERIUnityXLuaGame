@@ -3,6 +3,7 @@ using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
 using KCPNet;
+using UnityEngine.Serialization;
 
 /// <summary>
 /// MemoryStream的扩展类
@@ -49,7 +50,7 @@ public class BattleManager : MonoBehaviour
     private BattleCommonData _battleClientData;
     public BattleCommonData BattleClientData => _battleClientData;
 
-    private bool _battleStarted = false;
+    public bool battleStarted = false;
 
     /// <summary>
     /// 自己的ID
@@ -122,7 +123,7 @@ public class BattleManager : MonoBehaviour
     /// <param name="playerId"></param>
     public void StartBattle(int playerId)
     {
-        this._battleStarted = false;
+        this.battleStarted = false;
         this.selfPlayerId = playerId;
         BufferPool.InitPool(32, 1024, 5, 5);
         battle = new BattleController(_battleClientData);
@@ -144,9 +145,9 @@ public class BattleManager : MonoBehaviour
     {
         try
         {
-            if (!_battleStarted) return;
-
             battleNetController.TryRecivePackages();
+            if (!battleStarted) return;
+
             battle.LogicUpdate();
             battle.SwitchProceedingStatus(_paused);
         }
@@ -165,7 +166,7 @@ public class BattleManager : MonoBehaviour
         {
             if (battleNetController.IsConnected)
             {
-                if (!_battleStarted)
+                if (!battleStarted)
                 {
                     // 加入
                     battleNetController.SendReadyMsg(battle.battleEntity.Frame, (byte)selfPlayerId);
@@ -193,7 +194,7 @@ public class BattleManager : MonoBehaviour
         catch (Exception e)
         {
             Logger.Log(LogLevel.Exception, e.Message);
-            _battleStarted = false;
+            battleStarted = false;
         }
         System.Threading.Thread.Sleep(1);
     }
@@ -203,7 +204,7 @@ public class BattleManager : MonoBehaviour
     /// </summary>
     private void Update()
     {
-        if (!_battleStarted) return;
+        if (!battleStarted) return;
         
         Time = (int)(UnityEngine.Time.time * 1000);
         RenderUpdate();

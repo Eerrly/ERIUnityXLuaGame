@@ -114,7 +114,7 @@ public class BattleController : IBattleController
         }
         else
         {
-            Logger.Log(LogLevel.Error, $"【从缓存帧数据里无法取到对应帧的帧数据】frame:{battleEntity.Frame}");
+            Logger.Log(LogLevel.Error, $"从缓存帧数据里无法取到对应帧的帧数据 [frame]->{battleEntity.Frame}");
         }
     }
 

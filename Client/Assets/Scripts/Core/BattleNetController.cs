@@ -160,6 +160,12 @@ public class BattleNetController
             _minPing = Math.Min(_ping, _minPing);
             Logger.Log(LogLevel.Info, $"接受到服务器返回的Ping数据 [ping]->{_ping}");
         }
+        else if (recv.cmd == NetConstant.pvpReadyType)
+        {
+            BattleManager.Instance.battle.battleEntity.Frame = 0;
+            BattleManager.Instance.battleStarted = true;
+            Logger.Log(LogLevel.Info, $"接受到服务器返回的准备数据");
+        }
     }
 
     /// <summary>
@@ -212,8 +218,8 @@ public class BattleNetController
     public void Initialize()
     {
         _sendLock = new object();
-        _sendStream = new MemoryStream(256);
-        _receiveStream = new MemoryStream(256);
+        _sendStream = new MemoryStream(1024);
+        _receiveStream = new MemoryStream(1024);
         _binaryReader = new BinaryReader(_receiveStream);
         _binaryWriter = new BinaryWriter(_sendStream);
         _netData = new List<Packet>();
@@ -267,6 +273,7 @@ public class BattleNetController
             _binaryWriter.Seek(0, SeekOrigin.Begin);
             _binaryWriter.Write(frame);
             _binaryWriter.Write(input.ToByte());
+            SendToServer(_sendStream, NetConstant.pvpFrameCmd, NetConstant.pvpFrameAct);
         }
     }
 

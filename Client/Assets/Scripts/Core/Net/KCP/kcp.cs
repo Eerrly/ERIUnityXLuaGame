@@ -503,25 +503,17 @@ public class KCP
         if (segmentCacheList.Count > 0)
         {
             segment = segmentCacheList.Dequeue();
-
             if (segment == null)
             {
                 Logger.Log(LogLevel.Exception, "kcp new segment == null");
                 segment = new Segment(size, size == 0 ? _emptyArray : BufferPool.GetBuffer(size));
             }
-
             segment.Reset(size, size == 0 ? _emptyArray : BufferPool.GetBuffer(size));
-            //UnityEngine.Debug.LogError("new segment from cache " + size);
         }
         else
         {
             segment = new Segment(size, size == 0 ? _emptyArray : BufferPool.GetBuffer(size));
-            //UnityEngine.Debug.LogError("new segment from new " + size); 
-#if UNITY_EDITOR
-            Logger.Log(LogLevel.Info, "new segment " + size);
-#endif
         }
-
         return segment;
     }
 

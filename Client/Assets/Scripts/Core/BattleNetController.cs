@@ -56,7 +56,7 @@ public class BattleNetController
     /// </summary>
     public void DoDisconnect()
     {
-        if(_socketClient != null) _socketClient.Disconnect();
+        if(_socketClient != null && _socketClient.IsConnected) _socketClient.Disconnect();
     }
 
     /// <summary>
@@ -192,7 +192,7 @@ public class BattleNetController
     /// </summary>
     public void TryRecivePackages()
     {
-        if(_socketClient == null) return;
+        if(!IsConnected) return;
         HandleNetData();
     }
 
@@ -201,7 +201,7 @@ public class BattleNetController
     /// </summary>
     public void TryUpdate()
     {
-        if(_socketClient == null) return;
+        if(!IsConnected) return;
 
         _socketClient.Update();
     }

@@ -178,7 +178,7 @@ public class FrameBuffer
     public FrameBuffer(int playerCount, int capacity = 1000)
     {
         var size = System.Runtime.InteropServices.Marshal.SizeOf(typeof(Input));
-        Logger.Log(LogLevel.Info, $"FrameBuffer.Create({playerCount}, {capacity}) sizeof(Input) = {size}");
+        Logger.Log(LogLevel.Info, $"创建帧缓存对象 [玩家数量]->{playerCount} [长度]->{capacity} [输入结构体的字节大小]->{size}");
         this.playerCount = playerCount;
         this.capacity = capacity;
         this.inputSize = size;

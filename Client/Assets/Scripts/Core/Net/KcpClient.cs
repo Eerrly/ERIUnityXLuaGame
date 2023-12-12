@@ -14,7 +14,7 @@ namespace KCPNet
     
     public class KcpClient
     {
-        public bool IsConnected => _client != null && _client.Connected;
+        public bool IsConnected => _client != null && _client.Connected && _kcp != null && _kcp.State != 0xFFFFFF;
         
         private EndPoint _endPoint;
         
@@ -158,7 +158,7 @@ namespace KCPNet
                 }
                 catch (Exception ex)
                 {
-                    Logger.Log(LogLevel.Exception, $"客户端发送数据发生异常 错误:{ex.Message}");
+                    Logger.Log(LogLevel.Exception, $"发送数据发生异常 错误:{ex.Message}");
                 }
                 finally
                 {
@@ -184,14 +184,18 @@ namespace KCPNet
                         _usedRecvBufferSize += length;
                         SplitPackets();
                     }
-                    else if(length < 0)
+                    else if (length < 0)
                     {
-                        error = $"客户端接收数据发生异常 接受数据小于0, 长度:{length}";
+                        error = $"接收数据发生异常 接受数据小于0, 长度:{length}";
                     }
+                }
+                catch (SocketException ex)
+                {
+                    if(ex.ErrorCode != (int)SocketError.WouldBlock) error = $"接收数据发生异常 错误码:{ex.ErrorCode} 错误:{ex.Message}";
                 }
                 catch (Exception ex)
                 {
-                    error = $"客户端接收数据发生异常 错误:{ex.Message}";
+                    error = $"接收数据发生异常 错误:{ex.Message}";
                 }
 
                 if (error != string.Empty)
@@ -258,7 +262,7 @@ namespace KCPNet
             }
             if(length != packet.Head.length + Head.Length)
             {
-                Logger.Log(LogLevel.Error, $"客户端接收数据长度不匹配 数据长度:{length} 目标长度:{packet.Head.length + Head.Length}");
+                Logger.Log(LogLevel.Error, $"接收数据长度不匹配 数据长度:{length} 目标长度:{packet.Head.length + Head.Length}");
                 return;
             }
 
@@ -330,9 +334,10 @@ namespace KCPNet
                 if (!System.Net.IPAddress.TryParse(ip, out var address))
                 {
                     address = System.Net.IPAddress.Any;
-                    Logger.Log(LogLevel.Error, $"客户端链接 [IPAddress.TryParse] 发生错误, 转为 [IPAddress.Any] ip:{ip} address:{address}");
+                    Logger.Log(LogLevel.Error, $"链接 [IPAddress.TryParse] 发生错误, 转为 [IPAddress.Any] ip:{ip} address:{address}");
                 }
 
+                _endPoint = new IPEndPoint(address, port);
                 _client.Blocking = false;
                 try
                 {
@@ -341,14 +346,14 @@ namespace KCPNet
                 catch (System.Exception ex)
                 {
                     _client = null;
-                    Logger.Log(LogLevel.Exception, $"客户端链接 [Connect] 发生异常 错误:{ex.Message}");
+                    Logger.Log(LogLevel.Exception, $"链接 [Connect] 发生异常 错误:{ex.Message}");
                     return false;
                 }
                 return true;
             }
             catch (System.Exception ex)
             {
-                Logger.Log(LogLevel.Exception, $"客户端链接发生异常 错误:{ex.Message}");
+                Logger.Log(LogLevel.Exception, $"链接 发生异常 错误:{ex.Message}");
             }
             return false;
         }

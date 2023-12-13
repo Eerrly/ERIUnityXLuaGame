@@ -6,9 +6,15 @@
   <component name="ChangeListManager">
     <list default="true" id="b4a5898d-e06a-4fbd-b017-555dd42587d4" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Client/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Client/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Configs/asset_bundles.json" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Configs/asset_bundles.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Configs/version.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Configs/version.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Battle/BattleController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Battle/BattleController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Battle/BattleManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Battle/BattleManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Battle/FrameEngine.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Battle/FrameEngine.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Battle/Player/FrameBuffer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Battle/Player/FrameBuffer.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Core/BattleNetController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Core/BattleNetController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Core/Net/KcpClient.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Core/Net/KcpClient.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Sources/Lua/32/ui/Const.bytes" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Sources/Lua/32/ui/Const.bytes" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Sources/Lua/64/ui/Const.bytes" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Sources/Lua/64/ui/Const.bytes" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,6 +29,7 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/012ca6023c754e6384f20d14e09f256e5789b8/84/1c80d443/Random.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/012ca6023c754e6384f20d14e09f256e5789b8/c5/e19209d3/List`1.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/012ca6023c754e6384f20d14e09f256e5789b8/fc/243f967f/MemberInfo.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/4dc18ce7f2d44bec9b4b05682d05250935ea48/54/74d736bd/SocketError.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/4dc18ce7f2d44bec9b4b05682d05250935ea48/b3/7b49671d/Socket.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/5759c783505f4c70aebcb233b8082b85796400/7f/95f77ef0/Paths.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/6aff66e3fb024c7a8e93a3167f3b49a45c00/ae/6091abc4/AssetBundleRequest.cs" root0="SKIP_HIGHLIGHTING" />
@@ -31,6 +38,7 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/8e5509fdd5784e7e931313cdeac8ad64574bc0/dc/247df2aa/Array.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/9686eace6e5646cf929f6b4c7377ebcd364f48/58/30cc7aaa/UdpClient.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/c8341905d7bd40f79fd9df0aeb1e3cf61e00/76/a576715e/Logger.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://E:/GitProjects/ERIUnitySimpleGame/Client/Assets/Scripts/Core/BattleNetController.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Core/Net/Head.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Core/Net/KCP/BatterList.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Core/Net/KCP/kcp.cs" root0="FORCE_HIGHLIGHTING" />
@@ -101,10 +109,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="23428">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="4536">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" value="23428" />
+      <option name="pid" value="4536" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -127,7 +135,8 @@
       <workItem from="1700719069887" duration="10055000" />
       <workItem from="1700735442455" duration="2165000" />
       <workItem from="1702275865332" duration="16589000" />
-      <workItem from="1702372720610" duration="4078000" />
+      <workItem from="1702372720610" duration="6852000" />
+      <workItem from="1702448924956" duration="13531000" />
     </task>
     <task id="LOCAL-00001" summary="C#修改">
       <option name="closed" value="true" />
@@ -209,7 +218,15 @@
       <option name="project" value="LOCAL" />
       <updated>1702291898282</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="初始化KCP代码 Step 0">
+      <option name="closed" value="true" />
+      <created>1702377033341</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1702377033342</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -224,6 +241,13 @@
     <MESSAGE value="C# 修改" />
     <MESSAGE value="初始化KCP代码 Step 0" />
     <option name="LAST_COMMIT_MESSAGE" value="初始化KCP代码 Step 0" />
+  </component>
+  <component name="XDebuggerManager">
+    <pin-to-top-manager>
+      <pinned-members>
+        <PinnedItemInfo parentTag="Type#System.IO.BinaryReader" memberName="m_buffer" />
+      </pinned-members>
+    </pin-to-top-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

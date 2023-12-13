@@ -1,9 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 using KCPNet;
-using UnityEngine.Serialization;
 
 /// <summary>
 /// MemoryStream的扩展类
@@ -21,12 +21,6 @@ public static class MemoryStreamEx
 public class BattleManager : MonoBehaviour
 {
     private volatile bool _paused = false;
-
-    public static int MainThreadId;
-    /// <summary>
-    /// 是否为主线程
-    /// </summary>
-    public static bool IsMainThread => System.Threading.Thread.CurrentThread.ManagedThreadId == MainThreadId;
 
     public BattleController battle { get; private set; }
 
@@ -75,6 +69,21 @@ public class BattleManager : MonoBehaviour
     private FrameBuffer.Input _lastRecvPlayerInput = new FrameBuffer.Input(0);
     private int _realSentFrame = 0;
     private int _heartBeatFrame = 0;
+    
+    /// <summary>
+    /// 从第0帧接到服务器数据开始，客户端流逝时间的一个计时器
+    /// </summary>
+    private Stopwatch _stopWatch = new Stopwatch();
+    /// <summary>
+    /// 客户端流逝时间与最后一次接受服务器的帧数据的时间差
+    /// </summary>
+    private long _clientServerOffsetTime = 0;
+    /// <summary>
+    /// 上一次进行逻辑更新的客户端流逝时间
+    /// </summary>
+    private long _lastMilliseconds = 0;
+
+    public List<int> AsyncServerFrame = new List<int>();
 
     private void Awake()
     {
@@ -96,6 +105,25 @@ public class BattleManager : MonoBehaviour
         }
         _recvBuffer = new byte[6];
         _binaryReader = new BinaryReader(_receiveStream);
+    }
+
+    /// <summary>
+    /// 同步更新客户端与服务器的时间差
+    /// </summary>
+    /// <param name="frame">接收到的服务器帧数据的帧号</param>
+    public void SyncClientServerOffsetTime(int frame)
+    {
+        if (frame == 0)
+        {
+            _stopWatch.Start();
+            _clientServerOffsetTime = 0;
+        }
+
+        var tmpClientServerOffsetTime = _stopWatch.ElapsedMilliseconds - frame * BattleConstant.FrameInterval;
+        // if(tmpClientServerOffsetTime < _clientServerOffsetTime)
+        {
+            _clientServerOffsetTime = tmpClientServerOffsetTime;
+        }
     }
 
     /// <summary>
@@ -148,7 +176,26 @@ public class BattleManager : MonoBehaviour
             battleNetController.TryRecivePackages();
             if (!battleStarted) return;
 
-            battle.LogicUpdate();
+            var nextFrame = battle.battleEntity.Frame + 1;
+            var serverTime = _stopWatch.ElapsedMilliseconds - _clientServerOffsetTime + battleNetController.MinPing * 0.5f;
+            // 如果服务器时间 + 半个ping时间 + 魔法数字 >= 如果大于等于下一帧的时间，就说明理论上应该接受到服务器的新帧了，更新一帧
+            var hasNewFrame = serverTime + battleNetController.Ping * 0.5f + 4 >= nextFrame * BattleConstant.FrameInterval;
+            // 客户端流逝时间 - 上一帧执行时候的流逝时间 >= 两帧时间 也更新。这一般是比较卡的时候
+            var slowdown = _stopWatch.ElapsedMilliseconds - _lastMilliseconds >= BattleConstant.FrameInterval * 2f;
+
+            if (hasNewFrame || slowdown)
+            {
+                Logger.Log(LogLevel.Info, $"逻辑轮询 " +
+                                          $"nextFrame:{nextFrame} " +
+                                          $"clientTime:{_stopWatch.ElapsedMilliseconds} " +
+                                          $"serverTime:{serverTime}" +
+                                          $"MinPing:{battleNetController.MinPing}" +
+                                          $"Ping:{battleNetController.Ping}" +
+                                          $"_clientServerOffsetTime:{_clientServerOffsetTime} " +
+                                          $"hasNewFrame:{hasNewFrame} slowdown:{slowdown}");
+                _lastMilliseconds = _stopWatch.ElapsedMilliseconds;
+                battle.LogicUpdate();
+            }
             battle.SwitchProceedingStatus(_paused);
         }
         catch (Exception e)

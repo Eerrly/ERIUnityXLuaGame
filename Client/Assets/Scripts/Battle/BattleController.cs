@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 
 /// <summary>
@@ -42,28 +43,25 @@ public class BattleController : IBattleController
 
     public override void LogicUpdate()
     {
-        if(_enterMilliseconds == 0) _enterMilliseconds = BattleManager.Instance.Time;
-
-        var startMillSeconds = BattleManager.Instance.Time - _enterMilliseconds;
-        while(startMillSeconds - _lastMilliseconds >= BattleConstant.FrameInterval)
+        try
         {
-            _lastMilliseconds += BattleConstant.FrameInterval;
-            try
+            if (!Paused)
             {
-                if (!Paused)
+                Interlocked.Increment(ref BattleManager.Instance.LogicFrame);
+                while (BattleManager.Instance.AsyncServerFrame.Count > 0)
                 {
-                    Interlocked.Increment(ref BattleManager.Instance.LogicFrame);
-                    UpdateInput();
-                    RefreshBattleEntity(battleEntity);
+                    var frame = BattleManager.Instance.AsyncServerFrame.First();
+                    UpdateInput(frame);
                     UpdatePlayerState(battleEntity);
+                    battleEntity.Frame = frame;
                 }
-            }
-            catch (System.Exception e)
-            {
-                Logger.Log(LogLevel.Exception, e.Message);
+                RefreshBattleEntity(battleEntity);
             }
         }
-        
+        catch (System.Exception e)
+        {
+            Logger.Log(LogLevel.Exception, e.Message);
+        }
     }
 
     private void UpdatePlayerState(BattleEntity entity)
@@ -104,17 +102,20 @@ public class BattleController : IBattleController
     /// <summary>
     /// 更新玩家操作
     /// </summary>
-    private void UpdateInput() {
+    private void UpdateInput(int frame) {
         var playerEntity = battleEntity.FindEntity(BattleManager.Instance.selfPlayerId);
         var inputFrame = FrameBuffer.Frame.defFrame;
-        if (frameBuffer.TryGetFrame(battleEntity.Frame, ref inputFrame))
+        if (frameBuffer.TryGetFrame(frame, ref inputFrame))
         {
+            BattleManager.Instance.AsyncServerFrame.Remove(frame);
+            
             playerEntity.Input.yaw = inputFrame[playerEntity.ID].yaw - FixedMath.YawOffset;
             playerEntity.Input.key = inputFrame[playerEntity.ID].key;
+            Logger.Log(LogLevel.Info, $"从缓存帧数据里取到对应帧的帧数据 [frame]->{frame} [yaw]->{playerEntity.Input.yaw} key:{playerEntity.Input.key}");
         }
         else
         {
-            Logger.Log(LogLevel.Error, $"从缓存帧数据里无法取到对应帧的帧数据 [frame]->{battleEntity.Frame}");
+            Logger.Log(LogLevel.Error, $"从缓存帧数据里无法取到对应帧的帧数据 [frame]->{frame}");
         }
     }
 

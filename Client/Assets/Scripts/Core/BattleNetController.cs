@@ -22,9 +22,10 @@ public class RecvData
 /// </summary>
 public class BattleNetController
 {
+    public int MinPing = 0;
+    public int Ping = 0;
+
     private KcpClient _socketClient;
-    private int _ping = 0;
-    private int _minPing = 0;
     
     private MemoryStream _sendStream;
     private MemoryStream _receiveStream;
@@ -127,6 +128,7 @@ public class BattleNetController
                 var inputFrame = FrameBuffer.Frame.defFrame;
                 inputFrame.playerCount = BattleManager.Instance.BattleClientData.players.Length;
                 inputFrame.frame = _binaryReader.ReadInt32();
+                
                 if (inputFrame.frame != 0)
                 {
                     for (var i = 0; i < inputFrame.playerCount; i++)
@@ -150,15 +152,17 @@ public class BattleNetController
                     DoDisconnect();
                     break;
                 }
-                Logger.Log(LogLevel.Info, $"接受到服务器返回的帧数据 已同步 [frame]->{inputFrame.frame}");
+                BattleManager.Instance.AsyncServerFrame.Add(inputFrame.frame);
+                BattleManager.Instance.SyncClientServerOffsetTime(inputFrame.frame);
+                Logger.Log(LogLevel.Info, $"接受到服务器返回的帧数据 已同步 [frame]->{inputFrame.frame} [y0]->{inputFrame[0].yaw}");
             }
         }
         else if (recv.cmd == NetConstant.pvpPingType)
         {
-            _ping = (int)(recv.recvTime - _binaryReader.ReadInt64());
-            if (_minPing == 0) _minPing = _ping;
-            _minPing = Math.Min(_ping, _minPing);
-            Logger.Log(LogLevel.Info, $"接受到服务器返回的Ping数据 [ping]->{_ping}");
+            Ping = (int)(recv.recvTime - _binaryReader.ReadInt64());
+            if (MinPing == 0) MinPing = Ping;
+            MinPing = Math.Min(Ping, MinPing);
+            Logger.Log(LogLevel.Info, $"接受到服务器返回的Ping数据 [ping]->{Ping}");
         }
         else if (recv.cmd == NetConstant.pvpReadyType)
         {

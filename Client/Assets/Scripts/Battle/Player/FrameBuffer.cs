@@ -173,7 +173,7 @@ public class FrameBuffer
     private byte[] buffer;
 
     private Frame _lastGetFrame = Frame.defFrame;
-    private int _lastSetFrameIndex = 0;
+    private int _lastSetFrameIndex = -1;
 
     public FrameBuffer(int playerCount, int capacity = 1000)
     {
@@ -235,7 +235,6 @@ public class FrameBuffer
                 var currentFrame = *(int*)dest;
                 if(frame != currentFrame)
                 {
-                    Logger.Log(LogLevel.Error, $"找不到要取的帧:{frame}");
                     return false;
                 }
                 result.frame = currentFrame;

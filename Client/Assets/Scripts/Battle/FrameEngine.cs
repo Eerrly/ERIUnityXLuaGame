@@ -28,7 +28,6 @@ public class FrameEngine
     public void StartEngine(float frameInterval)
     {
         SetFrameInterval(frameInterval);
-        BattleManager.MainThreadId = Thread.CurrentThread.ManagedThreadId;
         _logicThread = new Thread(new ThreadStart(LogicThreadUpdate))
         {
             IsBackground = true

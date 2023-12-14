@@ -15,7 +15,7 @@ public class BuildToolsEditorWin : OdinEditorWindow
         return win;
     }
 
-    private BuildToolsConfig cfg;
+    private BuildToolsConfig _config;
 
     protected override void OnEnable()
     {
@@ -23,15 +23,15 @@ public class BuildToolsEditorWin : OdinEditorWindow
         LoadConfigFile();
     }
 
-    public void LoadConfigFile()
+    private void LoadConfigFile()
     {
-        cfg = Util.LoadConfig<BuildToolsConfig>(Constant.CLIENT_CONFIG_NAME);
-        enablePatching = cfg.enablePatching;
-        useAssetBundle = cfg.useAssetBundle;
-        itemList.Clear();
-        foreach (var item in cfg.itemList)
+        _config = Util.LoadConfig<BuildToolsConfig>(Constant.CLIENT_CONFIG_NAME);
+        enablePatching = _config.enablePatching;
+        useAssetBundle = _config.useAssetBundle;
+        ItemList.Clear();
+        foreach (var item in _config.itemList)
         {
-            itemList.Add(new BuildToolsItemEidtor(this, item));
+            ItemList.Add(new BuildToolsItemEditor(this, item));
         }
     }
 
@@ -45,32 +45,31 @@ public class BuildToolsEditorWin : OdinEditorWindow
     [InfoBox("AssetBundle资源包配置 (Assets/Sources/)")]
     [HideLabel]
     [LabelText("资源数据")]
-    public List<BuildToolsItemEidtor> itemList = new List<BuildToolsItemEidtor>();
+    public readonly List<BuildToolsItemEditor> ItemList = new List<BuildToolsItemEditor>();
 
     [Button("保存当前配置", ButtonSizes.Large)]
     public void SaveConfigFile()
     {
-        cfg.enablePatching = this.enablePatching;
-        cfg.useAssetBundle = this.useAssetBundle;
-        cfg.itemList.Clear();
-        foreach (var item in itemList)
+        _config.enablePatching = this.enablePatching;
+        _config.useAssetBundle = this.useAssetBundle;
+        _config.itemList.Clear();
+        foreach (var item in ItemList)
         {
             var c = new BuildToolsConfig.BuildToolsConfigItem()
             {
-                root = item.root,
-                extension = item.extension,
-                filter = item.filter,
-                searchoption = (int)item.searchoption,
-                directories = item.directories
+                root = item.Root,
+                filter = item.Filter,
+                searchOption = (int)item.SearchOption,
+                directories = item.Directories
             };
             if (string.IsNullOrEmpty(c.root))
             {
                 this.ShowTip("根路径配置为空");
                 return;
             }
-            cfg.itemList.Add(c);
+            _config.itemList.Add(c);
         }
-        Util.SaveConfig(cfg, Constant.CLIENT_CONFIG_NAME);
+        Util.SaveConfig(_config, Constant.CLIENT_CONFIG_NAME);
 
         AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
         this.ShowTip("保存成功！");
@@ -90,66 +89,58 @@ public class BuildToolsEditorWin : OdinEditorWindow
     }
 }
 
-
-public struct BuildToolsItemEidtor
+public struct BuildToolsItemEditor
 {
-    BuildToolsEditorWin win;
+    BuildToolsEditorWin _win;
 
-    [LabelText("资源目录"), LabelWidth(50)]
+    [LabelText("资源目录"), LabelWidth(70)]
     [HideLabel]
     [FolderPath(AbsolutePath = false, ParentFolder = "Assets/Sources/", UseBackslashes = false, RequireExistingPath = true)]
-    [HorizontalGroup("Path")]
+    [HorizontalGroup("Setting")]
     [OnValueChanged("RefreshAssets")]
-    public string root;
+    public readonly string Root;
 
-    [LabelText(",文件后缀"), LabelWidth(55)]
+    [LabelText(",是否以文件夹为单位"), LabelWidth(120)]
     [HideLabel]
-    [HorizontalGroup("Path")]
+    [HorizontalGroup("Setting", 50)]
     [OnValueChanged("RefreshAssets")]
-    public string extension;
-
+    public readonly bool Directories;
+    
     [LabelText(",筛选格式"), LabelWidth(55)]
     [HideLabel]
-    [HorizontalGroup("Path")]
+    [HorizontalGroup("Setting", 70)]
     [OnValueChanged("RefreshAssets")]
-    public string filter;
+    public readonly string Filter;
 
-    [LabelText("是否以文件夹为单位"), LabelWidth(120)]
+    [LabelText(",搜索选项"), LabelWidth(60)]
     [HideLabel]
-    [HorizontalGroup("Setting")]
+    [HorizontalGroup("Setting", 200)]
     [OnValueChanged("RefreshAssets")]
-    public bool directories;
-
-    [LabelText(",搜索选项"), LabelWidth(80)]
-    [HideLabel]
-    [HorizontalGroup("Setting")]
-    [OnValueChanged("RefreshAssets")]
-    public SearchOption searchoption;
+    public readonly SearchOption SearchOption;
 
     [LabelText("资源列表"), LabelWidth(300)]
     [HideLabel]
     [HorizontalGroup("Assets")]
-    public string[] assets;
+    public string[] Assets;
 
-    public BuildToolsItemEidtor(BuildToolsEditorWin win, BuildToolsConfig.BuildToolsConfigItem item)
+    public BuildToolsItemEditor(BuildToolsEditorWin win, BuildToolsConfig.BuildToolsConfigItem item)
     {
         if(item == null)
         {
             item = new BuildToolsConfig.BuildToolsConfigItem();
         }
-        root = string.IsNullOrEmpty(item.root) ? "" : item.root;
-        directories = item.directories;
-        searchoption = (SearchOption)item.searchoption;
-        extension = string.IsNullOrEmpty(item.extension) ? "" : item.extension;
-        filter = string.IsNullOrEmpty(item.filter) ? "*.*" : item.filter;
-        assets = Util.FindAssets(FileUtil.CombinePaths(Setting.EditorBundlePath, root), searchoption, filter, directories);
+        Root = string.IsNullOrEmpty(item.root) ? "" : item.root;
+        Directories = item.directories;
+        SearchOption = (SearchOption)item.searchOption;
+        Filter = string.IsNullOrEmpty(item.filter) ? "*.*" : item.filter;
+        Assets = Util.FindAssets(FileUtil.CombinePaths(Setting.EditorBundlePath, Root), SearchOption, Filter, Directories);
 
-        this.win = win;
+        this._win = win;
     }
 
     public void RefreshAssets()
     {
-        assets = Util.FindAssets(FileUtil.CombinePaths(Setting.EditorBundlePath, root), searchoption, filter, directories);
+        Assets = Util.FindAssets(FileUtil.CombinePaths(Setting.EditorBundlePath, Root), SearchOption, Filter, Directories);
     }
 
 }

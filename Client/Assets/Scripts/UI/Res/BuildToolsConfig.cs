@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UnityEngine.Serialization;
 
 public class BuildToolsConfig
 {
@@ -14,8 +15,7 @@ public class BuildToolsConfig
     {
         public string root;
         public bool directories;
-        public int searchoption;
-        public string extension;
+        public int searchOption;
         public string filter;
     }
 

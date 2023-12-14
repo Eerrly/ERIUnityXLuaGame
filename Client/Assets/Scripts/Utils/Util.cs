@@ -166,6 +166,10 @@ public class Util
         try
         {
             var json = UTF8.GetString(Resources.Load<TextAsset>(configPath).bytes);
+            var settings = new Newtonsoft.Json.JsonSerializerSettings()
+            {
+                
+            };
             var t = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(json);
             return t;
         }

@@ -197,11 +197,11 @@ public class ResUtil
             string[] items = null;
             if (cur.directories)
             {
-                items = Directory.GetDirectories(FileUtil.CombinePaths(Setting.EditorBundlePath, cur.root), cur.filter, (SearchOption)cur.searchoption);
+                items = Directory.GetDirectories(FileUtil.CombinePaths(Setting.EditorBundlePath, cur.root), cur.filter, (SearchOption)cur.searchOption);
             }
             else
             {
-                items = Directory.GetFiles(FileUtil.CombinePaths(Setting.EditorBundlePath, cur.root), cur.filter, (SearchOption)cur.searchoption);
+                items = Directory.GetFiles(FileUtil.CombinePaths(Setting.EditorBundlePath, cur.root), cur.filter, (SearchOption)cur.searchOption);
             }
             foreach (var item in items)
             {
@@ -311,11 +311,7 @@ public class ResUtil
                 abMainFile.Write(bytes, 0, bytes.Length);
             }
             var strDependencies = manifest.GetAllDependencies(t);
-            var uintDependencies = new uint[strDependencies.Length];
-            for (var i = 0; i < strDependencies.Length; i++)
-            {
-                uintDependencies[i] = uint.Parse(strDependencies[i].Replace(".s", ""));
-            }
+            var uintDependencies = strDependencies.Select(t1 => uint.Parse(t1.Replace(".s", ""))).ToList();
             if (mainBundleList.Contains(t))
             {
                 mainBundleItems.Add(new ManifestItem()
@@ -325,7 +321,6 @@ public class ResUtil
                     offset = offset,
                     size = bytes.Length,
                     directories = configItemMap[t].directories,
-                    extension = configItemMap[t].extension,
                     packageResourcePath = hash2Path.TryGetValue(t, out var value) ? value : string.Empty,
                     md5 = Util.MD5(bytes),
                 });
@@ -335,7 +330,7 @@ public class ResUtil
         abMainFile.Close();
         AssetDatabase.ImportAsset(Setting.StreamingBundleRoot, ImportAssetOptions.ForceUpdate);
 
-        bundleManifest.items = mainBundleItems.ToArray();
+        bundleManifest.items = mainBundleItems;
         Util.SaveConfig(bundleManifest, Constant.ASSETBUNDLES_CONFIG_NAME);
 
         AssetDatabase.Refresh();
@@ -371,11 +366,11 @@ public class ResUtil
             string[] files = null;
             if (cur.directories)
             {
-                files = Directory.GetDirectories(FileUtil.CombinePaths(Setting.EditorBundlePath, cur.root), cur.filter, (SearchOption)cur.searchoption);
+                files = Directory.GetDirectories(FileUtil.CombinePaths(Setting.EditorBundlePath, cur.root), cur.filter, (SearchOption)cur.searchOption);
             }
             else
             {
-                files = Directory.GetFiles(FileUtil.CombinePaths(Setting.EditorBundlePath, cur.root), cur.filter, (SearchOption)cur.searchoption);
+                files = Directory.GetFiles(FileUtil.CombinePaths(Setting.EditorBundlePath, cur.root), cur.filter, (SearchOption)cur.searchOption);
             }
             foreach (var item in files)
             {
@@ -529,12 +524,7 @@ public class ResUtil
             File.WriteAllBytes(destFile, sourceBytes);
 
             var nameDependencies = manifest.GetAllDependencies(bundleNames[i]);
-            var dependencies = new uint[nameDependencies.Length];
-            for (var j = 0; j < nameDependencies.Length; ++j)
-            {
-                dependencies[j] = uint.Parse(nameDependencies[j].Replace(".s", "").Replace(".p", ""));
-            }
-
+            var dependencies = nameDependencies.Select(t1 => uint.Parse(t1.Replace(".s", "").Replace(".p", ""))).ToList();
             var name = hash + ".s";
             items.Add(new ManifestItem() {
                 hash = uint.Parse(hash),
@@ -542,12 +532,11 @@ public class ResUtil
                 offset = 0,
                 size = sourceBytes.Length,
                 directories = configMap[bundleNames[i]].directories,
-                extension = configMap[bundleNames[i]].extension,
                 md5 = Util.MD5(sourceBytes),
             });
         }
 
-        bundleManifestFile.items = items.ToArray();
+        bundleManifestFile.items = items;
         AssetDatabase.ImportAsset(Setting.StreamingBundleRoot, ImportAssetOptions.ForceUpdate);
 
         var jsonTexts = JsonUtility.ToJson(bundleManifestFile);

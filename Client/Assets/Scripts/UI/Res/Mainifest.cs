@@ -4,16 +4,14 @@
 public class ManifestItem
 {
     public uint hash;
-    public uint[] dependencies;
+    public List<uint> dependencies;
     public uint offset;
     public int size;
     /// <summary>
     /// 以文件夹打包
     /// </summary>
     public bool directories = false;
-    public string extension;
     public string packageResourcePath;
-    public bool isPatching = false;
     public string md5;
 
     [System.NonSerialized]
@@ -25,15 +23,15 @@ public class ManifestItem
 [System.Serializable]
 public class ManifestConfig
 {
-    public ManifestItem[] items;
+    public List<ManifestItem> items;
 }
 
 public class Manifest
 {
-    private static uint[] defaultValue = new uint[] { };
+    private static List<uint> defaultValue = new List<uint>();
     public Dictionary<uint, ManifestItem> ManifestDict { get; set; }
 
-    public uint[] GetDependencies(uint hash)
+    public List<uint> GetDependencies(uint hash)
     {
         if(ManifestDict != null)
         {
@@ -68,7 +66,7 @@ public class Manifest
         return null;
     }
 
-    public uint[] GetDependencies(uint hash, out uint offset)
+    public List<uint> GetDependencies(uint hash, out uint offset)
     {
         offset = 0;
         if (ManifestDict != null)

@@ -99,7 +99,7 @@ public class ResManager : MonoBehaviour, IManager
 
         Manifest = new Manifest()
         {
-            ManifestDict = new Dictionary<uint, ManifestItem>(config.items.Length + 1),
+            ManifestDict = new Dictionary<uint, ManifestItem>(config.items.Count),
         };
 
         ManifestConfig patchConfig = null;

@@ -180,7 +180,7 @@ public partial class ResLoader
             while (true)
             {
                 var loadedCount = dependencies.Count(t => loadedBundles.ContainsKey(t));
-                if(loadedCount == dependencies.Length)
+                if(loadedCount == dependencies.Count)
                 {
                     break;
                 }

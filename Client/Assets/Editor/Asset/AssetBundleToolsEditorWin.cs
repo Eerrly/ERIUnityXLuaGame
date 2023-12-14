@@ -32,9 +32,8 @@ public class AssetBundleToolsEditorWin : OdinEditorWindow
         }
     }
 
-    [HideLabel]
-    [LabelText("资源数据")]
-    private List<AssetBundleToolsItemEditor> itemList = new List<AssetBundleToolsItemEditor>();
+    [HideLabel] [LabelText("资源数据")] 
+    public List<AssetBundleToolsItemEditor> itemList = new List<AssetBundleToolsItemEditor>();
 
     public struct AssetBundleToolsItemEditor
     {
@@ -60,7 +59,7 @@ public class AssetBundleToolsEditorWin : OdinEditorWindow
 
         [LabelText("所有的依赖"), LabelWidth(50)]
         [HideLabel]
-        [HorizontalGroup("Four")]
+        [HorizontalGroup("Three")]
         public List<AssetBundleToolsItemEditor> assetBundleToolsItemEditors;
 
         public AssetBundleToolsItemEditor(AssetBundleToolsEditorWin win, AssetBundleToolsConfig.AssetBundleToolsConfigItem item)

@@ -2,7 +2,7 @@
 
 public class AssetBundleToolsConfig
 {
-    public readonly List<AssetBundleToolsConfigItem> Items = new List<AssetBundleToolsConfigItem>();
+    public List<AssetBundleToolsConfigItem> Items = new List<AssetBundleToolsConfigItem>();
 
     [System.Serializable]
     public class AssetBundleToolsConfigItem
@@ -14,6 +14,7 @@ public class AssetBundleToolsConfig
         public bool directories;
         public string extension;
         public string packageResourcePath;
+        public bool isPatching;
         public string md5;
     }
 

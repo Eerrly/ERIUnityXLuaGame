@@ -8,13 +8,11 @@
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Client/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Client/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Resources/Configs/asset_bundles.json" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Configs/asset_bundles.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Resources/Configs/version.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Configs/version.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Battle/BattleController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Battle/BattleController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Battle/BattleManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Battle/BattleManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Battle/FrameEngine.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Battle/FrameEngine.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Battle/Player/FrameBuffer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Battle/Player/FrameBuffer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Core/BattleNetController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Core/BattleNetController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Sources/Lua/32/data/view.bytes" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Sources/Lua/32/data/view.bytes" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Sources/Lua/32/ui/Const.bytes" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Sources/Lua/32/ui/Const.bytes" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Sources/Lua/64/ui/Const.bytes" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Sources/Lua/64/ui/Const.bytes" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/EditorBuildSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/EditorBuildSettings.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,19 +27,50 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/012ca6023c754e6384f20d14e09f256e5789b8/84/1c80d443/Random.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/012ca6023c754e6384f20d14e09f256e5789b8/c5/e19209d3/List`1.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/012ca6023c754e6384f20d14e09f256e5789b8/fc/243f967f/MemberInfo.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/01d576ddfadc45249d5a23906072500246e000/e0/29eafb15/CultureInfo.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/4dc18ce7f2d44bec9b4b05682d05250935ea48/54/74d736bd/SocketError.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/4dc18ce7f2d44bec9b4b05682d05250935ea48/b3/7b49671d/Socket.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/5759c783505f4c70aebcb233b8082b85796400/7f/95f77ef0/Paths.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/6aff66e3fb024c7a8e93a3167f3b49a45c00/ae/6091abc4/AssetBundleRequest.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/6aff66e3fb024c7a8e93a3167f3b49a45c00/c5/1097048a/AssetBundleCreateRequest.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/84f51b1b0ff2473ca787c217e1eda8b9118a00/85/792de801/Vector3.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/8e5509fdd5784e7e931313cdeac8ad64574bc0/30/4558c11e/List`1.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/8e5509fdd5784e7e931313cdeac8ad64574bc0/dc/247df2aa/Array.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/9686eace6e5646cf929f6b4c7377ebcd364f48/58/30cc7aaa/UdpClient.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/c701cc3cda1a4e70a8e00519d656ac5a9600/22/bd854ee2/HideLabelAttribute.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/c701cc3cda1a4e70a8e00519d656ac5a9600/73/cfb9c300/HorizontalGroupAttribute.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/c8341905d7bd40f79fd9df0aeb1e3cf61e00/76/a576715e/Logger.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://E:/GitProjects/ERIUnitySimpleGame/Client/Assets/Scripts/Core/BattleNetController.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/fdee1383db0f4513952862f91d61e50258200/17/3ab6ad75/JsonSerializerSettings.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/fdee1383db0f4513952862f91d61e50258200/21/d1fb786e/JsonToken.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/fdee1383db0f4513952862f91d61e50258200/30/f5d946f7/TypeNameHandling.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/fdee1383db0f4513952862f91d61e50258200/53/d81c86b6/JsonSerializer.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/fdee1383db0f4513952862f91d61e50258200/81/e4d4a06d/ConstructorHandling.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/fdee1383db0f4513952862f91d61e50258200/97/d988d867/JsonConvert.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/fdee1383db0f4513952862f91d61e50258200/9c/85b234a0/JsonConverter.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/fdee1383db0f4513952862f91d61e50258200/b4/b306b014/IReferenceResolver.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/fdee1383db0f4513952862f91d61e50258200/cb/b7eaa590/JsonReaderException.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/fdee1383db0f4513952862f91d61e50258200/dd/d0777b5a/JsonSerializerInternalReader.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/fdee1383db0f4513952862f91d61e50258200/f4/c85248cf/NullValueHandling.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/fdee1383db0f4513952862f91d61e50258200/fd/ae305b86/JsonWriterException.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://E:/GitProjects/ERIUnitySimpleGame/Client/Assets/Editor/Asset/AssetBundleToolsConfig.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://E:/GitProjects/ERIUnitySimpleGame/Client/Assets/Editor/Asset/AssetBundleToolsConfig.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://E:/GitProjects/ERIUnitySimpleGame/Client/Assets/Editor/Asset/AssetBundleToolsEditorWin.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://E:/GitProjects/ERIUnitySimpleGame/Client/Assets/Editor/Asset/AssetBundleToolsEditorWin.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://E:/GitProjects/ERIUnitySimpleGame/Client/Assets/Editor/Asset/AssetBundleToolsEditorWin.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://E:/GitProjects/ERIUnitySimpleGame/Client/Assets/Editor/Build/BuildToolsEditorWin.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Core/Net/Head.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Core/Net/KCP/BatterList.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Core/Net/KCP/kcp.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://E:/GitProjects/ERIUnitySimpleGame/Client/Assets/Scripts/Main/Test.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://E:/GitProjects/ERIUnitySimpleGame/Client/Assets/Scripts/Main/Test.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://E:/GitProjects/ERIUnitySimpleGame/Client/Assets/Scripts/Main/Test.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://E:/GitProjects/ERIUnitySimpleGame/Client/Assets/Scripts/UI/Res/BuildToolsConfig.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://E:/GitProjects/ERIUnitySimpleGame/Client/Assets/Scripts/UI/Res/Mainifest.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://E:/GitProjects/ERIUnitySimpleGame/Client/Assets/Scripts/UI/Res/ResLoader.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://E:/GitProjects/ERIUnitySimpleGame/Client/Assets/Scripts/UI/Res/ResManager.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://E:/GitProjects/ERIUnitySimpleGame/Client/Assets/Scripts/Utils/ResUtil.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://E:/GitProjects/ERIUnitySimpleGame/Client/Assets/Scripts/Utils/Util.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://E:/GitProjects/ERIUnitySimpleGame/Client/Assets/Sources/Scenes/Test.unity" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.ugui@1.0.0/Runtime/UI/Core/Slider.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
@@ -76,7 +105,7 @@
 }</component>
   <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor">
     <configuration name="Standalone Player" type="RunUnityExe" factoryName="Unity Executable">
-      <option name="EXE_PATH" value="$PROJECT_DIR$/../Output/SampleGame.exe" />
+      <option name="EXE_PATH" value="$PROJECT_DIR$/../Output\SampleGame.exe" />
       <option name="PROGRAM_PARAMETERS" value="" />
       <option name="WORKING_DIRECTORY" value="E:\GitProjects\ERIUnitySimpleGame\Output" />
       <option name="PASS_PARENT_ENVS" value="1" />
@@ -109,10 +138,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="4536">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" value="4536" />
+      <option name="pid" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -136,7 +165,9 @@
       <workItem from="1700735442455" duration="2165000" />
       <workItem from="1702275865332" duration="16589000" />
       <workItem from="1702372720610" duration="6852000" />
-      <workItem from="1702448924956" duration="13531000" />
+      <workItem from="1702448924956" duration="13601000" />
+      <workItem from="1702519010021" duration="27783000" />
+      <workItem from="1705908247208" duration="175000" />
     </task>
     <task id="LOCAL-00001" summary="C#修改">
       <option name="closed" value="true" />
@@ -226,7 +257,31 @@
       <option name="project" value="LOCAL" />
       <updated>1702377033342</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="初始化KCP代码 Step 0">
+      <option name="closed" value="true" />
+      <created>1702467609347</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1702467609347</updated>
+    </task>
+    <task id="LOCAL-00013" summary="AssetBundle工具界面异常">
+      <option name="closed" value="true" />
+      <created>1702539088745</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1702539088745</updated>
+    </task>
+    <task id="LOCAL-00014" summary="AssetBundle工具界面异常">
+      <option name="closed" value="true" />
+      <created>1702560519283</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1702560519283</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -235,12 +290,24 @@
   <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
   <component name="UnityProjectConfiguration" hasMinimizedUI="true" />
   <component name="UnityUnitTestConfiguration" currentTestLauncher="Both" />
+  <component name="Vcs.Log.History.Properties">
+    <option name="COLUMN_ID_ORDER">
+      <list>
+        <option value="Default.Root" />
+        <option value="Default.Author" />
+        <option value="Default.Date" />
+        <option value="Default.Subject" />
+        <option value="Space.CommitStatus" />
+      </list>
+    </option>
+  </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
     <MESSAGE value="C#修改" />
     <MESSAGE value="C# 修改" />
     <MESSAGE value="初始化KCP代码 Step 0" />
-    <option name="LAST_COMMIT_MESSAGE" value="初始化KCP代码 Step 0" />
+    <MESSAGE value="AssetBundle工具界面异常" />
+    <option name="LAST_COMMIT_MESSAGE" value="AssetBundle工具界面异常" />
   </component>
   <component name="XDebuggerManager">
     <pin-to-top-manager>

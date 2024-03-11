@@ -348,7 +348,6 @@ public class ResUtil
         var patchMap = new Dictionary<string, string>();
         var bundleList = new List<AssetBundleBuild>();
         var configMap = new Dictionary<string, BuildToolsConfig.BuildToolsConfigItem>();
-        var hash2Name = new Dictionary<string, string>();
         var hash2Path = new Dictionary<string, string>();
 
         var resourceVersion = PatchUtil.GetGitVersion();
@@ -389,7 +388,6 @@ public class ResUtil
 
                 var name = Util.HashPath(keyPath).ToString() + ".s";
                 configMap.Add(name, cur);
-                hash2Name.Add(name, path);
                 hash2Path.Add(name, keyPath);
 
                 if (cur.directories)

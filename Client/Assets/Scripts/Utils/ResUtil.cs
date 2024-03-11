@@ -446,7 +446,7 @@ public class ResUtil
 
         if (patchList.Count > 0)
         {
-            var withoutExtensions = new List<string>() { ".prefab", ".unity", ".mat" };
+            var withoutExtensions = new List<string>() { ".prefab", ".unity", ".mat", ".png" };
             var files = Directory.GetFiles(Setting.EditorBundlePath, "*.*", SearchOption.AllDirectories)
                     .Where(s => withoutExtensions.Contains(Path.GetExtension(s).ToLower())).ToArray();
             var depMap = new Dictionary<string, List<string>>(files.Length);

@@ -12,22 +12,22 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour {
     public static T Instance {
         get {
             if (_applicationIsQuiting)
-            {
                 return null;
-            }
-            if (_instance == null) {
-                lock (_lock) {
-                    _instance = FindObjectOfType<T>();
-                    if (FindObjectsOfType<T>().Length > 1)
-                    {
-                        return _instance;
-                    }
-                    if (_instance == null)
-                    {
-                        _instance = new GameObject(typeof(T).Name).AddComponent<T>();
-                    }
-                    DontDestroyOnLoad(_instance.gameObject);
+
+            if (_instance != null) 
+                return _instance;
+            
+            lock (_lock) {
+                _instance = FindObjectOfType<T>();
+                if (FindObjectsOfType<T>().Length > 1)
+                {
+                    return _instance;
                 }
+                if (_instance == null)
+                {
+                    _instance = new GameObject(typeof(T).Name).AddComponent<T>();
+                }
+                DontDestroyOnLoad(_instance.gameObject);
             }
             return _instance;
         }
@@ -38,7 +38,7 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour {
         OnInitialize();
     }
 
-    public virtual void OnInitialize() { return; }
+    protected virtual void OnInitialize() { return; }
 
     public virtual void OnRelease() { }
 

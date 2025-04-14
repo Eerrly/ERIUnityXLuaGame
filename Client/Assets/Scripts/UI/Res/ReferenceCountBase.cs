@@ -9,7 +9,7 @@
 
     public bool IsReferenceValid => _referenceCount > 0;
 
-    public ReferenceCountBase()
+    protected ReferenceCountBase()
     {
         _referenceCount = 1;
     }

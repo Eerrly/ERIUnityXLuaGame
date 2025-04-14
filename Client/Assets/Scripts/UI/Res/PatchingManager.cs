@@ -66,7 +66,7 @@ public class PatchingManager : MonoBehaviour, IManager
         _downloadList = new List<ManifestItem>();
         var patchingResult = false;
         var localMd5Map = new Dictionary<uint, string>();
-        _localVersionText = File.Exists(_vBytesFilePath) ? File.ReadAllText(_vBytesFilePath) : "";
+        _localVersionText = File.Exists(_vBytesFilePath) ? await File.ReadAllTextAsync(_vBytesFilePath) : "";
         _bSaveRc = string.IsNullOrEmpty(_localVersionText);
 
         var remoteVerPath = FileUtil.CombinePaths(remoteUrl, "v.bytes");
@@ -174,13 +174,13 @@ public class PatchingManager : MonoBehaviour, IManager
                 FileUtil.DeleteFile(tmpLocalRcFilePath);
 
                 // 替换新V文件
-                File.WriteAllText(_vBytesFilePath, _remoteVersionText);
+                await File.WriteAllTextAsync(_vBytesFilePath, _remoteVersionText);
                 patchingResult = true;
             }
         }
         if (patchingResult)
         {
-            callback?.Call(o, "done");
+            _callback?.Call(o, "done");
             Global.Instance.onPatchingDone?.Invoke();
         }
     }

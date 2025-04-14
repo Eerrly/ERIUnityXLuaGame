@@ -54,7 +54,7 @@ public class HttpManager : MonoBehaviour, IManager
         {
             request = UnityWebRequest.Get(url);
             await request.SendWebRequest().WithCancellation(_timeoutController.Timeout(TimeSpan.FromSeconds(timeout)));
-            if(request.isNetworkError || request.isHttpError)
+            if (request.result != UnityWebRequest.Result.Success)
             {
                 HttpGetState = false;
                 HttpGetText = request.error;
@@ -113,7 +113,7 @@ public class HttpManager : MonoBehaviour, IManager
             downloadHandler = new DownloadHandlerFile(path, append);
             request = new UnityWebRequest(url, UnityWebRequest.kHttpVerbGET, downloadHandler, null);
             await request.SendWebRequest().ToUniTask(Progress.Create<float>(progress));
-            if (request.isNetworkError || request.isHttpError)
+            if (request.result != UnityWebRequest.Result.Success)
             {
                 HttpDownloadState = false;
                 HttpDownloadText = request.error;

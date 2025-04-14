@@ -35,14 +35,14 @@ public class ResManager : MonoBehaviour, IManager
     private uint ConvertPath(string path)
     {
         uint result = 0;
-        if (!string.IsNullOrEmpty(path))
+        if (string.IsNullOrEmpty(path)) 
+            return result;
+        
+        path = FileUtil.Normalized(path).ToLower().Replace(ResUtil.AssetsSourcesLowerPath, "");
+        if (!CacheFileMap.TryGetValue(path, out result))
         {
-            path = FileUtil.Normalized(path).ToLower().Replace(ResUtil.AssetsSourcesLowerPath, "");
-            if (!CacheFileMap.TryGetValue(path, out result))
-            {
-                result = Util.HashPath(path);
-                CacheFileMap.Add(path, result);
-            }
+            result = Util.HashPath(path);
+            CacheFileMap.Add(path, result);
         }
         return result;
     }
@@ -293,9 +293,8 @@ public class ResManager : MonoBehaviour, IManager
     {
         if (!_preInitialized) return;
 
-        if (!LoadedBundles.TryGetValue(hash, out var bundle)) return;
-        LoadedBundles.Remove(hash);
-        
+        if (!LoadedBundles.Remove(hash, out var bundle)) return;
+
         if (Manifest == null) return;
 
         var dependencies = Manifest.GetDependencies(hash);

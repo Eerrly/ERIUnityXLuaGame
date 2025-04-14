@@ -13,7 +13,7 @@ public class LuaManager : MonoBehaviour, IManager
     /// <summary>
     /// Lua与C#的桥接对象
     /// </summary>
-    public LuaEnv luaEnv { get; private set; }
+    public LuaEnv LuaEnv { get; private set; }
 
     /// <summary>
     /// 将所有预制好的组件与Lua对象进行绑定
@@ -25,13 +25,11 @@ public class LuaManager : MonoBehaviour, IManager
     {
         var self = (LuaTable)instance;
         self.Set<string, LuaBehaviour>("View", view);
-        var id = luaEnv.NewTable();
+        var id = LuaEnv.NewTable();
         using(var e = name2ID.GetEnumerator())
         {
             while (e.MoveNext())
-            {
                 id.Set<string, int>(e.Current.Key, e.Current.Value);
-            }
         }
         self.Set<string, LuaTable>("ID", id);
     }
@@ -41,7 +39,7 @@ public class LuaManager : MonoBehaviour, IManager
     /// </summary>
     public void OnRelease() {
         _codes.Clear();
-        luaEnv?.Dispose();
+        LuaEnv?.Dispose();
         IsInitialized = false;
     }
 
@@ -51,8 +49,8 @@ public class LuaManager : MonoBehaviour, IManager
     public void OnInitialize()
     {
         _codes.Clear();
-        luaEnv = new LuaEnv();
-        luaEnv.AddLoader(Loader);
+        LuaEnv = new LuaEnv();
+        LuaEnv.AddLoader(Loader);
         StartCoroutine(nameof(CoLoadScript));
     }
 
@@ -65,19 +63,15 @@ public class LuaManager : MonoBehaviour, IManager
     {
         var key = path.ToLower().Replace(".", "/");
         if (Setting.Config.useAssetBundle)
-        {
-            if(_codes.TryGetValue(key, out var code))
-            {
-                return code;
-            }
-            return null;
-        }
+            return _codes.GetValueOrDefault(key);
 
         // 在不使用AB包加载资源时，直接加载对应的Lua文件
-        if (!Directory.Exists(Setting.EditorLuaScriptRoot)) return null;
+        if (!Directory.Exists(Setting.EditorLuaScriptRoot)) 
+            return null;
             
         var filePath = Setting.EditorLuaScriptRoot + "/" + key.Replace(".", "/") + ".lua";
-        if (!File.Exists(filePath)) return null;
+        if (!File.Exists(filePath)) 
+            return null;
             
         return File.ReadAllBytes(filePath);
     }
@@ -103,15 +97,9 @@ public class LuaManager : MonoBehaviour, IManager
             }
             loader.Dispose();
             loader = null;
-
-            luaEnv.DoString("require('preinit')");
-            IsInitialized = true;
         }
-        else
-        {
-            luaEnv.DoString("require('preinit')");
-            IsInitialized = true;
-        }
+        LuaEnv.DoString("require('preinit')");
+        IsInitialized = true;
     }
 
 }

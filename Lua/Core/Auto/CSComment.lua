@@ -9,9 +9,9 @@
 ---@field IsInteractable fun(self:CS.LuaBehaviour,id:int32):boolean
 ---@field SetActive fun(self:CS.LuaBehaviour,id:int32, active:boolean)
 ---@field SetAnchoredPosition fun(self:CS.LuaBehaviour,id:int32, x:single, y:single, z:single)
----@field SetButtonEnable fun(self:CS.LuaBehaviour,id:int32, enabled:boolean)
+---@field SetButtonEnable fun(self:CS.LuaBehaviour,id:int32, enable:boolean)
 ---@field SetCanvasGroupAlpha fun(self:CS.LuaBehaviour,id:int32, alpha:single)
----@field SetEnable fun(self:CS.LuaBehaviour,id:int32, enabled:boolean)
+---@field SetEnable fun(self:CS.LuaBehaviour,id:int32, enable:boolean)
 ---@field SetFontSize fun(self:CS.LuaBehaviour,id:int32, size:int32)
 ---@field SetImage fun(self:CS.LuaBehaviour,id:int32, dir:string, spriteName:string, resetSize:boolean, sizeRatio:single)
 ---@field SetInteractable fun(self:CS.LuaBehaviour,id:int32, interactable:boolean)
@@ -31,5 +31,4 @@
 ---@field IsNull fun(obj:Object):boolean
 ---@field LoadScene fun(scene:string, callback:LuaFunction)
 ---@field Patching fun(url:string, o:Object, callback:LuaFunction)
----@field SetSelfPlayerId fun(id:int32)
 

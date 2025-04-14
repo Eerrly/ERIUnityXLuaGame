@@ -209,7 +209,7 @@ public partial class LuaBehaviour : MonoBehaviour
         if(TryGetControl(id, out LuaBehaviour child))
         {
             if(child._instance == null) {
-                child.Initialize(Global.Instance.LuaManager.luaEnv.NewTable(), root);
+                child.Initialize(Global.Instance.LuaManager.LuaEnv.NewTable(), root);
             }
             return child._instance;
         }
@@ -286,7 +286,7 @@ public partial class LuaBehaviour : MonoBehaviour
         }
         CacheCoroutines.Clear();
         var table = (LuaTable)_instance;
-        if(Global.Instance.LuaManager.luaEnv != null && Global.Instance.LuaManager.luaEnv.rawL != IntPtr.Zero && table != null)
+        if(Global.Instance.LuaManager.LuaEnv != null && Global.Instance.LuaManager.LuaEnv.rawL != IntPtr.Zero && table != null)
         {
             table.Dispose();
         }
@@ -607,8 +607,6 @@ public partial class LuaBehaviour : MonoBehaviour
         loader = null;
         CacheCoroutines.Remove(id);
         SetImage(c, sprite, resource, resetSize, sizeRatio);
-
-        yield break;
     }
     
 }

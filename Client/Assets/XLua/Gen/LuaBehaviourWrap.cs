@@ -195,9 +195,9 @@ namespace XLua.CSObjectWrap
             
                 
                 {
-                    string _name = LuaAPI.lua_tostring(L, 2);
+                    string _tName = LuaAPI.lua_tostring(L, 2);
                     
-                        int gen_ret = gen_to_be_invoked.NameToID( _name );
+                        int gen_ret = gen_to_be_invoked.NameToID( _tName );
                         LuaAPI.xlua_pushinteger(L, gen_ret);
                     
                     
@@ -533,9 +533,9 @@ namespace XLua.CSObjectWrap
                 
                 {
                     int _id = LuaAPI.xlua_tointeger(L, 2);
-                    bool _enabled = LuaAPI.lua_toboolean(L, 3);
+                    bool _enable = LuaAPI.lua_toboolean(L, 3);
                     
-                    gen_to_be_invoked.SetEnable( _id, _enabled );
+                    gen_to_be_invoked.SetEnable( _id, _enable );
                     
                     
                     
@@ -744,9 +744,9 @@ namespace XLua.CSObjectWrap
                 
                 {
                     int _id = LuaAPI.xlua_tointeger(L, 2);
-                    bool _enabled = LuaAPI.lua_toboolean(L, 3);
+                    bool _enable = LuaAPI.lua_toboolean(L, 3);
                     
-                    gen_to_be_invoked.SetButtonEnable( _id, _enabled );
+                    gen_to_be_invoked.SetButtonEnable( _id, _enable );
                     
                     
                     

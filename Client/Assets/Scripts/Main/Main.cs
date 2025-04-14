@@ -13,7 +13,7 @@ public class Main : MonoBehaviour
 
     void LuaStart()
     {
-        Global.Instance.LuaManager.luaEnv.DoString(@"
+        Global.Instance.LuaManager.LuaEnv.DoString(@"
 require 'main/main'
 ");
     }

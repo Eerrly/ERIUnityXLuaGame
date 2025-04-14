@@ -27,12 +27,10 @@ function viewB:StartBattle()
 end
 
 function viewB:OnBtnPlayer1Clicked()
-    Util.SetSelfPlayerId(1)
     self:StartBattle()
 end
 
 function viewB:OnBtnPlayer2Clicked()
-    Util.SetSelfPlayerId(2)
     self:StartBattle()
 end
 

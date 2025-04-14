@@ -5,14 +5,45 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b4a5898d-e06a-4fbd-b017-555dd42587d4" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Client/.idea/indexLayout.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Client/.idea/indexLayout.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Client/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Client/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Examples/SpriteAtlas/sources_textures_a.spriteatlas" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Examples/SpriteAtlas/sources_textures_a.spriteatlas" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Examples/SpriteAtlas/sources_textures_a_gift.spriteatlas" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Examples/SpriteAtlas/sources_textures_a_gift.spriteatlas" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Examples/SpriteAtlas/sources_textures_a_pic.spriteatlas" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Examples/SpriteAtlas/sources_textures_a_pic.spriteatlas" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Examples/SpriteAtlas/sources_textures_b.spriteatlas" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Examples/SpriteAtlas/sources_textures_b.spriteatlas" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Resources/Configs/asset_bundles.json" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Configs/asset_bundles.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Resources/Configs/version.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Configs/version.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Battle.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Constants.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Core.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Global.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Global.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Main/Main.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Main/Main.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Main/Test.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Main/Test.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Singleton.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Singleton.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/SupportLauncher.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/SupportLauncher.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Lua/LuaBehaviour.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Lua/LuaBehaviour.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Lua/LuaManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Lua/LuaManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Res/HttpManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Res/HttpManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Res/PatchingManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Res/PatchingManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Res/ReferenceCountBase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Res/ReferenceCountBase.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Res/ResManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Res/ResManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/UIManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/UIManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Utils/LuaUtil.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Utils/LuaUtil.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Sources/Lua/32/data/view.bytes" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Sources/Lua/32/data/view.bytes" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Sources/Lua/32/ui/Const.bytes" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Sources/Lua/32/ui/Const.bytes" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Sources/Lua/32/ui/view/viewb.bytes" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Sources/Lua/32/ui/view/viewb.bytes" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Sources/Lua/64/data/view.bytes" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Sources/Lua/64/data/view.bytes" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Sources/Lua/64/ui/Const.bytes" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Sources/Lua/64/ui/Const.bytes" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/EditorBuildSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/EditorBuildSettings.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Sources/Lua/64/ui/view/viewb.bytes" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Sources/Lua/64/ui/view/viewb.bytes" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/XLua/Gen/LuaBehaviourWrap.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/XLua/Gen/LuaBehaviourWrap.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/XLua/Gen/LuaUtilWrap.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/XLua/Gen/LuaUtilWrap.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client.sln" beforeDir="false" afterPath="$PROJECT_DIR$/Client.sln" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/manifest.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/packages-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/packages-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/ProjectVersion.txt" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/ProjectVersion.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Lua/Core/Auto/CSComment.lua" beforeDir="false" afterPath="$PROJECT_DIR$/../Lua/Core/Auto/CSComment.lua" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Lua/ui/view/viewb.lua" beforeDir="false" afterPath="$PROJECT_DIR$/../Lua/ui/view/viewb.lua" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,54 +54,7 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/012ca6023c754e6384f20d14e09f256e5789b8/3b/a22680d9/CultureInfo.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/012ca6023c754e6384f20d14e09f256e5789b8/84/1c80d443/Random.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/012ca6023c754e6384f20d14e09f256e5789b8/c5/e19209d3/List`1.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/012ca6023c754e6384f20d14e09f256e5789b8/fc/243f967f/MemberInfo.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/01d576ddfadc45249d5a23906072500246e000/e0/29eafb15/CultureInfo.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/4dc18ce7f2d44bec9b4b05682d05250935ea48/54/74d736bd/SocketError.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/4dc18ce7f2d44bec9b4b05682d05250935ea48/b3/7b49671d/Socket.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/5759c783505f4c70aebcb233b8082b85796400/7f/95f77ef0/Paths.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/6aff66e3fb024c7a8e93a3167f3b49a45c00/ae/6091abc4/AssetBundleRequest.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/6aff66e3fb024c7a8e93a3167f3b49a45c00/c5/1097048a/AssetBundleCreateRequest.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/84f51b1b0ff2473ca787c217e1eda8b9118a00/85/792de801/Vector3.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/8e5509fdd5784e7e931313cdeac8ad64574bc0/30/4558c11e/List`1.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/8e5509fdd5784e7e931313cdeac8ad64574bc0/dc/247df2aa/Array.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/9686eace6e5646cf929f6b4c7377ebcd364f48/58/30cc7aaa/UdpClient.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/c701cc3cda1a4e70a8e00519d656ac5a9600/22/bd854ee2/HideLabelAttribute.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/c701cc3cda1a4e70a8e00519d656ac5a9600/73/cfb9c300/HorizontalGroupAttribute.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/c8341905d7bd40f79fd9df0aeb1e3cf61e00/76/a576715e/Logger.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/fdee1383db0f4513952862f91d61e50258200/17/3ab6ad75/JsonSerializerSettings.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/fdee1383db0f4513952862f91d61e50258200/21/d1fb786e/JsonToken.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/fdee1383db0f4513952862f91d61e50258200/30/f5d946f7/TypeNameHandling.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/fdee1383db0f4513952862f91d61e50258200/53/d81c86b6/JsonSerializer.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/fdee1383db0f4513952862f91d61e50258200/81/e4d4a06d/ConstructorHandling.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/fdee1383db0f4513952862f91d61e50258200/97/d988d867/JsonConvert.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/fdee1383db0f4513952862f91d61e50258200/9c/85b234a0/JsonConverter.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/fdee1383db0f4513952862f91d61e50258200/b4/b306b014/IReferenceResolver.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/fdee1383db0f4513952862f91d61e50258200/cb/b7eaa590/JsonReaderException.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/fdee1383db0f4513952862f91d61e50258200/dd/d0777b5a/JsonSerializerInternalReader.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/fdee1383db0f4513952862f91d61e50258200/f4/c85248cf/NullValueHandling.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/fdee1383db0f4513952862f91d61e50258200/fd/ae305b86/JsonWriterException.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://E:/GitProjects/ERIUnitySimpleGame/Client/Assets/Editor/Asset/AssetBundleToolsConfig.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://E:/GitProjects/ERIUnitySimpleGame/Client/Assets/Editor/Asset/AssetBundleToolsConfig.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://E:/GitProjects/ERIUnitySimpleGame/Client/Assets/Editor/Asset/AssetBundleToolsEditorWin.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://E:/GitProjects/ERIUnitySimpleGame/Client/Assets/Editor/Asset/AssetBundleToolsEditorWin.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://E:/GitProjects/ERIUnitySimpleGame/Client/Assets/Editor/Asset/AssetBundleToolsEditorWin.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://E:/GitProjects/ERIUnitySimpleGame/Client/Assets/Editor/Build/BuildToolsEditorWin.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Core/Net/Head.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Core/Net/KCP/BatterList.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Core/Net/KCP/kcp.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="mock://E:/GitProjects/ERIUnitySimpleGame/Client/Assets/Scripts/Main/Test.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://E:/GitProjects/ERIUnitySimpleGame/Client/Assets/Scripts/Main/Test.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://E:/GitProjects/ERIUnitySimpleGame/Client/Assets/Scripts/Main/Test.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://E:/GitProjects/ERIUnitySimpleGame/Client/Assets/Scripts/UI/Res/BuildToolsConfig.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://E:/GitProjects/ERIUnitySimpleGame/Client/Assets/Scripts/UI/Res/Mainifest.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://E:/GitProjects/ERIUnitySimpleGame/Client/Assets/Scripts/UI/Res/ResLoader.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://E:/GitProjects/ERIUnitySimpleGame/Client/Assets/Scripts/UI/Res/ResManager.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://E:/GitProjects/ERIUnitySimpleGame/Client/Assets/Scripts/Utils/ResUtil.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://E:/GitProjects/ERIUnitySimpleGame/Client/Assets/Scripts/Utils/Util.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://E:/GitProjects/ERIUnitySimpleGame/Client/Assets/Sources/Scenes/Test.unity" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/de80aed0bd3646409e8bfb15c101f005e2000/66/c95461e7/CollectionExtensions.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.ugui@1.0.0/Runtime/UI/Core/Slider.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
@@ -92,13 +76,14 @@
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
   &quot;keyToStringList&quot;: {
     &quot;rider.external.source.directories&quot;: [
-      &quot;C:\\Users\\gy\\AppData\\Roaming\\JetBrains\\Rider2023.2\\resharper-host\\DecompilerCache&quot;,
-      &quot;C:\\Users\\gy\\AppData\\Roaming\\JetBrains\\Rider2023.2\\resharper-host\\SourcesCache&quot;,
+      &quot;C:\\Users\\gy\\AppData\\Roaming\\JetBrains\\Rider2024.1\\resharper-host\\DecompilerCache&quot;,
+      &quot;C:\\Users\\gy\\AppData\\Roaming\\JetBrains\\Rider2024.1\\resharper-host\\SourcesCache&quot;,
       &quot;C:\\Users\\gy\\AppData\\Local\\Symbols\\src&quot;
     ]
   }
@@ -113,7 +98,7 @@
       <method v="2" />
     </configuration>
     <configuration name="Start Unity" type="RunUnityExe" factoryName="Unity Executable">
-      <option name="EXE_PATH" value="D:\Unity_2019_4_37\Editor\Unity.exe" />
+      <option name="EXE_PATH" value="D:\Unity_2021_3_42f1\Editor\Unity.exe" />
       <option name="PROGRAM_PARAMETERS" value="-projectPath E:\GitProjects\ERIUnitySimpleGame\Client -debugCodeOptimization" />
       <option name="WORKING_DIRECTORY" value="E:\GitProjects\ERIUnitySimpleGame\Client" />
       <option name="PASS_PARENT_ENVS" value="1" />
@@ -121,7 +106,7 @@
       <method v="2" />
     </configuration>
     <configuration name="Unit Tests (batch mode)" type="RunUnityExe" factoryName="Unity Executable">
-      <option name="EXE_PATH" value="D:\Unity_2019_4_37\Editor\Unity.exe" />
+      <option name="EXE_PATH" value="D:\Unity_2021_3_42f1\Editor\Unity.exe" />
       <option name="PROGRAM_PARAMETERS" value="-runTests -batchmode -projectPath E:\GitProjects\ERIUnitySimpleGame\Client -testResults Logs/results.xml -testPlatform EditMode -debugCodeOptimization" />
       <option name="WORKING_DIRECTORY" value="E:\GitProjects\ERIUnitySimpleGame\Client" />
       <option name="PASS_PARENT_ENVS" value="1" />
@@ -168,6 +153,11 @@
       <workItem from="1702448924956" duration="13601000" />
       <workItem from="1702519010021" duration="27783000" />
       <workItem from="1705908247208" duration="175000" />
+      <workItem from="1722935460761" duration="20000" />
+      <workItem from="1723014061170" duration="11000" />
+      <workItem from="1741681931183" duration="935000" />
+      <workItem from="1744622099380" duration="647000" />
+      <workItem from="1744622932812" duration="1877000" />
     </task>
     <task id="LOCAL-00001" summary="C#修改">
       <option name="closed" value="true" />
@@ -289,6 +279,11 @@
   </component>
   <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
   <component name="UnityProjectConfiguration" hasMinimizedUI="true" />
+  <component name="UnityProjectDiscoverer">
+    <option name="hasUnityReference" value="true" />
+    <option name="unityProject" value="true" />
+    <option name="unityProjectFolder" value="true" />
+  </component>
   <component name="UnityUnitTestConfiguration" currentTestLauncher="Both" />
   <component name="Vcs.Log.History.Properties">
     <option name="COLUMN_ID_ORDER">

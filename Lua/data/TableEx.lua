@@ -221,14 +221,6 @@ function table.error(tab)
     error(table.tostring(tab))
 end
 
-function table.nums(tbl)
-    local count = 0
-    for _, v in pairs(tbl) do
-        count = count + 1
-    end
-    return count
-end
-
 function table.toArray(tab, dataId)
     local result = {}
     if dataId then
@@ -243,20 +235,24 @@ function table.toArray(tab, dataId)
     return result
 end
 
---
-function table.makeValueDic(to, from)
-    if not to or not from then return end
-    for _, v in pairs(from) do
-        to[v] = true
+--- 获取table中所有的key
+---@param tab table 表
+---@return table 所有的key集合
+function table.keys(tab)
+    local t = {}
+    for k, v in pairs(tab) do
+        t[#t + 1] = k
     end
-    return to
+    return t
 end
 
---
-function table.makeValueDic2(to, from, key)
-    if not to or not from then return end
-    for _, v in pairs(from) do
-        to[v[key]] = true
+--- 获取table中所有的元素
+---@param tab table 表
+---@return table 所有的元素集合
+function table.values(tab)
+    local t = {}
+    for k, v in pairs(tab) do
+        t[#t + 1] = v
     end
-    return to
+    return t
 end

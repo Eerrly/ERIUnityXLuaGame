@@ -50,7 +50,7 @@ public partial class UIManager : MonoBehaviour, IManager
         if (NoneCamera == null)
         {
             var noneCameraGo = new GameObject("NoneCamera");
-            noneCameraGo.transform.parent = go.transform;
+            noneCameraGo.transform.SetParent(go.transform, true);
             NoneCamera = noneCameraGo.AddComponent<Camera>();
             NoneCamera.clearFlags = CameraClearFlags.SolidColor;
             NoneCamera.backgroundColor = Color.black;
@@ -177,9 +177,9 @@ public partial class UIManager : MonoBehaviour, IManager
     {
         if (!_creatingWindows.Remove(id) && _windows.ContainsKey(id))
         {
-            if (!_windows.TryGetValue(id, out var window)) return;
-            
-            _windows.Remove(id);
+            if (!_windows.Remove(id, out var window)) 
+                return;
+
             window.OnHide(() => 
             {
                 window.OnDestroy();

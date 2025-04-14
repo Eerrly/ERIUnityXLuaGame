@@ -99,21 +99,4 @@ public class LuaUtil
         Global.Instance.PatchingManager.CoPatching(url, callback, o);
     }
 
-    /// <summary>
-    /// 设置战斗内自己的ID
-    /// </summary>
-    /// <param name="id"></param>
-    public static void SetSelfPlayerId(int id)
-    {
-        switch (id)
-        {
-            case 1:
-                BattleConstant.SelfID = 0;
-                break;
-            case 2:
-                BattleConstant.SelfID = 1;
-                break;
-        }
-    }
-
 }

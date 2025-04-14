@@ -54,7 +54,7 @@ public class Global : Singleton<Global>
     /// <summary>
     /// 初始化
     /// </summary>
-    public override void OnInitialize()
+    protected override void OnInitialize()
     {
         Application.runInBackground = true;
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
@@ -175,7 +175,7 @@ public class Global : Singleton<Global>
     /// </summary>
     public override void OnRelease()
     {
-        for (int i = _managers.Count - 1; i >= 0; i--)
+        for (var i = _managers.Count - 1; i >= 0; i--)
         {
             try
             {

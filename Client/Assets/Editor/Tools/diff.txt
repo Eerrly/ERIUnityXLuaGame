@@ -2,9 +2,8 @@ Client/.idea/.idea.Client/.idea/workspace.xml
 Client/Assets/Editor/Tools/diff.txt
 Client/Assets/Resources/Configs/asset_bundles.json
 Client/Assets/Resources/Configs/version.txt
-Client/Assets/Sources/Lua/32/ui/Const.bytes
-Client/Assets/Sources/Lua/32/ui/view/viewc.bytes
+Client/Assets/Sources/Lua/32/data/view.bytes
+Client/Assets/Sources/Lua/32/ui/view/viewb.bytes
 Client/Assets/Sources/Lua/64/data/view.bytes
 Client/Assets/Sources/Lua/64/ui/Const.bytes
-Client/Assets/Sources/Lua/64/ui/view/viewc.bytes
-Lua/ui/view/viewc.lua
+Client/Assets/Sources/Lua/64/ui/view/viewb.bytes

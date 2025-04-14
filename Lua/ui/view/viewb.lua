@@ -11,7 +11,7 @@ function viewB:OnCreate()
 end
 
 function viewB:RefreshView()
-    self.View:SetText(self.ID.Text_Desc, "Hello World.")
+    self.View:SetText(self.ID.Text_Desc, "Fuck The World.")
 end
 
 function viewB:BindEvent()

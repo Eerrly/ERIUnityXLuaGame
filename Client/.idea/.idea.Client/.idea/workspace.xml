@@ -6,7 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="b4a5898d-e06a-4fbd-b017-555dd42587d4" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Client/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Client/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/Tools/diff.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/Tools/diff.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Lua/ui/view/viewb.lua" beforeDir="false" afterPath="$PROJECT_DIR$/../Lua/ui/view/viewb.lua" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -120,7 +120,7 @@
       <workItem from="1723014061170" duration="11000" />
       <workItem from="1741681931183" duration="935000" />
       <workItem from="1744622099380" duration="647000" />
-      <workItem from="1744622932812" duration="2925000" />
+      <workItem from="1744622932812" duration="3362000" />
     </task>
     <task id="LOCAL-00001" summary="C#修改">
       <option name="closed" value="true" />

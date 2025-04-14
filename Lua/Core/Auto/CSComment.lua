@@ -28,6 +28,7 @@
 ---@field CreateWindow fun(parentId:int32, path:string, layer:int32, args:LuaTable, callback:LuaFunction):int32
 ---@field DestroyWindow fun(id:int32, destroy:boolean)
 ---@field DontDestroyOnLoad fun(obj:Object, isDontDestroy:boolean)
+---@field GetCurVersion fun():string
 ---@field IsNull fun(obj:Object):boolean
 ---@field LoadScene fun(scene:string, callback:LuaFunction)
 ---@field Patching fun(url:string, o:Object, callback:LuaFunction)

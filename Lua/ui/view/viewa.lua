@@ -18,6 +18,8 @@ function viewA:RefreshView()
     self.View:SetImage(self.ID.Image1, "Textures/B", "item_01.png")
     self.View:SetImage(self.ID.Image2, "Textures/A", "gongchengshi.png")
     self.View:SetImage(self.ID.Image3, "Textures/A", "golden_finger.png")
+    
+    self.View:SetText(self.ID.Text_Version, Util.GetCurVersion())
 end
 
 function viewA:OnBtnGetClicked()

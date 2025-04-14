@@ -33,6 +33,10 @@ local function SetSelfPlayerId(id)
     LuaUtil.SetSelfPlayerId(id)
 end
 
+local function GetCurVersion()
+    return LuaUtil.GetCurVersion()
+end
+
 exports.Util = {
     CreateWindow = CreateWindow,
     IsNull = IsNull,
@@ -42,4 +46,5 @@ exports.Util = {
     Patching = Patching,
     ClearUICache = ClearUICache,
     SetSelfPlayerId = SetSelfPlayerId,
+    GetCurVersion = GetCurVersion,
 }

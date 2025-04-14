@@ -6,17 +6,21 @@
   <component name="ChangeListManager">
     <list default="true" id="b4a5898d-e06a-4fbd-b017-555dd42587d4" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Client/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Client/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/Tools/diff.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/Tools/diff.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Resources/Configs/asset_bundles.json" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Configs/asset_bundles.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Resources/Configs/version.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Configs/version.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Global.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Global.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Utils/LuaUtil.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Utils/LuaUtil.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Sources/Lua/32/data/util.bytes" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Sources/Lua/32/data/util.bytes" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Sources/Lua/32/data/view.bytes" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Sources/Lua/32/data/view.bytes" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Sources/Lua/32/ui/Const.bytes" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Sources/Lua/32/ui/Const.bytes" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Sources/Lua/32/ui/view/viewb.bytes" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Sources/Lua/32/ui/view/viewb.bytes" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Sources/Lua/64/data/view.bytes" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Sources/Lua/64/data/view.bytes" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Sources/Lua/32/ui/view/viewa.bytes" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Sources/Lua/32/ui/view/viewa.bytes" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Sources/Lua/64/data/util.bytes" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Sources/Lua/64/data/util.bytes" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Sources/Lua/64/ui/Const.bytes" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Sources/Lua/64/ui/Const.bytes" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Sources/Lua/64/ui/view/viewb.bytes" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Sources/Lua/64/ui/view/viewb.bytes" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Lua/ui/view/viewb.lua" beforeDir="false" afterPath="$PROJECT_DIR$/../Lua/ui/view/viewb.lua" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Sources/Lua/64/ui/view/viewa.bytes" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Sources/Lua/64/ui/view/viewa.bytes" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Sources/UI/A.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Sources/UI/A.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/XLua/Gen/LuaUtilWrap.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/XLua/Gen/LuaUtilWrap.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Lua/Core/Auto/CSComment.lua" beforeDir="false" afterPath="$PROJECT_DIR$/../Lua/Core/Auto/CSComment.lua" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Lua/data/util.lua" beforeDir="false" afterPath="$PROJECT_DIR$/../Lua/data/util.lua" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Lua/ui/view/viewa.lua" beforeDir="false" afterPath="$PROJECT_DIR$/../Lua/ui/view/viewa.lua" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,6 +32,9 @@
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/de80aed0bd3646409e8bfb15c101f005e2000/66/c95461e7/CollectionExtensions.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.textmeshpro@3.0.6/Scripts/Editor/TMP_PackageUtilities.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.timeline@1.6.5/Editor/CurveEditUtility.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.ugui@1.0.0/Runtime/UI/Core/Graphic.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.ugui@1.0.0/Runtime/UI/Core/Slider.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
@@ -130,7 +137,7 @@
       <workItem from="1723014061170" duration="11000" />
       <workItem from="1741681931183" duration="935000" />
       <workItem from="1744622099380" duration="647000" />
-      <workItem from="1744622932812" duration="4830000" />
+      <workItem from="1744622932812" duration="5519000" />
     </task>
     <task id="LOCAL-00001" summary="C#修改">
       <option name="closed" value="true" />

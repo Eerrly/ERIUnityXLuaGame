@@ -99,4 +99,14 @@ public class LuaUtil
         Global.Instance.PatchingManager.CoPatching(url, callback, o);
     }
 
+    /// <summary>
+    /// 获取当前版本
+    /// </summary>
+    /// <returns>当前版本</returns>
+    public static string GetCurVersion()
+    {
+        var vBytesFilePath = FileUtil.CombinePaths(Setting.CacheBundleRoot, "v.bytes");
+        return System.IO.File.ReadAllText(vBytesFilePath);
+    }
+
 }

@@ -5,12 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b4a5898d-e06a-4fbd-b017-555dd42587d4" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Client/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Client/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Editor/Tools/diff.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/Tools/diff.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Resources/Configs/asset_bundles.json" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Configs/asset_bundles.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Resources/Configs/version.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Configs/version.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Global.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Global.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Sources/Lua/32/data/view.bytes" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Sources/Lua/32/data/view.bytes" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Sources/Lua/32/ui/Const.bytes" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Sources/Lua/32/ui/Const.bytes" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Sources/Lua/32/ui/view/viewb.bytes" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Sources/Lua/32/ui/view/viewb.bytes" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Sources/Lua/64/data/view.bytes" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Sources/Lua/64/data/view.bytes" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Sources/Lua/64/ui/Const.bytes" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Sources/Lua/64/ui/Const.bytes" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Sources/Lua/64/ui/view/viewb.bytes" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Sources/Lua/64/ui/view/viewb.bytes" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Lua/ui/view/viewb.lua" beforeDir="false" afterPath="$PROJECT_DIR$/../Lua/ui/view/viewb.lua" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -125,7 +130,7 @@
       <workItem from="1723014061170" duration="11000" />
       <workItem from="1741681931183" duration="935000" />
       <workItem from="1744622099380" duration="647000" />
-      <workItem from="1744622932812" duration="4365000" />
+      <workItem from="1744622932812" duration="4830000" />
     </task>
     <task id="LOCAL-00001" summary="C#修改">
       <option name="closed" value="true" />

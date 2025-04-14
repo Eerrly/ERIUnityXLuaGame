@@ -175,6 +175,8 @@ public class Global : Singleton<Global>
     /// </summary>
     public override void OnRelease()
     {
+        if (!_managers.Any())
+            return;
         for (var i = _managers.Count - 1; i >= 0; i--)
         {
             try

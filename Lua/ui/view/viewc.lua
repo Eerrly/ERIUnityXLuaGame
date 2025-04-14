@@ -14,7 +14,7 @@ function viewC:BindEvent()
 end
 
 function viewC:OnBtnConfirmClicked()
-    Util.Patching("http://192.168.16.158:8080/pres", self, self.OnPatchingEvent)
+    Util.Patching("http://192.168.16.78:10086/pres", self, self.OnPatchingEvent)
 end
 
 function viewC:OnBtnCancelClicked()

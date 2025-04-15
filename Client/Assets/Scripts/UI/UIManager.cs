@@ -32,33 +32,40 @@ public partial class UIManager : MonoBehaviour, IManager
     /// <returns></returns>
     private IEnumerator CoInitialize()
     {
-        var go = new GameObject("UI");
-        go.transform.SetParent(Global.Instance.transform, true);
-
-        UICamera = go.AddComponent<Camera>();
-        UICamera.backgroundColor = new Color(0, 0, 0, 0);
-        UICamera.clearFlags = CameraClearFlags.Depth;
-        UICamera.cullingMask = 1 << Setting.LAYER_UI;
-        UICamera.orthographic = true;
-        UICamera.transform.position = new Vector2(Screen.width / 2f, Screen.height / 2f);
-        UICamera.nearClipPlane = -200000;
-        UICamera.farClipPlane = 200000;
-        UICamera.depth = 1;
-        UICamera.allowHDR = false;
-        UICamera.allowMSAA = false;
-
-        if (NoneCamera == null)
+        if (UICamera == null)
         {
-            var noneCameraGo = new GameObject("NoneCamera");
-            noneCameraGo.transform.SetParent(go.transform, true);
-            NoneCamera = noneCameraGo.AddComponent<Camera>();
-            NoneCamera.clearFlags = CameraClearFlags.SolidColor;
-            NoneCamera.backgroundColor = Color.black;
-            NoneCamera.depth = -50;
-            NoneCamera.cullingMask = 0;
-            NoneCamera.allowHDR = false;
-            NoneCamera.allowMSAA = false;
-            NoneCamera.useOcclusionCulling = false;
+            var o = new GameObject("UI");
+            o.transform.SetParent(Global.Instance.transform, true);
+
+            UICamera = o.AddComponent<Camera>();
+            UICamera.backgroundColor = new Color(0, 0, 0, 0);
+            UICamera.clearFlags = CameraClearFlags.Depth;
+            UICamera.cullingMask = 1 << Setting.LAYER_UI;
+            UICamera.orthographic = true;
+            UICamera.transform.position = new Vector2(Screen.width / 2f, Screen.height / 2f);
+            UICamera.nearClipPlane = -200000;
+            UICamera.farClipPlane = 200000;
+            UICamera.depth = 1;
+            UICamera.allowHDR = false;
+            UICamera.allowMSAA = false;
+            
+            if (NoneCamera == null)
+            {
+                var noneCameraGo = new GameObject("NoneCamera");
+                noneCameraGo.transform.SetParent(o.transform, true);
+                NoneCamera = noneCameraGo.AddComponent<Camera>();
+                NoneCamera.clearFlags = CameraClearFlags.SolidColor;
+                NoneCamera.backgroundColor = Color.black;
+                NoneCamera.depth = -50;
+                NoneCamera.cullingMask = 0;
+                NoneCamera.allowHDR = false;
+                NoneCamera.allowMSAA = false;
+                NoneCamera.useOcclusionCulling = false;
+            }
+        }
+        else
+        {
+            UICamera.enabled = true;
         }
 
         yield return null;

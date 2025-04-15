@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using XLua;
 
@@ -106,7 +107,14 @@ public class LuaUtil
     public static string GetCurVersion()
     {
         var vBytesFilePath = FileUtil.CombinePaths(Setting.CacheBundleRoot, "v.bytes");
-        return System.IO.File.ReadAllText(vBytesFilePath);
+        if (!Directory.Exists(Setting.CacheBundleRoot))
+            Directory.CreateDirectory(Setting.CacheBundleRoot);
+        if (!File.Exists(vBytesFilePath))
+        {
+            using var sw = File.CreateText(vBytesFilePath);
+            sw.Write(Resources.Load<TextAsset>("Configs/version").text);
+        }
+        return File.ReadAllText(vBytesFilePath);
     }
 
 }

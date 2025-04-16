@@ -17,6 +17,6 @@
 + 运行`Main.unity`
 
 ### 引用
-[^lua] Lua - <https://www.lua.org/>
-[^odin] Odin - <https://odininspector.com/>
-[^newtonsoft.json] NewtonSoft.Json - <https://www.newtonsoft.com/json>
+[^lua]:Lua - <https://www.lua.org/>
+[^odin]:Odin - <https://odininspector.com/>
+[^newtonsoft.json]:NewtonSoft.Json - <https://www.newtonsoft.com/json>
